@@ -1005,8 +1005,170 @@ int main() {
 - Ví dụ trên nếu dùng struct thì 8 byte , trong khi union chỉ 4 byte
 
 </details>
+<details>
+  <summary><h3>Phân vùng bộ nhớ trên RAM, cấp phát bộ nhớ động</h3></summary>
+	
+### Phân vùng bộ nhớ trên RAM(Memory layout)
+- Chương trình main.exe trên window  hoặc main.hex với VĐK (lưu ở bộ nhớ SSD hoặc FLASH). 
+- Khi nhấn run chương trình trên window hoặc cấp nguồn cho vi điều khiển thì những chương trình này sẽ được copy vào bộ nhớ RAM để thực thi.
 
 
+| Stack |
+|:-----:|
+|   ↓   |
+|   ↑   |	
+|  Heap |
+|  Bss(Uninitialized data)  |
+|  Data(Initialized data)   |
+|  Text |
+- ***Text:*** Quyền truy cập chỉ có thể Read( không thay đổi)
+	- Lưu các hằng số :`const int x =2` 
+	- Kích thước là cố định
+	- Nó chưa lệnh thực thi :Mã assembly...
+- ***Data:*** Quyền truy cập Read-Write
+	- Chứa biến toàn cục đã dc khởi tạo hoặc biến static khác 0:`int a=1, int b=2;`
+	- Được giải phóng khi kết thúc chương trình
+	- Kích thước có thể thay đổi
+- ***Bss:*** Quyền truy cập Read-Write
+	- Chứa biến toàn cục chưa khởi tạo, hoặc bằng 0:`int a=0, int b;`
+	- Các biến static bằng 0 hoặc chưa khởi tạo
+	- Được giải phóng khi kết thúc chương trình
+	- Kích thước có thể thay đổi
+- ***Stack:*** Quyền truy cập là Read-Write.
+	- lưu trữ các biến cục bộ.
+	- Các tham số truyền vào và các giá trị trả về từ hàm.
+	- Hàm main cũng ở vùng stack
+	- Sẽ được giải phóng khi ra khỏi hàm
+	- Kích thước cố định: phụ thuộc vào hệ điều hành, đối với Windows thường là 1MB, Linux là 8MB.
+- ***Heap:*** Quyền truy cập là Read-Write.
+	- Được sử dụng để cấp phát bộ nhớ động như: Malloc, Calloc,...
+	- Kích thước không cố định.
+	- Sẽ được giải phóng khi gọi hàm free,...
+	### So sánh Stack và Heap?
+	- Bộ nhớ: Bộ nhớ Heap và bộ nhớ Stack bản chất đều cùng là vùng nhớ được tạo ra và lưu trữ trong RAM khi chương trình được thực thi.
+		- Stack được dùng để lưu trữ các biến cục bộ trong hàm, tham số truyền vào... Truy cập vào bộ nhớ này rất nhanh và được thực thi khi chương trình được biên dịch.
+		- Heap được dùng để lưu trữ vùng nhớ cho những biến con trỏ được cấp phát động bởi các hàm malloc - calloc - realloc (trong C)
+	- Kích thước vùng nhớ:
+		- Stack: kích thước của bộ nhớ Stack là cố định, tùy thuộc vào từng hệ điều hành, ví dụ hệ điều hành Windows là 1 MB, hệ điều hành Linux là 8 MB (lưu ý là con số có thể khác tùy thuộc vào kiến trúc hệ điều hành của bạn).
+		- Heap: kích thước của bộ nhớ Heap là không cố định, có thể tăng giảm do đó đáp ứng được nhu cầu lưu trữ dữ liệu của chương trình.
+	### Các cách sử dụng malloc, calloc, realloc, free:
+	- ***Malloc:*** Cấp phát bộ nhớ động mỗi phần tử, không khởi tạo giá trị, trả về con trỏ NULL khi cấp phát thành công.
+	- ***Calloc:*** Cấp phát bộ nhớ động và khởi tạo cho các phần tử là 0, trả về con trỏ NULL khi cấp phát thành công.
+	- ***Realloc:*** Thay đổi kích thước bộ nhớ của bộ nhớ đã được cấp phát trước đó của Malloc và Calloc, trả về con trỏ NULL khi thay đổi thành công.
+	- Vậy `Malloc` sẽ nhanh hơn `Calloc`
+	- Ví dụ:
+
+	```C
+	int main() {
+    int *arr_malloc, *arr_calloc;
+    size_t size = 5;
+
+    // Sử dụng malloc
+    arr_malloc = (int*)malloc(size * sizeof(int));
+
+    // Sử dụng calloc
+    arr_calloc = (int*)calloc(size, sizeof(int));
+
+    // Sử dụng Realloc
+	arr_malloc = (int*)realloc(arr_malloc, sizeof(int) * 7); // size arr_malloc lúc này là 7
+
+
+    // Giải phóng bộ nhớ
+    free(arr_malloc);
+    free(arr_calloc);
+
+    return 0;
+	}
+	```
+<details>
+<summary>Ví dụ:</summary>
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char const *argv[])
+{  
+    int soluongkytu = 0;
+    char* ten = (char*) malloc(sizeof(char) * soluongkytu)
+    for (int i = 0; i < 3; i++)
+    {
+        printf("Nhap so luong ky tu trong ten: \n");
+        scanf("%d", &soluongkytu);
+        ten = realloc(ten, sizeof(char) * soluongkytu);
+        printf("Nhap ten cua ban: \n");
+        scanf("%s", ten);
+        printf("Hello %s\n", ten);
+    }
+
+}
+
+```
+
+</details>
+
+
+- Đặc điểm vùng nhớ
+	- Stack: 
+		- vùng nhớ Stack được quản lý bởi hệ điều hành, 
+		- Dữ liệu được lưu trong Stack sẽ tự động hủy khi hàm thực hiện xong công việc của mình.
+	- Heap: k
+		- Kích thước của bộ nhớ Heap là không cố định, có thể tăng giảm do đó đáp ứng được nhu cầu lưu trữ dữ liệu ,
+		- Dữ liệu trong Heap sẽ không bị hủy khi hàm thực hiện xong, điều đó có nghĩa bạn phải tự tay hủy vùng nhớ bằng câu lệnh free (trong C), và delete hoặc delete [] (trong C++), nếu không sẽ xảy ra hiện tượng rò rỉ bộ nhớ. 
+### Lưu ý: 
+- Việc tự động dọn vùng nhớ còn tùy thuộc vào trình biên dịch trung gian.
+- Vấn đề lỗi xảy ra đối với vùng nhớ Stack: Bởi vì bộ nhớ Stack cố định nên nếu chương trình bạn sử dụng quá nhiều bộ nhớ vượt quá khả năng lưu trữ của Stack chắc chắn sẽ xảy ra tình trạng tràn bộ nhớ Stack (Stack overflow), các trường hợp xảy ra như bạn khởi tạo quá nhiều biến cục bộ, hàm đệ quy vô hạn,..
+	- Ví dụ về tràn bộ nhớ stack với hàm đệ quy vô hạn:
+	```C
+	int foo(int x){
+		printf("De quy khong gioi han\n");
+		return foo(x);
+	}
+	```
+- Vấn đề lỗi xảy ra đối với vùng nhớ Heap: Nếu bạn liên tục cấp phát vùng nhớ mà không giải phóng thì sẽ bị lỗi tràn vùng nhớ Heap (Heap overflow). Nếu bạn khởi tạo một vùng nhớ quá lớn mà vùng nhớ Heap không thể lưu trữ một lần được sẽ bị lỗi khởi tạo vùng nhớ Heap thất bại.
+	- Ví dụ trường hợp khởi tạo vùng nhớ Heap quá lớn:
+	```C 
+	int *A = (int *)malloc(18446744073709551615); 
+	```
+
+- ***Realloc:*** Thay đổi kích thước bộ nhớ của bộ nhớ đã được cấp phát trước đó của Malloc và Calloc, trả về con trỏ NULL khi thay đổi thành công
+```C
+void* realloc(void* ptr, size_t size);
+```
+- ***Free:*** Giải phóng bộ nhớ đã được cấp phát bằng Malloc, Calloc, Realloc sau khi sử dụng xong, không có trả về
+```C
+void free(void* ptr);
+```
+### Khác nhau của static cục bộ và static toàn cục:
+
+- Biến static cục bộ: Khi 1 biến cục bộ được khai báo với từ khóa static. Biến sẽ chỉ được khởi tạo 1 lần duy nhất và tồn tại suốt thời gian chạy chương trình. Giá trị của nó không bị mất đi ngay cả khi kết thúc hàm. Tuy nhiên khác với biến toàn cục có thể gọi trong tất cả mọi nơi trong chương trình, thì biến cục bộ static chỉ có thể được gọi trong nội bộ hàm khởi tạo ra nó. Mỗi lần hàm được gọi, giá trị của biến chính bằng giá trị tại lần gần nhất hàm được gọi.Biến static sẽ lưu vào vùng nhớ Data/ Bss, được giải phóng khi kết thúc chương trình.
+
+- Ví dụ:
+
+```C
+ 	#include <stdio.h>
+	void printMessage() {
+    static int count = 0;
+    // Tăng giá trị biến mỗi lần hàm được gọi
+    count++;
+    printf("Count: %d\n", count);
+	}
+
+	int main() {
+    // Gọi hàm có sử dụng biến static
+    printMessage();//
+    printMessage();
+
+    return 0;
+	}// KQ:Count: 1,Count: 2
+
+```
+
+- Biến static toàn cục: Biến toàn cục static sẽ chỉ có thể được truy cập và sử dụng trong File khai báo nó, các File khác không có cách nào truy cập được.
+- Ví dụ:globalStaticVar được khai báo là static và nằm trong file "File1.c". Do đó, bạn không thể trực tiếp truy cập nó từ file "File2.c", bằng extern int globalStaticVar; trong File2.c, chương trình sẽ không biên dịch được và thông báo lỗi.
+- Biến cục bộ: Biến cục bộ sẽ được lưu vào vùng nhớ stack, thu hồi khi kết thúc hàm cục bộ. 
+
+</details>
 
 
 
