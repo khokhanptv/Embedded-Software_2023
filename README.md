@@ -13,6 +13,8 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 - Giai đoạn dịch NNBC sang Asembly (Compiler)
 - Giai đoạn dịch asembly sang ngôn ngữ máy (Asember)
 - Giai đoạn liên kết (Linker)
+![compiler](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/439abd04-d8d2-4f2c-97a5-be7f5074fe39)
+
 	
 **_Pre-processor (Giai đoạn tiền xử lý):_**
 - 1 Project có nhiều file:`a.h, b.h, a.c, b.c `và file `main.c` sau quá trình tiền xử lý thành 1 file duy nhất là file `main.i`.
@@ -22,7 +24,7 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 - Xóa bỏ cmt,ghi chú.
 - `#include` file header, có nghĩa là nội dung file sẽ được chèn vào vị trí mà mình chỉ định.
 - Triển khai macro:
-	- Macro là từ dùng để chỉ những thông tin được xử lý ở tiền xử lý.
+	- Macro là từ dùng để chỉ những thông tin được xử lý ở tiền xử lý.Hiểu nôm na là cái j mà ở bước tiền xử lý làm thì sẽ gọi là macro.
 	- `#define`:
 		- Macro được định nghĩa bằng cách sử dụng chỉ thị tiền xử lý #define.
 		- Nơi nào có tên Macro sẽ được thay thế bằng nội dung của macro đó.
