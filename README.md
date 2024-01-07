@@ -21,14 +21,13 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 - Lệnh trong CMD là: `gcc -E main.c -o main.i`
 
 **3 việc xảy ra trong quá trình tiền xử lý:**
+- Nhận mã nguồn
 - Xóa bỏ cmt,ghi chú.
-- `#include` file header, có nghĩa là nội dung file sẽ được chèn vào vị trí mà mình chỉ định.
-- Triển khai macro:
-	- Macro là từ dùng để chỉ những thông tin được xử lý ở tiền xử lý.Hiểu nôm na là cái j mà ở bước tiền xử lý làm thì sẽ gọi là macro.
-	- `#define`:
-		- Macro được định nghĩa bằng cách sử dụng chỉ thị tiền xử lý #define.
-		- Nơi nào có tên Macro sẽ được thay thế bằng nội dung của macro đó.
-		- Giảm lặp lại mã ,dễ bảo trì.
+- Chỉ thị tiền xử lý (bắt đầu bằng #) được xử lý.
+	- Chỉ thị tiền xử lý dùng để chỉ những thông tin được xử lý ở quá trình tiền xử lý ( Preprocessor). Chia làm 3 nhóm chính:
+	- `#include`:Chỉ thị `#include` dùng để chèn nội dung của một file vào mã nguồn chương trình
+	- `#define, #undef`:Macro được định nghĩa bằng cách dùng `#define` .Macro là từ dùng để chỉ những thông tin được xử lý ở tiền xử lý
+	
 		- ví dụ:
 		```C
 		#define display_sum(a,b) \ // xuống dòng
@@ -40,9 +39,11 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 			return 0;
 		}
 		```
+	
 	- `#undef`:
 		- Dùng để hủy định nghĩa 1 macro đã dc định nghĩa trước đó bằng `#define`.
 		- Nếu hai hoặc nhiều tệp tiêu đề có cùng tên macro, chúng có thể xung đột với nhau. Việc sử dụng các chỉ thị này giúp ngăn chặn các xung đột này.
+
 		- ví dụ:
 		```C
 		#include <stdio.h>
@@ -58,14 +59,15 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 			return 0;
 		}
 		```
-	- `#if`: Sử dụng để bắt đầu 1 điều kiện xử lý.Nếu đúng thì các dòng lệnh sau `#if` sẽ được biên dịch , sai sẽ bỏ qua đến khi gặp`#endif`.
+	- `#if, #elif, #else, #ifdef, #ifndef`
+	- `#if`: Sử dụng để bắt đầu 1 điều kiện tiền xử lý.Nếu đúng thì các dòng lệnh sau `#if` sẽ được biên dịch , sai sẽ bỏ qua đến khi gặp`#endif`.
 	- `#elif`: Để thêm 1 ĐK mới khi `#if` hoặc `#elif` sai.
 	- `#else`: Dùng khi không có ĐK nào đúng
 	- `#ifdef` : Dùng để kiểm tra 1 macro định nghĩa hay chưa.Nếu định nghĩa rồi thì mã sau ifdef sẽ được biên dịch.
 	- `#ifndef`: Dùng để kiểm tra 1 macro định nghĩa hay chưa.Nếu chưa định nghĩa thì mã sau ifndef sẽ được biên dịch.Thường dùng để kiểm tra macro đó đã dc định nghĩa trong file nào chưa, kết thúc thì `#endif`
 
 	**Mục đích để tránh Định Nghĩa Nhiều Lần và Xung Đột**
-	- Ví dụ:
+	- Ví dụm trong 1 file `main.h`
 	```C
 	#ifndef __MAIN_H__
 	#define __MAIN_H__
@@ -916,7 +918,8 @@ int main() {
 
 <details>
 <summary>Ví dụ 2 </summary>
-```	X=C```
+
+```	C
 #include <stdio.h>
 
 #define LED1 1 << 0 // 0001
@@ -977,7 +980,7 @@ int main() {
 
     return 0;
 }
-
+```
 </details>
 
 
@@ -1175,16 +1178,421 @@ void free(void* ptr);
 - Biến cục bộ: Biến cục bộ sẽ được lưu vào vùng nhớ stack, thu hồi khi kết thúc hàm cục bộ. 
 
 </details>
+<details>
+  <summary><h3> JSON</h3></summary>
+
+> https://www.w3schools.com/js/js_json_intro.asp
+>
+> https://www.geeksforgeeks.org/cjson-json-file-write-read-modify-in-c/
+
+- JSON là viết tắt của "JavaScript Object Notation" (Định dạng đối tượng JavaScript).
+- JSON là một định dạng văn bản được sử dụng để lưu trữ và truyền dữ liệu; nó được sử dụng để trao đổi dữ liệu giữa các ứng dụng và dịch vụ web.
+- JSON là "tự mô tả", dễ đọc và viết cho cả con người và máy tính.
+
+**Trong JSON, giá trị phải thuộc một trong các loại dữ liệu sau:**
+
+- Một chuỗi (phải được viết trong dấu ngoặc kép) -> Ví dụ: {"name":"John"}
+- Một số (phải là số nguyên hoặc số thực) -> Ví dụ: {"age":30}
+- Một đối tượng (Các giá trị trong JSON có thể là đối tượng) -> Ví dụ: { "employee":{"name":"John", "age":30, "city":"New York"} }
+- Một mảng -> Ví dụ: { "employees":["John", "Anna", "Peter"] }
+- Một giá trị boolean -> Ví dụ: {"sale":true}
+null -> Ví dụ: {"middlename":null}
+- Giá trị JSON không thể là một trong các loại dữ liệu sau:
+Một hàm,Một ngày,undefined.
+
+```C
+	{ "name": "Bob Johnson", "age": 35, "city": "Chicago" },
+	{ "name": "John Doe", "age": 30, "city": "New York", "occupation": "Software Engineer", "isStudent": false },
+	{
+	    "name": "Jane Smith",
+	    "age": null,
+	    "city": "Los Angeles",
+	    "contact": { "email": "jane.smith@example.com", "phone": "555-1234" }
+	}
+
+```
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C
+	#include <stdio.h>
+	#include <string.h>
+	#include <stdlib.h>
+	#include <stddef.h>
+	#include <ctype.h>
+	#include <stdbool.h>
+	
+	typedef enum {
+	    JSON_NULL,
+	    JSON_BOOLEAN,
+	    JSON_NUMBER,
+	    JSON_STRING,
+	    JSON_ARRAY,
+	    JSON_OBJECT
+	} JsonType;
+	
+	typedef struct JsonValue {
+	    JsonType type;
+	    union {
+	        int boolean; double number; char *string;
+	        struct {
+	            struct JsonValue *values;
+	            size_t count; // số lượng element
+	        } array;
+	        struct {
+	            char **keys;
+	            struct JsonValue *values;
+	            size_t count; // số cặp key-value
+	        } object;
+	    } value;
+	} JsonValue;
+	
+	JsonValue *parse_json(const char **json);
+	
+	void free_json_value(JsonValue *json_value);
+	
+	static void skip_whitespace(const char **json) {
+	    while (isspace(**json)) {
+	        (*json)++;
+	    }
+	}
+	
+	JsonValue *parse_null(const char **json) {
+	    skip_whitespace(json);
+	    if (strncmp(*json, "null", 4) == 0) { // khi bắt gặp đc chữ n -> nó lấy thêm 3 phần tử tiếp theo -> so sánh với null
+	        JsonValue *value = (JsonValue *) malloc(sizeof(JsonValue));
+	        value->type = JSON_NULL; 
+	        *json += 4;
+	        return value;
+	    }
+	    return NULL;
+	}
+	
+	JsonValue *parse_boolean(const char **json) {
+	    skip_whitespace(json);
+	    JsonValue *value = (JsonValue *) malloc(sizeof(JsonValue));
+	    if (strncmp(*json, "true", 4) == 0) {
+	        value->type = JSON_BOOLEAN;
+	        value->value.boolean = true;
+	        *json += 4;
+	    } else if (strncmp(*json, "false", 5) == 0) {
+	        value->type = JSON_BOOLEAN;
+	        value->value.boolean = false;
+	        *json += 5;
+	    } else {
+	        free(value);
+	        return NULL;
+	    }
+	    return value;
+	}
+	
+	JsonValue *parse_number(const char **json) {
+	    skip_whitespace(json);
+	    char *end; //:') 
+	
+	    double num = strtod(*json, &end);
+	    if (end != *json) {
+	        JsonValue *value = (JsonValue *) malloc(sizeof(JsonValue));
+	        value->type = JSON_NUMBER;
+	        value->value.number = num;
+	        *json = end;
+	        return value;
+	    }
+	    return NULL;
+	}
+	
+	JsonValue *parse_string(const char **json) {
+	    skip_whitespace(json);
+	
+	    if (**json == '\"') {
+	        (*json)++;
+	        const char *start = *json;
+	        while (**json != '\"' && **json != '\0') {
+	            (*json)++;
+	        }
+	        if (**json == '\"') {
+	            size_t length = *json - start; // 3
+	            char *str = (char *) malloc((length + 1) * sizeof(char));
+	            strncpy(str, start, length);
+	            str[length] = '\0';
+	
+	            JsonValue *value = (JsonValue *) malloc(sizeof(JsonValue));
+	            value->type = JSON_STRING;
+	            value->value.string = str;
+	            (*json)++;
+	            return value;
+	        }
+	    }
+	    return NULL;
+	}
+	
+	JsonValue *parse_array(const char **json) {
+	    skip_whitespace(json);
+	    if (**json == '[') {
+	        (*json)++;
+	        skip_whitespace(json);
+	
+	        JsonValue *array_value = (JsonValue *)malloc(sizeof(JsonValue));
+	        array_value->type = JSON_ARRAY;
+	        array_value->value.array.count = 0;
+	        array_value->value.array.values = NULL;
+	
+	        /*
+	        double arr[2] = {};
+	        arr[0] = 30;
+	        arr[1] = 70;
+	        */
+	
+	        while (**json != ']' && **json != '\0') {
+	            JsonValue *element = parse_json(json); // 70
+	            if (element) {
+	                array_value->value.array.count++;
+	                array_value->value.array.values = (JsonValue *)realloc(array_value->value.array.values, array_value->value.array.count * sizeof(JsonValue));
+	                array_value->value.array.values[array_value->value.array.count - 1] = *element;
+	                free(element);
+	            } else {
+	                break;
+	            }
+	            skip_whitespace(json);
+	            if (**json == ',') {
+	                (*json)++;
+	            }
+	        }
+	        if (**json == ']') {
+	            (*json)++;
+	            return array_value;
+	        } else {
+	            free_json_value(array_value);
+	            return NULL;
+	        }
+	    }
+	    return NULL;
+	}
+	
+	JsonValue *parse_object(const char **json) {
+	    skip_whitespace(json);
+	    if (**json == '{') {
+	        (*json)++;
+	        skip_whitespace(json);
+	
+	        JsonValue *object_value = (JsonValue *)malloc(sizeof(JsonValue));
+	        object_value->type = JSON_OBJECT;
+	        object_value->value.object.count = 0;
+	        object_value->value.object.keys = NULL;
+	        object_value->value.object.values = NULL;
+	
+	        while (**json != '}' && **json != '\0') {
+	            JsonValue *key = parse_string(json);
+	            if (key) {
+	                skip_whitespace(json);
+	                if (**json == ':') {
+	                    (*json)++;
+	                    JsonValue *value = parse_json(json);
+	                    if (value) {
+	                        object_value->value.object.count++;
+	                        object_value->value.object.keys = (char **)realloc(object_value->value.object.keys, object_value->value.object.count * sizeof(char *));
+	                        object_value->value.object.keys[object_value->value.object.count - 1] = key->value.string;
+	
+	                        object_value->value.object.values = (JsonValue *)realloc(object_value->value.object.values, object_value->value.object.count * sizeof(JsonValue));
+	                        object_value->value.object.values[object_value->value.object.count - 1] = *value;
+	                        free(value);
+	                    } else {
+	                        free_json_value(key);
+	                        break;
+	                    }
+	                } else {
+	                    free_json_value(key);
+	                    break;
+	                }
+	            } else {
+	                break;
+	            }
+	            skip_whitespace(json);
+	            if (**json == ',') {
+	                (*json)++;
+	            }
+	        }
+	        if (**json == '}') {
+	            (*json)++;
+	            return object_value;
+	        } else {
+	            free_json_value(object_value);
+	            return NULL;
+	        }
+	    }
+	    return NULL;
+	}
+	
+	JsonValue *parse_json(const char **json) { // làm việc với giá trị json_str_value 
+	    while (isspace(**json)) {
+	        (*json)++;
+	    }
+	
+	    switch (**json) {
+	        case 'n':
+	            return parse_null(json);
+	        case 't':
+	        case 'f':
+	            return parse_boolean(json);
+	        case '\"':
+	            return parse_string(json);
+	        case '[':
+	            return parse_array(json);
+	        case '{':
+	            return parse_object(json);
+	        default:
+	            if (isdigit(**json) || **json == '-') return parse_number(json);
+	            else return NULL; // Lỗi phân tích cú pháp
+	    }
+	}
+	
+	void free_json_value(JsonValue *json_value) {
+	    if (json_value == NULL) return;
+	    
+	    switch (json_value->type) {
+	        case JSON_STRING:
+	            free(json_value->value.string);
+	            break;
+	        case JSON_ARRAY:
+	            for (size_t i = 0; i < json_value->value.array.count; i++) {
+	                free_json_value(&json_value->value.array.values[i]);
+	            }
+	            free(json_value->value.array.values);
+	            break;
+	        case JSON_OBJECT:
+	            for (size_t i = 0; i < json_value->value.object.count; i++) {
+	                free(json_value->value.object.keys[i]);
+	                free_json_value(&json_value->value.object.values[i]);
+	            }
+	            free(json_value->value.object.keys);
+	            free(json_value->value.object.values);
+	            break;
+	        default:
+	            break;
+	    }
+	}
+	
+	void test(JsonValue* json_value){
+	    if (json_value != NULL && json_value->type == JSON_OBJECT) {
+	        // Truy cập giá trị của các trường trong đối tượng JSON
+	        size_t num_fields = json_value->value.object.count;
+	        size_t num_fields2 = json_value->value.object.values->value.object.count;
+	        for (size_t i = 0; i < num_fields; ++i) {
+	
+	            char* key = json_value->value.object.keys[i];
+	            JsonValue* value = &json_value->value.object.values[i];
+	
+	            JsonType type = (int)(json_value->value.object.values[i].type);
+	
+	            if(type == JSON_STRING) printf("%s: %s\n", key, value->value.string);
+	        
+	            if(type == JSON_NUMBER) printf("%s: %f\n", key, value->value.number);
+	        
+	            if(type == JSON_BOOLEAN) printf("%s: %s\n", key, value->value.boolean ? "True":"False");
+	
+	            if(type == JSON_OBJECT){
+	                printf("%s: \n", key);
+	                test(value);
+	            }
+	
+	            if(type == JSON_ARRAY){
+	                printf("%s: ", key);
+	                for (int i = 0; i < value->value.array.count; i++) {
+	                   test(value->value.array.values + i);
+	                } 
+	                printf("\n");
+	            }
+	        }
+	    } else {
+		    if(json_value->type == JSON_STRING) printf("%s ", json_value->value.string);
+		    
+		    if(json_value->type == JSON_NUMBER) printf("%f ", json_value->value.number);
+		
+		    if(json_value->type == JSON_BOOLEAN) printf("%s ", json_value->value.boolean ? "True":"False");
+		
+		    if(json_value->type == JSON_OBJECT){
+			printf("%s: \n", json_value->value.object.keys);
+			test(json_value->value.object.values);          
+	            }
+	      }
+	}
+	
+	int main(int argc, char const *argv[]) {
+	     
+	     // Chuỗi JSON đầu vào
+	    const char* json_str = "{"
+	                        "\"1001\":{"
+	                          "\"SoPhong\":3,"
+	                          "\"NguoiThue\":{"
+	                            "\"Ten\":\"Nguyen Van A\","
+	                            "\"CCCD\":\"1920517781\","
+	                            "\"Tuoi\":26,"
+	                            "\"ThuongTru\":{"
+	                              "\"Duong\":\"73 Ba Huyen Thanh Quan\","
+	                              "\"Phuong_Xa\":\"Phuong 6\","
+	                              "\"Tinh_TP\":\"Ho Chi Minh\""
+	                            "}"
+	                          "},"
+	                          "\"SoNguoiO\":{"
+	                            "\"1\":\"Nguyen Van A\","
+	                            "\"2\":\"Nguyen Van B\","
+	                            "\"3\":\"Nguyen Van C\""
+	                          "},"
+	                          "\"TienDien\": [24, 56, 98],"
+	                          "\"TienNuoc\":30.000"
+	                        "},"
+	                        "\"1002\":{"
+	                          "\"SoPhong\":5,"
+	                          "\"NguoiThue\":{"
+	                            "\"Ten\":\"Phan Hoang Trung\","
+	                            "\"CCCD\":\"012345678912\","
+	                            "\"Tuoi\":24,"
+	                            "\"ThuongTru\":{"
+	                              "\"Duong\":\"53 Le Dai Hanh\","
+	                              "\"Phuong_Xa\":\"Phuong 11\","
+	                              "\"Tinh_TP\":\"Ho Chi Minh\""
+	                            "}"
+	                          "},"
+	                          "\"SoNguoiO\":{"
+	                            "\"1\":\"Phan Van Nhat\","
+	                            "\"2\":\"Phan Van Nhi\","
+	                            "\"2\":\"Phan Van Tam\","
+	                            "\"3\":\"Phan Van Tu\""
+	                          "},"
+	                          "\"TienDien\":23.000,"
+	                          "\"TienNuoc\":40.000"
+	                        "}"
+	                      "}";
+	    
+	
+	    // Phân tích cú pháp chuỗi JSON
+	    JsonValue* json_value = parse_json(&json_str);
+	
+	   test(json_value);
+	
+	    // Kiểm tra kết quả phân tích cú pháp
+	
+	       // Giải phóng bộ nhớ được cấp phát cho JsonValue
+	    free_json_value(json_value);
+	    
+	        //printf("test = %x", '\"');
+	
+	       // hienthi(5);
+	    
+	    return 0;
+	}
 
 
 
 
 
 
+```
+</details>
 
-
-
-
+</details>
+</details>
 
 
 
