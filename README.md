@@ -420,7 +420,7 @@ int main()
 - Con trỏ void.
 - Con trỏ hằng.
 - Hằng Con trỏ .
-- Con trỏ VOID
+- Con trỏ trỏ tới con trỏ.
 
 **Con trỏ hàm**
 
