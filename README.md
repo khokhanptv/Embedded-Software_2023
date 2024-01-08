@@ -1,11 +1,11 @@
 
 
 <details>
-  <summary><h3>▶ C Advance </h3></summary>
+  <summary><h1>▶ ⭐C Advance </h2></summary>
 
 
 <details>
-  <summary><h3>Quá trình biên dịch</h3></summary>
+  <summary><h2>Quá trình biên dịch</h2></summary>
 	
 Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc cao (NNBC) (C/C++, Pascal, Java, C#…) sang  ngôn ngữ máy , để máy tính có thể hiểu và thực thi.
 ### Quá trình biên dịch bao gồm 4 giai đoạn:
@@ -154,7 +154,7 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 
 </details>
 <details>
-  <summary><h3>Stdargt - Assert</h3></summary>
+  <summary><h2>Stdargt - Assert</h2></summary>
 
 - **Stdargt:** 
 - Cú pháp: `#include<stdarg.h>`
@@ -356,7 +356,7 @@ int main(){
 
 </details>
 <details>
-  <summary><h3>Pointer</h3></summary>
+  <summary><h2>Pointer</h2></summary>
 
 - Con trỏ (pointer) là một biến chứa địa chỉ bộ nhớ của một biến khác. Việc sử dụng con trỏ giúp chúng ta thực hiện các thao tác trên bộ nhớ một cách linh hoạt hơn.
 - Thông qua con trỏ có thể thay đổi giá trị tại biến mà nó trỏ tới
@@ -642,7 +642,7 @@ int main() {
 
 </details>
 <details>
-  <summary><h3>Từ khóa đặc biệt trong C </h3></summary>
+  <summary><h2>Từ khóa đặc biệt trong C </h2></summary>
 
 - Biến cục bộ là biến tồn tại trong các hàm :Hàm main() , hàm con.Biến cục bộ sẽ được lưu vào vùng nhớ stack, thu hồi khi kết thúc hàm. 
 - Biến toàn cục là các biến được khai báo ở bên ngoài tất cả các hàm , Biến toàn cục tồn tại cho tới khi chương trình kết thúc.
@@ -752,7 +752,7 @@ int main()
 </details>
  
 <details>
-  <summary><h3>Goto_setjmp</h3></summary>
+  <summary><h2>Goto_setjmp</h2></summary>
 
 **Goto:**
 - goto là một từ khóa trong ngôn ngữ lập trình C, cho phép chương trình nhảy đến một nhãn (label) đã được đặt trước đó trong cùng một hàm.
@@ -832,7 +832,7 @@ int main() {
 </details>
 
 <details>
-  <summary><h3>Bitmask </h3></summary>
+  <summary><h2>Bitmask </h2></summary>
 
 **Khái niệm**:
 - Bitmask là một kỹ thuật sử dụng các bit để lưu trữ  trạng thái. Có thể sử dụng bitmask để đặt, xóa và kiểm tra trạng thái của các bit cụ thể trong một từ  
@@ -993,7 +993,7 @@ int main() {
 
 </details>
 <details>
-  <summary><h3>Struct - Union </h3></summary>
+  <summary><h2>Struct - Union </h2></summary>
 
 **Struct:**
 - Struct là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó , kích thước của struct bằng kích thước các thành viên bên trong + phần padding.
@@ -1022,7 +1022,7 @@ int main() {
 
 </details>
 <details>
-  <summary><h3>Phân vùng bộ nhớ trên RAM, cấp phát bộ nhớ động</h3></summary>
+  <summary><h2>Phân vùng bộ nhớ trên RAM, cấp phát bộ nhớ động</h2></summary>
 	
 ### Phân vùng bộ nhớ trên RAM(Memory layout)
 - Chương trình main.exe trên window  hoặc main.hex với VĐK (lưu ở bộ nhớ SSD hoặc FLASH). 
@@ -1186,7 +1186,7 @@ void free(void* ptr);
 
 </details>
 <details>
-  <summary><h3> JSON</h3></summary>
+  <summary><h2> JSON</h2></summary>
 
 > https://www.w3schools.com/js/js_json_intro.asp
 >
