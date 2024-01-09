@@ -421,29 +421,54 @@ int main()
 - Con trỏ hằng.
 - Hằng Con trỏ .
 - Con trỏ trỏ tới con trỏ.
+- Con trỏ NULL.
 
 **Con trỏ hàm**
-
-- Pointer to function (con trỏ hàm) là một biến giữ địa chỉ của một hàm.Có nghĩa nó trỏ đến vùng nhớ chứa mã máy của hàm được định nghĩa
-- Có thể sử dụng con trỏ hàm để truy cập và gọi hàm từ một địa chỉ bộ nhớ cụ thể.
+- Hàm (function) bản chất là 1 địa chỉ 
+- con trỏ hàm là một biến chứa địa chỉ của một hàm.`void (*ptr)();`
+- khi khởi tạo xong thì phải gán địa chỉ của hàm cho con trỏ hàm.`ptr=printsum;`
+- sau khi gán rồi có thể gọi hàm thông qua con trỏ hàm  .`ptr();`
 - Cú pháp:
 `kiểu dữ liệu (*tên con trỏ hàm)(kieu du liêu1, kieu du liêu2)` 
 - kiểu dữ liệu trùng với kiểu dữ liệu của hàm trỏ tới.
 - Nếu cần truyền tham số thì kiểu dữ liệu 1 ,2 trùng với hàm truyền vào.
+- Hàm con trỏ là một hàm mà tham số là một con trỏ hàm.
+- Điều này cho phép truyền một hàm cụ thể vào một hàm khác 
+- Có thể thông mảng để lưu giá trị các hàm mà nó trỏ tới
  
 ```C
 #include <stdio.h>
-int add(int a, int b) {
-    return a + b;
+void sum(int a, int b)
+{
+    printf("Sum of %d and %d is: %d\n",a,b, a+b);
 }
-int main() {
-    int (*sum)(int, int); // Khai báo con trỏ hàm
-    sum = add;            // Gán địa chỉ của hàm add cho con trỏ sum
 
-    printf("Sum: %d\n", sum(3, 4)); // Gọi hàm thông qua con trỏ hàm
-
+void divide(int a, int b)
+{
+    if (b == 0)
+    {
+        printf("Mau so phai khac 0\n");
+        return;
+    }
+    printf("%d divided by %d is: %f \n",a,b, (double)a / (double)b);
+}
+void calculator(void (*ptr1)(int, int), int a, int b)
+{
+    printf("Program calculate: \n");
+    ptr(a,b);
+}
+int main()
+{
+	int arr[]={1,2};
+	
+    calculator(sum,5,2);
+    calculator(divide,5,2)	
+	void (*ptr[])(int , int)={sum ,divide};
+	ptr[0](2,4);
+	ptr[1](2,4);
     return 0;
 }
+
 ```
 
 **Hàm con trỏ**
