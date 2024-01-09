@@ -432,10 +432,11 @@ int main()
 `kiểu dữ liệu (*tên con trỏ hàm)(kieu du liêu1, kieu du liêu2)` 
 - kiểu dữ liệu trùng với kiểu dữ liệu của hàm trỏ tới.
 - Nếu cần truyền tham số thì kiểu dữ liệu 1 ,2 trùng với hàm truyền vào.
-- Hàm con trỏ là một hàm mà tham số là một con trỏ hàm.
 - Điều này cho phép truyền một hàm cụ thể vào một hàm khác 
-- Có thể thông mảng để lưu giá trị các hàm mà nó trỏ tới
- 
+- Có thể thông qua mảng để lưu giá trị các hàm mà nó trỏ tới
+ <details>
+<summary>Ví dụ:</summary>
+
 ```C
 #include <stdio.h>
 void sum(int a, int b)
@@ -470,6 +471,7 @@ int main()
 }
 
 ```
+</details>
 
 **Hàm con trỏ**
 - Hàm con trỏ là một hàm mà tham số của nó là một con trỏ hàm.
