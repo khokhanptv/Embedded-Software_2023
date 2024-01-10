@@ -4768,6 +4768,8 @@ int main() {
 ### Cách truyền nhận dữ liệu:
 
 ![Connect with orther](https://kysungheo.com/wp-content/uploads/2023/03/3-300x129.png)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/3b03fecd-3c23-4ec4-a498-9b1758b5bcd8)
+
 
 - UART sẽ truyền và nhận dữ liệu từ một Data Bus
 - Data Bus được sử dụng để gửi dữ liệu đến UART bởi một thiết bị khác như vi điều khiển.
