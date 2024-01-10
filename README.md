@@ -2587,6 +2587,785 @@ Một hàm,Một ngày,undefined.
 </details>
 
 </details>
+<details>
+  <summary><h2> Linked List</h2></summary>
+
+- Linked list là một cấu trúc dữ liệu , được sử dụng để tổ chức và lưu trữ dữ liệu. Một linked list bao gồm một chuỗi các "nút" (nodes), mỗi nút chứa một giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo trong chuỗi.
+- Dùng trong các bài toán thao tác với mảng:Thêm, xóa, chèn ....phần tử vào mảng.
+- Ngoài ra ta có các hàm thực hiện chức năng sau:
+
+```C
+node *createNode(int value); 
+void push_back(node** array, int value); // thêm một node vào cuối
+void push_front(node **array, int value); // them 1 node vao phia truoc
+void pop_back(node **array); //  bỏ node cuối 
+void pop_front(node **array); // xoa node dau tien
+int front(node **array); // lay gia tri cua node dau tien
+int back(node **array); // lay gia tri cua node cuoi cung
+void insert(node **array, int value, int pos); // them 1 node vao mot vi tri bat ky
+void deletee(node **array, int pos); // xoa 1 node tai mot vi tri bat ky
+int size(node **array); // lay kich thuoc cua list
+int get(node **array, int pos); 
+bool empty(node **array); // kiem tra list co rong hay khong
+
+
+```
+ <details>
+<summary>Ví dụ</summary>
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+// Định nghĩa cấu trúc của một node trong danh sách liên kết
+typedef struct node
+{
+    int value;           // Giá trị của node
+    struct node* next;   // Con trỏ trỏ đến node kế tiếp trong danh sách
+} node;
+
+// Hàm tạo một node mới với giá trị cho trước
+node* createNode(int value)
+{
+    node* ptr = (node*)malloc(sizeof(node));  // Cấp phát bộ nhớ cho node mới
+    ptr->value = value;                       // Gán giá trị
+    ptr->next = NULL;                         // Khởi tạo con trỏ next là NULL
+    return ptr;
+}
+
+// Hàm thêm một node vào cuối danh sách
+void push_back(node** array, int value)
+{
+    node* temp = createNode(value);
+
+    if (*array == NULL)
+    {
+        *array = temp;
+    }
+    else
+    {
+        node* p = *array;
+        while (p->next != NULL)
+        {
+            p = p->next;
+        }
+
+        p->next = temp;
+    }
+}
+
+// Hàm thêm một node vào đầu danh sách
+void push_front(node** array, int value)
+{
+    node* temp = createNode(value);
+    temp->next = *array;
+    *array = temp;
+}
+
+// Hàm loại bỏ node cuối cùng trong danh sách
+void pop_back(node** array)
+{
+    if (*array == NULL)
+    {
+        printf("Error: List is empty\n");
+        return;
+    }
+
+    node* p = *array;
+
+    if (p->next == NULL)
+    {
+        free(p);
+        *array = NULL;
+        return;
+    }
+
+    while (p->next->next != NULL)
+    {
+        p = p->next;
+    }
+
+    free(p->next);
+    p->next = NULL;
+}
+
+// Hàm loại bỏ node đầu tiên trong danh sách
+void pop_front(node** array)
+{
+    if (*array == NULL)
+    {
+        printf("Error: List is empty\n");
+        return;
+    }
+
+    node* temp = *array;
+    *array = (*array)->next;
+    free(temp);
+}
+
+// Hàm trả về giá trị của node đầu tiên trong danh sách
+int front(node** array)
+{
+    if (*array == NULL)
+    {
+        printf("Error: List is empty\n");
+        return 0; // Return a default value or handle the error as needed
+    }
+
+    return (*array)->value;
+}
+
+// Hàm trả về giá trị của node cuối cùng trong danh sách
+int back(node** array)
+{
+    if (*array == NULL)
+    {
+        printf("Error: List is empty\n");
+        return 0; // Return a default value or handle the error as needed
+    }
+
+    node* p = *array;
+    while (p->next != NULL)
+    {
+        p = p->next;
+    }
+
+    return p->value;
+}
+
+// Hàm chèn một node mới vào danh sách tại một vị trí cụ thể
+void insert(node** array, int value, int pos)
+{
+    if (pos < 0)
+    {
+        printf("Error: Invalid position\n");
+        return;
+    }
+
+    if (pos == 0)
+    {
+        push_front(array, value);
+        return;
+    }
+
+    node* temp = createNode(value);
+    node* p = *array;
+
+    for (int i = 0; i < pos - 1 && p != NULL; i++)
+    {
+        p = p->next;
+    }
+
+    if (p == NULL)
+    {
+        printf("Error: Invalid position\n");
+        free(temp);
+        return;
+    }
+
+    temp->next = p->next;
+    p->next = temp;
+}
+
+// Hàm xóa một node khỏi danh sách tại một vị trí cụ thể
+void deletee(node** array, int pos)
+{
+    if (*array == NULL)
+    {
+        printf("Error: List is empty\n");
+        return;
+    }
+
+    if (pos < 0)
+    {
+        printf("Error: Invalid position\n");
+        return;
+    }
+
+    if (pos == 0)
+    {
+        pop_front(array);
+        return;
+    }
+
+    node* p = *array;
+    node* temp;
+
+    for (int i = 0; i < pos - 1 && p != NULL; i++)
+    {
+        p = p->next;
+    }
+
+    if (p == NULL || p->next == NULL)
+    {
+        printf("Error: Invalid position\n");
+        return;
+    }
+
+    temp = p->next;
+    p->next = p->next->next;
+    free(temp);
+}
+
+// Hàm trả về kích thước của danh sách
+int size(node** array)
+{
+    int count = 0;
+    node* p = *array;
+
+    while (p != NULL)
+    {
+        count++;
+        p = p->next;
+    }
+
+    return count;
+}
+
+// Hàm trả về giá trị của node tại một vị trí cụ thể trong danh sách
+int get(node** array, int pos)
+{
+    int i = 0;
+    node* p = *array;
+
+    while (p != NULL && pos != i)
+    {
+        p = p->next;
+        i++;
+    }
+
+    if (pos != i || p == NULL)
+    {
+        printf("Error: Invalid position\n");
+        return 0; // Return a default value or handle the error as needed
+    }
+
+    return p->value;
+}
+
+// Hàm kiểm tra xem danh sách có rỗng hay không
+bool empty(node** array)
+{
+    return (*array == NULL);
+}
+
+// Hàm main để kiểm tra các hàm đã triển khai
+int main()
+{
+    node* arr = NULL;
+
+    push_back(&arr, 2);
+    push_back(&arr, 7);
+    push_back(&arr, 4);
+    push_back(&arr, 5);
+    push_back(&arr, 3);
+    push_back(&arr, 10);
+
+    printf("Size: %d\n", size(&arr));
+
+    push_front(&arr, 1);
+    pop_back(&arr);
+
+    printf("Front: %d\n", front(&arr));
+    printf("Back: %d\n", back(&arr));
+
+    insert(&arr, 99, 2);
+    deletee(&arr, 4);
+
+    for (int i = 0; i < size(&arr); i++)
+    {
+        printf("Value at position %d: %d\n", i, get(&arr, i));
+    }
+
+    printf("Is empty? %s\n", empty(&arr) ? "Yes" : "No");
+
+    return 0;
+}
+
+
+```
+</details>
+</details>
+
+
+<details>
+  <summary><h2> Stack - Queue </h2></summary>
+
+> https://www.programiz.com/dsa/stack
+>
+> https://medium.com/@noransaber685/understanding-the-stack-data-structure-in-c-introduction-implementation-and-examples-8d3fb03de809
+
+**Khái niệm:**
+- Stack là một cấu trúc dữ liệu trong đó việc chèn một phần tử mới và loại bỏ một phần tử hiện tại xảy ra ở cùng một đầu, được biểu diễn là đỉnh của ngăn xếp.
+Nó tuân theo nguyên tắc LIFO (Last In First Out) - Điều này có nghĩa là phần tử được chèn cuối cùng vào ngăn xếp sẽ được loại bỏ đầu tiên.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/08f2360c-a79d-4c79-8478-474bd695a274)
+
+**Các Phép Toán Cơ Bản trên Ngăn Xếp**
+
+- push(): Chèn một phần tử vào ngăn xếp.
+- pop(): Loại bỏ một phần tử khỏi ngăn xếp.
+- peek(): Lấy giá trị của phần tử ở đỉnh mà không loại bỏ nó.
+- isempty(): Kiểm tra xem ngăn xếp có trống không.
+- isfull(): Kiểm tra xem ngăn xếp có đầy không.
+- size(): Trả về kích thước của ngăn xếp.
+
+ 
+
+**Các phép toán hoạt động như sau:**
+- Sử dụng một con trỏ được gọi là TOP để theo dõi phần tử đỉnh trong ngăn xếp.
+- Khi khởi tạo ngăn xếp, ta đặt giá trị của nó là -1 để kiểm tra xem ngăn xếp có trống không bằng cách so sánh TOP == -1.
+- Khi đẩy một phần tử, ta tăng giá trị của TOP và đặt phần tử mới vào vị trí mà TOP đang chỉ đến.
+- Khi lấy ra một phần tử, ta trả về phần tử mà TOP đang chỉ đến và giảm giá trị của nó.
+- Trước khi đẩy, ta kiểm tra xem ngăn xếp đã đầy chưa.
+- Trước khi lấy ra, ta kiểm tra xem ngăn xếp đã trống không chưa.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/3b829f3d-20ea-4bcf-9a2f-646e580989ce)
+
+
+ <details>
+<summary>giải thích hàm</summary>
+
+**1, peek()**
+
+```C
+		int peek() {
+		   return stack[top];
+		}
+```  
+**2, isempty() and isfull()**
+
+```C
+		bool isempty() {
+		   if(top == -1)
+		      return true;
+		   else
+		      return false;
+		}
+		
+		bool isfull() {
+		   if(top == MAXSIZE)
+		      return true;
+		   else
+		      return false;
+		}
+``` 
+
+**3, push()**
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/0e1e6417-1fc2-423c-90f9-da35ea7f6fe5)
+
+```C
+
+		void push(int data) {
+		   if(!isFull()) {
+		      top = top + 1;   
+		      stack[top] = data;
+		   } else {
+		      printf("Stack overflow\n");
+		   }
+		}
+```
+
+**4, pop()**
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/2ce94763-fa9e-4982-bf5a-adf4a68aa1cd)
+
+```C
+int pop(int data) {
+		   if(!isempty()) {
+		      data = stack[top];
+		      top = top - 1;   
+		      return data;
+		   } else {
+		      printf("Stack underflow\n");
+		   }
+		}
+```
+
+</details>
+
+
+
+ <details>
+<summary>Ví dụ1:</summary>
+
+```C
+	#include <stdio.h>
+	#include <stdlib.h>
+	
+	typedef struct Stack {
+	    int* items; // mảng để lưu giá trị của từng ô
+	    int size;
+	    int top;
+	} Stack;
+	
+	void initialize( Stack *stack, int size) {
+	    stack->items = (int*) malloc(sizeof(int) * size);
+	    stack->size = size;
+	    stack->top = -1;
+	}
+	
+	int is_empty( Stack stack) {
+	    return stack.top == -1;
+	}
+	
+	int is_full( Stack stack) {
+	    return stack.top == stack.size - 1;
+	}
+	
+	void push( Stack *stack, int value) {
+	    if (!is_full(*stack)) {
+	        stack->items[++stack->top] = value;
+	    } else {
+	        printf("Stack overflow\n");
+	    }
+	}
+	
+	int pop( Stack *stack) {
+	    if (!is_empty(*stack)) {
+	        return stack->items[stack->top--];
+	    } else {
+	        printf("Stack underflow\n");
+	        return -1;
+	    }
+	}
+	
+	int top( Stack stack) {
+	    if (!is_empty(stack)) {
+	        return stack.items[stack.top];
+	    } else {
+	        printf("Stack is empty\n");
+	        return -1;
+	    }
+	}
+	
+	int main() {
+	    Stack stack1;
+	    initialize(&stack1, 5);
+	
+	
+	    push(&stack1, 10);
+	    push(&stack1, 20);
+	    push(&stack1, 30);
+	    push(&stack1, 40);
+	    push(&stack1, 50);
+	    push(&stack1, 60);
+	
+	    printf("Top element: %d\n", top(stack1)); // 50
+	
+	    printf("Pop element: %d\n", pop(&stack1)); // 50
+	    printf("Pop element: %d\n", pop(&stack1)); // 40
+	
+	    printf("Top element: %d\n", top(stack1)); // 30
+	
+	    return 0;
+	}
+
+```
+</details>
+
+ <details>
+<summary>Ví dụ 2:</summary>
+
+```c
+	#include <stdio.h>
+	#include <stdlib.h>
+
+	void push();
+	void pop();
+	void display();
+
+	struct node {
+	    int data;
+	    struct node* next;
+	};
+	
+	struct node* temp; // Variable to store the top of the stack
+	
+	int main() {
+	    printf("LINKED LIST IMPLEMENTATION USING STACKS\n\n");
+	    do {
+	        printf("1. Insert\n2. Delete\n3. Display\n4. Exit\n\n");
+	        printf("Enter your choice:");
+	        int choice; scanf("%d", &choice);
+	        
+	        switch (choice) {
+	            case 1:
+	                push();
+	                break;
+	            case 2:
+	                pop();
+	                break;
+	            case 3:
+	                display();
+	                break;
+	            case 4:
+	                exit(0);
+	                break;
+	            default:
+	                printf("Please re-enter!\n");
+	                break;
+	        }
+	    } while (choice != 4);
+	    return 0;
+	}
+	
+	void push() {
+	    int data;
+	    struct node* pointer = (struct node*)malloc(sizeof(struct node));
+	    
+	    if (pointer == NULL) printf("Stack overflow\n");
+	    else {
+	        printf("Enter the element to be inserted: ");
+	        scanf("%d", &data);
+	        
+	        if (temp == NULL) {
+	            pointer->data = data;
+	            pointer->next = NULL;
+	            temp = pointer;
+	        } else {
+	            pointer->data = data;
+	            pointer->next = temp;
+	            temp = pointer;
+	        }
+	    }
+	}
+	
+	void pop() {
+	    int item;
+	    struct node* pointer;
+	    
+	    if (temp == NULL) {
+	        printf("Stack underflow\n");
+	    }
+	    else {
+	        item = temp->data;
+	        pointer = temp;
+	        temp = temp->next;
+	        free(pointer);
+	        printf("The deleted item is %d\n", item);
+	    }
+	}
+	
+	void display() {
+	    struct node* pointer;
+	    pointer = temp;
+	    
+	    if (pointer == NULL) {
+	        printf("Stack underflow\n");
+	    }
+	    else {
+	        printf("The elements of the stack are:\n");
+	        
+	        while (pointer != NULL) {
+	            printf("%d\n", pointer->data);
+	            pointer = pointer->next;
+	        }
+	    }
+	}
+
+```
+</details>
+
+**Queue**
+> https://www.programiz.com/dsa/queue
+>
+> https://www.scaler.com/topics/data-structures/queue-in-data-structure/
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/54dffe7b-d9d8-4693-b68f-49f3797f6560)
+
+- Queue tuân theo nguyên tắc "Đầu Tiên Vào, Đầu Tiên Ra (FIFO)" - phần tử vào hàng đợi đầu tiên là phần tử ra khỏi hàng đợi đầu tiên.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/84c5b5de-2ee0-42c3-8f95-2c95cf81c682)
+
+**Các Phép Toán Cơ Bản trên Hàng Đợi**
+
+- Enqueue: Thêm một phần tử vào cuối hàng đợi.
+- Dequeue: Loại bỏ một phần tử từ đầu hàng đợi.
+- IsEmpty: Kiểm tra xem hàng đợi có trống không.
+- IsFull: Kiểm tra xem hàng đợi có đầy không.
+- Peek: Lấy giá trị ở đầu hàng đợi mà không loại bỏ nó.
+
+**Các phép toán trên hàng đợi hoạt động như sau:**
+
+  + Hai con trỏ FRONT và REAR
+  + FRONT theo dõi phần tử đầu tiên của hàng đợi
+  + REAR theo dõi phần tử cuối cùng của hàng đợi
+  + Ban đầu, đặt giá trị của FRONT và REAR là -1
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/35414b78-0871-445c-bd26-1e09ec383acf)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/83f8839e-ed51-4f95-8c2a-ffd0b42a6dd2)
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C
+	#include <stdio.h>
+	#include <stdlib.h>
+	
+	
+	typedef struct Queue {
+	    int* items; // mảng để lưu giá trị của từng ô
+	    int size;
+	    int front, rear; // để xác định phần tử nào đứng đầu, phần tử nào đứng cuối hàng
+	} Queue;
+	
+	void initialize(Queue *queue, int size) {
+	    queue->items = (int*) malloc(sizeof(int)* size);
+	    queue->front = -1;
+	    queue->rear = -1;
+	    queue->size = size;
+	}
+	
+	int is_empty(Queue queue) {
+	    return queue.front == -1;
+	}
+	
+	int is_full(Queue queue) {
+	    return (queue.rear + 1) % queue.size == queue.front;
+	}
+	
+	void enqueue(Queue *queue, int value) {
+	    if (!is_full(*queue)) {
+	        if (is_empty(*queue)) {
+	            queue->front = queue->rear = 0;
+	        } else {
+	            queue->rear = (queue->rear + 1) % queue->size;
+	        }
+	        queue->items[queue->rear] = value;
+	    } else {
+	        printf("Queue overflow\n");
+	    }
+	}
+	
+	int dequeue(Queue *queue) {
+	    if (!is_empty(*queue)) {
+	        int dequeued_value = queue->items[queue->front];
+	        if (queue->front == queue->rear) {
+	            queue->front = queue->rear = -1;
+	        } else {
+	            queue->front = (queue->front + 1) % queue->size;
+	        }
+	        return dequeued_value;
+	    } else {
+	        printf("Queue underflow\n");
+	        return -1;
+	    }
+	}
+	
+	int front(Queue queue) {
+	    if (!is_empty(queue)) {
+	        return queue.items[queue.front];
+	    } else {
+	        printf("Queue is empty\n");
+	        return -1;
+	    }
+	}
+	
+	int main() {
+	    Queue queue;
+	    initialize(&queue, 3);
+	
+	    enqueue(&queue, 10);
+	    enqueue(&queue, 20);
+	    enqueue(&queue, 30);
+	
+	    printf("Front element: %d\n", front(queue));
+	
+	    printf("Dequeue element: %d\n", dequeue(&queue));
+	    printf("Dequeue element: %d\n", dequeue(&queue));
+	
+	    printf("Front element: %d\n", front(queue));
+	
+	    enqueue(&queue, 40);
+	    enqueue(&queue, 50);
+	    printf("Dequeue element: %d\n", dequeue(&queue));
+	    printf("Front element: %d\n", front(queue));
+	
+	    return 0;
+	}
+
+
+```
+
+
+
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</details>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
