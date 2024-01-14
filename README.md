@@ -1,6 +1,73 @@
 <details>
 <summary><h1>▶ ⭐Bài tập ứng dụng</h1></summary>
 
+## 1 số BT liên quan con trỏ
+<details>
+<summary>Pointer</summary>
+
+**Tính độ dài mảng tĩnh**
+<details>
+<summary>CODE:</summary>
+
+```C
+#include <stdio.h>
+int main() {
+    int arr[4] = {1, 2, 3, 4};
+    int *ptr = arr;
+    int length = 0;
+
+    while (*ptr != '\0') {
+        ptr++;
+        length++;
+    }
+    printf("Do dai mang arr la: %d\n", length);
+
+    return 0;
+}
+
+```
+</details>
+
+**Tính độ dài mảng động**
+<details>
+<summary>CODE:</summary>
+
+```C
+ #include "stdio.h"
+ #include"stdlib.h"
+ 
+ int main(){
+    int n=0;
+    int length=0;
+    printf("nhap n\n");
+    scanf("%d",&n);
+    int *arr= (int*)malloc(n*sizeof(int));//cấp phát động cho mảng
+    if(arr==NULL){
+        printf("loi \n");
+        return 1;
+    }
+    int *ptr =arr;
+    printf("nhap cac phan tu\n");
+    for(int i =0;i<n;i++){
+        scanf("%d",ptr+i);
+    }
+    printf("cac phan tu da nhap la\n");
+    for(int i =0;i<n;i++){
+        printf("%d ",*(ptr+i));
+    }
+	free(arr);
+	return 0;
+ }
+```  
+</details>
+
+
+
+
+
+
+
+
 
 
 
@@ -10,6 +77,26 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</details>
 <details>
 <summary><h1>▶ ⭐C Basic</h1></summary>
 
@@ -3282,12 +3369,109 @@ int pop(int data) {
 	    return 0;
 	}
 
+```
+</details>
 
+
+</details>
+<details>
+  <summary><h2> File operations </h2></summary>
+
+**Những thứ liên quan đến file.csv**
+- File CSV (Comma-Separated Values) là một loại file văn bản  để lưu trữ  dữ liệu dưới dạng bảng.
+- Ví dụ 1 file example.csv có nội dung
+
+	+ UID	Room	Name
+	+	1	A 101	John Doe
+	+	2	B202	Jane Smith
+	+	3	C303	Bob Johnson4
+
+- Các hàm để thao tác file:
+	+ fprintf():Ghi chuỗi vào File, và có thể thêm danh sách các đối số 
+	+ fputs() :Ghi chuỗi vào File
+	+ fputc() :Ghi một ký tự vào File
+	+ fwrite() :Ghi một số byte được chỉ định vào File .bin
+	+ fclose(): Đóng File đã mở
+	+ feof(): Để kiểm tra địa chỉ hiện tại có phải ký tự cuối cùng của File hay chưa
+
+- Ví dụ thêm dữ liệu vào file example.csv.		
+
+```c
+#include <stdio.h>
+void addRow(const char* filename, const char* uid, const char* room, const char* name) {
+    FILE* file = fopen(filename, "a");
+    if (file == NULL) {
+        printf("Không thể mở file %s để ghi dữ liệu.\n", filename);
+        return;
+    }
+    fprintf(file, "%s,%s,%s\n", uid, room, name);
+
+    fclose(file);
+}
+int main() {
+    addRow("example.csv", "4", "D404", "A Johson");
+    addRow("example.csv", "5", "D424", "Ale ");
+    addRow("example.csv", "6", "D425", "Alice ");
+    return 0;
+}
 ```
 
 
 
 
+ 
+
+</details>
+<details>
+  <summary><h2>Binary Search</h2></summary>
+
+- Tìm kiếm nhị phân (Binary Search) là một thuật toán tìm kiếm trên m mảng đã được sắp xếp. Ý tưởng  là so sánh giá trị cần tìm với giá trị ở giữa của mảng, và dựa vào kết quả của so sánh để xác định xem giá trị cần tìm có thể nằm ở nửa trên hay nửa dưới của mảng
+<details>
+<summary>Ví dụ:</summary>
+
+```C
+#include <stdio.h>
+
+int binarySearch(int arr[], int low, int high, int target) {
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        // Kiểm tra xem giá trị ở giữa có bằng giá trị cần tìm không
+        if (arr[mid] == target)
+            return mid;
+
+        // Nếu giá trị ở giữa lớn hơn target, tìm ở nửa trái của mảng
+        if (arr[mid] > target)
+            high = mid - 1;
+
+        // Nếu giá trị ở giữa nhỏ hơn target, tìm ở nửa phải của mảng
+        else
+            low = mid + 1;
+    }
+
+    // Trả về -1 nếu không tìm thấy giá trị cần tìm
+    return -1;
+}
+
+int main() {
+    int arr[] = {2, 5, 8, 12, 16, 23, 38, 45, 50};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int target;
+    printf("nhap gia tri can tim\n");
+    scanf("%d",&target);
+
+    int result = binarySearch(arr, 0, n - 1, target);
+
+    if (result != -1)
+        printf("Giá trị %d được tìm thấy tại vị trí %d.\n", target, result);
+    else
+        printf("Giá trị %d không tồn tại trong mảng.\n", target);
+
+    return 0;
+}
+
+```
+</details>
 </details>
 
 
@@ -3295,79 +3479,11 @@ int pop(int data) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+</details>
 
 
 </details>
 </details>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </details>
 <details>
@@ -3383,31 +3499,126 @@ int pop(int data) {
 ### Class là gì?
 - Class là 1 kiểu dữ liệu do người dùng định nghĩa
 - Ví dụ:
+
 ```C++
-class sinhvien {
-	puplic:
-	string ten;
-	int tuoi;
-	int mssv;
-	int lop;
+class ClassName {
+private:   // Các thành phần riêng tư (private) chỉ có thể truy cập bên trong lớp   
+// Dữ liệu thành viên, hàm thành viên, ...
+protected:    // Các thành phần bảo vệ (protected) tương tự như private, nhưng có thể truy cập từ lớp kế thừa
+public:
+    // Các thành phần công khai (public) được truy cập từ bên ngoài lớp
+	   // Dữ liệu thành viên, hàm thành viên, ...
+	     // Hàm thành viên và các phương thức khác có thể được định nghĩa tại đây
+		     // ..
 };
 
-void display(sinhvien sv){
-	count<<"ten:"<<sv.ten<<endl;
-	count<<"tuoi:"<<sv.tuoi<<endl;
-	count<<"mssv:"<<sv.lop<<endl;
+```
+**Constructor**
+- Constructor trong C++ là một method(hàm) sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class.
+<details>
+<summary>Ví dụ:</summary>
 
-}
-int main(){
-	sinhvien sv1;
-	sv1.ten ="hoang";
-	sv1.tuoi=19;
-	display(sv1);
+```C++
+class HinhChuNhat {
+	public:
+    double chieuDai;  
+	 double chieuRong;
 
-	return 0;
+    HinhChuNhat(int dai = 5, int rong = 3);
+    // Hàm tính diện tích
+	   double tinhDienTich() {        
+		return chieuDai * chieuRong;   
+		}
+	};
 
+HinhChuNhat:HinhChuNhat(int dai, int rong)
+{
+   chieuDai = dai;
+   chieuRong = rong;
 }
 ```
+</details>
+
+**Destructor**
+- Destructor trong C++ là một method sẽ được tự động gọi khi object được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+class HinhChuNhat {
+	public:
+    double chieuDai;  
+	 double chieuRong;
+
+    HinhChuNhat(){
+        chieuDai = 10;
+        chieuRong = 9;
+    }
+    ~HinhChuNhat(){
+        std::cout << "Destructor " << '\n';
+    }
+
+
+    // Hàm tính diện tích   
+	double tinhDienTich() {       
+		return chieuDai * chieuRong; 
+		 }
+}
+int main()
+{
+    HinhChuNhat hinh1;
+    std::cout << "Dien tich: " << hinh1.tinhDienTich() << '\n';
+
+
+    return 0;
+}
+```
+</details>
+
+**Static keyword**
+- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object sẽ dùng chung địa chỉ của property này.
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+class HinhChuNhat {
+
+public:
+    double chieuDai;
+    double chieuRong;
+    
+    static int var;
+};
+
+int HinhChuNhat::var;
+
+int main()
+{
+    HinhChuNhat hinh1;
+    HinhChuNhat hinh2;
+    HinhChuNhat hinh3;
+
+    cout << "address of chieu dai: " << &hinh1.chieuDai << '\n'; 
+    cout << "address of chieu dai: " << &hinh2.chieuDai << '\n'; 
+    cout << "address of chieu dai: " << &hinh3.chieuDai << '\n'; 
+
+    cout << "address of var: " << &hinh1.var << '\n'; 
+    cout << "address of var: " << &hinh2.var << '\n'; 
+    cout << "address of var: " << &hinh3.var << '\n'; 
+
+
+    return 0;
+}
+```
+</details>
+
+- Khi một method trong class được khai báo với từ khóa static:
+- Method này độc lập với bất kỳ đối tượng nào của lớp.
+- Method này có thể được gọi ngay cả khi không có đối tượng nào của class tồn tại.
+- Method này có thể được truy cập bằng cách sử dụng tên class thông qua toán tử :: .
+- Method này có thể truy cập các static property và các static method bên trong hoặc bên ngoài class.
+- Method có phạm vi bên trong class và không thể truy cập con trỏ đối tượng hiện tại
 
 - Biến trong class gọi là `PROPERTY`.
 - sv1.tuoi... trong ví dụ gọi là `OBJECT` thuộc class sinhvien.
@@ -3416,6 +3627,10 @@ int main(){
 - Biến static trong class
 - Khi định nghĩa static trong class thì phải khởi tạo lần đầu ở ngoài.
 - Khi khởi tạo thì địa chỉ của nó tồn tại trong suốt chương trình nên member static này của các object sẽ đều có cùng 1 địa chỉ.
+
+<details>
+<summary>Ví dụ:</summary>
+
 ```C++
 class sinhvien {
 	puplic:// phạm vi truy cập
@@ -3496,6 +3711,8 @@ int main(){
 	// sẽ in ra là ten,tuoi,mssv,lop,Huy object co ten thai
 }
 ```
+</details>
+
 
 </details>
 <details>
@@ -3722,6 +3939,7 @@ class hs : private sinhvien{
 
 </details>
 **Polymorphism (Tính đa hình):**
+
 - Các method có thể trùng tên với nhau , nhưng phải khác các input parameter
 <details>
 <summary>Ví dụ:</summary>
@@ -4804,7 +5022,185 @@ Không có giao thức truyền thông nào là hoàn hảo, nhưng UART thực 
   - Kích thước của khung dữ liệu được giới hạn tối đa là 9 bit
   - Không hỗ trợ nhiều hệ thống phụ dây hoặc nhiều hệ thống chính
   - Tốc độ truyền của mỗi UART phải nằm trong khoảng 10% của nhau
+**CODE**
+ <details>
+<summary>STM32F4_MASTER</summary>
 
+- Cấp xung,Cấu hình chân,cấu hình UART.
+- Dựa vào hình thì UART từ ABP2
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c706fb8d-3be9-4b93-82c2-b660d3334790)
+
+- GPIOA ở AHB1
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/44b33b80-296a-4a72-ad31-b1b43a8f207c)
+
+```C
+void RCC_Config(){
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);// PA9 USART1_TX,PA10_USART1_RX
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+}
+```
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/306534cd-4f82-41e4-9045-5b0d3a7d2e1f)
+- Cấu hình chân:PA9 USART1_TX,PA10_USART1_RX
+
+```C
+	void GPIO_Config(){
+		GPIO_InitTypeDef GPIO_InitStruct;
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10 ;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz ;
+		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+		GPIO_Init(GPIOA,&GPIO_InitStruct);
+		GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_USART1);
+		GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_USART1);
+	}
+```
+- Cấu hình UART:
+
+```C
+void URART1_Config(){
+	USART_InitTypeDef UART_INITSTRUCT;
+	UART_INITSTRUCT.USART_BaudRate =9600;
+	UART_INITSTRUCT.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
+	UART_INITSTRUCT.USART_Mode = USART_Mode_Tx |USART_Mode_Rx;
+	UART_INITSTRUCT.USART_Parity =USART_Parity_No ;
+	UART_INITSTRUCT.USART_StopBits =USART_StopBits_1 ;
+	UART_INITSTRUCT.USART_WordLength = USART_WordLength_8b ;
+	USART_Init(USART1,&UART_INITSTRUCT);
+	USART_Cmd(USART1,ENABLE);
+}
+```
+- USART_Mode: Cấu hình chế độ hoạt động cho UART:
+- USART_Mode_Rx: Cấu hình truyền.
+- USART_Mode_Tx: Cấu hình nhận.Có thể cấu hình cả 2 cùng lúc.
+- USART_BaudRate: Cấu hình tốc độ baudrate cho uart.
+- USART_HardwareFlowControl: Cấu hình chế độ bắt tay cho uart.
+- USART_WordLength: Cấu hình số bit mỗi lần truyền.
+- USART_StopBits: Cấu hình số lượng stopbits.
+- USART_Parity: cấu hình bit kiểm tra chẳn, lẻ.
+
+**Hàm main**
+```C
+uint8_t arr[4]={5,2,3,4};
+int main(){
+	RCC_Config();
+	GPIO_Config();
+	URART1_Config();
+	while(1){
+		for(uint8_t i=0;i<4;i++){
+			USART1->DR =0;
+			USART_SendData(USART1,arr[i]);
+			while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==0); // TXE=TE
+			for(uint32_t j=0;j<10000;j++);
+		}	
+	}	
+}
+```
+- UART xóa hết data trong thanh ghi DR để đảm bảo data đúng.`USART1->DR =0;`
+- Hàm `USART_SendData(USART_TypeDef* USARTx, uint16_t Data)`, truyền data từ UARTx
+- `USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)`
+- USART_FLAG_TXE: Cờ truyền, set lên 1 nếu quá trình truyền hoàn tất.
+- USART_FLAG_RXNE: Cờ nhận, set lên 1 nếu quá trình nhận hoàn tất.
+- USART_FLAG_IDLE: Cờ báo đường truyền đang ở chế độ Idle.
+- USART_FLAG_PE: Cờ báo lỗi Parity
+
+- Trong tài liệu tiếng anh:
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/306534cd-4f82-41e4-9045-5b0d3a7d2e1f)
+
+</details>
+
+ <details>
+<summary>STM32F1_USART_SLAYER</summary>
+- Cấp xung,Cấu hình chân,cấu hình UART.
+- Dựa vào hình thì UART,GPIOA từ ABP2
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/0e4cbdf9-1f27-4925-9f46-b6f3e79a82ce)
+
+```C
+void RCC_Config(){
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);// PA9 USART1_TX,PA10_USART1_RX
+}
+```
+- Cấu hình GPIO:
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/d63639b0-5144-4389-9eaa-1e9425af93a2)
+
+
+```C
+void GPIO_Config(){
+GPIO_InitTypeDef GPIOInitStruct;
+	GPIOInitStruct.GPIO_Pin = GPIO_Pin_10;
+	GPIOInitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;// MODE NHẬN DL nếu là Slayer
+	//GPIO_INIT.GPIO_Mode =  GPIO_Mode_AF_PP;// nếu là Master
+	GPIO_Init(GPIOA, &GPIOInitStruct);
+	GPIOInitStruct.GPIO_Pin = GPIO_Pin_9;
+	GPIOInitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIOInitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIOInitStruct);
+}
+
+```
+- Cấu hình UART:Các hàm tương tự như F4
+
+```C
+void URART1_Config(){
+	USART_InitTypeDef UART_INITSTRUCT;
+	UART_INITSTRUCT.USART_BaudRate =9600;
+	UART_INITSTRUCT.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
+	UART_INITSTRUCT.USART_Mode = USART_Mode_Tx |USART_Mode_Rx;
+	UART_INITSTRUCT.USART_Parity =USART_Parity_No ;
+	UART_INITSTRUCT.USART_StopBits =USART_StopBits_1 ;
+	UART_INITSTRUCT.USART_WordLength = USART_WordLength_8b ;
+	USART_Init(USART1,&UART_INITSTRUCT);
+	USART_Cmd(USART1,ENABLE);
+}
+```
+**Hàm main**
+- Các cở như F4
+```C
+uint8_t arr[4];
+uint8_t i=0;
+int main(){
+	RCC_Config();
+	GPIO_Config();
+	URART1_Config();
+	while(1){
+		while(USART_GetFlagStatus(USART1,USART_FLAG_RXNE)==0);
+		arr[i]=USART_ReceiveData(USART1); 
+		i++;
+		if(i==4){
+			i =0;
+		}
+	}	
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</details>
 </details>
 
 <details>
