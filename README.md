@@ -4501,17 +4501,18 @@ cin >> tuoisv;
 
 - Các bit dữ liệu được truyền nối tiếp nhau và có xung clock đồng bộ.
 - Giao tiếp song công, có thể truyền và nhận cùng một thời điểm.
-- Khoảng cách truyền ngắn, được sử dụng để trao đổi dữ liệu với nhau giữa các chip trên cùng một bo mạch.
+- Khoảng cách truyền ngắn
 - Giao tiếp 1 Master với nhiều Slave.
 - Tốc độ truyền khoảng vài Mb/s.
-- Các dòng vi điều khiển thường được tích hợp module giao tiếp SPI dùng để giao tiếp truyền dữ liệu với các vi điều khiển khác, hoặc giao tiếp với các ngoại vi bên ngoài như cảm biến, EEPROM, ADC, LCD, SD Card,…
+
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_single_slave.svg/800px-SPI_single_slave.svg.png)
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_three_slaves.svg/350px-SPI_three_slaves.svg.png)
 - ***SCLK (Serial Clock):*** Xung clock phát ra từ master
 - ***MOSI (Master Out Slave In):*** Truyền data từ `master` đến `slave`. Chân `MOSI` ở `master` sẽ kết nối đến chân `MOSI` ở `slave`.
-- ***MISO (Master In Slave Out):*** Truyền data từ `slave` đến `master`. Chân `MISO` ở `master` sẽ kết nối đến chân `MISO` ở `slave`.
+- ***MISO (Master In Slave Out):*** Truyền data từ `slave` đến `master`. Chân `MISO
+` ở `master` sẽ kết nối đến chân `MISO` ở `slave`.
 - ***CS/SS (Chip/Slave Select):*** Chân CS được master sử dụng để lựa chọn slave cần giao tiếp. Master chỉnh chân SS xuống mức 0 để chọn slave truyền data.
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/SPI_8-bit_circular_transfer.svg/500px-SPI_8-bit_circular_transfer.svg.png)
@@ -4650,10 +4651,10 @@ int main(){
 
 **SPI Hardware:**
 - Dựa vào tài liệu nhà sản xuất ta cấu hình chân:\
-![STM43F4_AF](./Hinhanh/STM32F4_AF.PNG)
+![STM32F4_AF](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/74503806-d47a-4395-8beb-6152728f7423)
  
 <details>
-		<summary>Hardware</summary>
+		<summary>Hardware_rcv</summary>
 
 ```C
 // Slayer Hardware
@@ -4742,12 +4743,100 @@ int main ()
 ```
 </details>
 
+<details>
+		<summary>Hardware_Mater</summary>
+
+```C
+#include "stm32f4xx.h"
+
+#define SPI1_NSS 	GPIO_Pin_4
+#define SPI1_SCK	GPIO_Pin_5
+#define SPI1_MISO 	GPIO_Pin_6
+#define SPI1_MOSI 	GPIO_Pin_7
+#define SPI1_GPIO 	GPIOA
+
+void delay (uint32_t time){
+	uint32_t i;
+	for (i = 0; i< time; i++){
+	}
+	
+}
+void RCC_Config(){
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+}
+
+void GPIO_Config(){
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.GPIO_Pin = SPI1_NSS|SPI1_SCK|SPI1_MISO|SPI1_MOSI;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_Init(SPI1_GPIO,&GPIO_InitStruct); 
+	
+	
+	
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
+	GPIO_WriteBit(GPIOA,GPIO_Pin_4,1);
+}
+void SPI_Config(){
+	SPI_InitTypeDef SPI_InitStruct;
+	SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
+	SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex; 
+	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128; //84mhz /16
+	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
+	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
+	SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
+	SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStruct.SPI_CRCPolynomial = 10;
+	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
+	SPI_Init(SPI1, &SPI_InitStruct);
+	SPI_Cmd(SPI1,ENABLE);
+	
+}
+void SPI_Trans(uint8_t arr ){
+	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
+	SPI_SendData(SPI1,arr);
+	while(!SPI_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY)==0);
+	GPIO_SetBits(GPIOA,GPIO_Pin_4);
+}
+
+uint8_t arr[4]={5,2,3,4};
+int main(){
+	RCC_Config();
+	GPIO_Config();
+	SPI_Config();
+	while(1){
+		
+		for(uint8_t i=0;i<4;i++){	
+			SPI_Trans(arr[i]);		 
+			delay(1000000);
+		}
+		 
+		
+	}
+	
+	
+	
+}
 
 
 
 
 
 
+
+
+
+```
+
+
+
+
+</details>
 
 </details>
 
@@ -4920,7 +5009,9 @@ int main() {
 </details>
 
 **Tóm lại:**
-![I2C](./Hinhanh/I2C.PNG)
+
+![I2C](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/d758fc68-1880-47ad-bd56-3b7b5a2a516f)
+
 - SDA,SCL nối trở kéo lên >> mức cao
 - Để bắt đầu truyền thì Master sẽ kéo đường SDA từ cao xuống thấp, sau đó SCL sẽ kéo từ cao xuống thấp.
 - Sau đó Master sẽ gửi 7 bit địa chỉ + 1 bit(read(1) hoặc write(0)) + nhận 1 bit ACK(0) hoặc NACK(1) từ slayer .
@@ -4977,11 +5068,17 @@ int main() {
 
 - `UART` (Universal Asynchronous Receiver / Transmitter) hoàn toàn khác biệt với chuẩn giao tiếp `SPI` hoặc `I2C`, những chuẩn này chỉ đơn tuần là giao tiếp phần mềm.
 - Mục đích chính của `UART` là truyền và nhận dữ liệu nối tiếp không đồng bộ vì không có chân `Clock`. Nên tốc độ truyền `Baudrate` rất quan trọng trong giao thức này.
+- Thông thường, tốc độ truyền của UART được đặt ở một số chuẩn, như 9600, 19200, 38400, 57600, 115200 baud . Tốc độ truyền này định nghĩa số lượng bit được truyền qua mỗi giây
 - Chuẩn giao tiếp `UART` sử dụng 2 dây để truyền và nhận dữ liệu giữa các thiết bị:
  - `TX (Transmiter)` – Dây truyền dữ liệu
  - `RX (Receiver)` – Dây nhận dữ liệu
 - Giao tiếp giữa 1 `Master` và 1 `Slave`.
 - Ngoài dữ liệu ra trong 1 lần truyền còn nhét thêm các Start bit, Stop bit, Parity bit. Các bit thêm vào này giúp cho Slave nhận biết, kiểm tra và nhận được đúng tín hiệu.
+- Uart truyền dữ liệu nối tiếp, theo 1 trong 3 chế độ:
+	+ Simplex: Chỉ tiến hành giao tiếp một chiều.
+ 	+ Half duplex: Dữ liệu sẽ đi theo một hướng tại 1 thời điểm
+	+ Full duplex: Thực hiện giao tiếp đồng thời đến và đi từ mỗi master và slave
+
 
 ### Cách truyền nhận dữ liệu:
 
@@ -5112,6 +5209,7 @@ int main(){
 <summary>STM32F1_USART_SLAYER</summary>
 - Cấp xung,Cấu hình chân,cấu hình UART.
 - Dựa vào hình thì UART,GPIOA từ ABP2
+
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/0e4cbdf9-1f27-4925-9f46-b6f3e79a82ce)
 
 ```C
