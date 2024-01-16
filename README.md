@@ -5310,6 +5310,243 @@ int main(){
   - 1 dây là CAN low: điện áp dao động từ 1.25 – 2.5 V
 
 </details>
-
 </details>
+
+<details>
+  <summary><h3>Interrupt  </h3></summary>
+<details>
+  <summary><h4>External interrupt </h4></summary>
+
+- External interrupt (EXTI) hay còn gọi là ngắt ngoài. Là 1 sự kiện ngắt xảy ra khi có tín hiệu can thiệp từ bên ngoài, từ phần cứng, người sử dụng hay ngoại vi,… 
+- Sơ đồ khối của các khối điều khiển ngắt ngoài:
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/0d74dfa6-8c4a-4108-b7ec-b8b5793513ed)
+
+- Ngắt ngoài của chip STM32F4bao gồm có 16 line:
+	+ External interrupt/event line mapping
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1b8b9683-c81d-4074-8482-3dcc2f2948c3)
+
+- Tiếp theo các Line ngắt sẽ được phân vào các Vector ngắt tương ứng
+	+ Table 61. Vector table for STM32F405xx/07xx and STM32F415xx/17xx
+- Các Line0, Line1, Line2, Line3, Line4 sẽ được phân vào các vector ngắt riêng biệt EXTI0, EXTI1, EXTI2, EXTI3, EXTI4
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e1a4a0b8-e4c2-4ee0-b9fd-22780022101d)
+- Còn từ Line5->Line9 sẽ được phân vào vector ngắt EXTI9_5, Line10->Line15 được phân vào vecotr EXTI15_10.
+- ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/cfd36fa1-9a2b-491d-82b4-a9687c0399fa)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e245a7fc-08c6-4166-be0d-a1928cf49d06)
+- Bảng mức độ ưu tiên ngắt NVIC:
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/73a2d0c7-1ad8-44f2-a7f8-738862765b37)
+- Có hai loại ưu tiên ngắt khác nhau trên MCU STM32F103C8T6 đó là Preemption Priorities và Sub Priorities:
+	+ Mặc định thì ngắt nào có Preemtion Priority cao hơn thì sẽ được thực hiện trước.
+	+ Khi nào 2 ngắt có cùng một mức Preemption Priority thì ngắt nào có Sub Priority cao hơn thì ngắt đó được thực hiện trước.
+	+ Còn trường hợp 2 ngắt có cùng mức Preemption và Sub Priority luôn thì ngắt nào đến trước được thực hiện trước.
+
+ <details>
+<summary>CODE_STM32F4</summary>
++ Cau hinh nut nhan PE4
++ // Cau hinh LED PA6
+Khi nhấn nút thì ngắt xảy ra
+
+```C
+#include "stm32f4xx.h"
+
+void RCC_Config(){
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);// (enable) xung nhịp cho bộ chuyển mạch hệ thống (System Configuration - SYSCFG)
+//Khi xung nhịp được kích hoạt cho SYSCFG, để  cấu hình các chân ngắt ngoại (external interrupts) thông qua hàm SYSCFG_EXTILineConfig
+}
+
+void GPIO_Config(){
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+    // Cau hinh nut nhan PE4
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+    // Cau hinh LED PA6
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+void EXTI_Config(){
+    EXTI_InitTypeDef EXTI_InitStruct;
+
+    // Định tuyến chân ngắt ngoại từ PE4 đến EXTI_Line4
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource4);
+
+    // Cấu hình chân ngắt ngoại EXTI_Line4
+    EXTI_InitStruct.EXTI_Line = EXTI_Line4; // Chọn chân ngắt ngoại là EXTI_Line4
+    EXTI_InitStruct.EXTI_LineCmd = ENABLE; // Kích hoạt chân ngắt ngoại
+    EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt; // Chọn chế độ ngắt ngoại
+    EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising; // Chọn kiểu ngắt ngoại: cạnh dương
+    EXTI_Init(&EXTI_InitStruct);
+}
+
+// Cấu hình ngắt (NVIC)
+void NVIC_Config(){
+    NVIC_InitTypeDef NVIC_InitStruct;
+
+    // Cấu hình ngắt EXTI4
+    NVIC_InitStruct.NVIC_IRQChannel = EXTI4_IRQn; // Chọn kênh ngắt là EXTI4
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE; // Kích hoạt ngắt
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0; // Độ ưu tiên ngắt
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0; // Độ ưu tiên ngắt
+    NVIC_Init(&NVIC_InitStruct);
+}
+// Hàm xử lý ngắt khi nút nhấn được nhấn
+void EXTI4_IRQHandler(){
+    if (EXTI_GetITStatus(EXTI_Line4) != RESET){
+        GPIO_ToggleBits(GPIOA, GPIO_Pin_6);
+    }
+    EXTI_ClearITPendingBit(EXTI_Line4);// Xóa cờ ngắt
+}
+
+int main(){
+    RCC_Config();
+    GPIO_Config();
+    EXTI_Config();
+    NVIC_Config();
+
+    while(1){
+ 
+    }
+}
+
+
+
+
+```
+</details>
+</details>
+
+<details>
+  <summary><h4>Ngắt Timer </h4></summary>
+
+- Timers thường được sử dụng để thực hiện các chức năng thời gian, đo đạc thời gian, và tạo ngắt theo chu kỳ. Các timers thường đi kèm với các chức năng ngắt (interrupts) để thực hiện các công việc liên quan đến thời gian.
+**Reset and clock control for STM32F42xxx and STM32F43xxx (RCC)**
+- ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b6b0065e-a44e-42e1-9f10-d88cfe765077)
+-  xung nhịp hệ thống là 168MHz, chia 1,2 vẫn giữ nguyên.
+<details>
+<summary>CODE_STM32F4</summary>
+
+-Timer (TIM2) và một GPIO pin (GPIOA Pin 6).
+- Tạo một ngắt (interrupt) sau mỗi khoảng thời gian nhất định và trong hàm ngắt, trạng thái của GPIOA Pin 6(LED)
+
+```c
+#include "stm32f4xx.h"
+
+// Cấu hình xung nhịp cho cổng GPIOA và timers TIM2 và TIM3
+void RCC_Config() {
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE); // Kích hoạt xung nhịp cho GPIOA
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);   // Kích hoạt xung nhịp cho TIM2
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);   // Kích hoạt xung nhịp cho TIM3
+}
+
+// Cấu hình chân GPIOA Pin 6 làm chân đầu ra
+void GPIO_Config() {
+    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+// Cấu hình timers TIM2 và TIM3
+void Tim_Config() {
+    TIM_TimeBaseInitTypeDef Tim_InitStruct;
+
+    // Cấu hình TIM2
+    Tim_InitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+    Tim_InitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+    Tim_InitStruct.TIM_Period = 1000000 - 1;  // Chu kỳ là 1 giây (đếm từ 0 đến 999999)
+    Tim_InitStruct.TIM_Prescaler = 168 - 1;    // Bộ chia tần, giả sử xung nhịp hệ thống là 168MHz
+    TIM_TimeBaseInit(TIM2, &Tim_InitStruct);
+    TIM_Cmd(TIM2, ENABLE);  // Bắt đầu đếm
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);  // Kích hoạt ngắt khi đếm đến giá trị Period
+
+    // Cấu hình TIM3 để tạo hàm delay
+    Tim_InitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+    Tim_InitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+    Tim_InitStruct.TIM_Period = 0xFFFF - 1;   // Giả sử đếm từ 0 đến 65535
+    Tim_InitStruct.TIM_Prescaler = 168 - 1;
+    TIM_TimeBaseInit(TIM3, &Tim_InitStruct);
+    TIM_Cmd(TIM3, ENABLE);
+}
+
+// Cấu hình ngắt cho TIM2
+void NVIC_Config() {
+    NVIC_InitTypeDef NVIC_InitStruct;
+    NVIC_InitStruct.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
+}
+
+// Hàm xử lý ngắt TIM2
+void TIM2_IRQHandler() {
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update)) {
+        GPIO_ToggleBits(GPIOA, GPIO_Pin_6);    // Chuyển đổi trạng thái của GPIOA Pin 6
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  // Xóa cờ ngắt TIM2
+    }
+}
+
+// Hàm delay sử dụng TIM3
+void delay(uint32_t TIM_TIME) {
+    TIM_SetCounter(TIM3, 0);  // Reset bộ đếm của TIM3
+    while (TIM_GetCounter(TIM3) < TIM_TIME * 1000);  // Đợi cho đến khi bộ đếm đạt đến giá trị cần
+}
+
+// Hàm main
+int main() {
+    RCC_Config();   // Cấu hình xung nhịp và các thành phần cần thiết
+    GPIO_Config();
+    NVIC_Config();
+    Tim_Config();
+
+    while (1) {
+        // Chương trình chính
+    }
+}
+
+
+
+
+
+
+
+```
+</details>
+</details>
+
+<details>
+  <summary><h4>Timer_PWM_SEGVO</h4></summary>
+
+
+
+
+
+
+
+
+
+
+
+
+<details>
+
+
+
+
+
+
+
+
+<details>
 </details>
