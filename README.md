@@ -5595,15 +5595,66 @@ int main() {
 
 
 
-
-<details>
-
-
-
-
-
-
-
-
-<details>
 </details>
+</details>
+
+<details>
+  <summary><h3>DMA</h3></summary>
+
+**DMA – Direct memory access được sử dụng với mục đích truyền data với tốc độ cao từ thiết bị ngoại vi đến bộ nhớ cũng như từ bộ nhớ đến bộ nhớ**
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/cce6b54e-d870-4dc0-b413-6482951feb9a)
+
+- DMA có thể điều khiển data truyền từ :
+	+ Bộ nhớ đến Peripheral 
+	+ Ngược lại, Periph đến Bộ nhớ.
+	+ Giữa 2 vùng nhớ.
+- Không thông qua data bus  của CPU. 
+- Giữ cho tài nguyên của CPU được rảnh rỗi cho các thao tác khác. Đồng thời tránh việc data nhận về từ ngoại vi bị mất mát.
+
+- Sơ đồ khối bộ DMA.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/36c6a3e8-3412-4c96-ae29-11ea7bbcc439)
+
+- STM32F4 có 2 bộ DMA với nhiều kênh, mỗi kênh có nhiều ngoại vi có thể dùng DMA:
+
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1f242652-a0d1-4dff-a3a1-78f46c894e84)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c79dec05-7b5b-4ab5-ba82-f5472c5b7009)
+
+- STM32F4 có 4 chế độ hoạt động:
+	+	Circular Buffer Mode: DMA có thể được cấu hình để hoạt động trong chế độ vòng lặp với khả năng tự động quay lại địa chỉ ban đầu sau khi hoàn thành mỗi lần truyền.
+
+	+	Normal Mode: Truyền dữ liệu một lần và sau đó dừng lại.
+
+	+	Double Buffer Mode: DMA có thể được cấu hình để truyền dữ liệu giữa hai bộ đệm, giúp giảm thiểu thời gian chờ khi một bộ đệm đang được truyền dữ liệu, trong khi bộ đệm khác có thể được chuẩn bị cho truyền tiếp theo.
+
+	+	Peripheral Increment Mode: Cho phép tăng địa chỉ của bộ nhớ đích hoặc nguồn dữ liệu sau mỗi lần truyền.
+
+	+ Memory Increment Mode: Cho phép tăng địa chỉ của bộ nhớ đích hoặc nguồn dữ liệu sau mỗi lần truyền.
+
+**Cấu hình DMA**
+- Không như các ngoại vi khác, DMA cần được cấp xung từ AHB, cả 2 bộ DMA đều có xung cấp từ AHB. Ngoài ra cần cấp xung cho AFIO.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/d48dc46a-b8f1-4ab5-8baa-d44c2cd8aa2e)
+
+
+</details>
+</details>
+
+
+
+
+</details>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
