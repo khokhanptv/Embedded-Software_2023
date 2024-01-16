@@ -61,13 +61,70 @@ int main() {
 ```  
 </details>
 
+**Sắp xếp(thuật toán bubble sort) và tìm kiếm**
+<details>
+<summary>CODE:</summary>
+
+```C
+#include<stdio.h>
+#include<stdlib.h>
+
+int main(){
+    int n=0;
+    int temp;
+    int a;
+    int found =0;
+    printf("nhap n\n");
+    scanf("%d",&n);
+
+    int *arr=(int*)malloc(n*sizeof(int));
+    int *ptr  =arr;
+    printf("nhap cac phan tu\n");
+    for(int i =0;i<n;i++){
+    scanf("%d",(ptr+i));
+    }  
+    printf("cac phan tu da nhap la n\n"); 
+    for(int i =0;i<n;i++){
+        printf("%d \n",*(ptr+i));
+    }
+    printf("sap xep cac phan tu tu be toi lon\n");
+    for(int i =0;i<n;i++){
+        for(int j=i+1; j<n;j++){
+            if (*(ptr+i)>*(ptr+j)){
+            temp =*(ptr+i);
+            *(ptr+i)  =*(ptr+j);
+            *(ptr+j) =temp;
+         }
+        }
+    }
+    printf("cac phan tu da sap xep n\n"); 
+        for(int i =0;i<n;i++){
+        printf("%d \n",*(ptr+i));
+    }
+    printf("nhap so can tim\n"); 
+    scanf("%d",&a);
+    for(int i =0;i<n;i++){
+        if(a == *(ptr+i)){
+            printf("da tim thay %d o vi tri %d \n ",*(ptr+i),i);
+            found=1;
+            break;
+        }
+    }
+    if(found==0){
+        printf("khong tim thay\n");
+        }
+    
+
+
+    free(arr);
+    return 0;
+}
+```
 
 
 
 
-
-
-
+</details>
 
 
 
@@ -803,7 +860,7 @@ void free(void* ptr);
 - Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
 - Macro đơn giản là chỉ thay thế đoạn code macro vào chỗ được gọi trước khi được biên dịch .Giả sử 1 macro là 1 byte được gọi 20 lần >> 20 byte trong hàm main ,20 dòng code sẽ được chèn vào trong quá trình tiền xử lí. Điều này làm tốn kich thước nhưng time xử lý ngắn hơn( chỉ copy -paste vào chương trình) .
 
-- khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu , Giả sử hàm được gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy. Nhưng khi gọi hàm sẽ mất thời gian để compiler lưu con trỏ chương trình PC hiện tại vào stack pointer; chuyển PC tới hàm được gọi, thực hiện hàm đó xong và lấy kết quả trả về; sau đó quay lại vị trí ban đầu trong stack pointer trước khi gọi hàm và tiếp tục thực hiện chương trình.
+- khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu , Giả sử hàm được gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy. Nhưng khi gọi hàm  có thể tốn thêm thời gian do quá trình gọi hàm và quay lại vị trí ban đầu.
 
 
 
