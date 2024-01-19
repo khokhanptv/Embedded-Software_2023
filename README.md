@@ -120,17 +120,45 @@ int main(){
     return 0;
 }
 ```
+</details>
+</details>
 
 
+## Struct_union
 
+<details>
+<summary>CODE:</summary>
+
+```C
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdint.h>
+
+int main(void){
+    struct ex{
+       
+        uint8_t  arr1[5]   ;
+        uint16_t  arr2[4]   ;
+        uint32_t  arr3[2]   ;
+    };
+    union ex1{
+       
+        uint8_t  arr1[5]   ;
+        uint16_t  arr2[4]   ;
+        uint32_t  arr3[2]   ;
+    };
+    printf("%zu",sizeof(struct ex));
+    printf("%zu",sizeof(union ex1));
+    return 0;
+}
+
+
+```
 
 </details>
 
 
 
-
-
-</details>
 
 
 
@@ -4540,11 +4568,23 @@ cin >> tuoisv;
 **Giải thích các phần tử của vi điều khiển.**
 - Một bộ vi điều khiển thường bao gồm CPU (Bộ xử lý trung tâm), RAM (Bộ nhớ truy cập ngẫu nhiên), ROM (Bộ nhớ chỉ đọc), bộ hẹn giờ và các thiết bị ngoại vi như GPIO, UART, SPI, I2C, ADC, DAC, PWM, timers/counters...
 
-**Thư viện tĩnh so với thư viện động..**
- - Thư viện tĩnh :Liên kết mã máy vào chương trình khi biên dịch. Hiệu suất tốt, không phụ thuộc vào thư mục khác khi chạy.Nhược điểm: Kích thước lớn, cần biên dịch lại toàn bộ khi thay đổi.
-- Dynamic Library: Liên kết vào chương trình khi chạy, không nằm trong chương trình chính.Tiết kiệm không gian lưu trữ, dễ cập nhật mà không cần biên dịch lại chương trình. Cần có thư viện động tương ứng, hiệu suất có thể thấp hơn một chút.
+**Data padding...**
+ - CPU hiện đại thao tác data vùng nhớ là số chẵn, không thể thao tác là số lẻ được. 
+- Data alignment: Compiler sắp xếp data sao cho vùng nhớ các biến luôn là số chẵn và phù hợp với hệ thống: 
+- Data padding: Để alignment Compiler sẽ thêm “padding” (đệm) một số byte vào sau biến ,để vùng nhớ là số chẵn
+**Tại sao không nên sử dụng đệ quy trong các hệ thống nhúng?**
+- Đệ quy là  một hàm gọi chính nó.
 
-**TTại sao không nên sử dụng đệ quy trong các hệ thống nhúng?**
+```C
+public int sum(int n) {
+if (n >= 1) {
+      return sum(n - 1) + n;
+}
+return n;
+}
+
+
+```
 - Sử dụng đệ quy có thể dẫn đến tràn bộ nhớ stack (stack overflow) trong các hệ thống nhúng. Điều này có thể làm cho chương trình bị dừng đột ngột .
 - Đảm bảo có điều kiện dừng hợp lý, là quan trọng khi sử dụng đệ quy trong lập trình
 

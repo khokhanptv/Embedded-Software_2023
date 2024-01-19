@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/TEST_VS2022",
-      "program": "d:/TEST_VS2022/build/Debug/outDebug",
+      "cwd": "d:/TEST",
+      "program": "d:/TEST/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
