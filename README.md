@@ -2127,11 +2127,11 @@ int main() {
 **Struct:**
 - Struct là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó , kích thước của struct bằng kích thước các thành viên bên trong + phần padding.
 - Ví dụ:
-![Struct](./Hinhanh/Struct.PNG)
+![Struct](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e28efacc-bb79-4e85-b16f-4e2645df8ff8)
 - Tổng Example là 8 byte , 7 byte dữ liệu + 1 byte trống 
-![Struct](./Hinhanh/Struct1.PNG)
+![Struct1](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/59f459ad-bbcb-42d3-a8e3-2cc0f222594d)
 - Tổng Example là 12 byte ,  7 byte dữ liệu + 5 byte trống
-![Struct](./Hinhanh/Struct2.PNG)
+![Struct2](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1ae3cbe1-4c82-40dd-b57e-7d2eec545f3f)
 - Tổng Example là 24 byte ,cơ bản là tốn time tính
 
 ##Mục đích tính toán struct,để tối ưu bộ nhớ,nếu sắp xếp các phần tử không hợp lý sẽ tốn bộ nhớ.
@@ -2139,14 +2139,14 @@ int main() {
 
 **Union:**
 - Union là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó ,kích thước của struct bằng kích thước thành viên lớn nhất và cùng 1 vùng nhớ.
-![Union](./Hinhanh/Union.PNG)
-![Union](./Hinhanh/union1.jpg)
+![Union](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/fbd619c6-cf4b-42f4-9882-7595480d67a9)
+![union1](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e70b509c-8c6e-4664-a79d-ed245e97125e)
 - Tổng Example là 20 byte , thằng nào lớn nhất thì lấy thằng đó
 
 ##Mục đích sử dụng  Union ,để tiết kiệm bộ nhớ ,vì 1 thời điểm chỉ có thể sử dụng 1 member. 
 - Ứng dụng đọc 1 cảm biến trong nhiều cảm biến.
 - Nếu cùng 1 mục đích mà sử dụng struct sẽ tốn nhiều dung lượng hơn.
-![Union](./Hinhanh/Union3.PNG)
+![Union2](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/7c8f5f9b-0325-4e04-bb81-5bfd96144b57)
 - Ví dụ trên nếu dùng struct thì 8 byte , trong khi union chỉ 4 byte
 
 </details>
