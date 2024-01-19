@@ -1263,11 +1263,10 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 - **Stdargt:** 
 - Cú pháp: `#include<stdarg.h>`
 - stdarg.h trong Thư viện C định nghĩa một kiểu biến va_list và 3 macro  được sử dụng để lấy các tham số trong một hàm khi không cần biết có bao nhiêu tham số đầu vào
-- va_list: là một kiểu dữ liệu.
-- va_start: Bắt đầu một danh sách đối số biến đổi. Nó cần được gọi trước khi truy cập các đối số biến đổi đầu tiên.
-- va_arg: Truy cập một đối số trong danh sách. Hàm này nhận một đối số của kiểu được xác định bởi tham số thứ hai
-- va_end: Kết thúc việc sử dụng danh sách đối số biến đổi. Nó cần được gọi trước khi kết thúc hàm.
-
+- va_list: Định nghĩa một đối tượng để duyệt qua các đối số biến đổi.
+- va_start: Khởi tạo va_list để trỏ đến tham số đầu tiên của hàm.
+- va_arg: Trả về giá trị của đối số hiện tại trong va_list và di chuyển va_list tới đối số tiếp theo.
+- va_end: Kết thúc việc sử dụng va_list.
 <details>
 <summary>Ví dụ:</summary>
 
@@ -1528,9 +1527,9 @@ int main()
 - Con trỏ NULL.
 
 **Con trỏ hàm**
-- Hàm (function) bản chất là 1 địa chỉ 
+- Hàm (function) bản chất là 1 địa chỉ vùng nhớ
 - con trỏ hàm là một biến chứa địa chỉ của một hàm.`void (*ptr)();`
-- khi khởi tạo xong thì phải gán địa chỉ của hàm cho con trỏ hàm.`ptr=printsum;`
+- khi khởi tạo xong thì phải gán địa chỉ của hàm cho con trỏ hàm.`ptr = add;`
 - sau khi gán rồi có thể gọi hàm thông qua con trỏ hàm  .`ptr();`
 - Cú pháp:
 `kiểu dữ liệu (*tên con trỏ hàm)(kieu du liêu1, kieu du liêu2)` 
@@ -1543,34 +1542,32 @@ int main()
 
 ```C
 #include <stdio.h>
-void sum(int a, int b)
-{
-    printf("Sum of %d and %d is: %d\n",a,b, a+b);
+
+// Hàm mẫu
+int add(int a, int b) {
+    return a + b;
 }
 
-void divide(int a, int b)
-{
-    if (b == 0)
-    {
-        printf("Mau so phai khac 0\n");
-        return;
-    }
-    printf("%d divided by %d is: %f \n",a,b, (double)a / (double)b);
+int subtract(int a, int b) {
+    return a - b;
 }
-void calculator(void (*ptr1)(int, int), int a, int b)
-{
-    printf("Program calculate: \n");
-    ptr(a,b);
-}
-int main()
-{
-	int arr[]={1,2};
-	
-    calculator(sum,5,2);
-    calculator(divide,5,2)	
-	void (*ptr[])(int , int)={sum ,divide};
-	ptr[0](2,4);
-	ptr[1](2,4);
+
+int main() {
+    // Khai báo con trỏ hàm với cú pháp: <kiểu dữ liệu trả về> (*<tên con trỏ>)(<kiểu dữ liệu đối số 1>, <kiểu dữ liệu đối số 2>, ...)
+    int (*operation)(int, int);
+
+    // Gán địa chỉ của hàm add cho con trỏ hàm
+    operation = add;
+
+    // Sử dụng con trỏ hàm để gọi hàm add
+    printf("Result: %d\n", operation(5, 3)); // In ra: Result: 8
+
+    // Gán địa chỉ của hàm subtract cho con trỏ hàm
+    operation = subtract;
+
+    // Sử dụng con trỏ hàm để gọi hàm subtract
+    printf("Result: %d\n", operation(5, 3)); // In ra: Result: 2
+
     return 0;
 }
 
@@ -1592,7 +1589,7 @@ void processNumbers(int (*operation)(int, int), int a, int b) {
 }
 
 // Hàm mẫu 1
-int add(int a, int b) {
+int add(int a, int b) {z
     return a + b;
 }
 
@@ -4532,6 +4529,11 @@ cin >> tuoisv;
 <details>
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
+**IDE là gì?**
+- là môi trường  dùng để viết code ,tích hợp các tool như trình biên dịch (Compiler), trình thông dịch (Interpreter), kiểm tra lỗi (Debugger)..
+- Visual Studio Code là trình soạn thảo mã nguồn .Nhờ khả năng mở rộng debug
+**GCC là gì?**
+- GCC là viết tắt của "GNU Compiler Collection," là bộ trình biên dịch mã nguồn mở được phát triển bởi Dự án GNU. GCC hỗ trợ nhiều ngôn ngữ lập trình như C, C++, Fortran, Ada, và nhiều ngôn ngữ khác.
 **sự khác biệt giữa vi điều khiển và vi xử lý**
 - Bộ vi điều khiển tích hợp CPU, bộ nhớ và các thiết bị ngoại vi trên một con chip duy nhất, được thiết kế riêng cho các tác vụ cụ thể.
 - Bộ vi xử lý tập trung vào tính toán đa năng, yêu cầu các thành phần bên ngoài để tạo nên một hệ thống hoàn chỉnh.
@@ -4715,18 +4717,19 @@ int main(){
 
 ```C
 // Slayer Hardware
-// DỰA VÀO PHẦN CỨNG STM32
+// DỰA VÀO PHẦN CỨNG STM32F1
+#include "stm32f10x.h"                  // Device header
+#include "stm32f10x_gpio.h"             // Keil::Device:StdPeriph Drivers:GPIO
+#include "stm32f10x_spi.h"              // Keil::Device:StdPeriph Drivers:SPI
+#include "stm32f10x_rcc.h"              // Keil::Device:StdPeriph Drivers:RCC
+
+
 #define SPI1_NSS 	GPIO_Pin_4
 #define SPI1_SCK	GPIO_Pin_5
 #define SPI1_MISO 	GPIO_Pin_6
 #define SPI1_MOSI 	GPIO_Pin_7
 #define SPI1_GPIO 	GPIOA
- 
 
-void RCC_Config(){
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
-}
 
 void delay (uint32_t time){
 	uint32_t i;
@@ -4735,64 +4738,58 @@ void delay (uint32_t time){
 	
 }
 
-void GPIO_Config(){
-  // Cấu hình chân GPIO là chân AF (Alternate Function)
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = SPI1_NSS|SPI1_SCK|SPI1_MISO|SPI1_MOSI;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_Init(SPI1_GPIO,&GPIO_InitStruct); 
-   // Cấu hình Alternate Function cho các chân SPI
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
+void RCC_CONFIG(){
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
+}
+
+void GPIO_Cofig(){
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Pin = SPI1_NSS| SPI1_SCK| SPI1_MISO| SPI1_MOSI;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(SPI1_GPIO, &GPIO_InitStructure);
+}
+
+void SPI_config(){
+	SPI_InitTypeDef SPI_InitStructure;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
+	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;
+	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;	
+	SPI_Init(SPI1, &SPI_InitStructure);
+	SPI_Cmd(SPI1, ENABLE);
+}
+
+uint8_t SPI_RCV(void){
+	volatile uint8_t temp;
+	while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY)==1);
+	temp =(uint8_t)SPI_I2S_ReceiveData(SPI1);
+	return temp;
 
 }
-void SPI_Config(){
-	SPI_InitTypeDef SPI_InitStruct;
-  // Cấu hình SPI ở chế độ Slave
-	SPI_InitStruct.SPI_Mode = SPI_Mode_Slave;
-	SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex; 
-	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
-	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;//CPOL = 0,  chưa truyền thì ở mức thấp
-	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;//CPHA = 0
-	SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
-	SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
-	SPI_InitStruct.SPI_CRCPolynomial = 7;
-	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
-	SPI_Init(SPI1, &SPI_InitStruct);
-	SPI_Cmd(SPI1,ENABLE);
-	
-}
-uint8_t SPI_Receive1byte(void){
-	volatile uint8_t temp;
-   // Đợi SPI không bận và đọc dữ liệu
-	while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY)==1);
-	temp = (uint8_t)SPI_I2S_ReceiveData(SPI1);
-	return temp;
-}
-uint8_t i = 0;
-uint8_t data[4];
-int main ()
-{
-		
-		RCC_Config();
-		GPIO_Config();
-		SPI_Config();
-		
+
+uint8_t arr[4]; 
+uint8_t i=0;
+int main(){
+	RCC_CONFIG();
+	GPIO_Cofig();
+	SPI_config();
 		while(1)
 		{	
-		 
-			while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_RXNE)== 0);//hỏi sau
+			
+			while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_RXNE)== 0);
 			if(GPIO_ReadInputDataBit(SPI1_GPIO, SPI1_NSS ) == 0){
-					data[i] = SPI_Receive1byte();
+					arr[i] = SPI_RCV();
 					i++;
 					if(i > 3){ 
 						i = 0;
 					}
-			} 
+			}
 
 		}
 }
