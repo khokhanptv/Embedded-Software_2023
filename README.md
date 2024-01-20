@@ -231,6 +231,7 @@ int main(){
 }
 ```
 - Ví dụ
+
 ```C
 #include <stdio.h>
  
@@ -810,7 +811,9 @@ void free(void* ptr);
 	```
  - Vùng nhớ dành cho union date là 4 byte. Vùng nhớ này sẽ chứa giá trị 24 khi dat.d = 24 được thực hiện. Tiếp đó, 9 sẽ được copy đè vào vùng nhớ này khi dat.m = 9 được thực hiện. Cuối cùng, 2014 được copy đè vào vùng nhớ khi dat.y = 2014 được thực hiện.
  **Tại cùng 1 thời điểm run-time, chỉ có thể truy cập 1 thành phần của union**
+
 - ví dụ 2:
+
   ```C
   #include <stdio.h>
   #include <conio.h>
@@ -4595,6 +4598,9 @@ return n;
 <details>
   <summary><h3>Các giao thức (Protocols)</h3></summary>
 
+**SMT32F4**
+![z4957623054341_76e371e0a646a50f810f7ba8450aed45](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b64d3b82-97fc-4c9d-a9d4-f05e9bb794f3)
+
 <details>
   <summary><h4>SPI protocol</h4></summary>
 
@@ -4616,7 +4622,10 @@ return n;
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/SPI_8-bit_circular_transfer.svg/500px-SPI_8-bit_circular_transfer.svg.png)
 Khung truyền SPI:
-- Mỗi chip Master hay Slave sẽ có một thanh ghi dữ liệu 8 bit chứa dữ liệu cần gửi hoặc dữ liệu nhận.
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/5ed1598f-be34-4626-833e-2f3e6fdd89d0)
+- Tùy thuộc vào bit chọn định dạng khung dữ liệu (DFF trong thanh ghi SPI_CR1), dữ liệu
+gửi hoặc nhận là 8 bit hoặc 16 bit. Lựa chọn này phải được thực hiện trước khi kích hoạt SPI để đảm bảo hoạt động chính xác.
 - Bắt đầu quá trình, master sẽ kéo chân CS của slave muốn giao tiếp xuống 0 để báo hiệu muốn truyền nhận.
 - Mỗi xung clock, Master sẽ gửi đi 1 bit từ thanh ghi dịch (Shift Register) của nó đến thanh ghi dịch của Slave thông qua đường MOSI. Đồng thời Slave cũng gửi lại 1 bit đến cho Master qua đường MISO.Như vậy sau 8 chu kỳ clock thì hoàn tất việc truyền và nhận 1 byte dữ liệu.
 
@@ -5623,18 +5632,231 @@ int main() {
   <summary><h4>Timer_PWM_SEGVO</h4></summary>
 
 
+- Timer là bộ đếm thời gian:
+- Chia thành các loại Timer:
+	+ Basic Timers (TIM6 và TIM7): Thường được sử dụng cho các ứng dụng cơ bản, như tạo ra các tín hiệu đơn giản.
+	+ General-purpose Timers (TIM2 đến TIM5 và TIM9 đến TIM14): Cung cấp nhiều tính năng, bao gồm các chế độ đếm, PWM (Pulse Width Modulation), và đặc biệt là chức năng Encoder Interface.
+	+ Advanced Timers (TIM1 và TIM8): Cung cấp nhiều tính năng cao cấp hơn như chế độ PWM mở rộng, chế độ Capture/Compare và chế độ Encoder.
+- PWM hay Pulse Width Modulation là phương pháp điều chỉnh độ rộng xung , nhằm tạo ra sự thay đổi điện áp tại đầu ra.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/61dc04f7-b3aa-4a63-b28e-b5540cfdd036)
+- PWM ứng dụng nhiều trong việc điều khiển động cơ, các bộ nguồn xung boot, buck, nghịch lưu 1 pha, 3 pha…
+- Sử dụng TIM2 để tạo PWM:
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e2c6e206-d3b5-4862-828c-791e3c9dae50)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/cbb56880-659c-4e50-9dbc-12cc77cfb414)
+- AHB1 =42 mhz ,nó đã qua bộ chia 4,  dựa vào hình ta có TIM2 =AHB1x2 =42MHZ
+- Gỉa sử nếu làm TIM1 >> TIM1 =168MHZ
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c63eeb39-b30a-4936-9c0e-4ad8bc04d0c8)
+- Dựa vào hình ta tính TIM_Period
+
+<details>
+<summary>CODE_STM32F4</summary>
+
+```C
+#include "stm32f4xx.h"
+void RCC_Configuration(void)
+{ 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); 
+}
+
+void GPIO_Configuration(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM2);  
+}
+
+void TIM_Configuration(void)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+    TIM_OCInitTypeDef TIM_OCInitStructure;
+    TIM_TimeBaseStructure.TIM_Period = 20000-1;
+	//thời gian xung cạnh lên là 20ms
+    TIM_TimeBaseStructure.TIM_Prescaler = 84-1; // bộ chia 84
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;// đếm lên
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);  
+
+    
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCInitStructure.TIM_Pulse = 10000-1; // 50% duty cycle
+	// thời gian xung canh lên 
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+    TIM_OC2Init(TIM2, &TIM_OCInitStructure); 
+    TIM_Cmd(TIM2, ENABLE);
+    TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
+    TIM_Cmd(TIM2, ENABLE);
+    TIM_ARRPreloadConfig(TIM2, ENABLE);
+}
 
 
+int main(void)
+{
+    RCC_Configuration();
+    GPIO_Configuration();
+    TIM_Configuration();
 
+    while (1)
+    {
+			TIM_SetCompare2(TIM2,999);
+			for(uint32_t i=0;i<84000000;i++);
+			TIM_SetCompare2(TIM2,1499);
+			for(uint32_t i=0;i<84000000;i++);
+			TIM_SetCompare2(TIM2,1999);
+			for(uint32_t i=0;i<84000000;i++);
+			TIM_SetCompare2(TIM2,1499);
+			for(uint32_t i=0;i<84000000;i++);
+			 
+    }
+} 
 
+```
 
-
-
+</details>
 
 
 </details>
 </details>
+<details>
+  <summary><h3>ADC</h3></summary>
 
+- ADC Analog to Digital Convert là bộ chuyển đổi tương tự sang số.Cho phép chuyển đổi tín hiệu analog như điện áp , dòng điện ,ánh sáng .. thông số thay đổi liên tục thành dạng số để máy tính hoặc VXL xử lý
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/4e15c95b-de89-4019-af49-143daffd8e26)
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/bc01ddc4-82b8-4a6f-8ea6-0d39a13d3768)
+- Độ phân giải (resolution):Đó là số bit mà ADC sử dụng để biểu diễn giá trị đầu vào trong tín hiệu số .Tính theo Bit bộ ADC có độ phân giải 12 Bit sẽ có 2^12 giá trị.ADC có độ phân giải càng lớn thì mô phỏng tín hiệu analog càng mịn.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b9b2600b-1a30-4aa1-ae3b-8361ef724222)
+-  Tần số lấy mẫu: số lần ADC chuyển đổi tín hiệu analog thành tín hiệu số trong một đơn vị thời gian.
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c4cd8997-b0e7-4f4b-8af6-10f7786700a6)
+
+**ADC trong STM3207.**
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/22085530-0851-4946-8000-bb02e601d350)
+
+- STM32F4 có 3 bộ ADC
+- Thanh ghi dữ liệu là 16 bit, chuyển đổi là 12bit, thanh ghi này sẽ xác định dữ liệu sẽ được căn lề bên trái hoặc phải
+- Có 19 kênh , 16 kênh đo từ bên ngoài ,2 bên trong và 1 đo Vpin
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/7d544f34-6e85-4ae2-8097-caaef649f919)
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/fed58cd4-a937-48b8-9058-bc926a0d9e97)
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b5d64739-049e-441c-80cb-f4ac10dd458b)
+- Cấu hình chân ADC ở PA0
+<details>
+<summary>CODE_STM32F4</summary>
+
+```C
+#include "stm32f4xx.h"
+
+#define SPI1_NSS 	GPIO_Pin_4
+#define SPI1_SCK	GPIO_Pin_5
+#define SPI1_MISO 	GPIO_Pin_6
+#define SPI1_MOSI 	GPIO_Pin_7
+#define SPI1_GPIO 	GPIOA
+
+void delay (uint32_t time){
+	uint32_t i;
+	for (i = 0; i< time; i++){
+	}
+	
+}
+void RCC_Config(){
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);// ADC
+	
+}
+
+void GPIO_Config(){
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.GPIO_Pin = SPI1_NSS|SPI1_SCK|SPI1_MISO|SPI1_MOSI;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_Init(SPI1_GPIO,&GPIO_InitStruct); 
+
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
+	GPIO_WriteBit(GPIOA,GPIO_Pin_4,1);
+	
+	//CAU HINH CHAN ADC
+	
+	GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AN; 
+	GPIO_InitStruct.GPIO_Pin    =  GPIO_Pin_0  ; 
+	GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+	GPIO_InitStruct.GPIO_Speed =  GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA,&GPIO_InitStruct);
+}
+
+void ADC_config(){
+	ADC_InitTypeDef ADC_InitStructure;
+	ADC_StructInit(&ADC_InitStructure);
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b; // Ð? phân gi?i ADC
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConvEdge_None;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  ADC_InitStructure.ADC_NbrOfConversion = 1;
+  ADC_Init(ADC1, &ADC_InitStructure);
+  ADC_Cmd(ADC1, ENABLE);
+}
+void SPI_Config(){
+	SPI_InitTypeDef SPI_InitStruct;
+	SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
+	SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex; 
+	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128; //84mhz /16
+	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
+	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
+	SPI_InitStruct.SPI_DataSize = SPI_DataSize_16b;
+	SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStruct.SPI_CRCPolynomial = 10;
+	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
+	SPI_Init(SPI1, &SPI_InitStruct);
+	SPI_Cmd(SPI1,ENABLE);
+	
+}
+void SPI_Trans(uint8_t arr ){
+	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
+	SPI_SendData(SPI1,arr);
+	while(!SPI_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY)==0);
+	GPIO_SetBits(GPIOA,GPIO_Pin_4);
+}
+
+uint8_t arr[4]={5,2,3,4};
+uint16_t val;
+int main(){
+	
+	RCC_Config();
+	GPIO_Config();
+	SPI_Config();
+	ADC_config();
+	while(1){
+		// TRUYEN DU LIEU spi
+		//for(uint8_t i=0;i<4;i++){	
+			//SPI_Trans(arr[i]);		 
+			//delay(1000000);
+		///}
+		
+		ADC_SoftwareStartConv(ADC1);
+		while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+			val= ADC_GetConversionValue(ADC1);
+			SPI_Trans(val);
+					
+	}
+	
+}
+```
+
+</details>
+
+
+</details> 
 <details>
   <summary><h3>DMA</h3></summary>
 
