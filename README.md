@@ -3575,89 +3575,113 @@ int main() {
   <summary><h1>▶ ⭐C++ programming language</h1></summary>
 
 <details>
-  <summary><h2>C++ cơ bản</h2></summary>
-
-</details>
-<details>
   <summary><h2>Class</h2></summary>
 	
 ### Class là gì?
 - Class là 1 kiểu dữ liệu do người dùng định nghĩa
+- Biến trong class gọi là `PROPERTY`.
+- Hàm trong class gọi là `METHOD`.
 - Ví dụ:
 
 ```C++
 class ClassName {
-private:   // Các thành phần riêng tư (private) chỉ có thể truy cập bên trong lớp   
+private:   
+// Các thành phần riêng tư (private) chỉ có thể truy cập bên trong lớp   
 // Dữ liệu thành viên, hàm thành viên, ...
-protected:    // Các thành phần bảo vệ (protected) tương tự như private, nhưng có thể truy cập từ lớp kế thừa
+protected:    
+// Các thành phần bảo vệ (protected) tương tự như private, nhưng có thể truy cập từ lớp kế thừa
 public:
     // Các thành phần công khai (public) được truy cập từ bên ngoài lớp
-	   // Dữ liệu thành viên, hàm thành viên, ...
-	     // Hàm thành viên và các phương thức khác có thể được định nghĩa tại đây
-		     // ..
+	// Dữ liệu thành viên, hàm thành viên, ...
+	// Hàm thành viên và các phương thức khác có thể được định nghĩa tại đây
+	// ..
 };
 
 ```
 **Constructor**
-- Constructor trong C++ là một method(hàm) sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class.
+-  Constructor là một  thành viên trong class,có tên giống với tên class và không có kiểu trả về. Nhiệm vụ chính là khởi tạo đối tượng khi nó được tạo ra. Có hai loại chính:
+	+ Default Constructor (Constructor mặc định): Tự động được tạo ra nếu không định nghĩa bất kỳ constructor . Nó không có tham số và thực hiện các công việc cần thiết để khởi tạo đối tượng.
+
+	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
+#include <iostream>
+
 class HinhChuNhat {
-	public:
-    double chieuDai;  
-	 double chieuRong;
+public:
+    double chieuDai;
+    double chieuRong;
 
-    HinhChuNhat(int dai = 5, int rong = 3);
+    // Parameterized Constructor
+    HinhChuNhat(int dai = 5, int rong = 3) {
+        chieuDai = dai;
+        chieuRong = rong;
+    }
+
     // Hàm tính diện tích
-	   double tinhDienTich() {        
-		return chieuDai * chieuRong;   
-		}
-	};
+    double tinhDienTich() {
+        return chieuDai * chieuRong;
+    }
+};
 
-HinhChuNhat:HinhChuNhat(int dai, int rong)
-{
-   chieuDai = dai;
-   chieuRong = rong;
+int main() {
+    // Tạo đối tượng HinhChuNhat và sử dụng constructor với giá trị mặc định
+    HinhChuNhat hinhCN1;
+
+    // Tạo đối tượng HinhChuNhat và truyền giá trị khác cho constructor
+    HinhChuNhat hinhCN2(7, 4);
+
+    // Hiển thị diện tích của hình chữ nhật 1 và 2
+    std::cout << "Dien tich hinh chieuDai1: " << hinhCN1.tinhDienTich() << std::endl;
+    std::cout << "Dien tich hinh chieuDai2: " << hinhCN2.tinhDienTich() << std::endl;
+
+    return 0;
 }
+
+
 ```
 </details>
 
 **Destructor**
-- Destructor trong C++ là một method sẽ được tự động gọi khi object được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
-
+- Destructor là 1 thành viên trong class . Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+Mục đích  Destructor để giải phóng bộ nhớ mà đối tượng đã cấp phát .
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
-class HinhChuNhat {
-	public:
-    double chieuDai;  
-	 double chieuRong;
+#include <iostream>
 
-    HinhChuNhat(){
+class HinhChuNhat {
+public:
+    double chieuDai;  
+    double chieuRong;
+
+    // Constructor
+    HinhChuNhat() {
         chieuDai = 10;
         chieuRong = 9;
     }
-    ~HinhChuNhat(){
-        std::cout << "Destructor " << '\n';
+
+    // Destructor
+    ~HinhChuNhat() {
+        std::cout << "Destructor" << '\n';
     }
 
-
     // Hàm tính diện tích   
-	double tinhDienTich() {       
-		return chieuDai * chieuRong; 
-		 }
-}
-int main()
-{
+    double tinhDienTich() {       
+        return chieuDai * chieuRong; 
+    }
+};
+
+int main() {
     HinhChuNhat hinh1;
     std::cout << "Dien tich: " << hinh1.tinhDienTich() << '\n';
 
-
     return 0;
 }
+
 ```
 </details>
 
@@ -3667,51 +3691,39 @@ int main()
 <summary>Ví dụ:</summary>
 
 ```C++
-class HinhChuNhat {
+#include <iostream>
+#include <string>
 
+class HinhChuNhat {
 public:
     double chieuDai;
     double chieuRong;
-    
     static int var;
 };
 
-int HinhChuNhat::var;
-
-int main()
-{
+int HinhChuNhat::var =0;
+// Đây là cách đặt giá trị khởi tạo cho biến static var trong lớp HinhChuNhat(bắt buộc)
+int main() {
     HinhChuNhat hinh1;
     HinhChuNhat hinh2;
     HinhChuNhat hinh3;
 
-    cout << "address of chieu dai: " << &hinh1.chieuDai << '\n'; 
-    cout << "address of chieu dai: " << &hinh2.chieuDai << '\n'; 
-    cout << "address of chieu dai: " << &hinh3.chieuDai << '\n'; 
+    std::cout << "address of chieu dai: " << &hinh1.chieuDai << '\n'; 
+    std::cout << "address of chieu dai: " << &hinh2.chieuDai << '\n'; 
+    std::cout << "address of chieu dai: " << &hinh3.chieuDai << '\n'; 
 
-    cout << "address of var: " << &hinh1.var << '\n'; 
-    cout << "address of var: " << &hinh2.var << '\n'; 
-    cout << "address of var: " << &hinh3.var << '\n'; 
-
+    std::cout << "address of var: " << &hinh1.var << '\n'; 
+    std::cout << "address of var: " << &hinh2.var << '\n'; 
+    std::cout << "address of var: " << &hinh3.var << '\n'; 
 
     return 0;
 }
+
 ```
 </details>
 
-- Khi một method trong class được khai báo với từ khóa static:
-- Method này độc lập với bất kỳ đối tượng nào của lớp.
-- Method này có thể được gọi ngay cả khi không có đối tượng nào của class tồn tại.
-- Method này có thể được truy cập bằng cách sử dụng tên class thông qua toán tử :: .
-- Method này có thể truy cập các static property và các static method bên trong hoặc bên ngoài class.
-- Method có phạm vi bên trong class và không thể truy cập con trỏ đối tượng hiện tại
 
-- Biến trong class gọi là `PROPERTY`.
-- sv1.tuoi... trong ví dụ gọi là `OBJECT` thuộc class sinhvien.
-- Hàm trong class gọi là `METHOD`.
-- Class có thể định nghĩa cả hàm , struct thì không:
-- Biến static trong class
-- Khi định nghĩa static trong class thì phải khởi tạo lần đầu ở ngoài.
-- Khi khởi tạo thì địa chỉ của nó tồn tại trong suốt chương trình nên member static này của các object sẽ đều có cùng 1 địa chỉ.
+ 
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3735,8 +3747,7 @@ int main(){
 	sv1.ten ="hoang";//OBJECT thuộc class sinh viên
 	sv1.tuoi=19;
 	sv1.mssv =123123;
-	sv1.display();// in ra 
-
+	sv1.display();// in ra 0.
 	return 0;
 
 }
@@ -3803,7 +3814,7 @@ int main(){
 <details>
   <summary><h2>namespace</h2></summary>
 
-**Namespace: tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,với 2 namespace khác nhau có thể tạo các biến trùng tên. Nhưng trong 1 namespace không thể có 2 biến cùng tên.**
+- Namespace: tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,với 2 namespace khác nhau có thể tạo các biến trùng tên. Nhưng trong 1 namespace không thể có 2 biến cùng tên
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3812,31 +3823,33 @@ int main(){
 #include<iostream>
 using namespace std;
 
-namespace onga{
-	int teo =10;
-	voi test(){
-		printf("test onga");
-	}
-	class sinhvien{
-		puplic:
-		void hienthi(){
+namespace onga {
+    int teo = 10;
 
-			printf("sinhvien");
-		}
-	};
+    void test() {
+        cout << "test onga" << endl;
+    }
+
+    class sinhvien {
+    public:
+        void hienthi() {
+            cout << "sinhvien" << endl;
+        }
+    };
 }
 
-namespace ongb{
-	int teo =20;
-	int arr[]={1,3,4,5};
+namespace ongb {
+    int teo = 20;
+    int arr[] = {1, 3, 4, 5};
 }
 
-int main(){
-	cout<<"con ong a: teo="<<onga::teo<<endl;//con ong a: teo=10
-	cout<<"con ong b: teo="<<onga::teo<<endl;//con ong b: teo=20
-	return 0;
-	/ 
+int main() {
+    cout << "con ong a: teo=" << onga::teo << endl; // con ong a: teo=10
+    cout << "con ong b: teo=" << ongb::teo << endl; // con ong b: teo=20
+
+    return 0;
 }
+
 ```
 **Dùng using namespace tên, có thể rút gọn code**
 - Ví dụ:
@@ -3854,7 +3867,11 @@ int main(){
 <details>
   <summary><h3>Hướng đối tượng </h3></summary>
 
-### Đặc tính của lập trình hướng đối tượng:
+### hướng đối tượng là gi?:
+- OOP là một phương pháp lập trình được tổ chức dưới dạng các "đối tượng," mỗi đối tượng có chứa dữ liệu và các phương thức để thao tác với dữ liệu đó.
+- Các khái niệm quan trọng trong OOP bao gồm:
+	+ Class: để tạo ra các đối tượng , nó mô tả dữ liệu và phương thức của đối tượng đó
+	+ Đối tượng (Object) : Một đối tượng cụ thể được tạo ra từ class, có 
 **Phạm vi truy cập:**
 - Public:Member nào trong Public thì object có thể trỏ trực tiếp được và nội tại trong class cũng sử dụng được .
 - protected:Member trong protected thì Class con có thể trỏ tới được
