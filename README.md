@@ -5256,13 +5256,14 @@ int main() {
  - `TX (Transmiter)` – Dây truyền dữ liệu
  - `RX (Receiver)` – Dây nhận dữ liệu
 - Giao tiếp giữa 1 `Master` và 1 `Slave`.
-- Ngoài dữ liệu ra trong 1 lần truyền còn nhét thêm các Start bit, Stop bit, Parity bit. Các bit thêm vào này giúp cho Slave nhận biết, kiểm tra và nhận được đúng tín hiệu.
+- Dữ liệu được truyền một frame (gồm start bit, data bits, parity bit nếu có, và stop bits) . Master truyền dữ liệu bắt đầu bằng một start bit và kết thúc bằng một hoặc nhiều stop bits. Slayer nhận dữ liệu đọc dữ liệu từng bit và xác định khung bằng cách đọc start bit và đếm số bit cho đến khi đến stop bit.
 - Uart truyền dữ liệu nối tiếp, theo 1 trong 3 chế độ:
 	+ Simplex: Chỉ tiến hành giao tiếp một chiều.
  	+ Half duplex: Dữ liệu sẽ đi theo một hướng tại 1 thời điểm
 	+ Full duplex: Thực hiện giao tiếp đồng thời đến và đi từ mỗi master và slave
 
-
+**Ứng dụng thực tế của UART trong lĩnh vực nhúng là gì?** 
+- UART được sử dụng trong các ứng dụng như kết nối giữa vi điều khiển và máy tính,
 ### Cách truyền nhận dữ liệu:
 
 ![Connect with orther](https://kysungheo.com/wp-content/uploads/2023/03/3-300x129.png)
