@@ -2025,8 +2025,7 @@ int main() {
   <summary><h2>Bitmask </h2></summary>
 
 **Khái niệm**:
-- Bitmask là một kỹ thuật dùng để kiểm tra, đặt, hoặc xóa bit cụ thể.
-- Ví dụ:Để kiểm tra trạng thái của các cờ (flags), bật (set) hoặc tắt (clear) các bit cụ thể.
+- Bitmask là một kỹ thuật dùng để kiểm tra, đặt, hoặc xóa bit cụ thể hoặc (flags)
 - khi muốn Set 1 bit tại ví trí chỉ cần dịch bit 1 tới vị trí Cần SET và OR với iá trị hiện tại
 - Khi muốn Clear bit tai vị tri chỉ cần dịch bit 1 tới vị trí cần Clear , đảo ngược hết bit đó  và AND với giá trị hiện tại
 - Ví dụ:
@@ -4608,6 +4607,12 @@ cin >> tuoisv;
 <details>
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
+
+**Thanh Ghi (Registers) ,Cờ (Flags):**
+
+- Thanh ghi là nơi lưu trữ dữ liệu cụ thể trong vi điều khiể
+- Cờ (Flags):Cờ là các biến boolean (đúng/sai) . Các cờ thường được sử dụng để kiểm tra trạng sự kiện đã xảy ra hay chưa.
+
 **IDE là gì?**
 - là môi trường  dùng để viết code ,tích hợp các tool như trình biên dịch (Compiler), trình thông dịch (Interpreter), kiểm tra lỗi (Debugger)..
 - Visual Studio Code là trình soạn thảo mã nguồn .Nhờ khả năng mở rộng debug
@@ -4657,7 +4662,9 @@ return n;
 - Có chế độ 1 dây: truyền hoặc nhận
 - Khoảng cách truyền ngắn
 - Giao tiếp 1 Master với nhiều Slave.
-- Tốc độ truyền khoảng vài MHZ.
+- Tốc độ truyền khoảng vài Mbps hoặc vài chục Mbps.
+- ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1287cafd-d263-4991-9fca-1d90ae15081e)
+- Với STM32F4 :tần số xung  là 84 MHz, qua bộ chia 8(có thể chọn bộ chia 2,4,8....)>> tốc độ bằng 10.5 Mbps.
 - Để xử lý lỗi truyền dữ liệu trong giao thức SPI,có thể sử dụng cờ (flags) để kiểm tra trạng thái của các lỗi như Overrun, Mode Fault, CRC Error
 **Master/Slave Configuration:**
 
@@ -4682,6 +4689,12 @@ Master nhận dữ liệu từ Slave thông qua dây MISO đồng bộ với xun
 **Ứng Dụng Thực Tế của SPI:**
 - Truyền Dữ Liệu Trong Các Ứng Dụng IoT :  ví dụ như mô-đun cảm biến nhiệt độ và độ ẩm sẽ gửi thông số cho microcontroller 
 - Truyền Dữ Liệu Giữa Vi xử lý và Các Thiết Bị Ngoại Vi:LCD,EEPROM
+**Cờ quan trọng trong STM32F4**
+- SPI_I2S_FLAG_TXE: Cờ báo truyền, cờ này sẽ set lên 1 khi truyền xong data trong buffer.
+- SPI_I2S_FLAG_RXNE: Cờ báo nhận, cờ này set lên 1 khi nhận xong data.
+- SPI_I2S_FLAG_BSY: Cờ báo bận,set lên 1 khi SPI đang bận truyền nhận
+
+
 **Quy tình cơ bản khi lập trình SPI**
 - 1. Cấp Xung cho SPI:
 - 2. Cấu Hình Chân Dựa Trên Reference Manual (RM) của Nhà Sản Xuất
@@ -5021,7 +5034,7 @@ int main(){
 
 - I2C (Inter-Integrated Circuit) là một giao thức truyền thông nối tiếp đồng bộ. Nên các bit dữ liệu truyền đi được đồng bộ hóa với xung nhịp do Master điều khiển.
 - Hỗ trợ nhiều Master và Slave trên một đường truyền
-
+-Tốc Độ Truyền (Baud Rate): Thông thường 100 kbps, 400 kbps đối với STM32F4( bit trên giây)
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/I2C.svg/220px-I2C.svg.png)
 
 - I2C chỉ sử dụng hai dây để truyền dữ liệu giữa các thiết bị:
