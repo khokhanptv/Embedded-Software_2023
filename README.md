@@ -4607,9 +4607,10 @@ cin >> tuoisv;
 <details>
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
+**I2S (Inter-IC Sound):**
 
+- Là một giao thức truyền dữ liệu âm thanh kỹ thuật số được sử dụng để kết nối các thiết bị âm thanh
 **Thanh Ghi (Registers) ,Cờ (Flags):**
-
 - Thanh ghi là nơi lưu trữ dữ liệu cụ thể trong vi điều khiể
 - Cờ (Flags):Cờ là các biến boolean (đúng/sai) . Các cờ thường được sử dụng để kiểm tra trạng sự kiện đã xảy ra hay chưa.
 
@@ -5045,7 +5046,13 @@ int main(){
 - I2C chỉ sử dụng hai dây để truyền dữ liệu giữa các thiết bị:
   - SDA (Serial Data) - đường truyền cho master và slave để gửi và nhận dữ liệu.
   - SCL (Serial Clock) - đường mang tín hiệu xung nhịp.
-
+**Ứng dụng thực tế của I2C trong lĩnh vực nhúng:**
+- Giao tiếp với các cảm biến.
+- Kết nối với LCD hoặc các bộ nhớ lưu trữ dữ liệu.
+**Khi nào nên dùng I2C**
+- Yêu Cầu Dây Dẫn Ít Hơn
+- Cần Kết Nối Nhiều Thiết Bị 
+- Tiết Kiệm Năng Lượng : các thiết bị không hoạt động không ảnh hưởng đến bus, giúp tiết kiệm năng lượng
 ### Cách hoạt động:
 
 ![Connect with orther](https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-I2C-Message-Frame-and-Bit-2.png)
