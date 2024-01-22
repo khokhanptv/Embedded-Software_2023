@@ -120,9 +120,40 @@ int main(){
     return 0;
 }
 ```
-</details>
+
 </details>
 
+**Sắp xếp mảng**
+<details>
+<summary>CODE:</summary>
+
+```C
+#include <stdio.h>
+
+int main(void) {
+    char arr1[] = "dbca 1d13";
+    char *ptr1;
+    ptr1 = arr1;
+ printf("Chuoi s: %s \n", ptr1);
+    // Sắp xếp chuỗi arr1 theo yêu cầu
+    for (int i = 0; i < 9; i++) {
+        for (int j = i + 1; j < 9; j++) {
+            if (ptr1[i] > ptr1[j]) {
+                char temp = ptr1[i];
+                ptr1[i] = ptr1[j];
+                ptr1[j] = temp;
+            }
+        }
+    }
+
+    printf("Chuoi sau khi sap xep: %s \n", ptr1);
+
+    return 0;
+}
+```
+
+
+</details>
 
 ## Struct_union
 
@@ -4623,11 +4654,38 @@ return n;
 
 - Các bit dữ liệu được truyền nối tiếp nhau và có xung clock đồng bộ.
 - Giao tiếp song công, có thể truyền và nhận cùng một thời điểm.
+- Có chế độ 1 dây: truyền hoặc nhận
 - Khoảng cách truyền ngắn
 - Giao tiếp 1 Master với nhiều Slave.
-- Tốc độ truyền khoảng vài Mb/s.
+- Tốc độ truyền khoảng vài MHZ.
+- Để xử lý lỗi truyền dữ liệu trong giao thức SPI,có thể sử dụng cờ (flags) để kiểm tra trạng thái của các lỗi như Overrun, Mode Fault, CRC Error
+**Master/Slave Configuration:**
 
+- Master (Thiết Bị Chủ Động): Master là thiết bị kiểm soát quá trình truyền/nhận dữ liệu. Nó tạo ra xung clock và chọn slave để gửi hoặc nhận dữ liệu từ.
+-	Slave (Thiết Bị Bị Động): Slave là thiết bị nghe lệnh từ Master và truyền hoặc nhận dữ liệu tùy thuộc vào yêu cầu của Master.
+Các Dây Truyền Thông Chính:
 
+- MOSI (Master Out Slave In): Dữ liệu được truyền từ Master đến Slave qua dây này.
+- MISO (Master In Slave Out): Dữ liệu được truyền từ Slave đến Master qua dây này.
+- SCK (Serial Clock): Tín hiệu xung clock được tạo ra bởi Master để đồng bộ hóa truyền dữ liệu.
+**Nguyên Tắc Full-Duplex:**
+
+Khi Master muốn truyền dữ liệu, nó tạo ra một xung clock và đặt giá trị dữ liệu trên dây MOSI.
+Đồng thời, Slave lắng nghe xung clock và đọc giá trị dữ liệu từ dây MOSI.
+Ngược lại, khi Slave muốn truyền dữ liệu, nó đặt giá trị dữ liệu trên dây MISO và lắng nghe xung clock.
+Master nhận dữ liệu từ Slave thông qua dây MISO đồng bộ với xung clock.
+(CS).
+**Vấn Đề Đồng Bộ Hóa Trong SPI**
+- Kiểm tra xung clock (CPOL và CPHA) 2 con cài như nhau chưa?
+- Check mode truyền của 2 con (master-slayer)
+- Khung truyền 2 con đúng chưa(8-16 bit)
+**Ứng Dụng Thực Tế của SPI:**
+- Truyền Dữ Liệu Trong Các Ứng Dụng IoT :  ví dụ như mô-đun cảm biến nhiệt độ và độ ẩm sẽ gửi thông số cho microcontroller 
+- Truyền Dữ Liệu Giữa Vi xử lý và Các Thiết Bị Ngoại Vi:LCD,EEPROM
+**Quy tình cơ bản khi lập trình SPI**
+- 1. Cấp Xung cho SPI:
+- 2. Cấu Hình Chân Dựa Trên Reference Manual (RM) của Nhà Sản Xuất
+- 3. Cấu Hình Các Chức Năng cho SPI
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_single_slave.svg/800px-SPI_single_slave.svg.png)
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_three_slaves.svg/350px-SPI_three_slaves.svg.png)
@@ -4650,7 +4708,7 @@ gửi hoặc nhận là 8 bit hoặc 16 bit. Lựa chọn này phải được t
 
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/SPI_timing_diagram2.svg/400px-SPI_timing_diagram2.svg.png)
-- Có 4 chế độ hoạt động:
+- Có 4 chế độ truyền dữ liệu:
   	| Mode | CPOL | CPHA |
   	|:---:|:---:|:---:|
   	|0|0|0|
@@ -4664,15 +4722,13 @@ gửi hoặc nhận là 8 bit hoặc 16 bit. Lựa chọn này phải được t
 - CPOL = 0 , CPHA = 0 là mặc định.
 ### Ưu, nhược điểm của chuẩn giao tiếp SPI.
 - Ưu điểm:
-  - Không có Start bit và Stop bit như trong giao tiếp I2C và giao tiếp UART. Vì vậy dữ liệu có thể được truyền liên tục mà không bị gián đoạn
   - Không có hệ thống định địa chỉ slave phức tạp như I2C
   - Tốc độ truyền dữ liệu cao hơn I2C (nhanh gần gấp đôi)
-  - Các dòng MISO và MOSI riêng biệt, vì vậy dữ liệu có thể được gửi và nhận cùng một lúc
+  - Hỗ trợ truyền dữ liệu hai chiều đồng thời (full-duplex), giúp tăng hiệu suất giao tiếp.
 - Nhược điểm:
   - Sử dụng bốn dây (I2C và UART sử dụng hai dây).
-  - Không xác nhận rằng dữ liệu đã được nhận thành công.
-  - Không có hình thức kiểm tra lỗi như bit chẵn lẻ (Parity bit) như trong UART.
   - Chỉ cho phép một master duy nhất.
+  - khoảng cách truyền ngắn
 
 ### SPI trong STM32F407VET6.
 **SPI Software:**
