@@ -211,7 +211,7 @@ int main(void){
 
 
 
-
+</details>
 </details>
 <details>
 <summary><h1>▶ ⭐C Basic</h1></summary>
