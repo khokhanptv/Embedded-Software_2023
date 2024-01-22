@@ -2025,8 +2025,8 @@ int main() {
   <summary><h2>Bitmask </h2></summary>
 
 **Khái niệm**:
-- Bitmask là một kỹ thuật sử dụng các bit để lưu trữ  trạng thái. Có thể sử dụng bitmask để đặt, xóa và kiểm tra trạng thái của các bit cụ thể trong một từ  
-- Bitmask thường được sử dụng để tối ưu hóa bộ nhớ
+- Bitmask là một kỹ thuật dùng để kiểm tra, đặt, hoặc xóa bit cụ thể.
+- Ví dụ:Để kiểm tra trạng thái của các cờ (flags), bật (set) hoặc tắt (clear) các bit cụ thể.
 - khi muốn Set 1 bit tại ví trí chỉ cần dịch bit 1 tới vị trí Cần SET và OR với iá trị hiện tại
 - Khi muốn Clear bit tai vị tri chỉ cần dịch bit 1 tới vị trí cần Clear , đảo ngược hết bit đó  và AND với giá trị hiện tại
 - Ví dụ:
