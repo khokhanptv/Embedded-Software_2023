@@ -5035,8 +5035,13 @@ int main(){
 - I2C (Inter-Integrated Circuit) là một giao thức truyền thông nối tiếp đồng bộ. Nên các bit dữ liệu truyền đi được đồng bộ hóa với xung nhịp do Master điều khiển.
 - Hỗ trợ nhiều Master và Slave trên một đường truyền
 -Tốc Độ Truyền (Baud Rate): Thông thường 100 kbps, 400 kbps đối với STM32F4( bit trên giây)
+
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/I2C.svg/220px-I2C.svg.png)
 
+**Vấn đề về đồng bộ hóa trong I2C:**
+- Kiểm tra Master,Slayer tốc độ truyền có đồng bộ chưa
+- Khung truyền ,nhận có giống nhau chưa
+- Kiểm tra giá trị trở kéo lên trên đường dữ liệu (SDA) và đường clock , quá lớn hay nhỏ đều lỗi.
 - I2C chỉ sử dụng hai dây để truyền dữ liệu giữa các thiết bị:
   - SDA (Serial Data) - đường truyền cho master và slave để gửi và nhận dữ liệu.
   - SCL (Serial Clock) - đường mang tín hiệu xung nhịp.
@@ -5078,121 +5083,103 @@ int main(){
   - Kích thước của khung dữ liệu được giới hạn ở `8 bit`
   - Cần phần cứng phức tạp hơn để triển khai so với giao tiếp `SPI`
 ### I2C trong STM32F407VET6.
-**I2C Software:**
+**I2C:**
 - Bước đầu, ta định nghĩa cho 2 chân sử dụng cho ic2 và cấp xung CLK:
 
 <details>
 		<summary>Software:</summary>
 
 ```C
-#include "stm32f4xx.h"                  // Device header
+#include "stm32f4xx.h"
 
-#define I2C_SCL 	GPIO_Pin_0
-#define I2C_SDA		GPIO_Pin_1
-#define I2C_GPIO 	GPIOA
+#define I2C_SCL_PIN GPIO_Pin_6
+#define I2C_SDA_PIN GPIO_Pin_7
+#define I2C_GPIO_PORT GPIOB
 
-#define WRITE_SDA_0 	GPIO_ResetBits(I2C_GPIO, I2C_SDA)
-#define WRITE_SDA_1 	GPIO_SetBits(I2C_GPIO, I2C_SDA)
-#define WRITE_SCL_0 	GPIO_ResetBits(I2C_GPIO, I2C_SCL)
-#define WRITE_SCL_1 	GPIO_SetBits(I2C_GPIO, I2C_SCL)
-#define READ_SDA_VAL 	GPIO_ReadInputDataBit(I2C_GPIO, I2C_SDA)
-
-void RCC_Config() {
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-}
-
-void GPIO_Config() {
+void I2C_Config() {
     GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin = I2C_SDA | I2C_SCL;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    I2C_InitTypeDef I2C_InitStructure;
+
+    // Enable the I2C and GPIO clocks
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+    // Configure the I2C pins
+    GPIO_InitStructure.GPIO_Pin = I2C_SCL_PIN | I2C_SDA_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(I2C_GPIO, &GPIO_InitStructure);
-}
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_Init(I2C_GPIO_PORT, &GPIO_InitStructure);
 
-void TIM_Config() {
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-    TIM_TimeBaseInitStruct.TIM_Prescaler = 168 - 1;
-    TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF - 1;
-    TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
-    TIM_Cmd(TIM2, ENABLE);
-}
+    // Connect the I2C pins to AF
+    GPIO_PinAFConfig(I2C_GPIO_PORT, GPIO_PinSource6, GPIO_AF_I2C1); // SCL
+    GPIO_PinAFConfig(I2C_GPIO_PORT, GPIO_PinSource6, GPIO_AF_I2C1); // SDA
 
-void delay_ms(uint32_t time) {
-    TIM_SetCounter(TIM2, 0);
-    while (TIM_GetCounter(TIM2) < time * 10);
+    // Configure the I2C peripheral
+    I2C_InitStructure.I2C_ClockSpeed = 400000;
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_Init(I2C1, &I2C_InitStructure);
+
+    // Enable the I2C peripheral
+    I2C_Cmd(I2C1, ENABLE);
 }
 
 void I2C_Start() {
-    WRITE_SDA_0;
-    delay_ms(3);
-    WRITE_SCL_0;
-    delay_ms(3);
+    // Send I2C start condition
+    I2C_GenerateSTART(I2C1, ENABLE);
+
+    // Wait until start condition is sent
+    while (!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
 }
 
 void I2C_Stop() {
-    WRITE_SDA_0;
-    delay_ms(3);
-    WRITE_SCL_1;
-    delay_ms(3);
-    WRITE_SDA_1;
-    delay_ms(3);
+    // Send I2C stop condition
+    I2C_GenerateSTOP(I2C1, ENABLE);
+
+    // Wait until stop condition is sent
+    while (I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
 }
 
 void I2C_Write(uint8_t u8Data) {
-    uint8_t i;
+    // Send a byte of data
+    I2C_SendData(I2C1, u8Data);
 
-    for (i = 0; i < 8; i++) {
-        if (u8Data & 0x80) {
-            WRITE_SDA_1;
-						
-        } else {
-            WRITE_SDA_0;
-        }
-        WRITE_SCL_1;
-        delay_ms(1);
-        WRITE_SCL_0;
-        u8Data <<= 1;
-    }
-
-    WRITE_SDA_1;
-    delay_ms(1);
-    WRITE_SCL_1;
-    delay_ms(1);
-    WRITE_SCL_0;
-    delay_ms(1);
+    // Wait until the byte is transferred
+    while (!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 }
 
-
-uint8_t array[] = {7, 8, 4, 2};
-void I2C_Write_Address() {
-    
+void I2C_Write_Array(uint8_t deviceAddress, uint8_t* data, uint8_t dataSize) {
+    // Start the I2C communication
     I2C_Start();
-    I2C_Write(0x27<<1);  
+
+    // Send the device address with the write bit
+    I2C_Write(deviceAddress << 1);
+
+    // Send each byte of the array
+    for (uint8_t i = 0; i < dataSize; i++) {
+        I2C_Write(data[i]);
+    }
+
+    // Stop the I2C communication
     I2C_Stop();
 }
-int main() {
-    RCC_Config();
-    GPIO_Config();
-    TIM_Config();
 
-	while (1) {
-		I2C_Write_Address(); 
-        for (uint8_t i = 0; i < sizeof(array) / sizeof(array[0]); i++) {
-            I2C_Start();        
-            I2C_Write(array[i]);
-            I2C_Stop();
-            delay_ms(10000);
-        }
+int main() {
+    // Initialize the I2C hardware
+    I2C_Config();
+
+    while (1) {
+        // Perform I2C communication with the array
+        uint8_t array[] = {7, 8, 4, 2};
+        I2C_Write_Array(0x27, array, sizeof(array));
+
+        // Add delay or other functionality as needed
     }
 }
-
-
-
 
 ```
 </details>
