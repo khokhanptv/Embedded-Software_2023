@@ -4625,13 +4625,26 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
+**i++ khác ++i**
+- Cả 2 dùng để tăng giá trị của i lên 1 đơn vị. Tuy nhiên, chúng có 1 điểm khác nhau cơ bản:
+	+ i++: tăng giá trị i sau khi thực hiện các phép toán 
+		```c
+		 int i = 5;
+		 int result = i++; //result = 5,i=6
+		 ```
+	+ ++i: i sẽ được tăng lên một đơn vị trước khi thực hiện các phép toán
+		```c
+		 int i = 5;
+		 int result = ++i; //result = 6,i=6
+		 ```
 **I2S (Inter-IC Sound):**
-
 - Là một giao thức truyền dữ liệu âm thanh kỹ thuật số được sử dụng để kết nối các thiết bị âm thanh
 **Thanh Ghi (Registers) ,Cờ (Flags):**
-- Thanh ghi là nơi lưu trữ dữ liệu cụ thể trong vi điều khiể
+- Thanh ghi là nơi lưu trữ dữ liệu cụ thể trong vi điều khiển
 - Cờ (Flags):Cờ là các biến boolean (đúng/sai) . Các cờ thường được sử dụng để kiểm tra trạng sự kiện đã xảy ra hay chưa.
-
+**USART và UART**
+- USART mô tả giao thức truyền dữ liệu đồng bộ và không đồng bộ xung clock.
+- UART mô tả giao thức truyền dữ liệu không đồng bộ.
 **IDE là gì?**
 - là môi trường  dùng để viết code ,tích hợp các tool như trình biên dịch (Compiler), trình thông dịch (Interpreter), kiểm tra lỗi (Debugger)..
 - Visual Studio Code là trình soạn thảo mã nguồn .Nhờ khả năng mở rộng debug
