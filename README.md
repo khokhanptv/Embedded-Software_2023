@@ -4637,22 +4637,29 @@ int main() {
 		 int i = 5;
 		 int result = ++i; //result = 6,i=6
 		 ```
+		 
 **I2S (Inter-IC Sound):**
 - Là một giao thức truyền dữ liệu âm thanh kỹ thuật số được sử dụng để kết nối các thiết bị âm thanh
+
 **Thanh Ghi (Registers) ,Cờ (Flags):**
 - Thanh ghi là nơi lưu trữ dữ liệu cụ thể trong vi điều khiển
 - Cờ (Flags):Cờ là các biến boolean (đúng/sai) . Các cờ thường được sử dụng để kiểm tra trạng sự kiện đã xảy ra hay chưa.
+
 **USART và UART**
 - USART mô tả giao thức truyền dữ liệu đồng bộ và không đồng bộ xung clock.
 - UART mô tả giao thức truyền dữ liệu không đồng bộ.
+
 **IDE là gì?**
 - là môi trường  dùng để viết code ,tích hợp các tool như trình biên dịch (Compiler), trình thông dịch (Interpreter), kiểm tra lỗi (Debugger)..
 - Visual Studio Code là trình soạn thảo mã nguồn .Nhờ khả năng mở rộng debug
+
 **GCC là gì?**
 - GCC là viết tắt của "GNU Compiler Collection," là bộ trình biên dịch mã nguồn mở được phát triển bởi Dự án GNU. GCC hỗ trợ nhiều ngôn ngữ lập trình như C, C++, Fortran, Ada, và nhiều ngôn ngữ khác.
-**sự khác biệt giữa vi điều khiển và vi xử lý**
+
+**Sự khác biệt giữa vi điều khiển và vi xử lý**
 - Bộ vi điều khiển tích hợp CPU, bộ nhớ và các thiết bị ngoại vi trên một con chip duy nhất, được thiết kế riêng cho các tác vụ cụ thể.
 - Bộ vi xử lý tập trung vào tính toán đa năng, yêu cầu các thành phần bên ngoài để tạo nên một hệ thống hoàn chỉnh.
+
 **Giải thích các phần tử của vi điều khiển.**
 - Một bộ vi điều khiển thường bao gồm CPU (Bộ xử lý trung tâm), RAM (Bộ nhớ truy cập ngẫu nhiên), ROM (Bộ nhớ chỉ đọc), bộ hẹn giờ và các thiết bị ngoại vi như GPIO, UART, SPI, I2C, ADC, DAC, PWM, timers/counters...
 
@@ -4660,6 +4667,7 @@ int main() {
  - CPU hiện đại thao tác data vùng nhớ là số chẵn, không thể thao tác là số lẻ được. 
 - Data alignment: Compiler sắp xếp data sao cho vùng nhớ các biến luôn là số chẵn và phù hợp với hệ thống: 
 - Data padding: Để alignment Compiler sẽ thêm “padding” (đệm) một số byte vào sau biến ,để vùng nhớ là số chẵn
+
 **Tại sao không nên sử dụng đệ quy trong các hệ thống nhúng?**
 - Đệ quy là  một hàm gọi chính nó.
 
