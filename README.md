@@ -3897,8 +3897,8 @@ int main(){
 <details>
   <summary><h3>Hướng đối tượng </h3></summary>
 
-### hướng đối tượng là gi?:
-- OOP là một phương pháp lập trình được tổ chức dưới dạng các "đối tượng," mỗi đối tượng có chứa dữ liệu và các phương thức để thao tác với dữ liệu đó.
+### hướng đối tượng là gi?
+- OOP là một phương pháp lập trình dưới dạng các "đối tượng," mỗi đối tượng có chứa dữ liệu và các phương thức để thao tác dữ liệu đó.
 - Các khái niệm quan trọng trong OOP bao gồm:
 	+ Class: để tạo ra các đối tượng , nó mô tả dữ liệu và phương thức của đối tượng đó
 	+ Đối tượng (Object) : Một đối tượng cụ thể được tạo ra từ class, có 
@@ -3907,7 +3907,7 @@ int main(){
 - protected:Member trong protected thì Class con có thể trỏ tới được
 - private: Chỉ có nội tại trong class mới sử dụng được.Lý do đặt PROPERTY trong private, để chắc chắn object không trỏ tới được.
 
-**Encapsulation (Tính đóng gói):**
+**1/Encapsulation (Tính đóng gói):**
 - Object không được phép truy cập PROPERTY từ phạm vi public
 - PROPERTY nằm ở private hoặc protected.
 - Để truy cập PROPERTY phải thông qua method.
@@ -3955,9 +3955,13 @@ int main(){
 ```
 </details>
 
-**Inheritance (Tính kế thừa ):**
+**2/Inheritance (Tính kế thừa ):**
 - Một class có thể kế thừa các thuộc tính của một class khác đã tồn tại trước đó.
 Khi một class con được tạo ra bởi việc kế thừa thuộc tính của class cha thì chúng ta sẽ gọi class con đó là subclass trong C++, và class cha chính là superclass trongC++.
+
+**khi nào nên dùng/không dùng class kế thừa**
+- Nên dùng: Khi một lớp B được miêu tả là "B là một A". Ví dụ: một lớp hình tròn có thể kế thừa từ một lớp hình học.
+- Không nên:Mối quan hệ "has-a" (có một) diễn ra khi một lớp chứa một đối tượng của một lớp khác. ví dụ: danhsachSV chứa một đối tượng sinhvien, do đó chúng ta có thể nói danhsachSV "có" hoặc "bao gồm" danh sách các sinh viên.
 
 <details>
 <summary>Ví dụ:</summary>
@@ -4039,6 +4043,7 @@ int main(void){
 </details>
 
 - Các kiểu kế thừa: public,private và protected .Thì private là không  dùng vì class con kế thừa private sẽ đưa tất cả property từ class cha vào private. Làm cho các class tiếp theo không thể truy cập vào được( private chỉ cho phép nội tại class trỏ tới)
+
 <details>
 <summary>Ví dụ:</summary>
 
@@ -4070,8 +4075,8 @@ class hs : private sinhvien{
 ```
 
 </details>
-**Polymorphism (Tính đa hình):**
 
+**3/Polymorphism (Tính đa hình):**
 - Các method có thể trùng tên với nhau , nhưng phải khác các input parameter
 <details>
 <summary>Ví dụ:</summary>
@@ -4104,6 +4109,8 @@ int main(void){
 ```
 </details>
 
+**4/Abstraction (Tính trừu tượng ):**
+- Ẩn đi các chi tiết của một đối tượng và hiển thị những gì cần thiết, để sử dụng đối tượng đó.
 **Template trong C++ là gì?**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
 
@@ -4130,62 +4137,10 @@ int main(void){
 ```
 </details>
 
-**Abstraction (Tính trừu tượng):**
-- Những thành phần bị ẩn đi trong quá trình tạo ra kết quả .
-- Về cơ bản tính trừu tượng khác tính đóng gói :
- - Tính đóng gói: property được khai báo ở private .
- - Tính trừu tượng : Các thành phần khác được khai báo ở private.
-<details>
-<summary>Ví dụ</summary>
-
-```C++
-using namespace std;
-typedef struct{
-	float X1;
-	float X2;
-}nghiem;
-
-class ptbac2{
-
-	private:
-		int A;// tính đóng gói
-		int B;
-		int C;
-		float delta ( ) {// tính trừu tượng
-			return B*B -4A*C;
-		}
-	public:
-		void input(int a, int b , int c){
-			A=a;
-			B=b;
-			C=c;
-		}
-		nghiem ketqua()
-		{	
-			if delta()>0 {
-				//câu lệnh
-			}
-			else{
-				//câu lênh;
-			}
-
-		}
- 
-};
-
-int main(void){
-	ptbac2 pt;
-	pt.input();
-	pt.ketqua();
-	 
-
-}
-```
-</details>
 
 **Virtual trong C++ là gì?**
 - Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  . 
-- Khi gọi hàm từ con trỏ hoặc tham chiếu đối tượng cơ sở, chương trình sẽ chọn hàm của lớp con nếu nó đã được định nghĩa. 
+
 
 <details>
 <summary>Ví dụ</summary>
@@ -4266,43 +4221,125 @@ int main(void) {
 
 </details>
 <details>
-  <summary><h2>Vector </h2></summary>
+  <summary><h2>Standard template library </h2></summary>
+
+## STL là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các template classes và functions để thực hiện nhiều loại cấu trúc dữ liệu và các thuật toán phổ biến
+
+**Một số thành phần chính của STL:**
+- Container:Một container là một cấu trúc dữ liệu chứa nhiều phần tử gồm:
+	+ Vector
+	+ List
+	+ Map
+	+ Array
+
+- Iterator
+- Algorithms
+- Functor
+
 
 **Vector trong C++ là gì?**
-- Thư viện #include <vector>
-- Là 1 mảng được hỗ trợ bới nhiều method 
-- Cú pháp:
+
+- vector là một mảng động, tức là có khả năng thay đổi kích thước  
+- Truy cập ngẫu nhiên: Việc truy cập các phần tử của vector có thể được thực hiện bằng cách sử dụng chỉ số.
+- Một số method của vector:
+1. at(): Truy cập vào phần tử của vector
+2. size(): Trả về kích thước của vector
+3. resize(): Thay đổi kích thước của vector
+4. begin(): Địa chỉ của phần tử đầu tiên của vector
+5. end(): Địa chỉ của phần tử cuối cùng của vector
+6. push_back(): Thêm phần tử vào vị trí cuối của vector
+<details>
+<summary>Ví dụ </summary>
 
 ```C++
-	vector <int>mang ={1,4,5,2,5,3}; 
-	mang.insert(mang.begin()+1,788);// vị trí thứ 1
-	mang.erase(mang.begin()+4);
-	mang.clear();
-	for(int i = 0;i<mang.size();i++){
-		cout<<"i= "<<mang[i]<<endl;
-	}
-	return 0;
+#include <iostream>
+#include <vector>
 
+using namespace std;
+
+int main()
+{
+  
+    vector <int> arr1 = {2,5,7,4,9};
+
+    arr1.at(0) = 3;
+    arr1.resize(7);
+
+    for (int i = 0; i < arr1.size(); i++)
+    {
+        cout << "Value: " << arr1.at(i) << endl;
+    }
+    
+    arr1.push_back(10);
+
+    cout << "-----------" << endl;
+    for (int i = 0; i < arr1.size(); i++)
+    {
+        cout << "Value: " << arr1.at(i) << endl;
+    }
+    
+
+    return 0;
+}
 
 ```
-1. push_back(): Hàm đẩy một phần tử vào vị trí sau cùng của vector. Nếu kiểu của
-đối tượng được truyền dưới dạng tham số trong push_back() không giống với kiểu
-của vector thì sẽ bị ném ra.
-ten-vector.push_back(ten-cua-phan-tu);
-2. assign(): Nó gán một giá trị mới cho các phần tử vector bằng cách thay thế các
-giá trị cũ.
-ten-vector.assign(int size, int value);
-3. pop_back(): Hàm pop_back () được sử dụng để xóa đi phần tử cuối cùng một
-vector.
-4. insert(): Hàm này chèn các phần tử mới vào trước phần tử trước vị trí được trỏ
-bởi vòng lặp. Chúng ta cũng có thể chuyển một số đối số thứ ba, đếm số lần phần tử
-được chèn vào trước vị trí được trỏ.5. erase(): Hàm được sử dụng để xóa các phần tử tùy theo vị trí vùng chứa
-6. emplace(): Nó mở rộng vùng chứa bằng cách chèn phần tử mới vào
-7. emplace_back(): Nó được sử dụng để chèn một phần tử mới vào vùng chứa
-vector, phần tử mới sẽ được thêm vào cuối vector
-8. swap(): Hàm được sử dụng để hoán đổi nội dung của một vector này với một
-vector khác cùng kiểu. Kích thước có thể khác nhau.
-9. clear(): Hàm được sử dụng để loại bỏ tất cả các phần tử của vùng chứa vector
+
+</details>
+
+
+**List là gì**
+
+- List là một container trong STL của C++, triển khai dưới dạng danh sách liên kết hai chiều.
+- Dưới đây là một số đặc điểm quan trọng của list:
+	+ Truy cập tuần tự
+	+ Hiệu suất chèn và xóa: 
+- Một số method của list:
+	+ push_back():
+	+ pop_back():
+	+ insert(): Chèn một node vào list
+	+ erase(): Xóa một node của list
+	+ size(): Trả về kích thước của list
+- Sử dụng vector khi:
+	+ Cần truy cập ngẫu nhiên đến các phần tử.
+    + Thực hiện nhiều thao tác chèn/xóa ở cuối danh sách.
+	+ Dung lượng có thể biết trước hoặc thay đổi ít.
+- Sử dụng list khi:
+	+ Thực hiện nhiều thao tác chèn/xóa ở bất kỳ vị trí nào trong danh sách.
+	+ Cần thực hiện nhiều thao tác chèn/xóa mà không làm ảnh hưởng đến các iterators hiện có.
+
+**Map**
+- Map là một container trong STL của C++, cung cấp một cấu trúc dữ liệu ánh xạ key-value
+- Map lưu trữ các phần tử dưới dạng cặp key-value, trong đó mỗi key phải là duy nhất trong map.
+- Ta có thể thêm phần tử mới vào map bằng cách sử dụng operator [] hoặc hàm insert(). Để xóa phần tử, bạn có thể sử dụng hàm erase().
+- Ta có thể sử dụng iterator để duyệt qua các phần tử của map
+
+**Array**
+- Array là một container có kích thước cố định và có sẵn trong thư viện STL (Standard Template Library)
+- array có kích thước cố định được xác định tại thời điểm biên dịch và không thể thay đổi sau khi được khai báo.
+- array hỗ trợ truy cập ngẫu nhiên vào các phần tử thông qua toán tử []
+
+# Iterator
+- Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
+- Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
+- Nó giống như con trỏ, cho phép di chuyển qua các phần tử trong container.
+
+# Algorithm
+- Thư viện STL (Standard Template Library) cung cấp một số thuật toán tiêu biểu thông qua algorithm. 
+- Các thuật toán này hoạt động trên các phạm vi hoặc các loại dữ liệu khác nhau, giúp thực hiện các nhiệm vụ như sắp xếp, tìm kiếm, chuyển đổi dữ liệu, và nhiều thao tác khác. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <details>
 <summary>Ví dụ quan trọng</summary>
@@ -4571,28 +4608,9 @@ int main() {
 ```
 </details>
 
-</details>
-<details>
-  <summary><h3>1 số chú ý</h3></summary>
 
 
-**cin.ignore:**
-- cin.ignore() để nhập các dữ liệu kiểu string , các kiểu khác thì không cần
-```C++
-string tensv;
-int tuoi;
-cout << "Nhap ten sinh vien: ";
-cin.ignore();
-getline(cin, tensv);
 
-cout << "Nhap tuoi sinh vien: ";
-cin >> tuoisv;
-
-```
-**khi nào nên dùng/không dùng class kế thừa**
-
-- Nên dùng: Khi một lớp B được miêu tả là "B là một A". Ví dụ: một lớp hình tròn có thể kế thừa từ một lớp hình học.
-- Không nên:Mối quan hệ "has-a" (có một) diễn ra khi một lớp chứa một đối tượng của một lớp khác. ví dụ: danhsachSV chứa một đối tượng sinhvien, do đó chúng ta có thể nói danhsachSV "có" hoặc "bao gồm" danh sách các sinh viên.
 
 </details>
 
@@ -5053,6 +5071,11 @@ int main(){
 - Yêu Cầu Dây Dẫn Ít Hơn
 - Cần Kết Nối Nhiều Thiết Bị 
 - Tiết Kiệm Năng Lượng : các thiết bị không hoạt động không ảnh hưởng đến bus, giúp tiết kiệm năng lượng
+
+**Cờ quan trọng trong IC2:**
+- I2C_FLAG_TXE
+- I2C_FLAG_RXNE
+- I2C_FLAG_AF :Được set khi không nhận được ACK từ thiết bị Slave.
 ### Cách hoạt động:
 
 ![Connect with orther](https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-I2C-Message-Frame-and-Bit-2.png)
@@ -5265,7 +5288,11 @@ int main() {
 **Ứng dụng thực tế của UART trong lĩnh vực nhúng là gì?** 
 - UART được sử dụng trong các ứng dụng như kết nối giữa vi điều khiển và máy tính,
 ### Cách truyền nhận dữ liệu:
-
+**Cờ quan trọng trong UART:**
+- UART_FLAG_RXNE
+- UART_FLAG_TX
+- UART_FLAG_FE :Được set khi xảy ra lỗi khung, tức là không có bit stop
+- UART_FLAG_PE:Được set khi xảy ra lỗi kiểm tra chẵn/le.
 ![Connect with orther](https://kysungheo.com/wp-content/uploads/2023/03/3-300x129.png)
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/3b03fecd-3c23-4ec4-a498-9b1758b5bcd8)
 
