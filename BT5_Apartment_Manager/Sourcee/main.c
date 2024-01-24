@@ -68,7 +68,7 @@ int main() {
                 scanf("%s", searchValue);
                 searchMember("DATA_FILE", searchValue, searchByUID);
                 break;
-            }  // Thêm dấu ngoặc đóng cho trường hợp find_UID_member
+            }  
 
             case find_licensePlates_member: {
                 printf("Enter the license plate to search: ");
