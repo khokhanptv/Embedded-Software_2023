@@ -1,14 +1,8 @@
-/*
-* File: main.c
-* Author: Tran Nhat Thai
-* Date: 19/01/2024
-* Description: Main program file for managing apartment members
-*/
-
-#include "D:\Embeded_T10\ADVANCED CC++ ALGORITHM T122023_BT\Apartment_Manager\Header\member.h"
+#include "D:\Embeded_T10\ADVANCED CC++ ALGORITHM T122023_BT\BT5_Apartment_Manager\Header\member.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
+#define DATA_FILE "10000_Members.CSV"
 #define add_member 0
 #define delete_member 1
 #define find_UID_member 2
@@ -57,13 +51,64 @@ int main() {
                 fgets(newMember.licensePlate, sizeof(newMember.licensePlate), stdin);
                 newMember.licensePlate[strcspn(newMember.licensePlate, "\n")] = '\0';
 
-                addMember("10000_Members.CSV", newMember);
+                addMember("DATA_FILE", newMember);
                 printf("Member has been added.\n");
                 break;
             }
-          
+            case delete_member: {
+                char deleteUID[20];
+                printf("Enter the UID of the member to delete: ");
+                scanf("%s", deleteUID);
+                deleteMember("DATA_FILE", deleteUID);
+                printf("Member has been deleted.\n");
+                break;
+            }
+            case find_UID_member: {
+                printf("Enter the UID to search: ");
+                scanf("%s", searchValue);
+                searchMember("DATA_FILE", searchValue, searchByUID);
+                break;
+            }  // Thêm dấu ngoặc đóng cho trường hợp find_UID_member
+
+            case find_licensePlates_member: {
+                printf("Enter the license plate to search: ");
+                scanf("%s", searchValue);
+                searchMember("DATA_FILE", searchValue, searchByLicensePlate);
+                break;
+            }
+            case update_member: {
+                Member updatedMember;
+                printf("Enter the UID of the member to update: ");
+                scanf("%s", updatedMember.uid);
+
+                printf("Enter the new information:\n");
+                printf("Room Number: ");
+                fflush(stdin);
+                fgets(updatedMember.roomNumber, sizeof(updatedMember.roomNumber), stdin);
+                updatedMember.roomNumber[strcspn(updatedMember.roomNumber, "\n")] = '\0';
+
+                printf("Name: ");
+                fflush(stdin);
+                fgets(updatedMember.name, sizeof(updatedMember.name), stdin);
+                updatedMember.name[strcspn(updatedMember.name, "\n")] = '\0';
+
+                printf("License Plate: ");
+                fflush(stdin);
+                fgets(updatedMember.licensePlate, sizeof(updatedMember.licensePlate), stdin);
+                updatedMember.licensePlate[strcspn(updatedMember.licensePlate, "\n")] = '\0';
+
+                editMember("DATA_FILE", updatedMember);
+                printf("Member information has been updated.\n");
+                break;
+            }
+            case out:
+                printf("Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please choose again.\n");
         }
-    } while (choice != 5);
+
+    } while (choice != out);
 
     return 0;
 }
