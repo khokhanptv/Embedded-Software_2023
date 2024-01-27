@@ -884,7 +884,7 @@ void free(void* ptr);
 
  **Macro là gì?**
 
- - Marco là 1 định nghĩa (do lập trình viên đặt tên) trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.
+ - Marco là  trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.
 
  - Được xử lý bởi preprocessor(tiền xử lý)
 
@@ -4626,7 +4626,7 @@ int main() {
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
 **Macro,Function**
-- Marco là 1 định nghĩa  trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
+- Marco trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
 - Function là 1 khối lệnh thực hiện một chức năng nào đó
 - Macro không cần quan tâm kiểu dữ liệu của tham số đầu vào
 - Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
@@ -4716,7 +4716,7 @@ return n;
 **Master/Slave Configuration:**
 
 - Master (Thiết Bị Chủ Động): Master là thiết bị kiểm soát quá trình truyền/nhận dữ liệu. Nó tạo ra xung clock và chọn slave để gửi hoặc nhận dữ liệu từ.
--	Slave (Thiết Bị Bị Động): Slave là thiết bị nghe lệnh từ Master và truyền hoặc nhận dữ liệu tùy thuộc vào yêu cầu của Master.
+- Slave (Thiết Bị Bị Động): Slave là thiết bị nghe lệnh từ Master và truyền hoặc nhận dữ liệu tùy thuộc vào yêu cầu của Master.
 Các Dây Truyền Thông Chính:
 
 - MOSI (Master Out Slave In): Dữ liệu được truyền từ Master đến Slave qua dây này.
@@ -4740,12 +4740,13 @@ Master nhận dữ liệu từ Slave thông qua dây MISO đồng bộ với xun
 - SPI_I2S_FLAG_TXE: Cờ báo truyền, cờ này sẽ set lên 1 khi truyền xong data trong buffer.
 - SPI_I2S_FLAG_RXNE: Cờ báo nhận, cờ này set lên 1 khi nhận xong data.
 - SPI_I2S_FLAG_BSY: Cờ báo bận,set lên 1 khi SPI đang bận truyền nhận
-
-
+- SPI_I2S_FLAG_MODF:Được set khi có lỗi trong chế độ hoạt động của SPI.
+- SPI_I2S_FLAG_OVR :Được set khi có một lỗi Overrun xảy ra, tức là khi dữ liệu mới nhận được trước khi kịp đọc dữ liệu cũ từ bộ đệm.
+- SPI_I2S_FLAG_CRCERR:Được set khi có lỗi trong việc so sánh giá trị  truyền và nhận.
 **Quy tình cơ bản khi lập trình SPI**
-- 1. Cấp Xung cho SPI:
-- 2. Cấu Hình Chân Dựa Trên Reference Manual (RM) của Nhà Sản Xuất
-- 3. Cấu Hình Các Chức Năng cho SPI
+- Cấp Xung cho SPI:
+- Cấu Hình Chân Dựa Trên Reference Manual (RM) của Nhà Sản Xuất
+- Cấu Hình Các Chức Năng cho SPI
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_single_slave.svg/800px-SPI_single_slave.svg.png)
 
 ![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_three_slaves.svg/350px-SPI_three_slaves.svg.png)
@@ -5101,9 +5102,10 @@ int main(){
 - Tiết Kiệm Năng Lượng : các thiết bị không hoạt động không ảnh hưởng đến bus, giúp tiết kiệm năng lượng
 
 **Cờ quan trọng trong IC2:**
-- I2C_FLAG_TXE
-- I2C_FLAG_RXNE
+- I2C_FLAG_TXE:Được set khi thanh ghi truyền (Transmit Data Register) trống và có thể gửi dữ liệu mới.
+- I2C_FLAG_RXNE:Được set khi thanh ghi nhận (Receive Data Register) không trống và có dữ liệu để đọc.
 - I2C_FLAG_AF :Được set khi không nhận được ACK từ thiết bị Slave.
+- I2C_FLAG_OVR:Được set khi có lỗi Overrun xảy ra trong quá trình truyền dữ liệu.
 ### Cách hoạt động:
 
 ![Connect with orther](https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-I2C-Message-Frame-and-Bit-2.png)
@@ -5356,7 +5358,7 @@ Không có giao thức truyền thông nào là hoàn hảo, nhưng UART thực 
 
 - Nhược điểm:
   - Kích thước của khung dữ liệu được giới hạn tối đa là 9 bit
-  - Không hỗ trợ nhiều hệ thống phụ dây hoặc nhiều hệ thống chính
+  - chỉ 1 Master và 1 slayer
   - Tốc độ truyền của mỗi UART phải nằm trong khoảng 10% của nhau
 **CODE**
  <details>
