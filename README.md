@@ -3911,7 +3911,7 @@ int main(){
 - Object không được phép truy cập PROPERTY từ phạm vi public
 - PROPERTY nằm ở private hoặc protected.
 - Để truy cập PROPERTY phải thông qua method.
-- Lý do phức tạo vì nếu không thông qua method để tránh lỗi tùy trường hợp mà coder quy ước (xử lý tham số nhập vào, lấy dữ liệu ra...)
+- Lý do để bảo vệ dữ liệu của một đối tượng khỏi sự xâm phạm từ bên ngoài.
 
 <details>
 <summary>Ví dụ:</summary>
@@ -4625,6 +4625,13 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi PV</h2></summary
 
+**Macro,Function**
+- Marco là 1 định nghĩa  trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
+- Function là 1 khối lệnh thực hiện một chức năng nào đó
+- Macro không cần quan tâm kiểu dữ liệu của tham số đầu vào
+- Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
+- Macro đơn giản là copy -paste vào chương trình ,Điều này làm tốn kich thước nhưng time xử lý ngắn hơn
+- khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu>>gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy.nhưng sẽ mất time nhiều hơn vì dịch từ vùng nhớ lưu hàm sang vùng nhớ goi hàm.
 **i++ khác ++i**
 - Cả 2 dùng để tăng giá trị của i lên 1 đơn vị. Tuy nhiên, chúng có 1 điểm khác nhau cơ bản:
 	+ i++: tăng giá trị i sau khi thực hiện các phép toán 
@@ -6025,8 +6032,10 @@ int main(){
 
 
 </details>
-</details>
 
+
+<details>
+  <summary><h3>FLASH</h3></summary>
 
 
 
