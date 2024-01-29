@@ -6018,6 +6018,7 @@ int main(){
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c79dec05-7b5b-4ab5-ba82-f5472c5b7009)
 
 - STM32F4 có 4 chế độ hoạt động:
+
 	+	Circular Buffer Mode: DMA có thể được cấu hình để hoạt động trong chế độ vòng lặp với khả năng tự động quay lại địa chỉ ban đầu sau khi hoàn thành mỗi lần truyền.
 
 	+	Normal Mode: Truyền dữ liệu một lần và sau đó dừng lại.
@@ -6029,6 +6030,7 @@ int main(){
 	+ Memory Increment Mode: Cho phép tăng địa chỉ của bộ nhớ đích hoặc nguồn dữ liệu sau mỗi lần truyền.
 
 **Cấu hình DMA**
+
 - Không như các ngoại vi khác, DMA cần được cấp xung từ AHB, cả 2 bộ DMA đều có xung cấp từ AHB. Ngoài ra cần cấp xung cho AFIO.
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/d48dc46a-b8f1-4ab5-8baa-d44c2cd8aa2e)
 
@@ -6037,7 +6039,51 @@ int main(){
 
 
 <details>
-  <summary><h3>FLASH</h3></summary>
+  <summary><h3>Booting</h3></summary>
+
+**Quá Trình Booting**
+
+- Có 3 chế độ BOOT có thể lựa chọn qua chân BT0,BT1
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/743eb220-223d-4527-ba45-d50579cb0d96)
+
+- Main Flash memory : (x 0)
+
+	+ Chọn Main Flash memory làm không gian boot. 
+	+ Vi điều khiển sẽ khởi động từ địa chỉ bắt đầu của Flash memory.(0x08000000)
+
+- System memory : (0 1)
+	+ Chọn System memory làm không gian boot. 
+	+ Vi điều khiển sẽ khởi động từ địa chỉ bắt đầu của System memory.(0x1FFF 0000.)
+
+- Embedded SRAM :(1 1)
+	+ Chọn Embedded SRAM làm không gian boot. 
+	+ Vi điều khiển sẽ khởi động từ địa chỉ bắt đầu của Embedded SRAM.(0x2000 0000 )
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/20a6cd2f-7259-4df3-a1b2-e47704a84a17)
+
+**Vector Table**
+
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/5dcbc72a-028a-4eca-8fa2-4a9ecb7cd541)
+
+
+- Vector table là một bảng  chứa các địa chỉ của các hàm xử lý ngắt (interrupt service routines - ISR) được liên kết với các nguồn ngắt cụ thể
+	
+	+ Exception Number: Số thứ tự của ngắt
+	+ IRQ Number: Số thứ tự của ngắt đặc biệt 
+	+ Offset: Địa chỉ offset của vector từ địa chỉ bắt đầu của bảng vector.
+	+ Vector: Tên của ngắt hoặc sự kiện tương ứng với vector đó
+- Dưới đây là một số vector quan trọng:
+	+ Reset Vector (Number 1): Được gọi khi vi điều khiển được khởi động lại.
+	+ Systick Vector (Number 15): Được gọi khi sự kiện ngắt Systick xảy ra.
+	+ NMI Vector (Number 2): Được gọi khi sự kiện NMI xảy ra.
+	+ Hard Fault Vector (Number 3): Được gọi khi sự kiện ngắt Hard Fault xảy ra.
+	+ SVCall Vector (Number 11): Được gọi khi sự kiện ngắt SVCall xảy ra.
+	+ PendSV Vector (Number 14): Được gọi khi sự kiện ngắt PendSV xảy ra.
+
+
+
+
 
 
 
