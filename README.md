@@ -4623,7 +4623,7 @@ int main() {
   <summary><h1>▶ ⭐Embedded</h1></summary>
 
 <details>
-  <summary><h2>1 Số câu hỏi PV</h2></summary
+  <summary><h2>1 Số câu hỏi</h2></summary
 
 **Macro,Function**
 - Marco trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
