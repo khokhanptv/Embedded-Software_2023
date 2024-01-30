@@ -6042,8 +6042,9 @@ int main(){
   <summary><h3>Booting</h3></summary>
 
 **Quá Trình Booting**
+- là quá trình khởi động (hoặc restart) MCU 
 
-- Có 3 chế độ BOOT có thể lựa chọn qua chân BT0,BT1
+- STM32 Có 3 chế độ BOOT có thể lựa chọn qua chân BT0,BT1
 
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/743eb220-223d-4527-ba45-d50579cb0d96)
 
@@ -6081,9 +6082,14 @@ int main(){
 	+ SVCall Vector (Number 11): Được gọi khi sự kiện ngắt SVCall xảy ra.
 	+ PendSV Vector (Number 14): Được gọi khi sự kiện ngắt PendSV xảy ra.
 
+**Quá trình khởi động MCU**
+![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/8d67675a-fcd4-413d-95e4-fdadcf2ea23e)
+- Sau khi reset ,MCU khởi tạo giá trị SP bằng cách đọc giá trị tại địa chỉ 0X00000000  
+- Tiếp theo VDK sẽ đọc giá trị của địa chỉ 0x0000004  (vector table ) cụ thể là vector reset
+- Sau đó sẽ nhảy đến hàm main và thực hiện chương trình ứng dụng trong hàm main.
 
-
-
+**Bootloader là gì?**
+- Bootloader là một chương trình nằm ở vùng nhớ đặc biệt của bộ nhớ trong thiết bị nhúng. Chức năng chính của nó cho phép cập nhật hoặc nạp firmware 
 
 
 
