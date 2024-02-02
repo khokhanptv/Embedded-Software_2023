@@ -6101,11 +6101,40 @@ int main(){
 
 
 
+<details>
+  <summary><h1>▶ ⭐Autosar</h1></summary>
+
+<details>
+  <summary><h2>Khái niệm</h2></summary
+
+**Autosar là gì?**
+-  là một tiêu chuẩn để phát triển phần mềm cho các hệ thống nhúng trong xe ô tô
+- AutoSAR không tập trung vào mã nguồn , mà đặt ra các hướng dẫn về cách tổ chức mã, quản lý cấu hình, và làm thế nào các thành phần phần mềm tương tác với nhau. 
+
+**Mô hìnhAutosar?**
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/04226826-e3ff-48ef-af51-fac5079e0338)
+
+- BSW:
+	+ MCAL:Tạo 1 môi trường giúp MCU giao tiếp với các ngoại vi bên ngoài như cảm biển
+	
+	+ ECU:Cung cấp những tính năng cụ thể cho MCU.
+		+ Ví dụ như Đk động cơ thì khởi động , tắt động cơ
+
+	+ SL: Tạo các service để gọi các tính năng đã đề cập ở lớp ECU
+
+- RTE:một lớp phần mềm trung gian giữa ứng dụng và các lớp  khác ,quản lý và cung cấp các dịch vụ hệ thống cần thiết để chạy các ứng dụng nhúng trong xe ô tô
+- Application Layer: Chứa code liên quan đến ứng dụng cụ thể của hệ thống ô tô.
+	+ Những hàm trong Application chạy độc lập với nhau
+
+**Bài toán thực tế?**
+- Điều khiển động cơ bằng STM32 theo tiêu chuẩn Autosar
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/ed56f0fa-b8f2-4a68-85be-b2612c33f71e)
+
+- Vậy khi thay đổi MCU khác chỉ cần thay đổi code lớp MCAL
 
 
+</details>
 
-
-
-
-
-
+</details>
