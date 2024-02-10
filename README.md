@@ -151,7 +151,57 @@ int main(void) {
     return 0;
 }
 ```
+</details>
 
+**So sánh 2 mảng bất kỳ( 1 chiều , 2 chiều)**
+<details>
+<summary>CODE:</summary>
+
+```c
+ #include <stdio.h>
+
+int compareArrays(const char *arr1, const char *arr2, int size) ;
+   
+
+int main()
+{
+    char str[5] = {1, 2, 3, 0, 5};
+    char serNum[2][5] = {{1, 2, 3, 4, 5}, {1, 2, 3, 0, 5}};
+     
+    
+    // Lưu kết quả của hàm compareArrays
+    int s1 = compareArrays(str, serNum[0], 5); // So sánh với hàng đầu tiên của serNum
+    printf("s1 bang %d \n", s1);
+    
+    int s2 = compareArrays(str, serNum[1], 5); // So sánh với hàng thứ hai của serNum
+    printf("s2 bang %d \n", s2);
+    
+    //1 cach tong hop hon, dung vòng for
+    for (int j = 0; j < 5; ++j) {
+                if (compareArrays(str, serNum[j], 5)) {
+                 
+                    printf("ID the khop tai vi tri %d\n", j);
+                    break; 
+                }
+            }
+
+
+    return 0;
+}
+
+
+int compareArrays(const char *arr1, const char *arr2, int size) {
+    for (int i = 0; i < size; ++i) {
+        if (arr1[i] != arr2[i]) {
+            return 0; 
+        }
+    }
+    return 1; 
+}
+
+```
+
+</details>
 
 </details>
 
