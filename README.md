@@ -934,7 +934,7 @@ void free(void* ptr);
 
  **Macro là gì?**
 
- - Marco là  trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.
+ - Marco là 1 tên bất kì trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.
 
  - Được xử lý bởi preprocessor(tiền xử lý)
 
@@ -972,7 +972,7 @@ void free(void* ptr);
 - Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
 - Macro đơn giản là chỉ thay thế đoạn code macro vào chỗ được gọi trước khi được biên dịch .Giả sử 1 macro là 1 byte được gọi 20 lần >> 20 byte trong hàm main ,20 dòng code sẽ được chèn vào trong quá trình tiền xử lí. Điều này làm tốn kich thước nhưng time xử lý ngắn hơn( chỉ copy -paste vào chương trình) .
 
-- khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu , Giả sử hàm được gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy. Nhưng khi gọi hàm  có thể tốn thêm thời gian do quá trình gọi hàm và quay lại vị trí ban đầu.
+- khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu , Giả sử hàm được gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy. Nhưng khi gọi hàm có thể tốn thêm thời gian do quá trình gọi hàm và quay lại vị trí ban đầu.
 
 
 
@@ -1281,6 +1281,23 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 	- `#else`: Dùng khi không có ĐK nào đúng
 	- `#ifdef` : Dùng để kiểm tra 1 macro định nghĩa hay chưa.Nếu định nghĩa rồi thì mã sau ifdef sẽ được biên dịch.
 	- `#ifndef`: Dùng để kiểm tra 1 macro định nghĩa hay chưa.Nếu chưa định nghĩa thì mã sau ifndef sẽ được biên dịch.Thường dùng để kiểm tra macro đó đã dc định nghĩa trong file nào chưa, kết thúc thì `#endif`
+	- ví dụ:
+		```C
+
+		#define max 6
+		#if max ==20
+		int a =10;
+		#elif max <20
+		int a =6;
+		#endif
+		#include <stdio.h>
+		int main()
+		{
+			printf("a bang %d",a);// a bằng 10
+			return 0;
+		}
+
+		```
 
 	**Mục đích để tránh Định Nghĩa Nhiều Lần và Xung Đột**
 	- Ví dụm trong 1 file `main.h`
@@ -3679,7 +3696,7 @@ public:
 
 ```
 **Constructor**
--  Constructor là một  thành viên trong class,có tên giống với tên class và không có kiểu trả về. Nhiệm vụ chính là khởi tạo đối tượng khi nó được tạo ra. Có hai loại chính:
+-  Constructor là một hàm đặc biệt, nó sẽ được gọi ngay khi chúng ta khởi tạo một object.. Có hai loại chính:
 	+ Default Constructor (Constructor mặc định): Tự động được tạo ra nếu không định nghĩa bất kỳ constructor . Nó không có tham số và thực hiện các công việc cần thiết để khởi tạo đối tượng.
 
 	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
@@ -4160,7 +4177,9 @@ int main(void){
 </details>
 
 **4/Abstraction (Tính trừu tượng ):**
+
 - Ẩn đi các chi tiết của một đối tượng và hiển thị những gì cần thiết, để sử dụng đối tượng đó.
+
 **Template trong C++ là gì?**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
 
@@ -4339,7 +4358,7 @@ int main()
 
 **List là gì**
 
-- List là một container trong STL của C++, triển khai dưới dạng danh sách liên kết hai chiều.
+- List là một c  danh sách liên kết hai chiều.
 - Dưới đây là một số đặc điểm quan trọng của list:
 	+ Truy cập tuần tự
 	+ Hiệu suất chèn và xóa: 
