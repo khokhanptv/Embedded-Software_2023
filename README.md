@@ -1154,6 +1154,7 @@ int *pc = &c;    // trỏ con trỏ pc tới vùng nhớ của biến c
 **Mảng:**
 
 - Mảng (array) là các phần tử có kiểu dữ liệu đồng nhất. Các phần tử của mảng được lưu trong các vùng nhớ liên tiếp
+- Một mảng thực sự là một con trỏ hằng (constant pointer) trỏ tới địa chỉ của phần tử đầu tiên trong mảng.
 - Khai báo:
 ```- Kiểu dữ liệu tên mảng[]={};```
 - Ví dụ :
@@ -2254,6 +2255,9 @@ int main() {
 
 **Struct:**
 - Struct là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó , kích thước của struct bằng kích thước các thành viên bên trong + phần padding.
+- Struct padding :
+	+ Data alignment:Việc thao tác các biến có địa chỉ liền kề là 1 số lẻ là phức tạp , nên CPU luôn thao tác các địa chỉ là số chẵn >> Data alignment là việc 	sắp xếp data sao cho địa chỉ của các biến luôn là số chẵn và phù hợp với hệ thống.
+	+ Data padding: là thêm các vùng nhớ đệm để có địa chỉ chẵn
 - Ví dụ:
 ![Struct](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e28efacc-bb79-4e85-b16f-4e2645df8ff8)
 - Tổng Example là 8 byte , 7 byte dữ liệu + 1 byte trống 
@@ -2262,7 +2266,7 @@ int main() {
 ![Struct2](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1ae3cbe1-4c82-40dd-b57e-7d2eec545f3f)
 - Tổng Example là 24 byte ,cơ bản là tốn time tính
 
-##Mục đích tính toán struct,để tối ưu bộ nhớ,nếu sắp xếp các phần tử không hợp lý sẽ tốn bộ nhớ.
+##Và mục đích tính toán struct,để tối ưu bộ nhớ,nếu sắp xếp các phần tử không hợp lý sẽ tốn bộ nhớ.
 
 
 **Union:**
