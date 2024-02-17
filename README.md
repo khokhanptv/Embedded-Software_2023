@@ -4753,7 +4753,12 @@ return n;
   <summary><h3>Các giao thức (Protocols)</h3></summary>
 
 **SMT32F4**
+- Watchdog timer (WDT)  là một tính năng quan trọng để bảo vệ chương trình . Nó giám sát hoạt động của chương trình và thực hiện các hành động nhất định nếu hệ thống lỗi
 
+-	Khi bắt đầu một chu kỳ, chương trình phải feed một giá trị cụ thể vào thanh ghi của watchdog timer. Nếu chương trình không feed trong khoảng thời gian nhất định, watchdog timer sẽ tự động reset hoặc thực hiện một hành động khác như kích hoạt một ngắt, tùy thuộc vào cấu hình của nó.
+	+ Independent Watchdog (IWDG):WDG là một bộ đếm độc lập  để theo dõi hoạt động của hệ thống và khởi động  nếu hệ thống không phản hồi trong khoảng thời gian xác định.WDG thường được sử dụng để đảm bảo tính ổn định  của hệ thống
+	+ Window Watchdog (WWDG): WWDG cũng là một bộ đếm nhưng có khả năng cấu hình một cửa sổ thời gian. Nếu việc đếm nằm ngoài khoảng cửa sổ này, hệ thống sẽ được khởi động lại. WWDG thường được sử dụng để giám sát tính nhất quán của hệ thống trong môi trường thời gian thực.
+Điều này đảm bảo rằng nếu chương trình bị treo hoặc gặp sự cố mà không feed watchdog timer, hệ thống sẽ tự động được khởi động lại hoặc thực hiện một hành động khác để phục hồi. Điều này cải thiện tính ổn định và độ tin cậy của hệ thống.
 - stm32F4 thuộc dòng ARM-M(có 3 loại)
 	+ Cortex-A :Dùng trong oto
 	+ Cortex-R :Dùng trong y tế 
