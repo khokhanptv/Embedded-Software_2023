@@ -3915,41 +3915,33 @@ int main(){
 <details>
   <summary><h2>namespace</h2></summary>
 
-- Namespace: tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,với 2 namespace khác nhau có thể tạo các biến trùng tên. Nhưng trong 1 namespace không thể có 2 biến cùng tên
+- Namespace:là từ khóa trong C++ được sử dụng để phân biệt các hàm, lớp, biến cùng tên trong các file khác nhau.
+ tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,với 2 namespace khác nhau có thể tạo các biến trùng tên. Nhưng trong 1 namespace không thể có 2 biến cùng tên
 
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
-#include<iostream>
+//fileB.hpp
+
+#include <iostream>
+
 using namespace std;
 
-namespace onga {
-    int teo = 10;
+namespace fileB{
+    void function(() { cout << “function in fileB running.” << endl; }
+}
+//fileC.hpp
+#include <iostream>
 
-    void test() {
-        cout << "test onga" << endl;
-    }
+using namespace std;
 
-    class sinhvien {
-    public:
-        void hienthi() {
-            cout << "sinhvien" << endl;
-        }
-    };
+namespace fileC{
+    void function(() { cout << “function in fileC running.” endl; }
 }
 
-namespace ongb {
-    int teo = 20;
-    int arr[] = {1, 3, 4, 5};
-}
 
-int main() {
-    cout << "con ong a: teo=" << onga::teo << endl; // con ong a: teo=10
-    cout << "con ong b: teo=" << ongb::teo << endl; // con ong b: teo=20
-
-    return 0;
-}
+# 
 
 ```
 **Dùng using namespace tên, có thể rút gọn code**
@@ -3961,11 +3953,31 @@ int main(){
 	return 0;
 	
 }
+
+// FILE MAIN.CPP
+#include <iostream>
+#incldue “fileB.hpp”
+#include “fileC.hpp”
+
+using namespace std;
+
+int main() {
+    fileB::function();
+    fileC::function();
+    
+    return 0;
+}
+
+
+
+
+
 ```
 </details>
 
 </details>
 <details>
+
   <summary><h3>Hướng đối tượng </h3></summary>
 
 ### hướng đối tượng là gi?
@@ -4219,74 +4231,43 @@ int main(void){
 <summary>Ví dụ</summary>
 
 ```C++
-using namespace std;
 
-class Shape {
-protected:
-    int canh;
-    int chieucao;
-    float dientich;
-    float chuvi;
+ #include <iostream>
 
+class Animal {
 public:
-    virtual void calculateArea() {
-        dientich = 0; 
-        cout << "Diện tích: " << dientich << endl;
-    }
-
-    virtual void calculatePerimeter() {
-        chuvi = 0; 
-        cout << "Chu vi: " << chuvi << endl;
+    virtual void speak() {
+        std::cout << "Animal speaks\n";
     }
 };
 
-class Circle : protected Shape {
-protected:
-    int bankinh;
-
+class Dog : public Animal {
 public:
-    Circle(int r) : bankinh(r) {}
-    //tương đương:  Circle(int r) {
-       //bankinh = r;}
-    void calculateArea() override {
-        dientich = 3.14 * bankinh * bankinh;
-        cout << "Dien tich " << dientich << endl;
-    }
-
-    void calculatePerimeter() override {
-        chuvi = 2 * 3.14 * bankinh;
-        cout << "Chu vi: " << chuvi << endl;
-    }
-};
-class Rectangle  : protected Shape {
-protected:
-    int chieudai;
-    int chieurong;
-
-public:
-    Rectangle(int a,int b) : chieudai(a), chieurong(b) {}
-
-    void calculateArea() override {
-        dientich = chieudai * chieurong;
-        cout << "Dien tich " << dientich << endl;
-    }
-
-    void calculatePerimeter() override {
-        chuvi = 2 * (chieudai+chieurong);
-        cout << "Chu vi: " << chuvi << endl;
+    void speak() override {
+        std::cout << "Dog barks\n";
     }
 };
 
-int main(void) {
-    Circle tron(5);
-    Rectangle dai(4,5);
-    tron.calculateArea();
-    tron.calculatePerimeter();
-    cout<<"------------"<<endl;
-    dai.calculateArea();
-    dai.calculatePerimeter();
+class Cat : public Animal {
+public:
+    void speak() override {
+        std::cout << "Cat meows\n";
+    }
+};
+
+int main() {
+    Animal* animal1 = new Dog();
+    Animal* animal2 = new Cat();
+
+    animal1->speak();  // Output: Dog barks
+    animal2->speak();  // Output: Cat meows
+
+    delete animal1;
+    delete animal2;
+
     return 0;
 }
+
 
 ```
 </details>
@@ -4772,6 +4753,21 @@ return n;
   <summary><h3>Các giao thức (Protocols)</h3></summary>
 
 **SMT32F4**
+
+- stm32F4 thuộc dòng ARM-M(có 3 loại)
+	+ Cortex-A :Dùng trong oto
+	+ Cortex-R :Dùng trong y tế 
+	+ Cortex-M :Tiêu thu năng lượng thấp , chi phí thấp
+- ARM Cortex  được thiết kế dựa trên kiến trúc RISC.RISC  phương pháp thiết kế tập trung vào sự đơn giản của tập lệnh.
+và  cấu trúc Von Neumann, một kiểu cấu trúc trong đó dữ liệu và lệnh được lưu trữ trong cùng một bộ nhớ, để giảm chi phí và độ phức tạp của hệ thống.
+**STM32F4**
+- Flash memory có thể lên đến 1 megabyte
+- SRAM có dung lượng 192+4 kilobytes
+- 16  bộ DMA ,17 timer
+- 3 × I2C ,4 USARTs/2 UARTs ,3 SPIs (42 Mbits/s),
+- 2 × CAN interfaces (2.0B Active)
+-  SDIO interface
+
 ![z4957623054341_76e371e0a646a50f810f7ba8450aed45](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b64d3b82-97fc-4c9d-a9d4-f05e9bb794f3)
 
 <details>
