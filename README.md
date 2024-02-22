@@ -2271,6 +2271,46 @@ int main() {
 
 **Union:**
 - Union là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó ,kích thước của struct bằng kích thước thành viên lớn nhất và cùng 1 vùng nhớ.
+
+<details>
+<summary>Ví dụ </summary>
+
+```c
+#include <stdio.h>
+
+union Data {
+    int i;
+    float f;
+    char str[20];
+};
+
+int main() {
+    union Data data;
+
+    data.i = 10;  // Gán giá trị cho thành viên int
+    printf("data.i: %d\n", data.i);  // In ra giá trị của thành viên int
+
+    data.f = 220.5;  // Gán giá trị cho thành viên float
+    printf("data.f: %f\n", data.f);  // In ra giá trị của thành viên float
+
+    // Truy cập thành viên int sau khi đã gán giá trị cho thành viên float
+    printf("data.i: %d\n", data.i);  // Giá trị này không còn chính xác do đã bị thay đổi
+
+    return 0;
+}
+
+
+
+
+
+
+
+```
+
+
+</details>
+
+
 ![Union](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/fbd619c6-cf4b-42f4-9882-7595480d67a9)
 ![union1](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/e70b509c-8c6e-4664-a79d-ed245e97125e)
 - Tổng Example là 20 byte , thằng nào lớn nhất thì lấy thằng đó
@@ -3700,9 +3740,9 @@ public:
 
 ```
 **Constructor**
--  Constructor là một hàm đặc biệt, nó sẽ được gọi ngay khi chúng ta khởi tạo một object.. Có hai loại chính:
-	+ Default Constructor (Constructor mặc định): Tự động được tạo ra nếu không định nghĩa bất kỳ constructor . Nó không có tham số và thực hiện các công việc cần thiết để khởi tạo đối tượng.
-
+-  Constructor là một hàm đặc biệt,có cùng tên với tên của lớp ,Nó được sử dụng để khởi tạo các thuộc tính của đối tượng..
+-  Có hai loại chính:
+	+ Default Constructor (Constructor mặc định): Nó không có tham số .
 	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
 <details>
 <summary>Ví dụ:</summary>
