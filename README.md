@@ -3740,9 +3740,9 @@ public:
 
 ```
 **Constructor**
--  Constructor là một hàm đặc biệt,có cùng tên với tên của lớp ,Nó được sử dụng để khởi tạo các thuộc tính của đối tượng..
+-  Constructor  là một method sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class,Nó được sử dụng để khởi tạo các thuộc tính của đối tượng..
 -  Có hai loại chính:
-	+ Default Constructor (Constructor mặc định): Nó không có tham số .
+	+ Default Constructor (Constructor mặc định): không có tham số .
 	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
 <details>
 <summary>Ví dụ:</summary>
@@ -3786,8 +3786,7 @@ int main() {
 </details>
 
 **Destructor**
-- Destructor là 1 thành viên trong class . Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
-Mục đích  Destructor để giải phóng bộ nhớ mà đối tượng đã cấp phát .
+- DDestructor trong C++ là một method sẽ được tự động gọi khi đối tượng được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
 <details>
 <summary>Ví dụ:</summary>
 
