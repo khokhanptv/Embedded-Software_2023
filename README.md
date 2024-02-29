@@ -1,4 +1,4 @@
-<details>
+	<details>
 <summary><h1>▶ ⭐Bài tập ứng dụng</h1></summary>
 
 ## 1 số BT liên quan con trỏ
@@ -1393,10 +1393,11 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 - **Stdargt:** 
 - Cú pháp: `#include<stdarg.h>`
 - stdarg.h trong Thư viện C định nghĩa một kiểu biến va_list và 3 macro  được sử dụng để lấy các tham số trong một hàm khi không cần biết có bao nhiêu tham số đầu vào
-- va_list: Định nghĩa một đối tượng để duyệt qua các đối số biến đổi.
-- va_start: Khởi tạo va_list để trỏ đến tham số đầu tiên của hàm.
-- va_arg: Trả về giá trị của đối số hiện tại trong va_list và di chuyển va_list tới đối số tiếp theo.
+- va_list: là một kiểu dữ liệu được sử dụng để lưu trữ danh sách các đối số biến đổi.
+- va_start:  được sử dụng để khởi tạo một va_list. Nó nhận hai giá trị: va_list và số lượng tham số
+- va_arg: lấy giá trị đầu tiên của va_list và di chuyển con trỏ trong va_list tới đối số tiếp theo
 - va_end: Kết thúc việc sử dụng va_list.
+
 <details>
 <summary>Ví dụ:</summary>
 
@@ -1404,25 +1405,34 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 #include <stdio.h>
 #include <stdarg.h>
 
-int sum(int count, ...) {
-    va_list args;// đây là 1 kiểu dữ liệu ,để lưu 1 địa chỉ 
-    va_start(args, count);//count để xác định  giá trị ban đầu 
-	//trong trường hợp này là 4....
+void example(int count, ...) {
+    va_list args;
+    va_start(args, count);
+    
+    // Lấy giá trị của đối số biến đổi thứ nhất
+    int value1 = va_arg(args, int);
+    printf("Value 1: %d\n", value1);
+    
+    // Lấy giá trị của đối số biến đổi thứ hai
+    int value2 = va_arg(args, int);
+    printf("Value 2: %d\n", value2);
 
-    int result = 0;
-    for (int i = 0; i < count; i++) {
-        result += va_arg(args, int);// ép kiểu dữ liệu 
-    }	
+    // Lấy giá trị của đối số biến đổi thứ ba
+    int value3 = va_arg(args, int);
+    printf("Value 3: %d\n", value3);
+
+    // Lấy giá trị của đối số biến đổi thứ tư
+    int value4 = va_arg(args, int);
+    printf("Value 4: %d\n", value4);
 
     va_end(args);
-
-    return result;
 }
 
 int main() {
-    printf("Sum: %d\n", sum(4, 1, 2, 3, 4));// sum:10 , vì cout =4>> truyền vào 4 tham số
+    example(4, 1, 2, 3, 4);
     return 0;
 }
+
 
 ```
 
@@ -4007,12 +4017,40 @@ int main() {
     return 0;
 }
 
-
-
-
+ 
 
 ```
 </details>
+
+
+
+
+</details>
+<details>
+  <summary><h2>Lambda</h2></summary>
+
+**Lambda**
+- Lambda là một cú pháp trong ngôn ngữ lập trình C++ cho phép tạo ra các hàm vô danh (anonymous functions) ngắn gọn và linh hoạt ngay tại chỗ mà không cần phải đặt tên  cho chúng,Cú pháp của lambda rất linh hoạt và có thể được sử dụng để viết mã ngắn gọn và dễ đọc.
+- Cú pháp :
+` [capture clause] (parameter list) -> return type { body }`
+- Capture clause: Là cách bạn chọn để capture các biến từ phạm vi bên ngoài vào bên trong lambda. Có thể capture bằng reference (&), capture bằng giá trị (=), hoặc không capture ([]).
+- parameter list: Là danh sách các tham số của hàm lambda, tương tự như danh sách tham số của một hàm thông thường.
+- return type: Là kiểu dữ liệu của giá trị trả về của hàm lambda. Trong một số trường hợp, trình biên dịch có thể tự suy luận kiểu dữ liệu này.
+- body: Là phần thân của hàm lambda, nơi  viết mã lệnh thực thi các công việc của hàm.
+- Trong C++, có ba cách chính để capture các biến từ phạm vi bên ngoài vào trong một lambda function:
+	+	Capture bằng Giá Trị (=):
+		+ Capture tất cả các biến được sử dụng trong lambda theo cách sao chép giá trị của chúng.
+		Các biến được capture bằng giá trị sẽ không thay đổi giá trị của chúng ngoài lambda khi chúng được thay đổi trong lambda.
+	+	Capture bằng Reference (&):
+		+ Capture tất cả các biến được sử dụng trong lambda theo cách tham chiếu đến chúng.
+		+ Các biến được capture bằng reference cho phép thay đổi giá trị của chúng ngoài lambda khi chúng được thay đổi trong lambda.
+	+ Capture Tự Do (không sử dụng capture clause):
+		+ Không capture bất kỳ biến nào từ phạm vi bên ngoài vào trong lambda.
+		+ Lambda chỉ có thể truy cập các biến được định nghĩa trong lambda hoặc các biến toàn cục.
+**Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
+
+</details>
+
 
 </details>
 <details>
