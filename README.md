@@ -1,4 +1,4 @@
-	<details>
+<details>
 <summary><h1>▶ ⭐Bài tập ứng dụng</h1></summary>
 
 ## 1 số BT liên quan con trỏ
@@ -3957,8 +3957,8 @@ int main(){
 	// sẽ in ra là ten,tuoi,mssv,lop,Huy object co ten thai
 }
 ```
-</details>
 
+</details>
 
 </details>
 <details>
@@ -4020,11 +4020,8 @@ int main() {
  
 
 ```
+
 </details>
-
-
-
-
 </details>
 <details>
   <summary><h2>Lambda</h2></summary>
@@ -4049,13 +4046,10 @@ int main() {
 		+ Lambda chỉ có thể truy cập các biến được định nghĩa trong lambda hoặc các biến toàn cục.
 **Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
 
-</details>
-
 
 </details>
 <details>
-
-  <summary><h3>Hướng đối tượng </h3></summary>
+<summary><h3>Hướng đối tượng </h3></summary>
 
 ### hướng đối tượng là gi?
 - OOP là một phương pháp lập trình dưới dạng các "đối tượng," mỗi đối tượng có chứa dữ liệu và các phương thức để thao tác dữ liệu đó.
@@ -4348,8 +4342,6 @@ int main() {
 
 ```
 </details>
-
-
 </details>
 <details>
   <summary><h2>Standard template library </h2></summary>
@@ -4379,6 +4371,7 @@ int main() {
 4. begin(): Địa chỉ của phần tử đầu tiên của vector
 5. end(): Địa chỉ của phần tử cuối cùng của vector
 6. push_back(): Thêm phần tử vào vị trí cuối của vector
+
 <details>
 <summary>Ví dụ </summary>
 
@@ -4417,9 +4410,7 @@ int main()
 
 </details>
 
-
 **List là gì**
-
 - List là một c  danh sách liên kết hai chiều.
 - Dưới đây là một số đặc điểm quan trọng của list:
 	+ Truy cập tuần tự
@@ -4740,16 +4731,8 @@ int main() {
 </details>
 
 
-
-
-
 </details>
-
-
-
 </details>
-
-
 <details>
   <summary><h1>▶ ⭐Embedded</h1></summary>
 
