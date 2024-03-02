@@ -248,19 +248,6 @@ int main(void){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 </details>
 </details>
 <details>
@@ -4766,7 +4753,152 @@ int main() {
 </details>
 
 
+
 </details>
+<details>
+  <summary><h2>Multithreading</h2></summary>
+
+**Lập trình đa luồng (Multithreading):**
+- Là việc sử dụng nhiều luồng đồng thời trong một chương trình để tăng hiệu suất và sử dụng tốt các tài nguyên hệ thống.Muốn sử dụng thì `#include <thread>`
+
+**Synchronization Mechanisms (Cơ chế đồng bộ hóa):**
+- Đồng bộ hóa: Là quá trình đảm bảo rằng các luồng hoạt động đồng bộ khi truy cập và thay đổi dữ liệu chia sẻ. 
+- Cơ chế đồng bộ hóa: Là phương pháp được sử dụng để đạt được đồng bộ  giữa các luồng, bao gồm cơ chế locks,unlock,mutex.Muốn sử dụng cơ chế này thì `#include <mutex>`
+- Mutex (Mutual Exclusion): được sử dụng để đồng bộ hóa truy cập vào các tài nguyên được chia sẻ giữa các luồng
+- Để khóa một mutex, bạn cần sử dụng phương thức lock() của đối tượng mutex, và để mở khóa mutex, bạn sử dụng phương thức unlock(). 
+- Cơ chế lock(),unlock() được sử dụng để khóa mutex.Việc khóa mutex trước và mở khóa mutex sau đảm bảo rằng chỉ có một luồng có thể truy cập vào dữ liệu chia sẽ giữa 2 luồng
+- std::unique_lock: Cơ bản có tính năng giống lock(),unlock(). nghĩa là 1 thời điểm chỉ cho 1 luồng truy cập dữ liệu , nhưng việc unlock là tự động
+- std::shared_lock:cho phép nhiều luồng đọc cùng một lúc.
+
+<details>
+<summary>Ví dụ unique_lock</summary>
+
+```c++
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+int sharedData = 0;
+void threadFunction() {
+    std::unique_lock<std::mutex> lock(mtx); // Khóa mutex
+    ++sharedData; // Truy cập và thay đổi biến dữ liệu được chia sẻ
+    std::cout << "Thread " << std::this_thread::get_id() << ": sharedData = " << sharedData << std::endl;
+} 
+int main() {
+    std::thread t1(threadFunction);
+    std::thread t2(threadFunction);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+
+```
+</details>
+
+
+**Concurrent Data Structures (Cấu trúc dữ liệu đồng thời)**
+- Cấu trúc dữ liệu đồng thời: Là  cấu trúc hỗ trợ truy cập  dữ liệu từ nhiều luồng mà không cần sử dụng locks hoặc mutexes.
+- condition_variable là  một cơ chế trong C++11 được sử dụng để đồng bộ hóa các luồng thông qua việc chờ đợi và thông báo về sự kiện xảy ra
+- condition_variable cho phép một hoặc nhiều luồng chờ đợi cho một điều kiện nhất định trở thành đúng trước khi tiếp tục thực hiện công việc của mình.
+- condition_variable được sử dụng kết hợp với một mutex để đảm bảo độ an toàn khi truy cập và thay đổi trạng thái của điều kiện.
+- condition_variable có các hàm :notify_one(),notify_all(),wait()
+- thread1 chạy và tăng giá trị của biến count mỗi lần lặp. Khi count đạt đến 5, nó gửi một tín hiệu thông báo cho thread2 bằng cách gọi cv.notify_one().
+thread2 chạy và đợi cho đến khi count đạt đến 5 trước khi tiếp tục thực hiện công việc của mình. Nó sử dụng cv.wait() để chờ đợi tín hiệu từ thread1.
+
+**Bất đồng bộ (Asynchronous):**
+- Trong lập trình, bất đồng bộ thường ám chỉ việc thực hiện một tác vụ mà không cần chờ đợi kết quả của tác vụ trước đó hoàn thành.
+- Các tác vụ bất đồng bộ thường được thực hiện song song và có thể hoàn thành trong thời gian khác nhau.
+- Bất đồng bộ thường được sử dụng trong các tình huống khi bạn muốn tiếp tục thực hiện các tác vụ khác mà không cần chờ đợi kết quả từ các tác vụ trước đó
+
+<details>
+<summary>Ví dụ quan trọng</summary>
+
+```c++
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+std::mutex mtx;
+std::condition_variable cv;
+int count = 0;
+
+void thread1() {
+    for (int i = 0; i < 5; ++i) {
+        // Simulate some work
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        
+        // Increase count
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            ++count;
+            std::cout << "Thread 1: Count = " << count << std::endl;
+        }
+
+        // If count reaches 5, notify thread 2
+        if (count == 5) {
+            cv.notify_one();
+        }
+    }
+}
+
+void thread2() {
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, [] { return count == 5; });
+    std::cout << "Thread 2: Condition met, count = " << count << std::endl;
+}
+
+int main() {
+    std::thread t1(thread1);
+    std::thread t2(thread2);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+
+```
+</details>
+
+**Task Parallelism (Song song hóa công việc):**
+
+- Song song hóa công việc: Là phân chia một nhiệm vụ lớn thành các phần nhỏ và thực thi chúng song song trên nhiều luồng hoặc nhiều lõi CPU để tận dụng được sức mạnh tính toán của hệ thống.
+- Điều này thường được sử dụng trong các ứng dụng đòi hỏi tính toán cao như xử lý hình ảnh, video, và tính toán khoa học.
+
+**Challenges in Concurrency (Thách thức trong đồng thời hóa):**
+- Race Conditions (Điều kiện cạnh tranh): Khi hai hoặc nhiều luồng cố gắng truy cập và thay đổi dữ liệu chia sẻ mà không có sự đồng bộ hóa, có thể dẫn đến kết quả không đoán trước được.
+- Deadlocks (Mắc kẹt): Khi hai hoặc nhiều luồng đợi lẫn nhau để giải phóng tài nguyên mà họ cần, dẫn đến tình trạng tắc nghẽn không thể tiếp tục thực thi.
+- Starvation (Đói đứng): Khi một hoặc nhiều luồng không thể tiếp tục thực thi vì chúng không nhận được tài nguyên hoặc quá trình lập lịch không công bằng.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</details>
+</details>
+
 </details>
 <details>
   <summary><h1>▶ ⭐Embedded</h1></summary>
