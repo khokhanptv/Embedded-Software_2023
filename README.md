@@ -4346,24 +4346,27 @@ int main() {
 <details>
   <summary><h2>Standard template library </h2></summary>
 
-## STL là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các template classes và functions để thực hiện nhiều loại cấu trúc dữ liệu và các thuật toán phổ biến
+## STL là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các  hàm mẫu và thuật toán để lưu trữ và thao tác dữ liệu.
 
 **Một số thành phần chính của STL:**
-- Container:Một container là một cấu trúc dữ liệu chứa nhiều phần tử gồm:
+- Container(Bộ chứa)
+- Một container là một cấu trúc dữ liệu chứa nhiều phần tử gồm:
 	+ Vector
 	+ List
 	+ Map
-	+ Array
 
-- Iterator
-- Algorithms
-- Functor
+- Iterator: Cung cấp 1 cách chung để duyệt các phần tử trong Container mà không cần quan tâm tới container đó là gi.
+ - Trong STL, có nhiều loại iterators:
+	+ Input Iterators: Cho phép duyệt qua các phần tử của một container từ đầu đến cuối, nhưng không thể thay đổi giá trị của các phần tử.
+	+ Output Iterators: Cho phép ghi dữ liệu vào một container từ đầu đến cuối.
+- Algorithms: STL cung cấp một loạt các thuật toán tiêu chuẩn như sort, find, binary_search, etc. Những thuật toán này có thể được áp dụng trên các containers.
+
 
 
 **Vector trong C++ là gì?**
 
-- vector là một mảng động, tức là có khả năng thay đổi kích thước  
-- Truy cập ngẫu nhiên: Việc truy cập các phần tử của vector có thể được thực hiện bằng cách sử dụng chỉ số.
+- vector là một mảng động,có thể mở rộng ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả
+- Sử dụng Vector: Thêm hoặc xóa phần tử ở cuối danh sách
 - Một số method của vector:
 1. at(): Truy cập vào phần tử của vector
 2. size(): Trả về kích thước của vector
@@ -4371,6 +4374,38 @@ int main() {
 4. begin(): Địa chỉ của phần tử đầu tiên của vector
 5. end(): Địa chỉ của phần tử cuối cùng của vector
 6. push_back(): Thêm phần tử vào vị trí cuối của vector
+
+**Lish trong C++ là gì?**
+- List: Là một danh sách liên kết , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
+- Khi cần thêm hoặc xóa phần tử ở bất kỳ vị trí nào trong danh sách
+- Một số method của Lish:
+1. push_back() và push_front(): Thêm một phần tử vào cuối hoặc đầu của danh sách.
+2. pop_back() và pop_front(): Xóa phần tử cuối cùng hoặc đầu tiên của danh sách.
+3. insert(): Chèn một phần tử vào vị trí cụ thể trong danh sách.
+4. erase(): Xóa một hoặc nhiều phần tử từ danh sách dựa trên vị trí hoặc một khoảng vị trí.
+5. size(): Trả về số lượng phần tử trong danh sách.
+
+**Set trong C++ là gì?**
+- Set: Là một container không cho phép phần tử trùng lặp và sắp xếp tự động các phần tử theo thứ tự tăng dần
+- Khi cần sắp xếp tự động các phần tử theo thứ tự tăng dần hoặc giảm dần.
+- Khi cần lưu trữ một tập hợp các phần tử duy nhất.
+- Một số method của Set:
+1. insert(): Chèn một phần tử vào set. Nếu phần tử đã tồn tại, nó sẽ không được chèn lại.
+2. erase(): Xóa một hoặc nhiều phần tử từ set dựa trên giá trị hoặc iterator.
+3. find(): Tìm kiếm một phần tử trong set và trả về iterator đến nó nếu nó tồn tại, hoặc end() nếu không tìm thấy.
+4. size(): Trả về số lượng phần tử trong set.
+5. empty(): Kiểm tra xem set có rỗng không.
+6. clear(): Xóa tất cả các phần tử trong set.
+
+**Map trong C++ là gì?**
+- Là một container lưu trữ dữ liệu theo cặp key-value. Mỗi phần tử trong map được liên kết với một key duy nhất và một giá trị
+- Cần ánh xạ (map) một giá trị (key) đến một giá trị khác (value), nơi mỗi key là duy nhất và không được phép trùng lặp.
+- Một số method của Map:
+1. insert(): Thêm một cặp key-value vào std::map. Nếu key đã tồn tại, giá trị tương ứng sẽ được cập nhật.
+erase(): Xóa một phần tử từ std::map dựa trên key.
+2. find(): Tìm kiếm một phần tử trong std::map dựa trên key. Trả về iterator đến phần tử nếu nó tồn tại, hoặc trả về end() nếu không tìm thấy.
+3. size(): Trả về số lượng phần tử trong std::map.
+ 
 
 <details>
 <summary>Ví dụ </summary>
