@@ -5857,8 +5857,66 @@ int main(){
 	
 ### CAN là gì?
 - Controller Area Network (CAN Bus) là giao thức truyền thông nối tiếp, tốc độ cao. Gồm có hai dây (CAN-High và CAN-Low).
-  - 1 dây là CAN high: điện áp dao động từ 2.5 – 3.75 V
-  - 1 dây là CAN low: điện áp dao động từ 1.25 – 2.5 V
+
+- Trong mạng CAN, các thiết bị được kết nối trên cùng 1 đường gồm 2 dây CAN_H và CAN_L, gọi là bus. Mỗi thiết bị trong mạng được gọi là 1 Node, gồm:
+	+ MCU: Chịu trách nhiệm truyền nhận xử lý data.
+	+ CAN Controller: Gồm CANTX,CANRX
+	+ CAN Transceiver: Giúp tạo điện áp cho Bus.
+- Trong 1 thời điểm chỉ có 1 node truyền và các node khác phải nhận
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/353762a0-c9c3-491f-a987-0d27529c9854)
+
+**Cụ thể**
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/2c05c965-fa51-4f6d-a562-f03bb99e1274)
+
+- Nếu MCU gửi bit `1` thì:
+	
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/858ebce9-e4f6-4f8f-8210-f4244f7a02ae)
+
+- Nếu MCU gửi bit `0` thì:
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/f061914a-8176-4c5a-aa41-129e7bda8413)
+
+- Nếu MCU nhận bit `1` hoặc `0` thì:
+	+ Nhận 1 điện áp là Can H - CanL
+
+- Can H - Can L phải bắt xoắn dây để tránh nhiễu
+
+**ID càng thấp thì có độ ưu tiên càng cao**
+- Trong trường hợp nhiều node, thì node có ID thấp thì node đó được ưu tiên truyền trước.ID có thể được code 
+- Ví dụ có 3 node:
+	+ Node A: 0100101 (7 bits)
+	+ Node B: 0010010 (7 bits)
+	+ Node C: 0010100 (7 bits)
+- Thì node B được ưu tiên truyền trước vì ID nó nhỏ nhất
+
+**ID càng thấp thì có độ ưu tiên càng cao**
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/8a608ca9-f445-4320-8b07-58fc763c46ab)
+
+**Data Frame của CAN (Phiên bản 2.0A) gồm các bit:**
+1. Start Of Frame Field – SOF là bit `0`
+2. 11 bit ID và bit RTR(Remote Transmission Request)
+	+ Nếu là Data Frame, bit này luôn bằng 0 (Dominant Bit).
+	+ Nếu là Remote Frame, bit này luôn bằng 1 (Recessive Bit).
+	- Cụ thể là RTR bằng `0` thì MCUA sẽ gửi dữ liệu cho MCUB 
+	- Nếu RTR bằng `1` thì MCUA sẽ yêu cầu MCUB gửi dữ liệu
+3. tiếp tới là bit r1,r0 là 2 bit đệm và bằng `0`
+4. Bit DLC(Data Length Code) 
+	+ DLC= `0` nếu RTR =`1`( RTR =1 là remote frame)
+	+ DLC =(0001>1000) 
+5. Data field(0-8 byte) muốn truyền đi , muốn truyền 8 byte thì DLC =1000
+6. CRC gồm 15 bit checksum: xem thử DATA có toàn vẹn không+1 bit đệm =0
+7. 1 bit ACK:nếu truyền đi mà các node khác nhận được thì sẽ phản hồi bằng ACK =0 +1 BIT đêm =0
+8. Bit kết thúc End Of Frame Field – EOF =`1`
+
+
+
+
+
+
+
+
+
 
 </details>
 </details>
