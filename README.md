@@ -4049,9 +4049,7 @@ int main() {
 - private: Chỉ có nội tại trong class mới sử dụng được.Lý do đặt PROPERTY trong private, để chắc chắn object không trỏ tới được.
 
 **1/Encapsulation (Tính đóng gói):**
-- Object không được phép truy cập PROPERTY từ phạm vi public
-- PROPERTY nằm ở private hoặc protected.
-- Để truy cập PROPERTY phải thông qua method.
+- PROPERTY phải nằm ở private hoặc protected.
 - Lý do để bảo vệ dữ liệu của một đối tượng khỏi sự xâm phạm từ bên ngoài.
 
 <details>
@@ -4097,10 +4095,10 @@ int main(){
 </details>
 
 **2/Inheritance (Tính kế thừa ):**
-- Một class có thể kế thừa các thuộc tính của một class khác đã tồn tại trước đó.
-Khi một class con được tạo ra bởi việc kế thừa thuộc tính của class cha thì chúng ta sẽ gọi class con đó là subclass trong C++, và class cha chính là superclass trongC++.
+- Một class có thể kế thừa các thuộc tính của một class khác đã tồn tại trước đó.Để kế thừa từ class khác, ta dùng ký tự “ : ”.Khi một class con được tạo ra bởi việc kế thừa thuộc tính của class cha thì chúng ta sẽ gọi class con đó là subclass trong C++, và class cha chính là superclass trongC++.
+- Class con có thể kế thừa property và method của class cha trong phạm vi public và protected  
+- Có 3 kiểu kế thừa là public, private và protected. Những property và method được kế thừa từ class cha sẽ nằm ở quyền truy cập của class con tương ứng với kiểu kế thừa.
 
-**khi nào nên dùng/không dùng class kế thừa**
 - Nên dùng: Khi một lớp B được miêu tả là "B là một A". Ví dụ: một lớp hình tròn có thể kế thừa từ một lớp hình học.
 - Không nên:Mối quan hệ "has-a" (có một) diễn ra khi một lớp chứa một đối tượng của một lớp khác. ví dụ: danhsachSV chứa một đối tượng sinhvien, do đó chúng ta có thể nói danhsachSV "có" hoặc "bao gồm" danh sách các sinh viên.
 
@@ -4183,7 +4181,6 @@ int main(void){
 ```
 </details>
 
-- Các kiểu kế thừa: public,private và protected .Thì private là không  dùng vì class con kế thừa private sẽ đưa tất cả property từ class cha vào private. Làm cho các class tiếp theo không thể truy cập vào được( private chỉ cho phép nội tại class trỏ tới)
 
 <details>
 <summary>Ví dụ:</summary>
@@ -4225,34 +4222,125 @@ class hs : private sinhvien{
 ```C++
 using namespace std;
 
-class toanhoc{
+class ToanHoc {
+public:
+    void tong(int a, int b) {
+        cout << "Tong a + b: " << a + b << endl;
+    }
 
-	protected:
-	int namsinh;
-	void tong(int a,int b ){ 
-	    	printf("tong a+b :%d\n",a+b);
-	}
-	void hienthi(int a,int b ,int c){ 
-		printf("tong a+b+c :%d\n",a+b+c);
-	}
-	int hienthi(int a,double b){ 		
-		return a +(int)b;
-	}
+    void hienthi(int a, int b, int c) {
+        cout << "Tong a + b + c: " << a + b + c << endl;
+    }
+
+    void hienthi(int a, double b) {
+        cout << "Tong a + b : " << a + b << endl;
+    }
 };
 
-int main(void){
-	toanhoc th;
-	th.tong(7,4);
-	th.tong(5,3,5);
-	printf("tong:%d\n",th.tong(5,6.7));
+int main() {
+    ToanHoc th;
+    th.tong(7, 4);
+    th.hienthi(1,2,3);
+    th.hienthi(1,1.1);
+     
 
+    return 0;
 }
 ```
 </details>
 
 **4/Abstraction (Tính trừu tượng ):**
 
-- Ẩn đi các chi tiết của một đối tượng và hiển thị những gì cần thiết, để sử dụng đối tượng đó.
+- Ẩn đi những thành phần tạo ra đối tượng gọi là tính trừu tượng.chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó, tức là các method mà người sử dụng bên ngoài có thể truy cập và tương tác.
+- Ví dụ tính phương trình bậc 2 , để tính nghiệm x1,x2 thì ta có hàm tính detal = b * b - 4 * a * c .delta là 1 trong những thành phần tạo ra kết quả.Vậy thì hàm tính delta này phải được ẩn đi bằng cách để nó vào phạm vi private
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+class GiaiPhuongTrinh
+{
+private:
+    double a;
+    double b;
+    double c;
+    double x1;
+    double x2;
+    double delta;
+
+    void tinhNghiem()
+    {
+        delta = b * b - 4 * a * c;
+        if (delta < 0)
+        {
+            delta = -1;
+        }
+        else if (delta == 0)
+        {
+            x1 = x2 = -b / (2 * a);
+        }
+        else if (delta > 0)
+        {
+            x1 = (-b + sqrt(delta)) / (2 * a);
+            x2 = (-b - sqrt(delta)) / (2 * a);
+        }
+    }
+
+public:
+    void enterNumber(double num_a, double num_b, double num_c);
+    void printResult();
+};
+
+void GiaiPhuongTrinh::enterNumber(double num_a, double num_b, double num_c)
+{
+    a = num_a;
+    b = num_b;
+    c = num_c;
+}
+
+void GiaiPhuongTrinh::printResult()
+{
+    tinhNghiem();
+    if (delta == -1)
+    {
+        cout << "PT vo nghiem" << endl;
+    }
+    else if (delta == 0)
+    {
+        cout << "PT co nghiem chung: " << x1 << endl;
+    }
+    else if (delta > 0)
+    {
+        cout << "PT co 2 nghiem: \n";
+        cout << "x1: " << x1 << endl;
+        cout << "x2: " << x2 << endl;
+    }
+}
+
+int main()
+{
+    GiaiPhuongTrinh phuongtrinh1;
+    phuongtrinh1.enterNumber(1, 5, 4);
+    phuongtrinh1.printResult();
+
+    return 0;
+}
+
+
+
+
+
+```
+
+
+
+<details>
 
 **Template trong C++ là gì?**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
@@ -4895,7 +4983,7 @@ int main() {
 
 
 
-
+</details>
 </details>
 </details>
 
@@ -4913,6 +5001,56 @@ int main() {
 - Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
 - Macro đơn giản là copy -paste vào chương trình ,Điều này làm tốn kich thước nhưng time xử lý ngắn hơn
 - khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu>>gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy.nhưng sẽ mất time nhiều hơn vì dịch từ vùng nhớ lưu hàm sang vùng nhớ goi hàm.
+**Funtion call là gì?**
+- Có 2 khái niệm cần chú ý:
+	+ Stack Pointer(SP): là 1 con trỏ
+	+ Program Counter (PC) là 1 thanh ghi trong CPU, lưu trữ địa chỉ của lệnh hiện tại đang được thực thi trong chương trình.
+- Khi tạo 1 hàm thì Ram sẽ cấp 1 vùng địa chỉ cố định cho hàm(ví du:0x01>>0x05)
+- Khi chạy 1 chương trình trong hàm main().Mà gặp phải lệnh gọi  hàm thì hệ thống sẽ lưu địa chỉ của lệnh gọi hàm`(0x00)` vào Program Counter rồi Stack Pointer sẽ trỏ tới địa chỉ đầu tiên`(0xC1)` của hàm khi khởi tạo, sau khi chạy hết vùng địa chỉ của hàm thì Stack Pointer sẽ lấy địa chỉ lệnh gọi hàm đã lưu vào Program Counter`(0x00)` và chạy tiếp hàm main >> Qúa trình này sẽ được thực hiện lại nếu gặp tiếp hàm 
+>> Nếu gọi nhiều hàm thì nó sẽ chậm hơn Macro vì tốn thời gian lưu địa chỉ vào PC, rồi trỏ con trỏ SP 
+
+
+**Inline Funtion là gì?**
+- 1 hàm có từ khóa inline 
+- Khi khởi tạo hàm ,hàm sẽ được cấp 1 vùng nhớ `0XC1>>0XC5`
+- Tác dụng của nó sẽ bỏ quá quá trình gọi hàm thông thường nghĩa là bỏ qua bước lưu địa chỉ vào Program Counter và dùng stack pointer trỏ tới địa chỉ khởi tạo của hàm .Lúc này địa chỉ của hàm trùng với địa chỉ lệnh 	gọi hàm trong main `0X00`
+- Hơn nữa nếu dùng Inline Funtion thì compiler sẽ buid hàm đó ra mã máy và dán vào vị trí gọi hàm trong main >> kích thước sẽ to ra
+- Nên tốc độ nó sẽ nhanh hơn funtion  , nhưng dùng nhiều thì làm cho bộ nhớ 
+>> Inline Funtion  và macro giống nhau ở tính năng , khác nhau về bản chất
+
+
+
+
+**Giao thức truyền thông nối tiếp đồng bộ, bất đồng bộ**
+- Trong giao thức đồng bộ, dữ liệu được truyền đi và nhận với sự đồng bộ hoàn toàn với một tín hiệu clock chung. Cả bộ gửi và bộ nhận phải được đồng bộ hóa theo tín hiệu clock này.
+- Trong giao thức bất đồng bộ, không có tín hiệu clock chung để đồng bộ hóa dữ liệu
+
+**Kích thước Enum**
+- Bằng kích thước của int , kích thước int sẽ phụ thuộc vào kiến trúc hệ thống(32 bit -4 byte , 64 bit -8 byte)
+
+**So sánh các chuẩn giao tiếp**
+1. Tốc độ truyền dẫn:
+	- SPI: Thường có tốc độ truyền dẫn nhanh nhất trong ba giao thức này. Tốc độ có thể lên đến hàng chục MHz.
+	- UART: Thường có tốc độ truyền dẫn thấp hơn so với I2C và SPI, thường dưới 1 Mbps.
+	- I2C: Tốc độ truyền dẫn thường nhanh hơn UART nhưng chậm hơn SPI, thường dưới 1 Mbps.
+	- CAN: Thường có tốc độ truyền dẫn cao, với các biến thể như CAN FD (Flexible Data-rate) có thể đạt tới hàng trăm Mbps.
+2. Số lượng thiết bị kết nối:
+	- SPI: Thường hỗ trợ kết nối với nhiều thiết bị hơn so với I2C và UART, do SPI sử dụng các dây riêng biệt cho mỗi thiết bị.
+	- UART: Thường chỉ hỗ trợ kết nối một đến một giữa các thiết bị.
+	- I2C: Cũng hỗ trợ kết nối nhiều thiết bị, nhưng địa chỉ của mỗi thiết bị phải là duy nhất trên bus.
+	- CAN: Hỗ trợ kết nối một số lượng lớn các thiết bị trên một mạng CAN, có thể lên đến hàng trăm hoặc thậm chí hàng nghìn thiết bị.
+3. Số dây truyền dẫn:
+	- SPI: Yêu cầu ít nhất bốn dây truyền dẫn: MOSI, MISO, SCK, và SS.
+	- UART: Yêu cầu hai dây truyền dẫn: một dây RX và một dây TX.
+	- I2C: Chỉ yêu cầu hai dây truyền dẫn: SDA và SCL.
+	- CAN: Sử dụng hai dây truyền dẫn: CANH và CANL.
+4. Khả năng điều khiển:
+	- SPI: 1 Master nhiều slayer
+	- I2C: Hỗ trợ nhiều master và nhiều slave
+5. Tiết kiệm nguồn điện:
+	- I2C và UART,CAN: Có thể tiết kiệm nguồn điện hơn so với SPI vì chúng chỉ yêu cầu hai dây truyền dẫn.
+	- SPI: Tiêu tốn nhiều nguồn điện hơn do sử dụng nhiều dây truyền dẫn.
+
 **i++ khác ++i**
 - Cả 2 dùng để tăng giá trị của i lên 1 đơn vị. Tuy nhiên, chúng có 1 điểm khác nhau cơ bản:
 	+ i++: tăng giá trị i sau khi thực hiện các phép toán 
@@ -4926,6 +5064,97 @@ int main() {
 		 int result = ++i; //result = 6,i=6
 		 ```
 		 
+**khi cấu hình Timer cần những thông số gì**
+1. Chế độ hoạt động (Mode):
+	- Chế độ đếm (Count Mode): 
+	- Chế độ PWM (Pulse Width Modulation): 
+	- Chế độ ngắt(interrupt mode)
+2. Tần số hoạt động (Clock Frequency):xung clock
+3. Chu kỳ và thời gian đếm (Period and Counting Time):xác định cần tạo chu kỳ bao nhiêu 
+4. Bộ chia tần số (Prescaler):
+	- Bộ chia tần số được sử dụng để chia tần số của Clock đầu vào để đạt được tần số hoạt động mong muốn cho Timer.
+
+
+
+**Thông số khi cấu hình ADC**
+
+1. Chế độ hoạt động (Operating Mode):
+	- single conversion mode (chế độ chuyển đổi đơn): ADC thực hiện một lần chuyển đổi khi được kích hoạt.
+	- continuous conversion mode (chế độ chuyển đổi liên tục) :ADC liên tục thực hiện các chuyển đổi mà không cần phải kích hoạt lại sau mỗi lần chuyển đổi.
+	- scan mode (chế độ quét nhiều kênh).
+2. Độ phân giải (Resolution):8-bit đến 12-bit.
+3. Nguồn tham chiếu (Reference Voltage):
+	- Thường là nguồn điện hoặc nguồn tham chiếu nội bộ trên vi điều khiển.
+4. Chu kỳ chuyển đổi (Conversion Time):
+	- Xác định thời gian mà ADC sẽ thực hiện mỗi lần chuyển đổi. Thời gian này phụ thuộc vào độ phân giải của ADC và tần số Clock.
+5. Kênh đầu vào (Input Channel):
+	- Chọn kênh đầu vào mà ADC sẽ chuyển đổi. STM32F4 thường có nhiều kênh ADC khác nhau cho phép đo lường nhiều tín hiệu khác nhau.
+6. Ngắt (Interrupt):
+	- Cấu hình xem ADC có cần phát sinh ngắt sau mỗi lần chuyển đổi hay không. Nếu cần, bạn cần cấu hình và xử lý hàm ngắt tương ứng để xử lý kết quả chuyển đổi.
+7. Bộ chia tỉ số (Prescaler):
+	- Xác định bộ chia tần số được sử dụng để chia tần số Clock đầu vào của ADC, từ đó xác định tốc độ chuyển đổi của ADC.
+
+**Thông số khi cấu hình DMA**
+
+1. Chọn Kênh DMA (DMA Channel):
+	- STM32F4 hỗ trợ nhiều kênh DMA khác nhau, mỗi kênh có thể được sử dụng cho một mục đích cụ thể.
+2. Chế Độ Hoạt Động (Operation Mode):
+	- single transfer mode (chế độ truyền chuyển đổi đơn), 
+	- circular mode (chế độ vòng tròn), 
+	- memory-to-memory mode (chế độ truyền dữ liệu từ bộ nhớ này sang bộ nhớ khác)
+3. Nguồn Dữ Liệu (Source Address):
+	- Xác định địa chỉ bắt đầu của dữ liệu cần truyền đi (nguồn dữ liệu).
+4. Đích Dữ Liệu (Destination Address):
+	- Xác định địa chỉ bắt đầu của bộ nhớ đích, nơi dữ liệu sẽ được truyền đến.
+5. Số Lượng Dữ Liệu (Data Length):
+	- Xác định số lượng dữ liệu cần truyền đi, hoặc số lượng dữ liệu cần nhận về.
+6. Xử Lý Ngắt (Interrupt Handling):
+	- Cấu hình xem DMA có cần phát sinh ngắt sau mỗi lần chuyển đổi hoàn tất hay không. 
+7. Chọn Định Dạng Dữ Liệu (Data Width):
+	- Xác định chiều rộng của dữ liệu (8-bit, 16-bit, 32-bit) được truyền hoặc nhận trong mỗi lần chuyển đổi.
+8. Cài Đặt Ưu Tiên (Priority Setting):
+	- Nếu có nhiều hoạt động DMA cùng xảy ra, bạn có thể cấu hình độ ưu tiên giữa chúng.
+
+**Thông số khi cấu hình SPI**
+
+1. Chế Độ Hoạt Động (Mode):
+	- Xác định chế độ hoạt động của SPI: Master hoặc Slave.
+2. Tốc Độ Truyền Dữ Liệu (Baud Rate):
+	- Xác định tốc độ truyền dữ liệu của SPI, thường được đo bằng kHz hoặc MHz.
+	- Tốc độ truyền dữ liệu của SPI sẽ bằng xung clock chia giá trị(2,4,8, 16, 32, 64, 128)
+3. Mod truyền :
+	- SPI_CPOL và SPI_CPHA
+4. Bit Data Trong Khung (Frame Format):
+	- 8 hoặc 16 bit
+5. Bit Order:
+	- MSB hoặc LSB
+6. Chế Độ Làm Việc (Operating Mode):
+	- Full-duplex, Half-duplex, hay Simplex.
+	- full-duplex cho phép truyền và nhận dữ liệu đồng thời, half-duplex cho phép truyền và nhận dữ liệu lần lượt, và simplex chỉ cho phép truyền dữ liệu một chiều
+
+**Thông số khi cấu hình I2C**
+1. Tốc độ I2C (I2C Clock Speed): như 100 kHz, 400 kHz 
+2. Chế độ I2C (I2C Mode):
+	- Xác định chế độ hoạt động của I2C: Master hoặc Slave.
+3. Địa chỉ Slave (Slave Address)
+4. (Data Length): kích thước này có thể là 8 bit 
+ 
+**Thông số khi cấu hình UART**
+1. baud Rate (Tốc độ truyền dữ liệu):
+	- Xác định tốc độ truyền dữ liệu trên UART. Tốc độ này được đo bằng bit/s (bps).
+2. Data Bits (Số bit dữ liệu):
+	- 5>9 bit
+3. Parity (Kiểm tra chẵn/lẻ)
+4. Stop Bits (Số bit dừng):
+5. Mode (Chế độ hoạt động):
+ - Xác định chế độ hoạt động của UART: Full-duplex hoặc Half-duplex.
+ 
+
+
+
+
+
+
 **I2S (Inter-IC Sound):**
 - Là một giao thức truyền dữ liệu âm thanh kỹ thuật số được sử dụng để kết nối các thiết bị âm thanh
 
@@ -6468,7 +6697,7 @@ int main(){
 
 
 
-
+</details>
 <details>
   <summary><h1>▶ ⭐Autosar</h1></summary>
 
