@@ -3946,6 +3946,86 @@ int main(){
 ```
 
 </details>
+</details>
+
+
+
+
+<details>
+  <summary><h2>Smart Pointer</h2></summary>
+
+**Cấp phát động trong C++**
+- new và delete là hai toán tử quan trọng trong C++ được sử dụng để cấp phát và giải phóng bộ nhớ động, tương ứng
+
+```C++
+int *ptr = new int; // cấp phát bộ nhớ cho một biến kiểu int
+int *arr = new int[5]; // cấp phát bộ nhớ cho một mảng kiểu int với 5 phần tử
+
+delete ptr; // giải phóng bộ nhớ của biến động
+delete[] arr; // giải phóng bộ nhớ của mảng động
+
+
+```
+**Smart Pointer C++**
+- smart pointers là một cơ chế quản lý bộ nhớ tự động , tự động giải phóng vùng nhớ khi không còn bất kỳ smart pointer nào nắm giữ   vùng nhớ đó.Dựa vào cơ chế Destructer trong class
+
+**Unique Pointer**
+- unique_ptr là một loại smart pointer trong C++, Cớ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
+
+```C++
+#include <iostream>
+#include <memory>
+
+void func() {
+    std::unique_ptr<int> uniquePtr(new int(42));
+    // uniquePtr sẽ tự động giải phóng vùng nhớ khi ra khỏi hàm func()
+}
+
+int main() {
+    func();
+    // uniquePtr đã bị giải phóng khi ra khỏi hàm func()
+    return 0;
+}
+
+```
+**shared_ptr**
+- shared_ptr : Cớ chế của shared_ptr 1 biến(hoặc 1 vùng nhớ)  được nhiều Smart Pointer sỡ hữu , Smart Pointer này chỉ giải phóng khi không còn shared_ptr trỏ đến .Nó sử dụng một biến đếm tham chiếu để theo dõi số lượng các smart pointer đang trỏ đến đối tượng và giữ vùng nhớ được quản lý cho đến khi không còn smart pointer nào trỏ đến nó nữa.
+- Ví dụ có 2 shared_ptr  trỏ đến 1 biến việc giải phóng vùng nhớ sẽ chỉ xảy ra khi cả hai shared_ptr này đều bị hủy hoặc không còn trỏ đến vùng nhớ nữa
+
+```C++
+#include <iostream>
+#include <memory>
+
+int main() {
+    // Khởi tạo một biến int x với giá trị 42
+    int x = 42;
+
+    // Tạo ba shared_ptr để trỏ đến biến int x
+    std::shared_ptr<int> sharedPtr1 = std::make_shared<int>(x);
+    std::shared_ptr<int> sharedPtr2 = sharedPtr1;
+    std::shared_ptr<int> sharedPtr3 = sharedPtr1;
+
+    // In ra địa chỉ của x và số lượng tham chiếu của mỗi shared_ptr
+    std::cout << "Địa chỉ của x: " << &x << std::endl;
+    std::cout << "sharedPtr1: " << sharedPtr1.use_count() << std::endl;
+    std::cout << "sharedPtr2: " << sharedPtr2.use_count() << std::endl;
+    std::cout << "sharedPtr3: " << sharedPtr3.use_count() << std::endl;
+
+    return 0;
+}
+
+
+```
+
+**weak_ptr**
+- weak_ptr là 1 smart pointer  không tham gia vào việc giải phóng vùng nhớ trực tiếp.
+- Nó chỉ là một công cụ để theo dõi xem một đối tượng có tồn tại hay không mà không tăng số lượng tham chiếu đếm của nó. 
+- weak_ptr có một phương thức là lock(). Nếu shared_ptr mà weak_ptr theo dõi vẫn tồn tại, lock() sẽ trả về một shared_ptr hợp lệ có thể sử dụng để truy cập đối tượng. Ngược lại, nếu shared_ptr đã bị giải phóng, lock() sẽ trả về một shared_ptr rỗng.
+
+
+
+
+
 
 </details>
 <details>
@@ -4343,7 +4423,12 @@ int main()
 <details>
 
 **Template trong C++ là gì?**
+
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
+- Có 2 loại  Templates:
+	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template
+	+ Function templates:cho phép viết một hàm với kiểu dữ liêu template , kiểu template sẽ tổng quát hóa nhiều kiểu dữ liệu khác, làm mã ngắn gọn hơn mà không cần triển khai lại hàm với kiểu dữ liệu cụ thể
+		- Ví dụ 1 hàm có tham số truyền vào là int , int thì ta phải viết 1 hàm có cùng kiểu dữ liệu đó , nhưng nếu viết hàm dùng kiểu dữ liêu template, thì không cần quan tâm đến thông số truyền vào là kiểu dữ liệu gì
 
 <details>
 <summary>Ví dụ</summary>
@@ -4994,12 +5079,62 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+
+**Làm sao biết được dữ liệu gửi đi trong SPI,I2C là đúng**
+
+- Thêm 1 byte check sum vào data
+- Thuật toán như CRC (Cyclic Redundancy Check) hoặc checksum đơn giản như tổng các byte.
+
+**Các hàm trong DIO VÀ SPI theo chuẩn AUTOSAR**
+1. DIO:
+	-Dio_ReadChannel: Đọc trạng thái của một kênh đầu vào cụ thể. Chanel được quy ước như sau chanel 1>16 thuộc GPIOA , 16>31 GPIOB .Có kiểu dữ liệu Dio_ChannelType
+	- Dio_WriteChannel: Ghi một giá trị vào một kênh đầu ra cụ thể. Dio_ChannelType
+	- Dio_ReadPort: Đọc trạng thái của một cổng đầu vào, có thể là một nhóm các kênh. Trả về giá trị của tất cả các kênh trong cổng đó.Dio_PortType
+	- Dio_WritePort: Ghi một giá trị vào một cổng đầu ra, có thể là một nhóm các kênh. Ghi giá trị vào tất cả các kênh trong cổng đó.Dio_PortType
+	- Dio_ReadChannelGroup: Đọc trạng thái của một nhóm các kênh đầu vào cụ thể. Đầu vào có thể bao gồm số tham chiếu đến nhóm kênh.Dio_ChannelGroupType
+	- Dio_WriteChannelGroup: Ghi một giá trị vào một nhóm các kênh đầu ra cụ thể. Đầu vào bao gồm số tham chiếu đến nhóm kênh và giá trị mà bạn muốn ghi vào đó.Dio_ChannelGroupType
+	- Dio_GetVersionInfo: Truy xuất thông tin phiên bản hoặc thông tin về thư viện Dio.
+	- Dio_FlipChannel: Đảo trạng thái của một kênh đầu ra cụ thể. Nếu kênh đó hiện đang ở trạng thái HIGH, thì hàm này sẽ chuyển nó thành LOW và ngược lại.
+	- Dio_MaskedWritePort: Ghi một giá trị vào một cổng đầu ra với một mặt nạ (mask). Chỉ các bit được đặt trong mặt nạ sẽ thay đổi giá trị của cổng đầu ra.
+		- Ví dụ nếu bạn có một cổng GPIO với 8 kênh đầu ra và bạn muốn chỉ bật LED ở kênh 0 và kênh 1, bạn có thể sử dụng Dio_MaskedWritePort với mặt nạ là 0x03 (0000  0011) để chỉ ảnh hưởng đến kênh 0 và kênh 1 trong khi giữ nguyên trạng thái của các kênh khác không bị thay đổi.
+	- Dio_LevelType Đây là một kiểu dữ liệu được sử dụng để đại diện cho trạng thái của một kênh đầu vào hoặc đầu ra, thường là hai giá trị "STD_LOW" và "STD_HIGH" 
+	- Dio_PortLevelType: Đây là một kiểu dữ liệu được sử dụng để đại diện cho trạng thái của một nhóm các kênh đầu vào hoặc đầu ra trên một cổng GPIO. Thường thì mỗi bit trong kiểu này tương ứng với trạng thái của một kênh trong nhóm.Ví dụ 1111 1111 1111 1111, 16 chanel ở mức 1
+	- Dio_ChannelType : Đây là một kiểu dữ liệu được sử dụng để đại diện cho một kênh đầu vào hoặc đầu ra trên một cổng GPIO cụ thể trên vi điều khiển
+	- Dio_PortType: Đây là một kiểu dữ liệu được sử dụng để đại diện cho một cổng GPIO trên vi điều khiển. 
+	- Dio_ChannelGroupType: Đây là một cấu trúc dữ liệu được sử dụng để đại diện cho một nhóm các kênh đầu vào hoặc đầu ra trên một cổng GPIO cụ thể trên vi điều khiển.
+
+2. SPI
+	- Spi_Init: Hàm này được sử dụng để khởi tạo giao diện SPI, cấu hình các cài đặt cần thiết như tốc độ truyền, chế độ truyền/nhận, bit dữ liệu và các cài đặt khác.
+	- Spi_DeInit: Hàm này được sử dụng để huỷ bỏ và dọn dẹp tất cả các tài nguyên và trạng thái của giao diện SPI sau khi sử dụng.
+	- Spi_WriteIB: Hàm này được sử dụng để gửi dữ liệu từ bộ đệm nội bộ đến thiết bị ngoại vi thông qua giao diện SPI.
+	- Spi_AsyncTransmit: Hàm này được sử dụng để bắt đầu một truyền dữ liệu bất đồng bộ thông qua giao diện SPI. Hàm này không chờ đợi việc truyền hoàn thành và cho phép tiếp tụcthực thi các tác vụ khác trong khi truyền dữ liệu.
+	- Spi_ReadIB: Hàm này được sử dụng để nhận dữ liệu từ thiết bị ngoại vi thông qua giao diện SPI và lưu trữ vào bộ đệm nội bộ.
+	- Spi_SetupEB: Hàm này được sử dụng để cấu hình và truyền dữ liệu theo phương thức gửi/nhận tuần tự thông qua giao diện SPI.
+	- Spi_GetStatus: Hàm này được sử dụng để lấy trạng thái hiện tại của giao diện SPI.
+	- Spi_GetJobResult: Hàm này được sử dụng để lấy kết quả của một công việc truyền dữ liệu đã hoàn thành qua giao diện SPI.
+	- Spi_GetSequenceResult: Hàm này được sử dụng để lấy kết quả của một chuỗi công việc đã hoàn thành qua giao diện SPI.
+	- Spi_GetVersionInfo: Hàm này được sử dụng để lấy thông tin phiên bản của module SPI.
+	- Spi_SyncTransmit: Hàm này được sử dụng để bắt đầu một truyền dữ liệu đồng bộ thông qua giao diện SPI. Hàm này chờ đợi cho đến khi truyền dữ liệu hoàn thành trước khi trả về.
+	- Spi_GetHWUnitStatus: Hàm này được sử dụng để lấy trạng thái hiện tại của một đơn vị phần cứng (HW unit) cụ thể của giao diện SPI.
+	- Spi_Cancel: Hàm này được sử dụng để hủy bỏ việc truyền dữ liệu đang diễn ra thông qua giao diện SPI.
+	- Spi_SetAsyncMode: Hàm này được sử dụng để cấu hình giao diện SPI vào chế độ bất đồng bộ hoặc đồng bộ.
+
+
+
+**LSB,MSB là gì**
+- NLeast significant bit LSB.  bit từ phải sang trái
+- Most Significant Bit MSB . bit từ trái sang phải
+**LSB,MSB là gì**
+
+
+
+
 **Macro,Function**
-- Marco trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
+- Marco làm 1 tên do người code đặt trỏ tới 1 khối lệnh thực hiện một chức năng nào đó.Được xử lý bởi preprocessor(tiền xử lý)
 - Function là 1 khối lệnh thực hiện một chức năng nào đó
 - Macro không cần quan tâm kiểu dữ liệu của tham số đầu vào
 - Function phải chỉ rõ kiểu dữ liệu của tham số đầu vào
-- Macro đơn giản là copy -paste vào chương trình ,Điều này làm tốn kich thước nhưng time xử lý ngắn hơn
+-  Khi vào chương trình Macro đơn giản là copy -paste vào chương trình ,Điều này làm tăng kich thước nhưng time xử lý ngắn hơn
 - khi khởi tạo hàm ,RAM chỉ tốn 1 bộ nhớ cố định để lưu>>gọi 20 lần, cũng sẽ chỉ tốn 1 bộ nhớ như vậy.nhưng sẽ mất time nhiều hơn vì dịch từ vùng nhớ lưu hàm sang vùng nhớ goi hàm.
 **Funtion call là gì?**
 - Có 2 khái niệm cần chú ý:
@@ -5018,19 +5153,40 @@ int main() {
 - Nên tốc độ nó sẽ nhanh hơn funtion  , nhưng dùng nhiều thì làm cho bộ nhớ 
 >> Inline Funtion  và macro giống nhau ở tính năng , khác nhau về bản chất
 
+**Lỗi tràn vùng nhớ HEAP**
+- Khi cấp dữ liệu cho 1 biến vượt qua kích thước của vùng HEAP
 
+**Khi nào truyền  con trỏ , truyền biến**
+- Khi muốn thay đổi giá trị tại 1 địa chỉ thì truyền  con trỏ 
+- Khi đọc giá trị tại địa chỉ đó thì truyền biến
 
+**khi nào dùng struct , khi nào dùng union**
+- Dùng struct khi bạn cần lưu trữ và truy cập nhiều loại dữ liệu khác nhau trong một đối tượng
+
+```c
+struct Person {
+    char name[50];
+    int age;
+    char address[100];
+};
+```
+- Dùng Union muốn tiết kiệm bộ nhớ bằng cách chia sẻ cùng một vùng nhớ cho nhiều trường dữ liệu và chỉ muốn sử dụng một kiểu dữ liệu tại một thời điểm.
 
 **Giao thức truyền thông nối tiếp đồng bộ, bất đồng bộ**
 - Trong giao thức đồng bộ, dữ liệu được truyền đi và nhận với sự đồng bộ hoàn toàn với một tín hiệu clock chung. Cả bộ gửi và bộ nhận phải được đồng bộ hóa theo tín hiệu clock này.
 - Trong giao thức bất đồng bộ, không có tín hiệu clock chung để đồng bộ hóa dữ liệu
+
+**DMA khác gi với ngắt truyền thông**
+- Khi sử dụng DMA, dữ liệu được truyền đi hoặc nhận về mà không cần sự can thiệp của CPU. DMA sẽ thực hiện các hoạt động truyền dữ liệu song song với hoạt động của CPU.
+- Khi sử dụng ngắt truyền thông, vi điều khiển sẽ chờ cho đến khi có dữ liệu được truyền đến hoặc gửi đi, sau đó nó sẽ tự động thức dậy và thực hiện các xử lý phản ứng dựa trên sự kiện ngắt.
+- Tốc độ của DMA thường nhanh hơn so với ngắt truyền thông. Điều này là do DMA có khả năng thực hiện truyền dữ liệu mà không cần sự can thiệp của CPU, trong khi ngắt truyền thông đòi hỏi CPU phải xử lý dữ liệu mỗi khi có sự kiện ngắt xảy ra.
 
 **Kích thước Enum**
 - Bằng kích thước của int , kích thước int sẽ phụ thuộc vào kiến trúc hệ thống(32 bit -4 byte , 64 bit -8 byte)
 
 **So sánh các chuẩn giao tiếp**
 1. Tốc độ truyền dẫn:
-	- SPI: Thường có tốc độ truyền dẫn nhanh nhất trong ba giao thức này. Tốc độ có thể lên đến hàng chục MHz.
+	- SPI: Thường có tốc độ truyền dẫn nhanh nhất trong ba giao thức này. Tốc độ có thể lên đến hàng chục MHz.Lý do truyền nhanh hơn vì nó có chân truyền và nhận riêng biệt , trong khi I2C chỉ có 1 đường là SDA
 	- UART: Thường có tốc độ truyền dẫn thấp hơn so với I2C và SPI, thường dưới 1 Mbps.
 	- I2C: Tốc độ truyền dẫn thường nhanh hơn UART nhưng chậm hơn SPI, thường dưới 1 Mbps.
 	- CAN: Thường có tốc độ truyền dẫn cao, với các biến thể như CAN FD (Flexible Data-rate) có thể đạt tới hàng trăm Mbps.
@@ -6086,11 +6242,15 @@ int main(){
 	
 ### CAN là gì?
 - Controller Area Network (CAN Bus) là giao thức truyền thông nối tiếp, tốc độ cao. Gồm có hai dây (CAN-High và CAN-Low).
-
+- CAN có 4 chế độ:
+	- Data Frame (khung dữ liệu): Gửi dữ liệu đến 1 node
+	- Remote Frame (khung yêu cầu hay điều khiển): Gửi yêu cầu tới 1 node và yêu cầu nó gửi dữ liệu lại
+	- Error Frame (khung lỗi):  node A phát hiện lỗi CRC .Nó sẽ không gửi Data Frame mà sẽ gửi 1 Error Frame tới các node khác để thông báo lỗi , các node khác khi nhận dc farm này sẽ có biện pháp xử lý hoặc thông báo lỗi
+	- Overflow Frame (khung báo tràn):  một nút trong mạng gặp phải tình trạng quá tải ,nguyên nhân có thể có 2 node cùng giành truyền tạo ra quá tải thì 1 node đó sẽ gửi Overflow Frame tới các node khác , các node nhận Overflow Frame sẽ điều chỉnh tốc độ truyền dữ liệu
 - Trong mạng CAN, các thiết bị được kết nối trên cùng 1 đường gồm 2 dây CAN_H và CAN_L, gọi là bus. Mỗi thiết bị trong mạng được gọi là 1 Node, gồm:
 	+ MCU: Chịu trách nhiệm truyền nhận xử lý data.
 	+ CAN Controller: Gồm CANTX,CANRX
-	+ CAN Transceiver: Giúp tạo điện áp cho Bus.
+	+ CAN Transceiver: tạo điện áp cho Bus.
 - Trong 1 thời điểm chỉ có 1 node truyền và các node khác phải nhận
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/353762a0-c9c3-491f-a987-0d27529c9854)
@@ -6123,20 +6283,19 @@ int main(){
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/8a608ca9-f445-4320-8b07-58fc763c46ab)
 
 **Data Frame của CAN (Phiên bản 2.0A) gồm các bit:**
-1. Start Of Frame Field – SOF là bit `0`
-2. 11 bit ID và bit RTR(Remote Transmission Request)
+1. Trường bắt đầu khung  Start Of Frame Field – SOF là bit `0`
+2. Trường xác định quyền ưu tiên (Arbitration Field) gồm 11 bit ID và bit RTR(Remote Transmission Request)
 	+ Nếu là Data Frame, bit này luôn bằng 0 (Dominant Bit).
 	+ Nếu là Remote Frame, bit này luôn bằng 1 (Recessive Bit).
 	- Cụ thể là RTR bằng `0` thì MCUA sẽ gửi dữ liệu cho MCUB 
 	- Nếu RTR bằng `1` thì MCUA sẽ yêu cầu MCUB gửi dữ liệu
-3. tiếp tới là bit r1,r0 là 2 bit đệm và bằng `0`
-4. Bit DLC(Data Length Code) 
+3. Trường điều khiển (Control Field)  bit r1,r0 là 2 bit đệm và bằng `0` và Bit DLC(Data Length Code) 
 	+ DLC= `0` nếu RTR =`1`( RTR =1 là remote frame)
 	+ DLC =(0001>1000) 
-5. Data field(0-8 byte) muốn truyền đi , muốn truyền 8 byte thì DLC =1000
-6. CRC gồm 15 bit checksum: xem thử DATA có toàn vẹn không+1 bit đệm =0
-7. 1 bit ACK:nếu truyền đi mà các node khác nhận được thì sẽ phản hồi bằng ACK =0 +1 BIT đêm =0
-8. Bit kết thúc End Of Frame Field – EOF =`1`
+4. Trường dữ liệu (Data Field) Data field(0-8 byte) muốn truyền đi , muốn truyền 8 byte thì DLC =1000
+5. Trường kiểm tra  CRC gồm 15 bit checksum: xem thử DATA có toàn vẹn không  
+6. Trường báo nhận (ACK) 1 bit ACK:nếu truyền đi mà các node khác nhận được thì sẽ phản hồi bằng ACK =0  
+7. Trường kết thúc (End Of Frame Field – EOF)Bit kết thúc End Of Frame Field – EOF =`1`
 
 
 
