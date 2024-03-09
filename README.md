@@ -6890,6 +6890,103 @@ int main(){
 
 - Vậy khi thay đổi MCU khác chỉ cần thay đổi code lớp MCAL
 
+</details>
+<details>
+  <summary><h2>BMS</h2></summary
+
+**Battery Management System (BMS)**
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc58321d-96fe-41c1-90e8-386537eab2e1)
+
+- Battery Management System là 1 ECU để quản lý pin , trên xe thì có nhiều ECU và ECU này gồm MCU+ Cảm biến đo thông số pin 
+- pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
+- V pin xe điện  4.2 volt mỗi ô pin (cell) khi sạc đầy
+- V pin khi xài cạn là 3.2 volt mỗi ô pin (cell)
+1. Phần cứng
+	- Cảm Biến Điện Áp:
+		+ Voltage Divider.
+		+ Kết Nối và Giao Tiếp: Kết nối trực tiếp với ADC của STM32F103.
+		+ Mạch Chia Điện Áp: Để chuyển đổi điện áp pin cao xuống mức phù hợp với ADC.
+		+ Dựa vào thông số bán đầu Min là 3.2v, Max là 4.2 v
+	- Cảm Biến dòng điện:
+		+ Cảm Biến Hall Effect: Cung cấp tín hiệu không tiếp xúc dựa trên nguyên lý từ học.
+		+ Đọc trực tiếp từ DIO
+		+ Kết Nối và Giao Tiếp:Tín hiệu từ cảm biến dòng được đọc bởi ADC của STM32F103
+		+ Khi xe tắt thì dòng hiện tại bằng 0 , khi xe hoạt động , ví dụ là 5 A
+		+ Ta có thể tính công suất hiện tại của xe = u.I(w)
+	- Cảm Biến nhiệt độ:
+		+ Cảm Biến Nhiệt Độ Số: Như PT100/PT1000, cung cấp dữ liệu nhiệt độ dưới dạng analog.
+		+ Kết nối bằng ADC
+		+ Nhiệt độ an toàn từ 0> 60 độ . lý tương từ 15~40 độ
+	- Quạt làm mát"
+		+ Nếu nhiệt độ quá 60 độ MCU sẽ bật quạt, vì MCU có 5 v thôi , nên phải thông qua rờ le
+
+
+
+2. Công thức tính dung lượng pin và thời gian sử dụng còn lại
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/5129f945-5a9b-45c6-94a7-345c29abb149)
+
+	 
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/207a7ea3-ef57-4355-a44f-1e09930a276e)
+
+3.  Các loại cảm biến:
+
+	- Voltage Divider:
+		+ Cảm biến Voltage Divider, còn được gọi là cảm biến điện áp, thường được sử dụng để đo lường điện áp hoặc điện thế trong các ứng dụng cụ thể.
+		+ Nguyên lý hoạt động của cảm biến này dựa trên việc chia nhỏ một điện áp đầu vào thành một điện áp nhỏ hơn, dựa trên tỷ lệ của hai hoặc nhiều tụ résistor.
+		+ Thông thường, cảm biến Voltage Divider không cung cấp dữ liệu về nhiệt độ hoặc môi trường, mà thường cung cấp dữ liệu về điện áp hoặc điện thế.
+		+ Để sử dụng cảm biến Voltage Divider, bạn cần kết hợp nó với một kênh ADC để đọc và xử lý dữ liệu
+
+	- Hall Effect Sensor:
+		+ Cảm biến Hall Effect được sử dụng để đo lường hoặc phát hiện từ trường từ một nguồn từ trường ngoại lực.
+		+ Cảm biến này hoạt động dựa trên hiện tượng Hall, trong đó dòng điện trong một dẫn điện sẽ tạo ra một điện áp điện tử nếu nó bị tác động bởi một từ trường ngoại lực.
+		+ Cảm biến Hall Effect thường được sử dụng trong các ứng dụng như đo lường dòng điện, đo tốc độ, cảm biến vị trí và đo lường dòng chảy.
+		+ Trong một số trường hợp, cảm biến Hall Effect cũng có thể cung cấp dữ liệu analog hoặc digital.
+
+	- PT100/PT1000:
+		+ Cảm biến PT100 và PT1000 là các cảm biến nhiệt độ chính xác cao dựa trên nguyên lý thay đổi điện trở của các vật liệu dẫn nhiệt theo nhiệt độ.
+		+ PT100 có điện trở 100 ohm ở 0°C, trong khi PT1000 có điện trở 1000 ohm ở 0°C.
+		+ Để sử dụng cảm biến này, bạn cần kết hợp nó với một kênh ADC hoặc một mạch chuyển đổi điện trở thành tín hiệu analog hoặc số để đọc và xử lý dữ liệu.
+		+ PT100 và PT1000 thường được sử dụng trong các ứng dụng yêu cầu độ chính xác cao như trong các hệ thống kiểm soát nhiệt độ công nghiệp hoặc y tế.
+
+3.  Rờ le:
+
+	- Chọn Relay:
+		+ Code kích hoạt relay từ nhiệt độ từ ECU chính 
+			+ Ví dụ ECU chính nhận thấy nhiệt độ quá 60 độ, sẽ gửi 1 data cho MCU BSM , yêu cầu kích hoạt Relay
+		+ Bạn quyết định sử dụng một relay 5V có coil tiêu thụ dòng điện 20mA để kích hoạt, phù hợp với STM32 với điện áp hoạt động 3.3V.	
+	- Kết nối Relay với STM32:
+		+ Coil của relay được kết nối với chân GPIO của STM32 (ví dụ: GPIO_PIN_0) thông qua một resistor hạn dòng để giới hạn dòng điện.
+	- Cài Đặt Phần Mềm:
+		+ Sử dụng cảm biến nhiệt độ PT100 để đo lường nhiệt độ môi trường.
+	- Thiết lập một ngưỡng nhiệt độ (ví dụ: 30°C). Nếu nhiệt độ vượt qua ngưỡng này, quạt sẽ được kích hoạt.
+	- Kích Hoạt Relay:
+		+ (GPIO_PIN_SET), kích hoạt coil của relay và mở mạch của quạt.
+		+ Khi bạn đưa dòng điện qua cuộn dây (coil) của rơ le từ STM32, cuộn dây sẽ tạo ra một từ trường từ.
+		+ Từ trường này sẽ tương tác với các bộ phận từ trường trong rơ le, thường làm chuyển động một thanh kim loại trong rơ le.
+		+ Khi mạch điện trong rơ le được chuyển đổi, nó sẽ tạo ra một tác động cơ học, thường làm kích hoạt hoặc ngắt mạch điện của quạt.
+		
+	- Giải Phóng Relay:
+		+ Khi nhiệt độ giảm xuống dưới ngưỡng (dưới 30°C), STM32 sẽ đặt chân GPIO tương ứng vào trạng thái thấp (GPIO_PIN_RESET), giải phóng coil của relay và ngưng hoạt động của quạt.
+
+
+3.  Main ECU:
+	-  Main ECU giao tiếp với BSM qua CAN
+	-  Main ECU sẽ gửi remote farme tới BSM , yêu cầu BSM gửi các thông số của PIN
+	-  Data farm gồm các byte : 1 byte dòng , áp , nhiệt độ , thông số quạt bật tắt
+	-  Sau khi có các thông số ở BSM thì Main ECU sẽ tính toán thời gian sạc đầy , tràn pin(code )
+	-  MCU trong BSM chỉ thu nhận thông số thôi
+	-  Việc điều khiển quạt cũng từ Main ECU , sẽ gửi tín hiệu sang MCU BSM
+
+
+
+
+
+
+
+</details>
+</details>
 
 </details>
 
