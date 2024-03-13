@@ -6991,3 +6991,110 @@ int main(){
 </details>
 
 </details>
+
+
+</details>
+<details>
+  <summary><h1>▶ ⭐LoRa E32 Based Wireless </h1></summary>
+
+1. Sơ đồ nguyên lý
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ff08cc7-4bcd-4cc7-bb17-dfef703271cc)
+
+2. Phần cứng 
+
+- 2xLora E32 433Mhz
+	+ Khoảng cách lý thuyết gửi bộ phát và thu là 3Km (với Lora E32 0.1 W) và 7Km ( với Lora E32 1W ) lưu ý phải dùng thêm ăng ten có độ lợi cao (5-7 dBi)
+- 2 x Esp32
+- TFT 1.8inch
+- Dust Sharp
+- DHT11
+3. Phần mềm:
+- Andruno IDE dùng để nạp code
+- Blynk.cloud : Dùng để theo dõi dữ liệu trong môi trường internet
+4. Giải thích:
+-  Bộ phát :
+	+ ESP32
+	+ Module RF SX1278 Lora E32  433Mhz 
+	+ DHT22 
+	+ Dust 
+	+ Quản lý dữ liệu bằng Blynk.cloud ( app hoặc web)
+-  Bộ thu :
+	+ ESP32
+	+ Module RF SX1278 Lora E32  433Mhz 
+	+ Màn hình TFT 1.8 inch ST7735 
+
+- giải thích ngắn gọn :
+	+ Bộ phát dùng ESP32  nhận dữ liệu từ 2 cảm biến Dust và DHT11, sau đó thông qua RF SX1278 Lora	truyền dữ liệu này qua RF SX1278 Lora của bộ thu , sau đó ESP32 sẽ hiển thị dữ liệu này qua màn hình TFT
+	+ Có thể quản lý dữ liệu bằng blynk.cloud
+		+ Tạo cơ sở dữ liệu :
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/444edcfc-a777-42d9-9932-6ec7880190d1)
+		+ Tạo virtual pin :
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/32dc7a28-5986-4e3f-ac47-642a8b913f64)
+			chú ý chế độ đồng bộ:Khi ESP bị lỗi sau khi kết nối sẽ đồng bộ với dữ liệu trên cloud
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/91720047-c516-43aa-8cf5-8901b093c937)
+		+ Thiết lập giao diện :
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc2ed3c3-fc87-4a76-b993-3743b083999c)
+		+ Kết nối và cài đặt thư viện blynk:
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/abad4dc6-ab2f-42f5-9352-636215244d05)
+			Chọn phiên bản MCU:
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b1afdfd5-911f-4981-b064-41c1974d8984)
+		+ Điền Blynk ID và Name vào code ESP32 để kết nối tới blynk sever
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/f3db3c67-0452-4fca-9797-57d03f617f4e)
+			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/0550a10d-73fa-4714-84cd-71e8b2dba056)
+		+ Có thể tải app blynk và vào trang web của nó để quản lý dữ liệu từ ESP 32
+5. Giải thích phần cứng:	
+	+  Module RF SX1278 Lora E32  433Mhz 
+		- Có 2 loại:
+			+ Công suất: 20dbm (100mW) 
+			+ Khoảng cách truyền tối đa trong điều kiện lý tưởng: 3000m
+			+ Độ nhạy: -130dBm
+			+ --------------------------------------------------------
+			+ Công suất: 30dbm (1W)
+			+ Khoảng cách truyền tối đa trong điều kiện lý tưởng: 8000m
+			+ Độ nhạy: -147dBm
+		- Dùng công nghệ LORA là một công nghệ tiết kiệm năng lượng và khoảng cách phát siêu xa 
+		- Điện áp hoạt đông: 2.3 – 5.5 VDC
+		- Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
+		- Giao tiếp UART Data bits 8, Stop bits 1, Parity none, tốc độ từ 9600 – 115200
+		- Tần số: 410 – 441Mhz
+		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ca24868-03e8-49d1-83b5-c927bfafa81e)
+		- Chân M0,M1 là chế độ của Module:
+			+ Mode 0 - Chế độ Normal:
+				+ M0: 0
+				+ M1: 0
+			+ Mode 1 - Chế độ Wake-up:
+				+ M0: 0
+				+ M1: 1
+			+ Mode 2 - Chế độ Power saving:Không thể truyền dữ liệu dưới chế độ này
+				+ M0: 1
+				+ M1: 0
+			+ Mode 3 - Chế độ Sleep:Không thể truyền dữ liệu dưới chế độ này
+				+ M0: 1
+				+ M1: 1
+		- Chân AUX:
+			+ chức năng: Chân AUX được sử dụng để thông báo về trạng thái hoạt động của module, như trạng thái sẵn sàng truyền dữ liệu, trạng thái kết nối, v.v.
+	+ ESP32:
+		+ ESP32 là một vi điều khiển 32 bit 
+		+ Hỗ trợ WiFi và Bluetooth, cung cấp khả năng kết nối mạng linh hoạt cho IoT.
+		+ GPIO và Giao Tiếp: Nhiều chân GPIO và hỗ trợ các giao tiếp như I2C, SPI, UART, và CAN.
+		+ Bộ dao động tinh thể 32 kHz
+	+ DHT22 :
+		+ Cảm biến độ ẩm và nhiệt độ
+		+ Giao tiếp với vi điều khiển qua chuẩn giao tiếp 1 dây.
+		+ Dùng thư viện do NSX để đọc dữ liệu
+		+ Dữ liệu được truyền đi qua một chuỗi tín hiệu số và được giải mã để lấy dữ liệu nhiệt độ và độ ẩm
+	+ Dust PM2.5:
+		+ là cảm biến được sử dụng để đo lượng bụi trong không khí
+		+ Nguyên lý hoạt động của cảm biến quang học để đo lượng bụi trong không khí.
+		+ sự thay đổi của ánh sáng khi bụi đi qua, và chuyển đổi sự thay đổi này thành tín hiệu điện để đánh giá mức độ ô nhiễm.
+		+ Giao tiếp với vi điều khiển qua ADC
+	+ Màn hình TFT 1.8 inch ST7735 
+		+ Chuẩn giao tiếp SPI
+
+
+
+
+	
+</details>
+</details>
