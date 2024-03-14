@@ -6997,6 +6997,10 @@ int main(){
 <details>
   <summary><h1>▶ ⭐LoRa E32 Based Wireless </h1></summary>
 
+**Khái niệm**
+- LoRa là viết tắt của Long Range Radio ,có thể truyền dữ liệu với khoảng cách lên hàng km mà không cần các mạch khuếch đại công suất;từ đó giúp tiết kiệm năng lượng tiêu thụ khi truyền/nhận dữ liệu. Do đó, LoRa có thể được áp dụng rộng rãi trong các ứng dụng thu thập dữ liệu như sensor network 
+- Nguyên lý hoạt động của LoRa là sử dụng kỹ thuật điều chế Chirp Spread Spectrum. Dữ liệu được chia nhỏ thành các khối và sau đó được mã hóa thành các chuỗi tín hiệu chirp (up-chirp cho bit 1 và down-chirp cho bit 0). Tín hiệu này được truyền qua anten và tạo ra một dải tần số rộng, giúp tăng cường phạm vi truyền thông và chịu được nhiễu mạnh mẽ
+
 1. Sơ đồ nguyên lý
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/9a32bf1e-970c-4f94-8f0a-ac07e067c544)
 
@@ -7004,7 +7008,7 @@ int main(){
 
 2. Phần cứng 
 
-- 2xLora E32 433Mhz
+- 2xLora E32-433T20D 433Mhz
 	+ Khoảng cách lý thuyết gửi bộ phát và thu là 3Km (với Lora E32 0.1 W) và 7Km ( với Lora E32 1W ) lưu ý phải dùng thêm ăng ten có độ lợi cao (5-7 dBi)
 - 2 x Esp32
 - TFT 1.8inch
@@ -7048,6 +7052,7 @@ int main(){
 	+  Module RF SX1278 Lora E32  433Mhz 
 		- Có 2 loại:
 			+ Công suất: 20dbm (100mW) 
+			
 			+ Khoảng cách truyền tối đa trong điều kiện lý tưởng: 3000m
 			+ Độ nhạy: -130dBm
 			+ --------------------------------------------------------
@@ -7058,23 +7063,34 @@ int main(){
 		- Điện áp hoạt đông: 2.3 – 5.5 VDC
 		- Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
 		- Giao tiếp UART Data bits 8, Stop bits 1, Parity none, tốc độ từ 9600 – 115200
+		- 512bytes bộ đệm.
+		- Hỗ trợ 65536 địa chỉ cấu hình.
 		- Tần số: 410 – 441Mhz
 		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ca24868-03e8-49d1-83b5-c927bfafa81e)
 		- Chân M0,M1 là chế độ của Module:
+		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b06ff251-a387-49fa-8f38-dcf643415093)
 			+ Mode 0 - Chế độ Normal:
 				+ M0: 0
 				+ M1: 0
 			+ Mode 1 - Chế độ Wake-up:
 				+ M0: 0
 				+ M1: 1
-			+ Mode 2 - Chế độ Power saving:Không thể truyền dữ liệu dưới chế độ này
+			+ Mode 2 - Chế độ Power saving:chỉ nhận ,Không thể truyền dữ liệu dưới chế độ này
 				+ M0: 1
 				+ M1: 0
+				+ Nếu set mode này thì master phải ở mode 1
 			+ Mode 3 - Chế độ Sleep:Không thể truyền dữ liệu dưới chế độ này
 				+ M0: 1
 				+ M1: 1
+				+ Dùng để cấu hình thông số , nghĩa là trước khi phát ta phải set nó ở mode 3 để cấu hình
 		- Chân AUX:
 			+ chức năng: Chân AUX được sử dụng để thông báo về trạng thái hoạt động của module, như trạng thái sẵn sàng truyền dữ liệu, trạng thái kết nối, v.v.
+			+ Thường không xài
+		- Cấu hình thông số của lora qua USB UART và phần mềm của nhà sản xuất
+		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b8a2de2e-9867-4574-ad7c-7e9af67d9d82)
+		
+		- Khi cấu hình phải cùng địa chỉ , cùng chanel
+
 	+ ESP32:
 		+ ESP32 là một vi điều khiển 32 bit 
 		+ Hỗ trợ WiFi và Bluetooth, cung cấp khả năng kết nối mạng linh hoạt cho IoT.
@@ -7097,5 +7113,103 @@ int main(){
 
 
 	
+</details>
+</details>
+
+
+</details>
+<details>
+  <summary><h1>▶ ⭐RTOS </h1></summary>
+
+**RTOS là gì?**
+
+- RTOS là viết tắt của Real-Time Operating System, tức là Hệ điều hành Thời gian thực. Đây là một hệ điều hành được thiết kế để xử lý các ứng dụng yêu cầu độ tin cậy cao và đáp ứng một cách chính xác về thời gian. 
+- Tại sao lại phải dùng RTOS ?
+	+ Chia sẻ tài nguyên một cách đơn giản: cung cấp cơ chế để phân chia các yêu cầu về bộ nhớ và ngoại vi của MCU
+	+ Tăng tính linh động và dễ dàng bảo trì: thông qua API của RTOS
+
+
+**Các khái niệm cơ bản**
+- Kernel:sẽ có nhiệm vụ quản lý nhiều task cùng chạy 1 lúc, mỗi task thường chạy mất vài ms.Tại lúc kết thúc task thường:
+	+ Lưu trạng thái task
+	+ Thanh ghi CPU sẽ load trạng thái của task tiếp theo
+	+ Task tiếp theo cần khoảng vài ms để thực hiện
+	![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/de11d2ab-fb6e-4ae8-ae02-76cd45e10145)
+- Task state(trạng thái):
+	+ RUNNING: đang thực thi
+	+ READY: sẵn sàng để thực hiện
+	+ WAITING: chờ sự kiện
+	+ INACTIVE: không được kích hoạt
+	![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/12fc80ad-18bf-401e-884d-f1e86a1272d4)
+
+- Scheduler:
+	+ Cooperative: giống với lập trình thông thường, mỗi task chỉ có thể thực thi khi task đang chạy dừng lại, nhược điểm của nó là task này có thể dùng hết tất cả tài nguyên của CPU
+	+ Round-robin: mỗi task được thực hiện trong thời gian định trước (time slice) và không có ưu tiên.
+	![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/68628bc9-adb3-4c2b-96a8-fbcc45c60297)
+	+ Priority base: Task được phân quyền cao nhất sẽ được thực hiện trước, nếu các task có cùng quyền như nhau thì sẽ giống với round-robin, các task có mức ưu tiên thấp hơn sẽ được thực hiện cho đến cuối time slice
+	![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/d49c15ad-7bbe-4aad-932b-0885274b1a3a)
+	+ Task A chờ event
+	+ Task B chờ event
+	+ Task B event sẵn sàng
+	+ Task A event sẵn sàng
+	+ Priority-based pre-emptive: Các task có mức ưu tiên cao nhất luôn nhường các task có mức ưu tiên thấp hơn thực thi trước.
+	![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/0508619c-f7d1-415f-8900-5d4da44898ed)
+
+	+ Task A chờ event
+	+ Task B chờ event
+	+ Task B event sẵn sàng
+	+ Task A event sẵn sàng
+
+- Task:
+	+ Một task là một chương trình, chương trình này chạy liên tục trong vòng lặp vô tận và không bao giờ dừng lại. Với mỗi task thì có niềm tin duy nhất là chỉ mình nó đang chạy và có thể sử dụng hết nguồn tài nguyên sẵn có của bộ xử lý (mặc dù là thực tế thì nó vẫn phải chia sẻ nguồn tài nguyên này với các task khác).
+
+	+ Một chương trình thường sẽ có nhiều task khác nhau. Ví dụ như máy bán đồ uống tự động sẽ có các thành task sau
+
+	+ Task quản lý việc lựa chọn của người dùng
+	Task để kiểm tra đúng số tiền người dùng đã trả
+	Task để điều khiển động cơ/ cơ cấu cung cấp nước uống.
+	Kernel sẽ quản lý việc chuyển đổi giữa các task, nó sẽ lưu lại ngữ cảnh của task sắp bị hủy và khôi phục lại ngữ cảnh của task tiếp theo bằng cách:
+
+	+ Kiểm tra thời gian thực thi đã được định nghĩa trước (time slice được tạo ra bởi ngắt systick)
+	Khi có các sự kiện unblocking một task có quyền cao hơn xảy ra (signal, queue, semaphore,…)
+	Khi task gọi hàm Yield() để ép Kernel chuyển sang các task khác mà không phải chờ cho hết time slice
+	Khi khởi động thì kernel sẽ tạo ra một task mặc định gọi là Idle Task.
+
+	+ Để tạo một task thì cần phải khai báo hàm định nghĩa task, sau đó tạo task và cấp phát bộ nhớ, phần này mình sẽ nói sau.
+- Kết nối Inter-task & Chia sẻ tài nguyên:
+	- Các task cần phải kết nối và trao đổi dữ liệu với nhau để có thể chia sẻ tài nguyên, có một số khái niệm cần lưu ý
+	- Với Inter-task Communication:
+		+ Signal Events – Đồng bộ các task
+		+ Message queue – Trao đổi tin nhắn giữa các task trong hoạt động giống như FIFO
+		+ Mail queue – Trao đổi dữ liệu giữa các task sử dụng hằng đợi của khối bộ nhớ
+	- Với Resource Sharing
+		+ Semaphores – Truy xuất tài nguyên liên tục từ các task khác nhau
+		+ Mutex – Đồng bộ hóa truy cập tài nguyên sử dụng Mutual Exclusion
+- Signal event:
+	- Signal event được dùng để đồng bộ các task, task 1 phải hoàn thành điều kiện rồi mới tới task 2
+- Message queue:
+    - Message queue là cơ chế cho phép các task có thể kết nối với nhau, nó là một FIFO buffer được định nghĩa bởi độ dài (số phần tử mà buffer có thể lưu trữ) và kích thước dữ liệu (kích thước của các thành phần trong buffer)
+- Mail queue:
+	- Giống như message queue nhưng dũ liệu sẽ được truyền dưới dạng khối(memory block) thay vì dạng đơn. Mỗi memory block thì cần phải cấp phát trước khi đưa dữ liệu vào và giải phóng sau khi đưa dữ liệu ra.
+
+- Semaphore
+	- Được sử dụng để đồng bộ task với các sự kiện khác trong hệ thống. Có 2 loại
+
+		- Binary semaphore
+			+ Trường hợp đặc biệt của counting semaphore
+			+ Có duy nhất 1 token
+			+ Chỉ có 1 hoạt động đồng bộ 
+		- Counting semaphore
+			+ Có nhiều token
+			+ Có nhiều hoạt động đồng bộ
+- Mutex:
+	+ Sử dụng cho việc loại trừ (mutial exclution), hoạt động như là một token để bảo vệ tài nguyên được chia sẻ. Một task nếu muốn truy cập vào tài nguyên chia sẻ
+		+ Cần yêu cầu (đợi) mutex trước khi truy cập vào tài nguyên chia sẻ
+		+ Đưa ra token khi kết thúc với tài nguyên.
+	+ Tại mỗi một thời điểm thì chỉ có 1 task có được mutex.
+
+
+
+
 </details>
 </details>
