@@ -6998,6 +6998,7 @@ int main(){
   <summary><h1>▶ ⭐LoRa E32 Based Wireless </h1></summary>
 
 1. Sơ đồ nguyên lý
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/9a32bf1e-970c-4f94-8f0a-ac07e067c544)
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ff08cc7-4bcd-4cc7-bb17-dfef703271cc)
 
