@@ -7001,6 +7001,42 @@ int main(){
 - LoRa là viết tắt của Long Range Radio ,có thể truyền dữ liệu với khoảng cách lên hàng km mà không cần các mạch khuếch đại công suất;từ đó giúp tiết kiệm năng lượng tiêu thụ khi truyền/nhận dữ liệu. Do đó, LoRa có thể được áp dụng rộng rãi trong các ứng dụng thu thập dữ liệu như sensor network 
 - Nguyên lý hoạt động của LoRa là sử dụng kỹ thuật điều chế Chirp Spread Spectrum. Dữ liệu được chia nhỏ thành các khối và sau đó được mã hóa thành các chuỗi tín hiệu chirp (up-chirp cho bit 1 và down-chirp cho bit 0). Tín hiệu này được truyền qua anten và tạo ra một dải tần số rộng, giúp tăng cường phạm vi truyền thông và chịu được nhiễu mạnh mẽ
 
+**Đặc tính**
+- Module SX1278
+- Đặc tính nó là truyền xa , tiết kiệm năng lượng
+- Sóng FM(radio) có khoảng cách thu phát tầm 2 km 
+- Điện áp hoạt đông: 3.3 VDC
+- Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
+- Tần số phát tối đa 433MHZ
+- Giao tiếp thông qua giao thức SPI
+- Các mô-đun LoRa có hai chế độ nhận:
+
+ - Đơn
+ - liên tục
+- Các thông số cần chú ý:
+	+ frequency  : Tần số tối đa là 433MHZ        
+	+ spredingFactor  :tức là số lượng bit được truyền trên mỗi biểu đồ chấm (chip). Càng cao SF, tỉ lệ nén càng cao, dẫn đến tốc độ truyền thấp hơn.      
+	+ bandWidth : Độ rộng của băng thông cũng ảnh hưởng đến tốc độ truyền dữ liệu. Băng thông càng lớn, khả năng truyền dữ liệu càng cao, nhưng đồng thời cũng tăng độ nhiễu.           
+	+ power  : Đây là công suất truyền của module LoRa. Công suất này quyết định khả năng truyền xa và độ nhạy của module.               
+	+ overCurrentProtection:giới hạn dòng điện mà module LoRa có thể tiêu thụ.(mA)           
+	+ preamble :Tiền tín hiệu (preamble) được sử dụng để đồng bộ hóa trước khi truyền dữ liệu. Độ dài của tiền tín hiệu có thể ảnh hưởng đến thời gian cần thiết để bắt đầu truyền dữ liệu, và do đó ảnh hưởng đến tốc độ truyền dữ liệu.   
+	+ crcRate : kiểm tra tính toàn vẹn của dữ liệu
+```c
+myLoRa.frequency             = 434;             // default = 433 MHz
+myLoRa.spredingFactor        = SF_9;            // default = SF_7
+myLoRa.bandWidth             = BW_250KHz;       // default = BW_125KHz
+myLoRa.crcRate               = CR_4_8;          // default = CR_4_5
+myLoRa.power                 = POWER_17db;      // default = 20db
+myLoRa.overCurrentProtection = 130;             // default = 100 mA
+myLoRa.preamble              = 10;              // default = 8;
+
+
+
+
+```
+
+
+
 1. Sơ đồ nguyên lý
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/9a32bf1e-970c-4f94-8f0a-ac07e067c544)
 
