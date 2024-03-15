@@ -4091,7 +4091,7 @@ int main() {
 </details>
 </details>
 <details>
-  <summary><h2>Lambda</h2></summary>
+  <summary><h2>Lambda,templates</h2></summary>
 
 **Lambda**
 - Lambda là một cú pháp trong ngôn ngữ lập trình C++ cho phép tạo ra các hàm vô danh (anonymous functions) ngắn gọn và linh hoạt ngay tại chỗ mà không cần phải đặt tên  cho chúng,Cú pháp của lambda rất linh hoạt và có thể được sử dụng để viết mã ngắn gọn và dễ đọc.
@@ -4112,6 +4112,25 @@ int main() {
 		+ Không capture bất kỳ biến nào từ phạm vi bên ngoài vào trong lambda.
 		+ Lambda chỉ có thể truy cập các biến được định nghĩa trong lambda hoặc các biến toàn cục.
 **Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
+
+**Template**
+- 1 kiểu dữ liệu trừu tượng thay thế các kiểu dữ liệu bình thường
+	+ Template Function 
+
+```C++
+		template <typename T>
+		T function_name(T parameter) {
+			// code
+		}
+```
+	+ Template Class
+
+**Virtual Function**
+- Hàm ảo , cho phép hàm của lớp con ghi đè lên hàm lớp cha
+
+
+
+
 
 
 </details>
