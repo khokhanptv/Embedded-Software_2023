@@ -6900,16 +6900,19 @@ int main(){
 
 - Battery Management System là 1 ECU để quản lý pin , trên xe thì có nhiều ECU và ECU này gồm MCU+ Cảm biến đo thông số pin 
 - pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
-- V pin xe điện  4.2 volt mỗi ô pin (cell) khi sạc đầy
-- V pin khi xài cạn là 3.2 volt mỗi ô pin (cell)
+- V pin xe điện  3.6 volt mỗi ô pin (cell) khi sạc đầy
+- V pin khi xài cạn là 2.5 volt mỗi ô pin (cell)
+- V pin tổng khi đầy là 350V
+- V pin khi cạn là  242v
 1. Phần cứng
 	- Cảm Biến Điện Áp:
 		+ Voltage Divider.
 		+ Kết Nối và Giao Tiếp: Kết nối trực tiếp với ADC của STM32F103.
 		+ Mạch Chia Điện Áp: Để chuyển đổi điện áp pin cao xuống mức phù hợp với ADC.
-		+ Dựa vào thông số bán đầu Min là 3.2v, Max là 4.2 v
+		+ Dựa vào thông số bán đầu Min là 2.5 v, Max là 3.6 v
 	- Cảm Biến dòng điện:
 		+ Cảm Biến Hall Effect: Cung cấp tín hiệu không tiếp xúc dựa trên nguyên lý từ học.
+		+ Dòng điện sẽ thay đổi khi có nhiều thiết bị hoạt động
 		+ Đọc trực tiếp từ DIO
 		+ Kết Nối và Giao Tiếp:Tín hiệu từ cảm biến dòng được đọc bởi ADC của STM32F103
 		+ Khi xe tắt thì dòng hiện tại bằng 0 , khi xe hoạt động , ví dụ là 5 A
@@ -7007,20 +7010,49 @@ int main(){
 - Sóng FM(radio) có khoảng cách thu phát tầm 2 km 
 - Điện áp hoạt đông: 3.3 VDC
 - Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
-- Tần số phát tối đa 433MHZ
 - Giao tiếp thông qua giao thức SPI
 - Các mô-đun LoRa có hai chế độ nhận:
-
- - Đơn
- - liên tục
+	- Đơn : dữ liệu truyền 1 lần rồi dừng lại
+	- liên tục: Dữ liệu truyền liên tục
 - Các thông số cần chú ý:
-	+ frequency  : Tần số tối đa là 433MHZ        
-	+ spredingFactor  :tức là số lượng bit được truyền trên mỗi biểu đồ chấm (chip). Càng cao SF, tỉ lệ nén càng cao, dẫn đến tốc độ truyền thấp hơn.      
-	+ bandWidth : Độ rộng của băng thông cũng ảnh hưởng đến tốc độ truyền dữ liệu. Băng thông càng lớn, khả năng truyền dữ liệu càng cao, nhưng đồng thời cũng tăng độ nhiễu.           
-	+ power  : Đây là công suất truyền của module LoRa. Công suất này quyết định khả năng truyền xa và độ nhạy của module.               
-	+ overCurrentProtection:giới hạn dòng điện mà module LoRa có thể tiêu thụ.(mA)           
-	+ preamble :Tiền tín hiệu (preamble) được sử dụng để đồng bộ hóa trước khi truyền dữ liệu. Độ dài của tiền tín hiệu có thể ảnh hưởng đến thời gian cần thiết để bắt đầu truyền dữ liệu, và do đó ảnh hưởng đến tốc độ truyền dữ liệu.   
-	+ crcRate : kiểm tra tính toàn vẹn của dữ liệu
+	+ frequency  : dải tần số từ 433 MHZ đến 915MHZ, tùy theo pháp lý mà ta có 
+		+ Khu vực châu á:Dải tần hoạt động 433MHZ  
+			+ phạm vi tần số  420MHz đến 450MHz.
+		+ Khu vực châu âu:868MHz   
+		+ Khu vực bắc mĩ:915MHz  
+		+ Tần số thấp thì tính đâm xuyên tốt hơn ,thích hợp truyền trong khu vực nhiều vật cản
+		+ Tần số cao thì truyền xa hơn trong môi trường ít vật cản
+		+ lamda =c/f>> f lớn ,lamda nhỏ thì tính đâm xuyên nhỏ hơn
+
+	+ spredingFactor(SF) một thông số mã hóa số lượng chấm(chips) của mỗi  bit truyền đi 
+		+ SF=7, mỗi bit dữ liệu được mã hóa thành một chuỗi 7 biểu đồ chấm. 
+		+ Nếu SF=12, mỗi bit dữ liệu sẽ được mã hóa thành một chuỗi 12 biểu đồ chấm.
+		+ (SF) càng thấp, tức là sử dụng ít biểu đồ chấm hơn. Điều này làm cho tín hiệu trở nên rộng hơn , cho phép truyền dữ liệu với tốc độ nhanh hơn. Tuy nhiên, phạm vi truyền dẫn sẽ giảm do tín hiệu yếu hơn, do đó thường chỉ được sử dụng trong khoảng cách gần
+		+ Ngược lại, khi SF càng cao, tức là sử dụng nhiều chips, . Điều này làm cho tín hiệu trở nên hẹp hơn tốc độ truyền dữ liệu sẽ giảm, nhưng lại có khả năng xuyên qua nhiễu tốt hơn và có thể truyền dữ liệu ở khoảng cách xa hơn.
+		+ SF từ 7-12 
+	+ bandWidth : (Băng thông) Nó xác định độ rộng của tín hiệu truyền dẫn và ảnh hưởng đến cả tốc độ truyền dữ liệu , cụ thể.  
+		+ BW càng lớn cho phép truyền dữ liệu ở tốc độ cao hơn xa hơn.Nhưng sẽ tốn năng lượng và dễ bị nhiễu hơn
+		+ BW càng nhỏ chống nhiễu tốt hơn, vì nó chia nhỏ dải tần số thành các kênh nhỏ hơn và do đó giảm khả năng bị nhiễu từ các tín hiệu khác.It tốn năng lương hơn  nhưng tốc độ và khoảng cách nhỏ hơn
+		+ BW LORA:7>>500KHZ
+
+	+ power  :
+		+  Đây là công suất truyền của module LoRa. Công suất này quyết định khả năng truyền xa  của module. Công suất phát càng cao, tín hiệu sẽ có thể truyền xa hơn, tốn nhiều năng lượng hơn
+		+  11 -20 dbm
+	+ overCurrentProtection:giới hạn dòng điện mà module LoRa có thể tiêu thụ.(mA) , theo data sheet , giá trị dòng điện tối đa mà có thể chịu được trong trạng thái gửi là 120mA       
+	+ preamble : là số bit bộ phát sẽ  sang bộ thu ,để bộ thu biết thời điểm khi nào bộ phát gửi, sau khi gửi preamble sẽ tới data
+		+  8-10 bit
+		+ Nếu chọn thông số 10 , thì thời gian gửi dữ liệu sẽ tăng lên
+	+ crcRate : một phương pháp kiểm tra lỗi trong truyền thông dữ liệu.
+		+ CR_4_5: mỗi 5 bit dữ liệu truyền đi sẽ có 1 bit CRC
+			+  8 bit dữ liệu dùng CR_4_5, dữ liệu sẽ được chia thành 2 gói, mỗi gói có 4 bit dữ liệu và 1 bit CRC. Do đó, tổng số bit được truyền đi là 10 bit.
+			+ Trong đó, có 8 bit dữ liệu và 2 bit CRC.
+		+ CR_4_8: mỗi 8 bit dữ liệu sẽ được mã hóa thành một chuỗi 4 bit dữ liệu và 4 bit CRC trước khi truyền đi
+		+ 5>8
+		+ Chú ý việc sử dụng CRC Rate (CR) 4/5 , thì tốc độ nhanh hơn nhưng  tỷ lệ phát hiện lỗi thấp hơn , đặc biệt trong môi trường có nhiều nhiễu.
+		+ Chú ý việc sử dụng CRC Rate (CR) 4/8  kích thước gói dữ liệu tăng lên, mỗi lần truyền đi cũng tăng lên một lượng dữ liệu lớn hơn, do đó làm giảm tốc độ truyền dữ liệu
+
+
+
 ```c
 myLoRa.frequency             = 434;             // default = 433 MHz
 myLoRa.spredingFactor        = SF_9;            // default = SF_7
