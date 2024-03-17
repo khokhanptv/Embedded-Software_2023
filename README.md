@@ -6862,7 +6862,7 @@ int main(){
 
 **Bootloader là gì?**
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b76ad27c-9c6b-4a9d-9651-33c224a26b44)
-- Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này
+- Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này, để lựa chọn chương trình ứng dụng nào để bắt đầu thực hiện
 - Qúa trình  bootloader:
 	+ Với arm coretex , thì có các chế độ boot mode , nếu chọn chế độ nào thì VĐK sẽ đến địa chỉ của chế độ đó để boot chương trình ,flash là 0x8M , sram là 0x2M, sytem là 0xff
 	+ Sau khi MCU reset thì SP sẽ nhảy Reset_Handler(),Reset_Handler() nằm trong vector table  ở địa chỉ 0x8M , sau đó sẽ nhảy đến hàm main của chương trình boot
