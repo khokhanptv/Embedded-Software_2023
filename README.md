@@ -6845,11 +6845,7 @@ int main(){
 
 
 - Vector table là một bảng  chứa các địa chỉ của các hàm xử lý ngắt (interrupt service routines - ISR) được liên kết với các nguồn ngắt cụ thể
-	
-	+ Exception Number: Số thứ tự của ngắt
-	+ IRQ Number: Số thứ tự của ngắt đặc biệt 
-	+ Offset: Địa chỉ offset của vector từ địa chỉ bắt đầu của bảng vector.
-	+ Vector: Tên của ngắt hoặc sự kiện tương ứng với vector đó
+
 - Dưới đây là một số vector quan trọng:
 	+ Reset Vector (Number 1): Được gọi khi vi điều khiển được khởi động lại.
 	+ Systick Vector (Number 15): Được gọi khi sự kiện ngắt Systick xảy ra.
@@ -6866,9 +6862,24 @@ int main(){
 
 **Bootloader là gì?**
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b76ad27c-9c6b-4a9d-9651-33c224a26b44)
-- Chương trình của nhà sản xuất nằm ở địa chỉ 0x00 tới 0x8000000, để giao tiếp với IDE
-- bootloader là 1 chương trình của nhà sản xuất nằm ở 0x8M-0x9M , mục đích là nạp hoặc cập nhật  chương trình của nhà sản xuất vào vùng 0x000 tới 0x8M và chương trình  của người dùng vào vùng 0x9M
-- Software bootloader , là 1 chương trình do người dùng viết , sẽ bắt đầu từ địa chỉ 0x9M , mục đích để ghi dữ liệu vào địa chỉ mong muốn , sau đó sẽ chuyển vector table vào địa chỉ đó để chạy chương trình , mặc định vector table sẽ chạy từ 0X9M
+- Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này
+- Qúa trình  bootloader:
+	+ Với arm coretex , thì có các chế độ boot mode , nếu chọn chế độ nào thì VĐK sẽ đến địa chỉ của chế độ đó để boot chương trình ,flash là 0x8M , sram là 0x2M, sytem là 0xff
+	+ Sau khi MCU reset thì SP sẽ nhảy Reset_Handler(),Reset_Handler() nằm trong vector table  ở địa chỉ 0x8M , sau đó sẽ nhảy đến hàm main của chương trình boot
+	+ trong hàm main của chương trình Boot , người lập trình  set  địa chỉ của chương trình ứng dụng(chẳng hạn 0x0800.8000).
+	+ Set thanh ghi SCB_VTOR theo địa chỉ Firmware muốn nhảy đến, SCB➔VTOR = 0x0800.8000. 
+	+ Khi mà set SCB➔VTOR ở địa chỉ này thì Reset_Handler() sẽ ở dỉa chỉ tiếp theo , ví dụ (0x0800.8004 )
+	+ Sau khi cài đặt xong , tiến hành reset chương trình , lúc này VĐK đã nhận Reset_Handler() ở địa chỉ mới , và  sẽ thực hiện từ dịa chỉ cứng chương trình ứng dụng
+
+
+
+
+
+
+
+
+
+
 
 </details>
 </details>
@@ -6919,6 +6930,8 @@ int main(){
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc58321d-96fe-41c1-90e8-386537eab2e1)
 
+
+- Mục đích :Cung cấp thông tin chính xác về trạng thái pin hiện tại, bao gồm điện áp, dòng điện, nhiệt độ, dung lượng pin 
 - Battery Management System là 1 ECU để quản lý pin , trên xe thì có nhiều ECU và ECU này gồm MCU+ Cảm biến đo thông số pin 
 - pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
 - V pin xe điện  3.6 volt mỗi ô pin (cell) khi sạc đầy
@@ -6957,23 +6970,20 @@ int main(){
 3.  Các loại cảm biến:
 
 	- Voltage Divider:
-		+ Cảm biến Voltage Divider, còn được gọi là cảm biến điện áp, thường được sử dụng để đo lường điện áp hoặc điện thế trong các ứng dụng cụ thể.
-		+ Nguyên lý hoạt động của cảm biến này dựa trên việc chia nhỏ một điện áp đầu vào thành một điện áp nhỏ hơn, dựa trên tỷ lệ của hai hoặc nhiều tụ résistor.
-		+ Thông thường, cảm biến Voltage Divider không cung cấp dữ liệu về nhiệt độ hoặc môi trường, mà thường cung cấp dữ liệu về điện áp hoặc điện thế.
-		+ Để sử dụng cảm biến Voltage Divider, bạn cần kết hợp nó với một kênh ADC để đọc và xử lý dữ liệu
+		+ PIN + MẠCH chia áp ( để giảm điện áp xuống phù hợp khoảng đo ADC(0 tới 5 v))+ Voltage Divider SENSOR+ 1 chân của MCU
+		+ Cảm biến Voltage Divider, Nguyên lý hoạt động của cảm biến này dựa trên việc chia nhỏ một điện áp đầu vào thành một điện áp nhỏ hơn, dựa trên tỷ lệ của hai điện trở
+		+ ADC  của STM32F103 để chuyển đổi tín hiệu analog từ cảm biến điện áp sang giá trị số.
 
 	- Hall Effect Sensor:
-		+ Cảm biến Hall Effect được sử dụng để đo lường hoặc phát hiện từ trường từ một nguồn từ trường ngoại lực.
-		+ Cảm biến này hoạt động dựa trên hiện tượng Hall, trong đó dòng điện trong một dẫn điện sẽ tạo ra một điện áp điện tử nếu nó bị tác động bởi một từ trường ngoại lực.
-		+ Cảm biến Hall Effect thường được sử dụng trong các ứng dụng như đo lường dòng điện, đo tốc độ, cảm biến vị trí và đo lường dòng chảy.
-		+ Trong một số trường hợp, cảm biến Hall Effect cũng có thể cung cấp dữ liệu analog hoặc digital.
+		+ cụ thể WCS1800 
+		+ Hoạt động dựa trên hiệu ứng Hall
+		+ Hiệu ứng hall liên quan đến từ trường được tạo ra khi có dòng điện chạy trong dây dẫn, sẽ tạo ta 1 điện áp hall , dựa vào điện áp này có thể đo được cường độ dòng điện chạy qua
+	 	+ 	ADC đọc giá trị này và chuyển đổi thành dữ liệu số.( dựa theo công thức hoặc bảng tương đương )
 
-	- PT100/PT1000:
-		+ Cảm biến PT100 và PT1000 là các cảm biến nhiệt độ chính xác cao dựa trên nguyên lý thay đổi điện trở của các vật liệu dẫn nhiệt theo nhiệt độ.
-		+ PT100 có điện trở 100 ohm ở 0°C, trong khi PT1000 có điện trở 1000 ohm ở 0°C.
-		+ Để sử dụng cảm biến này, bạn cần kết hợp nó với một kênh ADC hoặc một mạch chuyển đổi điện trở thành tín hiệu analog hoặc số để đọc và xử lý dữ liệu.
-		+ PT100 và PT1000 thường được sử dụng trong các ứng dụng yêu cầu độ chính xác cao như trong các hệ thống kiểm soát nhiệt độ công nghiệp hoặc y tế.
 
+	- PT100:
+		+ Cảm biến PT100 là các cảm biến nhiệt độ  dựa trên nguyên lý thay đổi điện trở của vật liệu dẫn nhiệt theo nhiệt độ.
+		+ Kết nối trực tiếp cảm biến này với 1 chân của VDK và dùng ADC để xử lý dữ liệu từ cảm biến 
 3.  Rờ le:
 
 	- Chọn Relay:
