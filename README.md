@@ -6818,6 +6818,7 @@ int main(){
 
 **Quá Trình Booting**
 - là quá trình khởi động (hoặc restart) MCU 
+- Là chế độ nạp CODE của MCU
 
 - STM32 Có 3 chế độ BOOT có thể lựa chọn qua chân BT0,BT1
 
@@ -6864,9 +6865,10 @@ int main(){
 - Sau đó sẽ nhảy đến hàm main và thực hiện chương trình ứng dụng trong hàm main.
 
 **Bootloader là gì?**
-- Bootloader là một chương trình nằm ở vùng nhớ đặc biệt của bộ nhớ trong thiết bị nhúng. Chức năng chính của nó cho phép cập nhật hoặc nạp firmware 
-
-
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b76ad27c-9c6b-4a9d-9651-33c224a26b44)
+- Chương trình của nhà sản xuất nằm ở địa chỉ 0x00 tới 0x8000000, để giao tiếp với IDE
+- bootloader là 1 chương trình của nhà sản xuất nằm ở 0x8M-0x9M , mục đích là nạp hoặc cập nhật  chương trình của nhà sản xuất vào vùng 0x000 tới 0x8M và chương trình  của người dùng vào vùng 0x9M
+- Software bootloader , là 1 chương trình do người dùng viết , sẽ bắt đầu từ địa chỉ 0x9M , mục đích để ghi dữ liệu vào địa chỉ mong muốn , sau đó sẽ chuyển vector table vào địa chỉ đó để chạy chương trình , mặc định vector table sẽ chạy từ 0X9M
 
 </details>
 </details>
@@ -6921,8 +6923,8 @@ int main(){
 - pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
 - V pin xe điện  3.6 volt mỗi ô pin (cell) khi sạc đầy
 - V pin khi xài cạn là 2.5 volt mỗi ô pin (cell)
-- V pin tổng khi đầy là 350V
-- V pin khi cạn là  242v
+- V pin tổng khi đầy là 403v(112 cell)
+- V pin khi cạn là  280v
 1. Phần cứng
 	- Cảm Biến Điện Áp:
 		+ Voltage Divider.
