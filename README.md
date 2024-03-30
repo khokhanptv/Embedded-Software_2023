@@ -848,6 +848,7 @@ void free(void* ptr);
 	- Ví dụ: Các thành phần của một hình học như điểm, đường, v.v.
 
 	**Union : Dữ liệu các thành viên sẽ dùng chung 1 vùng nhớ. Kích thước của union được tính là size lớn nhất của kiểu dữ liệu trong union.**
+	- cho phép lưu trữ các biến khác nhau trong cùng một vị trí bộ nhớ. Khi một giá trị mới được gán cho union, giá trị trước đó được ghi đè. Điều này có nghĩa là union chỉ lưu trữ một giá trị duy nhất tại một thời điểm.
 	 
 	- ví dụ 1:
 	```C
@@ -2250,6 +2251,7 @@ int main() {
 <details>
   <summary><h2>Struct - Union </h2></summary>
 
+
 **Struct:**
 - Struct là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó , kích thước của struct bằng kích thước các thành viên bên trong + phần padding.
 - Struct padding :
@@ -2268,6 +2270,7 @@ int main() {
 
 **Union:**
 - Union là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó ,kích thước của struct bằng kích thước thành viên lớn nhất và cùng 1 vùng nhớ.
+- cho phép lưu trữ các biến khác nhau trong cùng một vị trí bộ nhớ. Khi một giá trị mới được gán cho union, giá trị trước đó được ghi đè. Điều này có nghĩa là union chỉ lưu trữ một giá trị duy nhất tại một thời điểm.
 
 <details>
 <summary>Ví dụ </summary>
@@ -3716,7 +3719,8 @@ int main() {
   <summary><h2>Class</h2></summary>
 	
 ### Class là gì?
-- Class là 1 kiểu dữ liệu do người dùng định nghĩa
+- Class là một cấu trúc dữ liệu , nó bao gồm thuộc tính và hành vi của đối tượng
+- Object là 1 đối tượng có thuộc tính và hành vi được tạo ra từ class
 - Biến trong class gọi là `PROPERTY`.
 - Hàm trong class gọi là `METHOD`.
 - Ví dụ:
@@ -3737,10 +3741,13 @@ public:
 
 ```
 **Constructor**
--  Constructor  là một method sẽ được tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class,Nó được sử dụng để khởi tạo các thuộc tính của đối tượng..
+-  Constructor  là một method , nó sẽ tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class,Nó dùng để khởi tạo giá trị cho đối tượng 
 -  Có hai loại chính:
-	+ Default Constructor (Constructor mặc định): không có tham số .
+	+ Default Constructor (Constructor mặc định):Hệ thống sẽ tự động tạo
 	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
+	+  Có constructor là cần thiết và quan trọng:
+		+ Khởi tạo đối tượng
+		+ Thiết lập các giá trị ban đầu
 <details>
 <summary>Ví dụ:</summary>
 
@@ -3782,85 +3789,365 @@ int main() {
 ```
 </details>
 
+**copy Constructor**
+- Mục đích của constructor sao chép là sao chép các giá trị thuộc tính từ một đối tượng đã tồn tại sang một đối tượng mới
+- Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
+	+ Shallow copy
+		+ Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy.
+		+ hỉ các giá trị của các property được sao chép từ đối tượng gốc sang đối tượng mới.
+		+ Nếu các property là các con trỏ , sẽ chỉ sao chép địa chỉ của các con trỏ đó dẫn đến nếu 1 đối tượng bị thay đổi sẽ ảnh hưởng tới đối tượng khác
+
+	+ Deep copp
+		+ Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao
+		+ Điều này đảm bảo rằng các đối tượng không chia sẻ cùng một vùng nhớ.thay đổi dữ liệu trong một đối tượng không ảnh hưởng đến dữ liệu của đối tượng khác.
+
+<details>
+<summary>Ví dụ:</summary>
+
+```c++
+#include <iostream>
+
+using namespace std;
+
+class TestShallowCopy {
+    int a;
+    int b;
+    int *p;
+
+public:
+    TestShallowCopy() {
+        p = new int;
+    }
+
+    TestShallowCopy(const TestShallowCopy &t) {
+        a = t.a;
+        b = t.b;
+        p = new int; // Cấp phát vùng nhớ mới
+        *p = *(t.p); // Sao chép giá trị của *p từ đối tượng gốc sang đối tượng mới
+    }
+
+    ~TestShallowCopy() {
+        delete p; // Giải phóng bộ nhớ khi đối tượng bị hủy
+    }
+
+    void TaoDuLieu(int x, int y, int z) {
+        a = x;
+        b = y;
+        *p = z;
+    }
+
+    void HienThi() {
+        cout << "   Gia tri cua a la: " << a << endl;
+        cout << "   Gia tri cua b la: " << b << endl;
+        cout << "   Gia tri cua *p la: " << *p << endl;
+    }
+};
+
+int main() {
+    TestShallowCopy t1;
+    t1.TaoDuLieu(2, 6, 8);
+    TestShallowCopy t2 = t1;
+    cout << "Du lieu cua doi tuong t1: " << endl;
+    t1.HienThi();
+    cout << "Du lieu cua doi tuong t2: " << endl;
+    t2.HienThi();
+    return 0;
+}
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+</details>
+
+
+
+
+
 **Destructor**
-- DDestructor trong C++ là một method sẽ được tự động gọi khi đối tượng được giải phóng. Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+- Destructor dùng để hủy đối tượng.
+- Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+- Chỉ có duy nhất một hàm hủy trong một lớp. Hàm hủy tự động được gọi. Nếu như chúng ta không định nghĩa hàm hủy thì mặc định trình biên dịch sẽ tự tạo ra một hàm hủy mặc nhiên
+- Hàm hủy (Destructor) trong C++ được gọi tự động khi:
+	+ Kết thúc hàm
+	+ Kết thúc chương trình
+	+ Toán tử delete được gọi
+- Destructor dùng để giải phóng tài nguyên mà đối tượng sở hữu
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <iostream>  
+using namespace std;  
+class NhanVien  {  
+   public:  
+        NhanVien() {    
+            cout << "Ham xay dung duoc goi" << endl;    
+        }    
+        ~NhanVien() {    
+            cout << "Ham huy duoc goi" << endl;    
+        }  
+};  
+int main(void) {  
+	NhanVien* n0 = new NhanVien();
+	delete n0;
+    NhanVien n1;   
+    NhanVien n2; 
+    return 0;  
+}
+
+```
+</details>
+
+**Vitual Destructor**
+
+- virtual destructor nằm ở lớp cha( lớp cơ sở ), khi ta có 1 đối tượng của lớp con  được tạo ra và xóa từ con trỏ của lớp cha.Destructor của cả lớp con  và lớp cha đều được gọi, đảm bảo rằng tất cả các tài nguyên được giải phóng đúng đắn.
+
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
 #include <iostream>
 
-class HinhChuNhat {
+class Base {
 public:
-    double chieuDai;  
-    double chieuRong;
-
-    // Constructor
-    HinhChuNhat() {
-        chieuDai = 10;
-        chieuRong = 9;
+    virtual ~Base() {
+        std::cout << "Base destructor" << std::endl;
     }
+};
 
-    // Destructor
-    ~HinhChuNhat() {
-        std::cout << "Destructor" << '\n';
-    }
-
-    // Hàm tính diện tích   
-    double tinhDienTich() {       
-        return chieuDai * chieuRong; 
+class Derived : public Base {
+public:
+    ~Derived() {
+        std::cout << "Derived destructor" << std::endl;
     }
 };
 
 int main() {
-    HinhChuNhat hinh1;
-    std::cout << "Dien tich: " << hinh1.tinhDienTich() << '\n';
+    Base* ptr = new Derived(); // Tạo một đối tượng Derived và gán con trỏ của lớp cơ sở
+    delete ptr; // Xóa đối tượng thông qua con trỏ của lớp cơ sở
 
     return 0;
 }
 
+
 ```
 </details>
 
-**Static keyword**
-- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object sẽ dùng chung địa chỉ của property này.
+**Static keyword:property**
+- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object được tạo ra từ class đó sẽ dùng chung địa chỉ của property này.
+- trước khi dùng Static phải khởi tạo giá trị cho nó  bên ngoài class:`KieuDuLieu TenLop::tenTruongStatic = Gia tri;`
+- Dùng biến Static để tiết kiệm bộ nhớ ,vì các đối tượng trong cùng một lớp truy cập vào một biến static, nó đang chia sẻ vùng nhớ lưu trữ cho biến static đó
+- Truy cập vào biến Static mà không cần tạo object
+
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
-#include <iostream>
-#include <string>
-
-class HinhChuNhat {
-public:
-    double chieuDai;
-    double chieuRong;
-    static int var;
-};
-
-int HinhChuNhat::var =0;
-// Đây là cách đặt giá trị khởi tạo cho biến static var trong lớp HinhChuNhat(bắt buộc)
-int main() {
-    HinhChuNhat hinh1;
-    HinhChuNhat hinh2;
-    HinhChuNhat hinh3;
-
-    std::cout << "address of chieu dai: " << &hinh1.chieuDai << '\n'; 
-    std::cout << "address of chieu dai: " << &hinh2.chieuDai << '\n'; 
-    std::cout << "address of chieu dai: " << &hinh3.chieuDai << '\n'; 
-
-    std::cout << "address of var: " << &hinh1.var << '\n'; 
-    std::cout << "address of var: " << &hinh2.var << '\n'; 
-    std::cout << "address of var: " << &hinh3.var << '\n'; 
-
-    return 0;
-}
-
-```
-</details>
-
-
+#include <iostream>  
+using namespace std;  
+class NhanVien { 
+    int msnv;    
+    string ten;
+    int tuoi;
+    public:  
+       static string tenCongTy;
+       NhanVien(int msnv, string ten, int tuoi) {    
+            this->msnv = msnv;    
+            this->ten = ten;    
+            this->tuoi = tuoi; 
+       }    
+       void HienThi() {    
+            cout << ten << endl;
+            cout << "   Ma so nhan vien: " << msnv << endl;
+            cout << "   Tuoi: " << tuoi << endl;
+            cout << "   Ten cong ty: " << tenCongTy << endl;
+       }    
+};  
  
+string NhanVien::tenCongTy = "TNHH Tin Hoc";
+ 
+int main() {  
+    NhanVien n1 =  NhanVien(111231, "Nguyen Van A", 25);    
+    NhanVien n2 =  NhanVien(213214, "Nguyen Van B", 40);
+    NhanVien n3 =  NhanVien(213215, "Nguyen Van C", 67);
+    n1.HienThi();    
+    n2.HienThi();
+    n3.HienThi();
+    return 0;  
+}
+
+```
+</details>
+
+**Static keyword:method**
+- Tiện lợi và linh hoạt :
+	+ gọi  static method từ bất kỳ nơi nào trong chương trình và không cần tạo object khi gọi 
+-  truy cập được vào biến thành viên static, không thể truy cập vào biến thường
+-  static method không thể gọi trực tiếp từ các methodc không static của lớp
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <iostream>
+
+class MyClass {
+public:
+    static int staticVariable; // Biến thành viên static
+
+    // Phương thức static - Đặc điểm 1 và 2
+    static void staticMethod() {
+        std::cout << "This is a static method." << std::endl;
+    }
+
+    // Phương thức static truy cập vào biến thành viên static - Đặc điểm 3
+    static void printStaticVariable() {
+        std::cout << "Static variable value: " << staticVariable << std::endl;
+    }
+
+    // Phương thức static không thể truy cập biến thành viên không static - Đặc điểm 2
+    /*
+    static void printNonStaticVariable() {
+        std::cout << "Non-static variable value: " << nonStaticVariable << std::endl;
+    }
+    */
+
+    // Phương thức static không thể gọi từ phương thức không static - Đặc điểm 4
+    /*
+    void callStaticMethodFromNonStaticMethod() {
+        staticMethod(); // Lỗi biên dịch
+    }
+    */
+};
+
+// Khởi tạo biến thành viên static
+int MyClass::staticVariable = 42;
+
+// Phương thức static có thể gọi từ bất kỳ nơi nào trong chương trình thông qua hàm - Đặc điểm 5
+void callStaticMethodFromOutsideClass() {
+    MyClass::staticMethod();
+}
+
+int main() {
+    // Gọi phương thức static từ bên ngoài lớp
+    callStaticMethodFromOutsideClass();
+
+    // Gọi phương thức static từ bên trong lớp
+    MyClass::printStaticVariable();
+
+
+    return 0;
+}
+
+```
+
+</details>
+
+
+**Con trỏ this trong C++**
+- This là một con trỏ đặc biệt dùng để trỏ đến địa chỉ của đối tượng hiện tại
+- Trong ví dụ dưới thì đối tượng hiện tại là n1, n2
+- Khi nào nên dùng con trỏ this:
+	+ Nó có thể được sử dụng để truyền đối tượng hiện tại làm tham số cho method khác
+	+ Khi gọi method từ các đối tượng khác nhau, nó sẽ trỏ tới địa chỉ của các đối tượng tương ứng.
+- Trong trường hợp ta đặt tên của tham số method trùng tên với property, và gán property = tham số method, thì lúc này chương trình hiểu rằng đang gán giá trị của các tham số cho chính các tham số đó. Nên các property giữ giá trị mặc định của chúng (0) khi được tạo ra.
+- Khi bạn sử dụng this->, bạn đang xác định rõ ràng rằng các phép gán áp dụng cho các proberty, không phải là các tham số của phương thức.
+
+```c++
+void setData(int msnv, string ten, int tuoi) {  
+    this->msnv = msnv;    
+    this->ten = ten;    
+    this->tuoi = tuoi; 
+}
+```
+
+
+<details>
+<summary>Ví dụ:</summary>
+
+```c++
+#include <iostream>  
+using namespace std;  
+class NhanVien { 
+    int msnv;    
+    string ten;
+    int tuoi;
+    public:  
+       void setData(int msnv, string ten, int tuoi) {  
+            this->msnv = msnv;    
+            this->ten = ten;    
+            this->tuoi = tuoi; 
+       }    
+       void showData() {
+            cout << "Ten nhan vien: " << this->ten << endl;
+            cout << "Ma so nhan vien: " << this->msnv << endl;
+            cout << "Tuoi: " << this->tuoi << endl;
+       }    
+};
+
+int main() { 
+    // Nhan vien 1
+    NhanVien n1;
+    n1.setData(111231, "Nguyen Van A", 24);
+    n1.showData();    
+     
+    // Nhan vien 2
+    NhanVien n2 =  NhanVien();
+    n2.setData(111232, "Nguyen Van B", 25);
+    n2.showData();
+    return 0;  
+}
+
+```
+
+</details>
+
+
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <iostream>
+
+class MyClass {
+public:
+    void printAddress() {
+        std::cout << "Address of current object: " << this << std::endl;
+    }
+};
+
+int main() {
+    MyClass obj1;
+    MyClass obj2;
+    obj1.printAddress(); // In địa chỉ của đối tượng obj1
+    obj2.printAddress(); // In địa chỉ của đối tượng obj2
+    return 0;
+}
+
+
+
+```
+
+</details>
+
+
+
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3951,6 +4238,16 @@ int main(){
 
 
 
+
+
+
+
+
+
+
+
+
+
 <details>
   <summary><h2>Smart Pointer</h2></summary>
 
@@ -3967,10 +4264,10 @@ delete[] arr; // giải phóng bộ nhớ của mảng động
 
 ```
 **Smart Pointer C++**
-- smart pointers là một cơ chế quản lý bộ nhớ tự động , tự động giải phóng vùng nhớ khi không còn bất kỳ smart pointer nào nắm giữ   vùng nhớ đó.Dựa vào cơ chế Destructer trong class
+- smart pointers là một cơ chế quản lý bộ nhớ tự động , tự động giải phóng vùng nhớ khi không còn bất kỳ smart pointer nào nắm giữ  vùng nhớ đó.Dựa vào cơ chế Destructer trong class
 
 **Unique Pointer**
-- unique_ptr là một loại smart pointer trong C++, Cớ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
+- unique_ptr là một loại smart pointer trong C++, Cơ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
 
 ```C++
 #include <iostream>
@@ -4350,7 +4647,7 @@ int main() {
 
 **4/Abstraction (Tính trừu tượng ):**
 
-- Ẩn đi những thành phần tạo ra đối tượng gọi là tính trừu tượng.chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó, tức là các method mà người sử dụng bên ngoài có thể truy cập và tương tác.
+- Ẩn đi những thành phần tạo ra đối tượng .chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó, tức là các method mà người sử dụng bên ngoài có thể truy cập và tương tác.
 - Ví dụ tính phương trình bậc 2 , để tính nghiệm x1,x2 thì ta có hàm tính detal = b * b - 4 * a * c .delta là 1 trong những thành phần tạo ra kết quả.Vậy thì hàm tính delta này phải được ẩn đi bằng cách để nó vào phạm vi private
 
 <details>
@@ -4438,10 +4735,14 @@ int main()
 ```
 
 
+</details>
 
-<details>
+**Hàm Bạn,Lớp Bạn?**
+- Là các khái niệm cho phép một hàm hoặc một lớp khác có thể truy cập các thành viên private hoặc protected của một lớp.
+
 
 **Template trong C++ là gì?**
+
 
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
 - Có 2 loại  Templates:
@@ -5097,6 +5398,17 @@ int main() {
 
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
+
+**So sánh struct với union trong c** 
+- giống về mục đích là kiểu dữ liệu chứa các dữ liệu khác nhau trong 1 đối tượng
+- Khác là về 
+	+ kích thước của một union bằng với kích thước của thành viên lớn nhất trong union, trong khi kích thước của một struct là tổng của kích thước của các thành viên của nó.
+	+ Mỗi thành viên trong struct có vùng nhớ riêng, trong khi tất cả các thành viên trong union chia sẻ cùng một vùng nhớ
+	+ 
+**So sánh struct với class**
+- Mặc định truy cập: Trong một struct, mặc định truy cập  public, một class mặc định truy cập là private.
+
+- Mục đích sử dụng: Thường thì struct được sử dụng để đại diện cho một cấu trúc dữ liệu đơn giản trong khi class  được sử dụng để tạo 1 đối tượng 
 
 
 **Làm sao biết được dữ liệu gửi đi trong SPI,I2C là đúng**
@@ -6859,7 +7171,7 @@ int main(){
 - Sau khi reset ,MCU khởi tạo giá trị SP bằng cách đọc giá trị tại địa chỉ 0X00000000  
 - Tiếp theo VDK sẽ đọc giá trị của địa chỉ 0x0000004  (vector table ) cụ thể là vector reset
 - Sau đó sẽ nhảy đến hàm main và thực hiện chương trình ứng dụng trong hàm main.
-
+s
 **Bootloader là gì?**
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b76ad27c-9c6b-4a9d-9651-33c224a26b44)
 - Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này, để lựa chọn chương trình ứng dụng nào để bắt đầu thực hiện
