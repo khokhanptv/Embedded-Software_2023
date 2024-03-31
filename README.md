@@ -4413,7 +4413,7 @@ int main() {
 **Template**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...cho phép  viết mã một cách tổng quát cho nhiều loại dữ liệu khác nhau mà không cần phải viết lại mã nhiều lần
 - Có 2 loại  Templates:
-	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template
+	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template, tù
 	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. Bạn chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
 
 ```C++
@@ -4425,6 +4425,15 @@ int main() {
 		U second;
 		Pair(T a, U b) : first(a), second(b) {}
 	};
+	int main() {
+		Pair<int, double> p1(1, 3.14);
+		std::cout << "First: " << p1.first << ", Second: " << p1.second << std::endl;
+
+		Pair<std::string, char> p2("Hello", 'X');
+		std::cout << "First: " << p2.first << ", Second: " << p2.second << std::endl;
+
+    return 0;
+}
 	// Hàm template tính tổng của hai giá trị
 	template <class T>
 	T sum(T a, T b) {
