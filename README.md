@@ -4411,16 +4411,28 @@ int main() {
 **Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
 
 **Template**
-- 1 kiểu dữ liệu trừu tượng thay thế các kiểu dữ liệu bình thường
-	+ Template Function 
+- Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...cho phép  viết mã một cách tổng quát cho nhiều loại dữ liệu khác nhau mà không cần phải viết lại mã nhiều lần
+- Có 2 loại  Templates:
+	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template
+	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. Bạn chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
 
 ```C++
-		template <typename T>
-		T function_name(T parameter) {
-			// code
-		}
+	// Khai báo một class template cho một cặp giá trị
+	template <class T, class U>
+	class Pair {
+	public:
+		T first;
+		U second;
+		Pair(T a, U b) : first(a), second(b) {}
+	};
+	// Hàm template tính tổng của hai giá trị
+	template <class T>
+	T sum(T a, T b) {
+		return a + b;
+	}
+
 ```
-	+ Template Class
+	
 
 **Virtual Function**
 - Hàm ảo , cho phép hàm của lớp con ghi đè lên hàm lớp cha
@@ -4740,9 +4752,7 @@ int main()
 **Hàm Bạn,Lớp Bạn?**
 - Là các khái niệm cho phép một hàm hoặc một lớp khác có thể truy cập các thành viên private hoặc protected của một lớp.
 
-
 **Template trong C++ là gì?**
-
 
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...
 - Có 2 loại  Templates:
