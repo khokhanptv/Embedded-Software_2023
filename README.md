@@ -4413,7 +4413,7 @@ int main() {
 **Template**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...cho phép  viết mã một cách tổng quát cho nhiều loại dữ liệu khác nhau mà không cần phải viết lại mã nhiều lần
 - Có 2 loại  Templates:
-	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template, tù
+	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template, lúc này trong hàm chính , tùy mục đích có thể đặt kiểu dữ liệu(int ,double..) cho class và object sẽ có kiểu DL theo class
 	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. Bạn chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
 
 ```C++
@@ -4439,6 +4439,13 @@ int main() {
 	T sum(T a, T b) {
 		return a + b;
 	}
+	int main() {
+    std::cout << "Sum of integers: " << sum(5, 10) << std::endl; // T được suy luận là int
+    std::cout << "Sum of doubles: " << sum(3.14, 2.5) << std::endl; // T được suy luận là double
+    
+
+    return 0;
+}
 
 ```
 	
