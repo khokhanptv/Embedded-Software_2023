@@ -4468,9 +4468,9 @@ int main() {
 	+ Class: để tạo ra các đối tượng , nó mô tả dữ liệu và phương thức của đối tượng đó
 	+ Đối tượng (Object) : Một đối tượng cụ thể được tạo ra từ class, có 
 **Phạm vi truy cập:**
-- Public:Member nào trong Public thì object có thể trỏ trực tiếp được và nội tại trong class cũng sử dụng được .
-- protected:Member trong protected thì Class con có thể trỏ tới được
-- private: Chỉ có nội tại trong class mới sử dụng được.Lý do đặt PROPERTY trong private, để chắc chắn object không trỏ tới được.
+- Public:Member nào trong Public thì có thể truy cập từ mọi nơi trong chương trình , bao gồm object của lớp và từ các lớp khác thông qua method của lớp đó, có thể truy cập được
+- protected:Member trong protected thì method của Class con và method trong class có thể truy cập
+- private: Chỉ có method  trong class có thể truy cập .
 
 **1/Encapsulation (Tính đóng gói):**
 - PROPERTY phải nằm ở private hoặc protected.
@@ -5425,6 +5425,67 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+**Function overloading và operator overloading?**
+- Function overloading là tính năng của ngôn ngữ C++ (không có trong C). Kỹ thuật này cho phép sử dụng cùng một tên gọi cho nhiều hàm (có cùng mục đích). Nhưng khác nhau về kiểu dữ liệu tham số hoặc số lượng tham số.Chú ý , phải cùng kiểu dữ liệu trả về , tham số không phải là 1 con trỏ
+- operator overloading:operator overloading là 1 tính năng trong c++ , cho phép thực hiện các toán tử với các đối tượng dược tao ra từ class . dùng từ khóa `operator+ toán tử`
+
+```c++
+#include <iostream>
+
+class Complex {
+private:
+    double real;
+    double imag;
+
+public:
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+
+    // Operator overloading for addition
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+
+    // Display the complex number
+    void display() {
+        std::cout << real << " + " << imag << "i" << std::endl;
+    }
+};
+
+int main() {
+    Complex c1(3, 2);
+    Complex c2(1, 7);
+    Complex sum = c1 + c2; // Using operator overloading for addition
+    sum.display(); // Output: 4 + 9i
+    return 0;
+}
+```
+
+
+**Friend classes và Friend funtion** 
+- Friend classes :
+	+ được truy cập vào các thành viên pri và protected của một lớp khác. 
+	+ Điều này được thực hiện bằng cách khai báo lớp đó là friend trong phạm vi của lớp khác.
+
+	```c++
+
+	private:
+    int privateData;
+
+    friend class FriendClass;
+	```
+- friend function:
+	+ hàm bên ngoài cmột lớp nhưng được cấp quyền truy cập các thành viên riêng tư và bảo vệ của lớp đó.
+	+ thực hiện bằng cách khai báo hàm đó là friend trong phạm vi của pri và protected  của lớp đó
+
+	```c++
+
+	private:
+    int privateData;
+
+    friend void friendFunction(MyClass& obj); // Khai báo hàm bạn
+	
+	```
+
 **So sánh struct với union trong c** 
 - giống về mục đích là kiểu dữ liệu chứa các dữ liệu khác nhau trong 1 đối tượng
 - Khác là về 
@@ -5433,7 +5494,6 @@ int main() {
 	+ 
 **So sánh struct với class**
 - Mặc định truy cập: Trong một struct, mặc định truy cập  public, một class mặc định truy cập là private.
-
 - Mục đích sử dụng: Thường thì struct được sử dụng để đại diện cho một cấu trúc dữ liệu đơn giản trong khi class  được sử dụng để tạo 1 đối tượng 
 
 
