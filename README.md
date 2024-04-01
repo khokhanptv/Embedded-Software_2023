@@ -5468,21 +5468,50 @@ int main() {
 
 	```c++
 
-	private:
-    int privateData;
+	public:
+		MyClass(int d) : data(d) {}
 
-    friend class FriendClass;
+		friend class FriendClass; // Khai báo lớp bạn
+
+		// Các thành viên khác của lớp
+	};
+
+	class FriendClass {
+	public:
+		void accessData(const MyClass& obj) {
+			std::cout << "Data: " << obj.data << std::endl; // Truy cập thành viên private của MyClass
+		}
+	};
+
+
 	```
 - friend function:
-	+ hàm bên ngoài cmột lớp nhưng được cấp quyền truy cập các thành viên riêng tư và bảo vệ của lớp đó.
-	+ thực hiện bằng cách khai báo hàm đó là friend trong phạm vi của pri và protected  của lớp đó
+	+ hàm bên ngoài lớp nhưng được cấp quyền truy cập các thành viên riêng tư và bảo vệ của lớp đó.
+	+ thực hiện bằng cách khai báo hàm đó là friend trong lớp đó
 
-	```c++
+	```C++
 
-	private:
-    int privateData;
+		class MyClass {
+		private:
+			int data;
 
-    friend void friendFunction(MyClass& obj); // Khai báo hàm bạn
+		public:
+			MyClass(int d) : data(d) {}
+
+			friend void displayData(const MyClass& obj); // Khai báo hàm bạn
+
+			// Các thành viên khác của lớp
+		};
+
+		void displayData(const MyClass& obj) {
+			std::cout << "Data: " << obj.data << std::endl;
+		}
+
+		int main() {
+			MyClass obj(10);
+			displayData(obj); // Gọi hàm bạn để hiển thị dữ liệu private của obj
+			return 0;
+		}
 	
 	```
 
