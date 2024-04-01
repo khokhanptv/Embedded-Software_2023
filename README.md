@@ -4472,6 +4472,41 @@ int main() {
 - protected:Member trong protected thì method của Class con và method trong class có thể truy cập
 - private: Chỉ có method  trong class có thể truy cập .
 
+```c++
+#include <iostream>
+
+class ClassA {
+public:
+    int publicVarA;
+
+    ClassA() : publicVarA(0) {}
+};
+
+class ClassB {
+public:
+    void accessPublicVar(ClassA &objA) {
+        std::cout << "Value of publicVarA from ClassB: " << objA.publicVarA << std::endl;
+    }
+};
+
+int main() {
+    ClassA objA;
+    ClassB objB;
+
+    objA.publicVarA = 42; // Gán giá trị cho thành viên publicVarA của đối tượng objA
+
+    objB.accessPublicVar(objA); // Truy cập thành viên publicVarA của đối tượng objA từ đối tượng objB
+
+    return 0;
+}
+
+
+
+
+
+
+```
+
 **1/Encapsulation (Tính đóng gói):**
 - PROPERTY phải nằm ở private hoặc protected.
 - Lý do để bảo vệ dữ liệu của một đối tượng khỏi sự xâm phạm từ bên ngoài.
