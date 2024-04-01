@@ -4835,7 +4835,7 @@ int main(void){
 </details>
 
 
-**Virtual trong C++ là gì?**
+**Virtual funtion trong C++ là gì?**
 - Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  . 
 
 
@@ -4843,42 +4843,33 @@ int main(void){
 <summary>Ví dụ</summary>
 
 ```C++
+#include <iostream>
 
- #include <iostream>
-
-class Animal {
+// Lớp cha
+class Base {
 public:
-    virtual void speak() {
-        std::cout << "Animal speaks\n";
+    // Hàm ảo
+    virtual void display() {
+        std::cout << "This is a Base class method." << std::endl;
     }
 };
 
-class Dog : public Animal {
+// Lớp con kế thừa từ lớp cha
+class Derived : public Base {
 public:
-    void speak() override {
-        std::cout << "Dog barks\n";
-    }
-};
-
-class Cat : public Animal {
-public:
-    void speak() override {
-        std::cout << "Cat meows\n";
+    // Ghi đè (override) hàm ảo của lớp cha
+    void display() override {
+        std::cout << "This is a Derived class method." << std::endl;
     }
 };
 
 int main() {
-    Animal* animal1 = new Dog();
-    Animal* animal2 = new Cat();
-
-    animal1->speak();  // Output: Dog barks
-    animal2->speak();  // Output: Cat meows
-
-    delete animal1;
-    delete animal2;
+    Derived obj;
+    obj.display(); // Gọi phương thức display() của lớp con
 
     return 0;
 }
+
 
 
 ```
