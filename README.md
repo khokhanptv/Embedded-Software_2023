@@ -7382,9 +7382,21 @@ s
 **Battery Management System (BMS)**
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc58321d-96fe-41c1-90e8-386537eab2e1)
+- Mục đích :Cung cấp thông tin về trạng thái pin hiện tại, bao gồm điện áp, dòng điện, nhiệt độ, dung lượng pin thời gian sử dụng pin
+
+- Phần cứng:1 con MCU (PC1500) sẽ giao tiếp các cảm biến , các cảm biến xe nối với  pin để đo cảm  dòng hiện tại, điện áp hiện tại(403v)đầy , cạn là 280v , nhiệt độ .Các dữ liệu này sẽ truyền qua MCU thông qua ADC,
+- Nói về nhiệt độ ,khi nhiệt độ lớn hơn nhiệt độ an toàn >60 độ , thì MCU sẽ gửi 1 bit kích hoạt hệ thống làm mát ( hệ thống này gồm role và quạt)( nguồn 3.3 v kích nguồn 5 v)
+- Voltage Divider
+- Hall Effect
+- Cảm Biến Nhiệt Độ: PT1000
+- Sau khi có các dữ liệu thì ECU chính sẽ gửi ECU pin thông qua CAN , bằng mode remote farm ,và ECU pin sẽ gửi lại 1 data farm 1byte nhiệt độ ,1 byte điện áp , 1 byte dòng điện,1byte quạt, byte CRC để tính dung lượng pin và thời gian sử dụng
+- Thời gian lấy mẫu là liên tục .
+ 
+- Quạt được bật khi nào:
+	+ nhiệt độ quá 60 độ , thì ECU pin sẽ bật quạt
+	+ khi ECU chính kiểm tra các khối ECU khác và quyết định bật quạt
 
 
-- Mục đích :Cung cấp thông tin chính xác về trạng thái pin hiện tại, bao gồm điện áp, dòng điện, nhiệt độ, dung lượng pin 
 - Battery Management System là 1 ECU để quản lý pin , trên xe thì có nhiều ECU và ECU này gồm MCU+ Cảm biến đo thông số pin 
 - pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
 - V pin xe điện  3.6 volt mỗi ô pin (cell) khi sạc đầy
@@ -7764,4 +7776,114 @@ myLoRa.preamble              = 10;              // default = 8;
 
 
 </details>
+</details>
+
+</details>
+<details>
+  <summary><h1>▶ ⭐V-Model </h1></summary>
+
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b3cf7f9f-ae02-413d-8af6-b001ad8b4516)
+
+- Mô hình mô tả vòng đời phát triển 1 chương trình .( 9 bước)
+1. Requirements Gathering (Thu thập yêu cầu)
+- Bắt đầu với việc thu thập yêu cầu từ khách hàng hoặc các bên liên quan
+- Xác định, xác minh các yêu cầu về chức năng, hiệu suất và các yêu cầu khác của sản phẩm
+2. Requirements Analysis (Phân tích yêu cầu)
+- Phân tích yêu cầu để hiểu rõ những gì cần phải được phát triển và cách thức thực hiện
+- Xác định các rủi ro và yêu cầu bổ sung nếu cần
+3. Design (Thiết kê)
+- Phát triển các thiết kế chỉ tiết cá phần của hệ thóng hoặc sản phẩm.
+- Bao gồm thiết kế cơ điện tử, cơ khí , phần mềm (viết code )
+4. Test Planning (Lập kế hoạch kiểm thử)
+- Bắt đầu việc thực hiện thiết kế xây dựng sản phẩm thực tế dựa trên các yêu cầu thiết kế đã được
+phê duyệt.
+5. Development (Phát triển)
+- Bắt đầu việc thực hiện thiết kế và xây dụng sản phẩm thực tế dựa trên các yêu cầu và thiết kế đã
+được phê duyệt
+6. Unit Testing
+- Kiểm tra từng phần nhỏ của sản phẩm để bảo đảm tính đúng đắn và hoặt động đúng cách.
+7. Integration Testing
+- Kiểm tra tính tương tác và tính hoạt động của các thành phần khi được kết hợp lại với nhau
+8. System Testing
+- Kiểm tra hệ thống hoàn chính để đảm bảo rằng nó đáp ứng các yêu cầu chức năng và phi chức
+năng
+9. Acceptance Testing
+- Thực hiện các bài kiểm tra cuối cùng bởi người dùng hoặc khách hàng đề xác nhận sản phẩm
+đáp ứng các yêu cầu đạt được.
+
+**Unit test là gì?**
+- là một loại kiểm thử phần mềm để kiểm tra tính chính xác của từng "đơn vị" của mã nguồn phần mềm: fution , class ,method
+- lưu ý khi làm việc với unit test:
+1. Chuẩn bị tốt:
+	+ Đảm bảo rằng bạn đã cài đặt và cấu hình môi trường phát triển phù hợp để chạy unittest.
+	+ Xác định và cài đặt các framework hoặc thư viện unittest phù hợp với ngôn ngữ lập trình của bạn (ví dụ: unittest, JUnit, Pytest).
+2.	Thiết lập độc lập:
+	+ Đảm bảo rằng các unittest của bạn hoàn toàn độc lập và không phụ thuộc vào các thành phần bên ngoài như cơ sở dữ liệu, mạng hoặc các tài nguyên bên ngoài khác.
+	+ Sử dụng mocking hoặc stubbing để giả lập các thành phần phụ thuộc và tạo môi trường kiểm thử độc lập.
+3.	Tách biệt các trường hợp kiểm thử:
+	+ Chia nhỏ các testcase thành các trường hợp kiểm thử riêng biệt và đảm bảo mỗi testcase kiểm tra một tính năng cụ thể.
+	+ Cung cấp các dữ liệu kiểm thử đại diện cho tất cả các trường hợp biên, bình thường và ngoại lệ.
+4.	Đảm bảo tính phủ (Code Coverage):
+	+ Kiểm tra tính phủ mã nguồn để đảm bảo rằng tất cả các đoạn mã được kiểm thử.
+	+ Đảm bảo kiểm tra các điều kiện biên, đường dẫn thực thi khác nhau và các trường hợp ngoại lệ.
+5.	Xử lý và báo cáo lỗi:
+	+ Xác định và kiểm tra các trường hợp lỗi, xử lý ngoại lệ và các tình huống không mong muốn.
+	+ Đảm bảo rằng bạn kiểm tra và báo cáo lỗi một cách chính xác và chi tiết để dễ dàng xác định và sửa chúng.
+6.	Đồng nhất và duy trì:
+	+ Sử dụng quy ước đặt tên và cấu trúc đồng nhất cho các testcase để dễ đọc và hiểu.
+	+ Duy trì và cập nhật các unittest khi có sự thay đổi trong mã nguồn để đảm bảo tính nhất quán và độ tin cậy của chúng.
+7.	Tích hợp liên tục:
+	+ Tự động hóa việc chạy unittest trong quy trình tích hợp liên tục để đảm bảo rằng các testcase được chạy tự động và thường xuyên.
+	+ Sử dụng công cụ tích hợp liên tục như Jenkins, Travis CI, hoặc GitLab CI để chạy và theo dõi các unittest.
+8.	Quản lý dữ liệu kiểm thử:
+	+ Quản lý dữ liệu kiểm thử một cách cẩn thận để đảm bảo tính nhất quán và dễ dàng tái sử dụng.
+	+ Sử dụng tập dữ liệu kiểm thử đại diện cho các trường hợp biên, bình thường và ngoại lệ, và lưu trữ chúng một cách có tổ chức.
+9.	Kiểm tra hiệu suất (Performance Testing):
+	+ Trong một số trường hợp, cần kiểm tra hiệu suất của mã nguồn.
+	+ Sử dụng công cụ phân tích hiệu suất để đo và đánh giá hiệu suất của mã nguồn trong các điều kiện tải khác nhau.
+10.	Sử dụng các nguyên tắc lập trình tốt:
+	+ Áp dụng các nguyên tắc lập trình tốt như nguyên tắc SOLID, kiểm tra đơn vị và thiết kế phần mềm để viết các unittest dễ đọc, dễ bảo trì và linh hoạt.
+11.	Kiểm tra tích hợp:
+	+ Đối với các ứng dụng lớn hoặc có nhiều phần tương tác với nhau, cần kiểm tra tích hợp giữa các thành phần để đảm bảo sự tương tác đúng đắn và chính xác.
+12.	Kiểm tra biên:
+	+ Đảm bảo kiểm tra các trường hợp biên để đảm bảo tính ổn định và đáng tin cậy của ứng dụng trong các điều kiện đặc biệt và giá trị đầu vào biên.
+
+•	EXPECT_EQ: giá trị kỳ vọng bằng giá trị thực tế thì pass
+•	EXPECT_TRUE: ĐK đúng thì pass
+•	EXPECT_FALSE: ĐK sai thì pass
+
+
+**MCDC là gì?**
+- MCDC (Modified Condition/Decision Coverage) là một kỹ thuật kiểm thử phần mềm được sử dụng để đảm bảo mức độ phủ mã nguồn cao
+- độ bao phủ MCDC là tỷ lệ  điều kiện và quyết định trong mã đã được kiểm tra so với tổng số lượng điều kiện và quyết định có trong mã
+MCDC yêu cầu các bài kiểm tra phải thỏa mãn các tiêu chí sau:
+1.	Mỗi điều kiện trong mã nguồn phải được kiểm tra ít nhất một lần và cả trong trạng thái đúng và trạng thái sai.
+2.	Các phần tử quyết định phải được kiểm tra ít nhất một lần và cả trong trạng thái đúng và trạng thái sai.
+3.	Mọi khả năng kết hợp của các điều kiện phải được kiểm tra, bao gồm cả các kết hợp tình huống đặc biệt và biên.
+ví dụ:
+
+```c
+bool IsPositiveEven(int n) {
+    if (n > 0 && n % 2 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+\*
+Decision  1: (n > 0 && n % 2 == 0).
+Conditions:
+Condition 1: n > 0.
+Condition 2: n % 2 == 0.
+Test case 1: n = 2 (Positive even number).
+Test case 2: n = 1 (Not a positive even number).
+Test case 3: n = 0 (Not a positive even number).
+Test case 4: n = -2 (Not a positive number).
+Test case 5: n = -1 (Not a positive number).
+*/
+```
+
+
+
+
 </details>
