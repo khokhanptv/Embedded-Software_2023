@@ -1368,7 +1368,13 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 	-  Quá trình này compiler sẽ biên dịch từ file `.i` sang file ngôn ngữ assembly là file `.s`.
 	-  Dùng lệnh `gcc -S main.i -o main.s`.
 - **_Assembler (Giai đoạn dịch ngôn ngữ Assembly sang ngôn ngữ máy):_** compiler sẽ Biên dịch ngôn ngữ Assembly sang ngôn ngữ máy (0 và 1). Và tạo ra tệp tin Object `.o` 
-	-  Dùng lệnh `gcc -c main.s -o main.o` để tạo ra file ".o"  
+	-  Dùng lệnh `gcc -c main.s -o main.o` để tạo ra file ".o" 
+- có thể tạo thành file.hex từ file.o  
+`objcopy -O ihex main.o main.hex `
+- objcopy: là công cụ được sử dụng để thực hiện việc chuyển đổi.
+- File hex chứa thông tin về mã máy, địa chỉ bắt đầu dữ liệu, kích thước và dữ liệu của chương trình, và thường được sử dụng để nạp chương trình vào bộ nhớ của thiết bị nhúng.
+
+
 - **_Linker (Giải đoạn liên kết):_** 
 	- 1 hoặc nhiều file.o sẽ được compiler liên kết lại 1 File  `.exe`.
 	- File này để hệ điều hành chạy
@@ -1380,11 +1386,21 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 
 - **Stdargt:** 
 - Cú pháp: `#include<stdarg.h>`
-- stdarg.h trong Thư viện C định nghĩa một kiểu biến va_list và 3 macro  được sử dụng để lấy các tham số trong một hàm khi không cần biết có bao nhiêu tham số đầu vào
-- va_list: là một kiểu dữ liệu được sử dụng để lưu trữ danh sách các đối số biến đổi.
-- va_start:  được sử dụng để khởi tạo một va_list. Nó nhận hai giá trị: va_list và số lượng tham số
-- va_arg: lấy giá trị đầu tiên của va_list và di chuyển con trỏ trong va_list tới đối số tiếp theo
-- va_end: Kết thúc việc sử dụng va_list.
+- Dùng để viết 1 hàm có đối số biến đổi
+- Đối số biến đổi (variadic arguments) là các đối số của một hàm mà số lượng và kiểu dữ liệu của chúng không được xác định trước khi biên dịch
+ một kiểu biến va_list và 3 macro  được sử dụng để lấy các tham số trong một hàm khi không cần biết có bao nhiêu tham số đầu vào
+- va_list là một kiểu dữ liệu được để lưu trữ các đối số biến đổi.
+	+ Bạn khai báo một biến thuộc kiểu va_list để sử dụng trong việc truy cập các đối số.
+	+ Ví dụ: va_list args;
+- va_start:  được sử dụng để khởi tạo một va_list để truy cập các đối số biến đổi. 
+	+ Nó nhận hai giá trị: va_list và số lượng tham số do người dùng nhập
+	+ Ví dụ: va_start(args, last_arg);
+- va_arg:  Truy cập một đối số trong danh sách.
+	+ Nó nhận hai tham số: va_list và kiểu dữ liệu của đối số cần lấy
+	+ Nó trả về giá trị của đối số và di chuyển va_list đến đối số tiếp theo
+	+ Ví dụ: double val = va_arg(args, double);
+- va_end: Kết thúc việc truy cập vào các đối số biến đổi,Nó nhận một tham số là va_list
+	+ Ví dụ: va_end(args);
 
 <details>
 <summary>Ví dụ:</summary>
@@ -5451,6 +5467,15 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+
+
+**IDE**
+-  IDE là viết tắt của "Integrated Development Environment"(Môi trường Phát triển Tích hợp): keil C , vs2022(nặng)
+	+ Editor 
+	+ Compiler(trình biên dịch)
+	+ Debugger 
+- Text editer :dùng để soạn thảo văn bản: vscode(nhẹ)
+- MinGW :là 1 trình biên dịch c/c++ chạy trên window
 **Function overloading và operator overloading?**
 - Function overloading là tính năng của ngôn ngữ C++ (không có trong C). Kỹ thuật này cho phép sử dụng cùng một tên gọi cho nhiều hàm (có cùng mục đích). Nhưng khác nhau về kiểu dữ liệu tham số hoặc số lượng tham số.Chú ý , phải cùng kiểu dữ liệu trả về , tham số không phải là 1 con trỏ
 - operator overloading:operator overloading là 1 tính năng trong c++ , cho phép thực hiện các toán tử với các đối tượng dược tao ra từ class . dùng từ khóa `operator+ toán tử`
