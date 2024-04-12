@@ -1,5 +1,5 @@
 <details>
-<summary><h1>▶ ⭐Bài tập ứng dụng</h1></summary>
+<summary><h1>▶ ⭐Xin chào Lộc :D</h1></summary>
 
 ## 1 số BT liên quan con trỏ
 <details>
@@ -5467,8 +5467,15 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+**Header trong ngôn ngữ C là gì?**
+- header  là 1 file .h chứa các khai báo hàm, khai báo biến, các define macros, và các khai báo khác mà chương trình có thể sử dụng. Header files thường được sử dụng để chia sẻ thông tin giữa các file mã nguồn và thư viện.
 
+**destructor có thể bị overloaded?**
+-  không thể overload (nạp chồng)
+-  Lý do trong 1 class chỉ có 1 destructor
 
+**operator overloading là gì ?**
+- Nạp chồng toán tử , có nghĩa là ta có thể định nghĩa lại cách hoạt động của các toán tử 
 **IDE**
 -  IDE là viết tắt của "Integrated Development Environment"(Môi trường Phát triển Tích hợp): keil C , vs2022(nặng)
 	+ Editor 
@@ -5476,6 +5483,10 @@ int main() {
 	+ Debugger 
 - Text editer :dùng để soạn thảo văn bản: vscode(nhẹ)
 - MinGW :là 1 trình biên dịch c/c++ chạy trên window
+- objcopy  :công cụ trong GNU
+- GNU:  dự án phần mềm bao gồm công cụ, thư viện và hệ điều hành
+- GCC (GNU Compiler Collection): Công cụ biên dịch
+
 **Function overloading và operator overloading?**
 - Function overloading là tính năng của ngôn ngữ C++ (không có trong C). Kỹ thuật này cho phép sử dụng cùng một tên gọi cho nhiều hàm (có cùng mục đích). Nhưng khác nhau về kiểu dữ liệu tham số hoặc số lượng tham số.Chú ý , phải cùng kiểu dữ liệu trả về , tham số không phải là 1 con trỏ
 - operator overloading:operator overloading là 1 tính năng trong c++ , cho phép thực hiện các toán tử với các đối tượng dược tao ra từ class . dùng từ khóa `operator+ toán tử`
@@ -5536,6 +5547,7 @@ int main() {
 
 
 	```
+	
 - friend function:
 	+ hàm bên ngoài lớp nhưng được cấp quyền truy cập các thành viên riêng tư và bảo vệ của lớp đó.
 	+ thực hiện bằng cách khai báo hàm đó là friend trong lớp đó
@@ -7407,101 +7419,62 @@ s
 **Battery Management System (BMS)**
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc58321d-96fe-41c1-90e8-386537eab2e1)
-- Mục đích :Cung cấp thông tin về trạng thái pin hiện tại, bao gồm điện áp, dòng điện, nhiệt độ, dung lượng pin thời gian sử dụng pin
-
-- Phần cứng:1 con MCU (PC1500) sẽ giao tiếp các cảm biến , các cảm biến xe nối với  pin để đo cảm  dòng hiện tại, điện áp hiện tại(403v)đầy , cạn là 280v , nhiệt độ .Các dữ liệu này sẽ truyền qua MCU thông qua ADC,
+- Mục đích :Cung cấp thông tin về trạng thái pin hiện tại, bao gồm điện áp, dòng điện,  dung lượng pin thời gian sử dụng pin
+- Xe điện Huyndai , hãng pin LG chem
+- Pin lithium-ion polyme(lipo) có dung lượng 38.3 kWh, pin sạc đầy là 350vol
+- Phần cứng:1 con MCU (PC1500) sẽ giao tiếp các cảm biến , các cảm biến xe nối với  pin để đo cảm  dòng hiện tại, điện áp hiện tại(350vol)đầy , cạn là 280v ,.Các dữ liệu này sẽ truyền qua MCU thông qua ADC,
 - Nói về nhiệt độ ,khi nhiệt độ lớn hơn nhiệt độ an toàn >60 độ , thì MCU sẽ gửi 1 bit kích hoạt hệ thống làm mát ( hệ thống này gồm role và quạt)( nguồn 3.3 v kích nguồn 5 v)
-- Voltage Divider
+- MCP3008 
 - Hall Effect
-- Cảm Biến Nhiệt Độ: PT1000
 - Sau khi có các dữ liệu thì ECU chính sẽ gửi ECU pin thông qua CAN , bằng mode remote farm ,và ECU pin sẽ gửi lại 1 data farm 1byte nhiệt độ ,1 byte điện áp , 1 byte dòng điện,1byte quạt, byte CRC để tính dung lượng pin và thời gian sử dụng
 - Thời gian lấy mẫu là liên tục .
  
-- Quạt được bật khi nào:
-	+ nhiệt độ quá 60 độ , thì ECU pin sẽ bật quạt
-	+ khi ECU chính kiểm tra các khối ECU khác và quyết định bật quạt
+
 
 
 - Battery Management System là 1 ECU để quản lý pin , trên xe thì có nhiều ECU và ECU này gồm MCU+ Cảm biến đo thông số pin 
 - pin lithium-ion (Li-ion) và lithium polymer (LiPo) - hai loại pin phổ biến trong các xe điện
-- V pin xe điện  3.6 volt mỗi ô pin (cell) khi sạc đầy
-- V pin khi xài cạn là 2.5 volt mỗi ô pin (cell)
-- V pin tổng khi đầy là 403v(112 cell)
-- V pin khi cạn là  280v
-1. Phần cứng
-	- Cảm Biến Điện Áp:
-		+ Voltage Divider.
-		+ Kết Nối và Giao Tiếp: Kết nối trực tiếp với ADC của STM32F103.
-		+ Mạch Chia Điện Áp: Để chuyển đổi điện áp pin cao xuống mức phù hợp với ADC.
-		+ Dựa vào thông số bán đầu Min là 2.5 v, Max là 3.6 v
-	- Cảm Biến dòng điện:
-		+ Cảm Biến Hall Effect: Cung cấp tín hiệu không tiếp xúc dựa trên nguyên lý từ học.
-		+ Dòng điện sẽ thay đổi khi có nhiều thiết bị hoạt động
-		+ Đọc trực tiếp từ DIO
-		+ Kết Nối và Giao Tiếp:Tín hiệu từ cảm biến dòng được đọc bởi ADC của STM32F103
-		+ Khi xe tắt thì dòng hiện tại bằng 0 , khi xe hoạt động , ví dụ là 5 A
-		+ Ta có thể tính công suất hiện tại của xe = u.I(w)
-	- Cảm Biến nhiệt độ:
-		+ Cảm Biến Nhiệt Độ Số: Như PT100/PT1000, cung cấp dữ liệu nhiệt độ dưới dạng analog.
-		+ Kết nối bằng ADC
-		+ Nhiệt độ an toàn từ 0> 60 độ . lý tương từ 15~40 độ
-	- Quạt làm mát"
-		+ Nếu nhiệt độ quá 60 độ MCU sẽ bật quạt, vì MCU có 5 v thôi , nên phải thông qua rờ le
+- V pin xe điện  4 volt mỗi ô pin (cell) khi sạc đầy, 350 vol /4= 88 cell
+- V pin khi xài cạn là 3 volt mỗi ô pin (cell)
+- V pin tổng khi đầy là 350v(88 cell)
+- V pin khi cạn là  260v
 
 
-
-2. Công thức tính dung lượng pin và thời gian sử dụng còn lại
+1. Công thức tính dung lượng pin và thời gian sử dụng còn lại
 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/5129f945-5a9b-45c6-94a7-345c29abb149)
 
 	 
 ![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/207a7ea3-ef57-4355-a44f-1e09930a276e)
 
-3.  Các loại cảm biến:
+2.  Các loại cảm biến:
 
-	- Voltage Divider:
-		+ PIN + MẠCH chia áp ( để giảm điện áp xuống phù hợp khoảng đo ADC(0 tới 5 v))+ Voltage Divider SENSOR+ 1 chân của MCU
-		+ Cảm biến Voltage Divider, Nguyên lý hoạt động của cảm biến này dựa trên việc chia nhỏ một điện áp đầu vào thành một điện áp nhỏ hơn, dựa trên tỷ lệ của hai điện trở
-		+ ADC  của STM32F103 để chuyển đổi tín hiệu analog từ cảm biến điện áp sang giá trị số.
+	- INA219  :
+		+ PIN + MẠCH chia áp(sử dụng mạch chia áp với tỉ lệ 70:1.)  để giảm điện áp xuống phù hợp khoảng đo ADC(0 tới 5 v)+ INA219 + I2C MCU
+		+ Cảm biến này cho phép bạn đo điện áp từ các nguồn analog và chuyển đổi chúng thành giá trị số để xử lý bởi vi điều khiển hoặc các thiết bị khác
+		+ INA219  sẽ tính toán cụ thể giá trị vol rồi truyền qua MCU
+		+ INA219 sử dụng một điện trở shunt (hoặc shunt resistor) để đo điện áp dòng điện qua mạch
+		+ Điện áp shunt được chuyển đổi thành giá trị số thông qua bộ chuyển đổi analog-to-digital (ADC) tích hợp trong INA219
+		+ Dựa vào giá trị số ADC, giá trị của shunt resistor và các thông số calibation của INA219>> Ra điện áp thực tế
+		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/f3ecd7d6-5d9b-4075-8b2d-99f5b7ed8b8e)
 
-	- Hall Effect Sensor:
-		+ cụ thể WCS1800 
-		+ Hoạt động dựa trên hiệu ứng Hall
-		+ Hiệu ứng hall liên quan đến từ trường được tạo ra khi có dòng điện chạy trong dây dẫn, sẽ tạo ta 1 điện áp hall , dựa vào điện áp này có thể đo được cường độ dòng điện chạy qua
-	 	+ 	ADC đọc giá trị này và chuyển đổi thành dữ liệu số.( dựa theo công thức hoặc bảng tương đương )
-
-
-	- PT100:
-		+ Cảm biến PT100 là các cảm biến nhiệt độ  dựa trên nguyên lý thay đổi điện trở của vật liệu dẫn nhiệt theo nhiệt độ.
-		+ Kết nối trực tiếp cảm biến này với 1 chân của VDK và dùng ADC để xử lý dữ liệu từ cảm biến 
-3.  Rờ le:
-
-	- Chọn Relay:
-		+ Code kích hoạt relay từ nhiệt độ từ ECU chính 
-			+ Ví dụ ECU chính nhận thấy nhiệt độ quá 60 độ, sẽ gửi 1 data cho MCU BSM , yêu cầu kích hoạt Relay
-		+ Bạn quyết định sử dụng một relay 5V có coil tiêu thụ dòng điện 20mA để kích hoạt, phù hợp với STM32 với điện áp hoạt động 3.3V.	
-	- Kết nối Relay với STM32:
-		+ Coil của relay được kết nối với chân GPIO của STM32 (ví dụ: GPIO_PIN_0) thông qua một resistor hạn dòng để giới hạn dòng điện.
-	- Cài Đặt Phần Mềm:
-		+ Sử dụng cảm biến nhiệt độ PT100 để đo lường nhiệt độ môi trường.
-	- Thiết lập một ngưỡng nhiệt độ (ví dụ: 30°C). Nếu nhiệt độ vượt qua ngưỡng này, quạt sẽ được kích hoạt.
-	- Kích Hoạt Relay:
-		+ (GPIO_PIN_SET), kích hoạt coil của relay và mở mạch của quạt.
-		+ Khi bạn đưa dòng điện qua cuộn dây (coil) của rơ le từ STM32, cuộn dây sẽ tạo ra một từ trường từ.
-		+ Từ trường này sẽ tương tác với các bộ phận từ trường trong rơ le, thường làm chuyển động một thanh kim loại trong rơ le.
-		+ Khi mạch điện trong rơ le được chuyển đổi, nó sẽ tạo ra một tác động cơ học, thường làm kích hoạt hoặc ngắt mạch điện của quạt.
-		
-	- Giải Phóng Relay:
-		+ Khi nhiệt độ giảm xuống dưới ngưỡng (dưới 30°C), STM32 sẽ đặt chân GPIO tương ứng vào trạng thái thấp (GPIO_PIN_RESET), giải phóng coil của relay và ngưng hoạt động của quạt.
+	- ACS756 : 
+		+ Hoạt động dựa trên hiệu ứng Hal
+		+ ADC đọc giá trị này và chuyển đổi thành dữ liệu số.
+		+ Measured Current = Giá trị số đọc từ bộ ADC * Tỷ lệ đo
+		+ `Measured Current = 512 * 10ma/A = 20.48A`
+		+ khi một dòng điện đi qua một dẫn dẻo (conductor), nó tạo ra một lực từ gọi là "lực từ Hall" vuông góc với cả hai dòng điện và trường từ bên ngoài (nếu có). Cảm biến Hall được đặt gần dẫn sẽ phát hiện và đo lực từ Hall này.
+		+ Dựa trên lực từ Hall phát sinh, cảm biến sẽ tạo ra một tín hiệu điện áp tương tự với dòng điện đi qua dẫn. Độ lớn của tín hiệu này tỉ lệ thuận với dòng điện đi qua cảm biến.
+		+ Tín hiệu điện áp từ cảm biến Hall sau đó được chuyển đổi từ tín hiệu analog sang tín hiệu số bằng một bộ chuyển đổi analog-to-digital (ADC) tích hợp trong cảm biến hoặc được kết nối với một bộ chuyển đổi ADC ngoài.
 
 
 3.  Main ECU:
 	-  Main ECU giao tiếp với BSM qua CAN
 	-  Main ECU sẽ gửi remote farme tới BSM , yêu cầu BSM gửi các thông số của PIN
-	-  Data farm gồm các byte : 1 byte dòng , áp , nhiệt độ , thông số quạt bật tắt
+	-  Data farm gồm các byte : 1 byte dòng , áp 
 	-  Sau khi có các thông số ở BSM thì Main ECU sẽ tính toán thời gian sạc đầy , tràn pin(code )
 	-  MCU trong BSM chỉ thu nhận thông số thôi
-	-  Việc điều khiển quạt cũng từ Main ECU , sẽ gửi tín hiệu sang MCU BSM
+
 
 
 
