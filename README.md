@@ -1,5 +1,23 @@
+
+
+
 <details>
-<summary><h1>▶ ⭐Xin chào Lộc :D</h1></summary>
+<summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 1 số BT liên quan con trỏ
 <details>
