@@ -272,14 +272,6 @@ int main(void){
 <summary><h1>▶ ⭐C Basic</h1></summary>
 
 <details>
-<summary><h3>Kiểu dữ liệu</h3></summary>
-
-  ![kieu du lieu](./Kieu_Dulieu(1).PNG)
-  ![kieu du lieu](./Kieu_Dulieu(2).PNG)
-
-</details>
-
-<details>
   <summary><h3>Lệnh điều kiện trong C</h3></summary>
 
   **_Câu lệnh If_**
