@@ -1396,20 +1396,19 @@ Quy trình biên dịch là quá trình chuyển đổi từ ngôn ngữ bậc c
 
 - **Stdargt:** 
 - Cú pháp: `#include<stdarg.h>`
-- Dùng để viết 1 hàm có đối số biến đổi
-- Đối số biến đổi (variadic arguments) là các đối số của một hàm mà số lượng và kiểu dữ liệu của chúng không được xác định trước khi biên dịch
- một kiểu biến va_list và 3 macro  được sử dụng để lấy các tham số trong một hàm khi không cần biết có bao nhiêu tham số đầu vào
-- va_list là một kiểu dữ liệu được để lưu trữ các đối số biến đổi.
-	+ Bạn khai báo một biến thuộc kiểu va_list để sử dụng trong việc truy cập các đối số.
+- Cung cấp các macros để xử lý các hàm có số lượng đối số biến đổi. 
+- Đối số biến đổi (variadic arguments) là các đối số mà một hàm có thể nhận với số lượng không xác định.
+
+- va_list  để khai báo một biến sẽ trỏ tới các đối số không xác định.
 	+ Ví dụ: va_list args;
-- va_start:  được sử dụng để khởi tạo một va_list để truy cập các đối số biến đổi. 
-	+ Nó nhận hai giá trị: va_list và số lượng tham số do người dùng nhập
+- va_start:  Khởi tạo danh sách các đối số biến đổi.
+ 	+ Nó nhận hai tham số: biến va_list và tên của đối số cuối cùng có kiểu xác định
 	+ Ví dụ: va_start(args, last_arg);
-- va_arg:  Truy cập một đối số trong danh sách.
+- va_arg:  Truy xuất từng đối số từ danh sách các đối số biến đổi.
 	+ Nó nhận hai tham số: va_list và kiểu dữ liệu của đối số cần lấy
 	+ Nó trả về giá trị của đối số và di chuyển va_list đến đối số tiếp theo
 	+ Ví dụ: double val = va_arg(args, double);
-- va_end: Kết thúc việc truy cập vào các đối số biến đổi,Nó nhận một tham số là va_list
+- va_end: Kết thúc việc sử dụng danh sách các đối số biến đổi
 	+ Ví dụ: va_end(args);
 
 <details>
