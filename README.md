@@ -5477,6 +5477,27 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+
+
+
+
+**i++ và ++i**
+
+- i++ : Hậu tố, dùng i trước rồi tăng i sau
+- ++i : Tiền tố, tăng i trước rồi mới dùng i sau
+
+ví dụ:
+```c
+int i=1;
+int x=0;
+
+x=i++;//x=1;i=2;
+x=++i;//x=2;i=2;
+
+```
+
+
+
 **Header trong ngôn ngữ C là gì?**
 - header  là 1 file .h chứa các khai báo hàm, khai báo biến, các define macros, và các khai báo khác mà chương trình có thể sử dụng. Header files thường được sử dụng để chia sẻ thông tin giữa các file mã nguồn và thư viện.
 
