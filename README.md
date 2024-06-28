@@ -2968,295 +2968,76 @@ Một hàm,Một ngày,undefined.
 <details>
   <summary><h2> Linked List</h2></summary>
 
-- Linked list là một cấu trúc dữ liệu , được sử dụng để tổ chức và lưu trữ dữ liệu. Một linked list bao gồm một chuỗi các "nút" (nodes), mỗi nút chứa một giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo trong chuỗi.
-- Dùng trong các bài toán thao tác với mảng:Thêm, xóa, chèn ....phần tử vào mảng.
-- Ngoài ra ta có các hàm thực hiện chức năng sau:
+- Linked List trong C là một cấu trúc dữ liệu cho phép lưu trữ dữ liệu  không liên tục trong bộ nhớ
+- Mỗi nút (node) trong Linked List chứa dữ liệu và một con trỏ đến nút tiếp theo trong danh sách.
+- Linked List cho phép cấp phát bộ nhớ động dễ dàng, do đó có thể mở rộng hoặc thu nhỏ kích thước của danh sách tùy theo nhu cầu.
+- Chèn/Xóa hiệu quả: Thao tác chèn hoặc xóa một phần tử ở vị trí bất kỳ có thể thực hiện mà không cần phải di chuyển các phần tử khác như mảng.
+- Duyệt dữ liệu: Duyệt dữ liệu từ đầu đến cuối hoặc ngược lại cũng dễ dàng nhờ vào con trỏ next.
+- Mảng và nhược điểm của thao tác chèn/xóa:
+	+ Trong mảng, khi chèn hoặc xóa một phần tử ở vị trí bất kỳ, các phần tử khác phía sau nó phải được di chuyển.
 
-```C
-node *createNode(int value); 
-void push_back(node** array, int value); // thêm một node vào cuối
-void push_front(node **array, int value); // them 1 node vao phia truoc
-void pop_back(node **array); //  bỏ node cuối 
-void pop_front(node **array); // xoa node dau tien
-int front(node **array); // lay gia tri cua node dau tien
-int back(node **array); // lay gia tri cua node cuoi cung
-void insert(node **array, int value, int pos); // them 1 node vao mot vi tri bat ky
-void deletee(node **array, int pos); // xoa 1 node tai mot vi tri bat ky
-int size(node **array); // lay kich thuoc cua list
-int get(node **array, int pos); 
-bool empty(node **array); // kiem tra list co rong hay khong
-
-
-```
  <details>
 <summary>Ví dụ</summary>
 
 ```C
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+// Định nghĩa cấu trúc Node của Linked List
+struct Node {
+    int data;
+    struct Node* next;
+};
 
-// Định nghĩa cấu trúc của một node trong danh sách liên kết
-typedef struct node
-{
-    int value;           // Giá trị của node
-    struct node* next;   // Con trỏ trỏ đến node kế tiếp trong danh sách
-} node;
+// Hàm chèn một nút mới vào vị trí bất kỳ trong danh sách liên kết
+void insertNode(struct Node** head_ref, int position, int data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = data;
 
-// Hàm tạo một node mới với giá trị cho trước
-node* createNode(int value)
-{
-    node* ptr = (node*)malloc(sizeof(node));  // Cấp phát bộ nhớ cho node mới
-    ptr->value = value;                       // Gán giá trị
-    ptr->next = NULL;                         // Khởi tạo con trỏ next là NULL
-    return ptr;
-}
-
-// Hàm thêm một node vào cuối danh sách
-void push_back(node** array, int value)
-{
-    node* temp = createNode(value);
-
-    if (*array == NULL)
-    {
-        *array = temp;
-    }
-    else
-    {
-        node* p = *array;
-        while (p->next != NULL)
-        {
-            p = p->next;
+    if (position == 1) {
+        // Chèn vào đầu danh sách
+        new_node->next = *head_ref;
+        *head_ref = new_node;
+    } else {
+        // Tìm vị trí chèn
+        struct Node* temp = *head_ref;
+        for (int i = 1; i < position - 1 && temp != NULL; i++) {
+            temp = temp->next;
         }
-
-        p->next = temp;
+        if (temp == NULL) {
+            printf("Không thể chèn vào vị trí đã cho.\n");
+            return;
+        }
+        // Chèn vào vị trí position
+        new_node->next = temp->next;
+        temp->next = new_node;
     }
 }
 
-// Hàm thêm một node vào đầu danh sách
-void push_front(node** array, int value)
-{
-    node* temp = createNode(value);
-    temp->next = *array;
-    *array = temp;
+// Hàm để in danh sách liên kết
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
 }
 
-// Hàm loại bỏ node cuối cùng trong danh sách
-void pop_back(node** array)
-{
-    if (*array == NULL)
-    {
-        printf("Error: List is empty\n");
-        return;
-    }
+int main() {
+    struct Node* head = NULL;
 
-    node* p = *array;
+    // Chèn các phần tử ban đầu vào danh sách liên kết
+    insertNode(&head, 1, 5);
+    insertNode(&head, 2, 7);
+    insertNode(&head, 3, 9);
 
-    if (p->next == NULL)
-    {
-        free(p);
-        *array = NULL;
-        return;
-    }
+    printf("Linked List ban đầu: ");
+    printList(head);
 
-    while (p->next->next != NULL)
-    {
-        p = p->next;
-    }
+    // Chèn phần tử 10 vào vị trí thứ 2
+    insertNode(&head, 2, 10);
 
-    free(p->next);
-    p->next = NULL;
-}
-
-// Hàm loại bỏ node đầu tiên trong danh sách
-void pop_front(node** array)
-{
-    if (*array == NULL)
-    {
-        printf("Error: List is empty\n");
-        return;
-    }
-
-    node* temp = *array;
-    *array = (*array)->next;
-    free(temp);
-}
-
-// Hàm trả về giá trị của node đầu tiên trong danh sách
-int front(node** array)
-{
-    if (*array == NULL)
-    {
-        printf("Error: List is empty\n");
-        return 0; // Return a default value or handle the error as needed
-    }
-
-    return (*array)->value;
-}
-
-// Hàm trả về giá trị của node cuối cùng trong danh sách
-int back(node** array)
-{
-    if (*array == NULL)
-    {
-        printf("Error: List is empty\n");
-        return 0; // Return a default value or handle the error as needed
-    }
-
-    node* p = *array;
-    while (p->next != NULL)
-    {
-        p = p->next;
-    }
-
-    return p->value;
-}
-
-// Hàm chèn một node mới vào danh sách tại một vị trí cụ thể
-void insert(node** array, int value, int pos)
-{
-    if (pos < 0)
-    {
-        printf("Error: Invalid position\n");
-        return;
-    }
-
-    if (pos == 0)
-    {
-        push_front(array, value);
-        return;
-    }
-
-    node* temp = createNode(value);
-    node* p = *array;
-
-    for (int i = 0; i < pos - 1 && p != NULL; i++)
-    {
-        p = p->next;
-    }
-
-    if (p == NULL)
-    {
-        printf("Error: Invalid position\n");
-        free(temp);
-        return;
-    }
-
-    temp->next = p->next;
-    p->next = temp;
-}
-
-// Hàm xóa một node khỏi danh sách tại một vị trí cụ thể
-void deletee(node** array, int pos)
-{
-    if (*array == NULL)
-    {
-        printf("Error: List is empty\n");
-        return;
-    }
-
-    if (pos < 0)
-    {
-        printf("Error: Invalid position\n");
-        return;
-    }
-
-    if (pos == 0)
-    {
-        pop_front(array);
-        return;
-    }
-
-    node* p = *array;
-    node* temp;
-
-    for (int i = 0; i < pos - 1 && p != NULL; i++)
-    {
-        p = p->next;
-    }
-
-    if (p == NULL || p->next == NULL)
-    {
-        printf("Error: Invalid position\n");
-        return;
-    }
-
-    temp = p->next;
-    p->next = p->next->next;
-    free(temp);
-}
-
-// Hàm trả về kích thước của danh sách
-int size(node** array)
-{
-    int count = 0;
-    node* p = *array;
-
-    while (p != NULL)
-    {
-        count++;
-        p = p->next;
-    }
-
-    return count;
-}
-
-// Hàm trả về giá trị của node tại một vị trí cụ thể trong danh sách
-int get(node** array, int pos)
-{
-    int i = 0;
-    node* p = *array;
-
-    while (p != NULL && pos != i)
-    {
-        p = p->next;
-        i++;
-    }
-
-    if (pos != i || p == NULL)
-    {
-        printf("Error: Invalid position\n");
-        return 0; // Return a default value or handle the error as needed
-    }
-
-    return p->value;
-}
-
-// Hàm kiểm tra xem danh sách có rỗng hay không
-bool empty(node** array)
-{
-    return (*array == NULL);
-}
-
-// Hàm main để kiểm tra các hàm đã triển khai
-int main()
-{
-    node* arr = NULL;
-
-    push_back(&arr, 2);
-    push_back(&arr, 7);
-    push_back(&arr, 4);
-    push_back(&arr, 5);
-    push_back(&arr, 3);
-    push_back(&arr, 10);
-
-    printf("Size: %d\n", size(&arr));
-
-    push_front(&arr, 1);
-    pop_back(&arr);
-
-    printf("Front: %d\n", front(&arr));
-    printf("Back: %d\n", back(&arr));
-
-    insert(&arr, 99, 2);
-    deletee(&arr, 4);
-
-    for (int i = 0; i < size(&arr); i++)
-    {
-        printf("Value at position %d: %d\n", i, get(&arr, i));
-    }
-
-    printf("Is empty? %s\n", empty(&arr) ? "Yes" : "No");
+    printf("Linked List sau khi chèn: ");
+    printList(head);
 
     return 0;
 }
@@ -3277,6 +3058,7 @@ int main()
 **Khái niệm:**
 - Stack là một cấu trúc dữ liệu trong đó việc chèn một phần tử mới và loại bỏ một phần tử hiện tại xảy ra ở cùng một đầu, được biểu diễn là đỉnh của ngăn xếp.
 Nó tuân theo nguyên tắc LIFO (Last In First Out) - Điều này có nghĩa là phần tử được chèn cuối cùng vào ngăn xếp sẽ được loại bỏ đầu tiên.
+- Stack là một trường hợp đặc biệt của danh sách liên kết, chỉ thêm và xóa phần tử ở đầu danh sách
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/08f2360c-a79d-4c79-8478-474bd695a274)
 
 **Các Phép Toán Cơ Bản trên Ngăn Xếp**
@@ -3551,6 +3333,7 @@ int pop(int data) {
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/54dffe7b-d9d8-4693-b68f-49f3797f6560)
 
 - Queue tuân theo nguyên tắc "Đầu Tiên Vào, Đầu Tiên Ra (FIFO)" - phần tử vào hàng đợi đầu tiên là phần tử ra khỏi hàng đợi đầu tiên.
+- Queue cũng có thể được triển khai bằng Linked List (danh sách liên kết đơn hoặc đôi), nhưng nó chỉ thực hiện các thao tác enqueue/dequeue ở hai đầu của danh sách.
 ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/84c5b5de-2ee0-42c3-8f95-2c95cf81c682)
 
 **Các Phép Toán Cơ Bản trên Hàng Đợi**
@@ -3559,7 +3342,8 @@ int pop(int data) {
 - Dequeue: Loại bỏ một phần tử từ đầu hàng đợi.
 - IsEmpty: Kiểm tra xem hàng đợi có trống không.
 - IsFull: Kiểm tra xem hàng đợi có đầy không.
-- Peek: Lấy giá trị ở đầu hàng đợi mà không loại bỏ nó.
+- front : Lấy giá trị ở đầu hàng đợi mà không loại bỏ nó.
+- rear :Xem giá trị của phần tử ở cuối hàng đợi mà không xóa nó
 
 **Các phép toán trên hàng đợi hoạt động như sau:**
 
