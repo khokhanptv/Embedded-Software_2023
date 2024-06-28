@@ -1688,6 +1688,7 @@ int main()
 `kiểu dữ liệu (*tên con trỏ hàm)(kieu du liêu1, kieu du liêu2)` 
 - kiểu dữ liệu trùng với kiểu dữ liệu của hàm trỏ tới.
 - Nếu cần truyền tham số thì kiểu dữ liệu 1 ,2 trùng với hàm truyền vào.
+**Lợi ích**
 - Điều này cho phép truyền một hàm cụ thể vào một hàm khác 
 - Có thể thông qua mảng để lưu giá trị các hàm mà nó trỏ tới
  <details>
@@ -1807,7 +1808,38 @@ int main() {
 **Con trỏ hằng- Pointer to Constant**
 - Khai báo:`const　<Kiểu dữ liệu>　* <Tên con trỏ>;`
 - không thể thay đổi giá trị tại biến mà nó đang trỏ đến.
-- Ứng dụng:Trong bài toán thao tác với mảng, lý do arr trả về địa chỉ ,là 1 con trỏ , có thể thay đổi giá trị thông qua địa chỉ .
+- Bảo vệ dữ liệu không bị thay đổi thông qua con trỏ. 
+- Đảm bảo giá trị mà con trỏ, trỏ đến không bị thay đổi bởi các hàm nhận con trỏ này làm tham số.
+<details>
+<summary>Ví dụ:</summary>
+
+```C
+#include <stdio.h>
+
+// Hàm in mảng sử dụng con trỏ đến hằng
+void printArray(const int *array, int size) {
+	//array[0]=2;// lỗi
+    for (int i = 0; i < size; ++i) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int values[] = {10, 20, 30, 40, 50};
+    int size = sizeof(values) / sizeof(values[0]);
+
+    // Gọi hàm printArray với con trỏ đến mảng values
+    printArray(values, size);
+
+    return 0;
+}
+// nếu không dùng con trỏ hằng thì có thể thay đổi được dữ liệu từ hàm
+
+```
+</details>
+
+
 - So sánh:
 
 | Con trỏ thường | Con trỏ hằng|
