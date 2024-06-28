@@ -2397,6 +2397,7 @@ int main() {
 |  Text |
 - ***Text:*** Quyền truy cập chỉ có thể Read( không thay đổi)
 	- Lưu các hằng số :`const int x =2` 
+	- con trỏ kiểu char
 	- Kích thước là cố định
 	- Nó chưa lệnh thực thi :Mã assembly...
 - ***Data:*** Quyền truy cập Read-Write
@@ -2414,8 +2415,13 @@ int main() {
 	- Hàm main cũng ở vùng stack
 	- Sẽ được giải phóng khi ra khỏi hàm
 	- Kích thước cố định: phụ thuộc vào hệ điều hành, đối với Windows thường là 1MB, Linux là 8MB.
+	- Stack: bởi vì bộ nhớ Stack cố định nêú sử dụng quá nhiều bộ nhớ vượt quá khả năng của Stack sẽ xảy ra tình trạng tràn bộ nhớ Stack (Stack overflow), các trường hợp xảy ra như  khởi tạo quá nhiều biến cục bộ, hàm đệ quy vô hạn,...
+	
 - ***Heap:*** Quyền truy cập là Read-Write.
-	- Được sử dụng để cấp phát bộ nhớ động như: Malloc, Calloc,...
+	- Heap sử dụng để cấp phát bộ nhớ động trong quá trình thực thi của chương trình
+	- Heap được dùng để lưu trữ vùng nhớ cho những biến được cấp phát động bởi các hàm malloc - calloc - realloc 
+	- Nếu liên tục cấp phát vùng nhớ mà không giải phóng thì sẽ bị lỗi tràn vùng nhớ Heap (Heap overflow). 
+	- Nếu khởi tạo một vùng nhớ quá lớn mà vùng nhớ Heap không thể lưu trữ một lần được sẽ bị lỗi khởi tạo vùng nhớ Heap thất bại.
 	- Kích thước không cố định.
 	- Sẽ được giải phóng khi gọi hàm free,...
 	### So sánh Stack và Heap?
@@ -2425,10 +2431,12 @@ int main() {
 	- Kích thước vùng nhớ:
 		- Stack: kích thước của bộ nhớ Stack là cố định, tùy thuộc vào từng hệ điều hành, ví dụ hệ điều hành Windows là 1 MB, hệ điều hành Linux là 8 MB (lưu ý là con số có thể khác tùy thuộc vào kiến trúc hệ điều hành của bạn).
 		- Heap: kích thước của bộ nhớ Heap là không cố định, có thể tăng giảm do đó đáp ứng được nhu cầu lưu trữ dữ liệu của chương trình.
+	- vùng nhớ Stack được quản lý bởi hệ điều hành,tự động giải phóng khi hàm thực hiện xong 
+	- Vùng nhớ Heap được quản lý bởi lập trình viên ,tự  giải phóng vùng nhớ bằng câu lệnh free (trong C) hoặc delete [] (trong C++), nếu không sẽ xảy ra hiện tượng rò rỉ bộ nhớ 
 	### Các cách sử dụng malloc, calloc, realloc, free:
-	- ***Malloc:*** Cấp phát bộ nhớ động mỗi phần tử, không khởi tạo giá trị, trả về con trỏ NULL khi cấp phát thành công.
-	- ***Calloc:*** Cấp phát bộ nhớ động và khởi tạo cho các phần tử là 0, trả về con trỏ NULL khi cấp phát thành công.
-	- ***Realloc:*** Thay đổi kích thước bộ nhớ của bộ nhớ đã được cấp phát trước đó của Malloc và Calloc, trả về con trỏ NULL khi thay đổi thành công.
+	- ***Malloc:*** Cấp phát bộ nhớ động mỗi phần tử, không khởi tạo giá trị, trả về con trỏ void khi cấp phát thành công.
+	- ***Calloc:*** Cấp phát bộ nhớ động và khởi tạo cho các phần tử là 0, trả về con trỏ void khi cấp phát thành công.
+	- ***Realloc:*** Thay đổi kích thước bộ nhớ của bộ nhớ đã được cấp phát trước đó của Malloc và Calloc, trả về con trỏ void khi thay đổi thành công.
 	- Vậy `Malloc` sẽ nhanh hơn `Calloc`
 	- Ví dụ:
 
