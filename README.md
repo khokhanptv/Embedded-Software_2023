@@ -2973,6 +2973,41 @@ Một hàm,Một ngày,undefined.
 - Linked List cho phép cấp phát bộ nhớ động dễ dàng, do đó có thể mở rộng hoặc thu nhỏ kích thước của danh sách tùy theo nhu cầu.
 - Chèn/Xóa hiệu quả: Thao tác chèn hoặc xóa một phần tử ở vị trí bất kỳ có thể thực hiện mà không cần phải di chuyển các phần tử khác như mảng.
 - Duyệt dữ liệu: Duyệt dữ liệu từ đầu đến cuối hoặc ngược lại cũng dễ dàng nhờ vào con trỏ next.
+- khi thêm node bất kì trong linked lish thì điều chỉnh con trỏ của nút trước đó để trỏ đến `nút mới` , và con trỏ  của` nút mới` trỏ đến nút tiếp theo.
+- Ví dụ:Chèn nút có giá trị 8 vào giữa nút 7 và 9
+```C
+#include <stdio.h>
+
+int main()
+{
+// Đầu tiên, bạn cần khởi tạo một nút mới và gán giá trị cho nút này là 8.
+
+Node* new_node = new Node(8);
+//Đặt con trỏ nút 7  trỏ đến nút 8.
+//Đặt con trỏ nút 8  trỏ đến nút 9.
+
+// Tìm nút có giá trị 7 trong danh sách
+Node* current = head;
+while (current->data != 7) {
+    current = current->next;
+}
+
+// current hiện đang trỏ đến nút có giá trị là 7
+// Điều chỉnh con trỏ next để chèn nút mới
+new_node->next = current->next;   // new_node sẽ trỏ đến nút có giá trị là 9
+current->next = new_node;         // Nút có giá trị là 7 sẽ trỏ đến new_node
+
+
+    return 0;
+}
+
+
+```
+
+- khi xóa 1 node bất kì trong linked lish điều chỉnh con trỏ  của nút trước nút bị xóa để trỏ đến nút sau nó, sau đó giải phóng bộ nhớ của nút bị xóa
+	+ Ví du: 5>7>9
+	+ điều chỉnh con trỏ next của nút 5 để trỏ tới nút 9, bỏ qua nút 7.
+	+ Sau đó, giải phóng bộ nhớ của nút 7.
 - Mảng và nhược điểm của thao tác chèn/xóa:
 	+ Trong mảng, khi chèn hoặc xóa một phần tử ở vị trí bất kỳ, các phần tử khác phía sau nó phải được di chuyển.
 
@@ -3340,8 +3375,6 @@ int pop(int data) {
 
 - Enqueue: Thêm một phần tử vào cuối hàng đợi.
 - Dequeue: Loại bỏ một phần tử từ đầu hàng đợi.
-- IsEmpty: Kiểm tra xem hàng đợi có trống không.
-- IsFull: Kiểm tra xem hàng đợi có đầy không.
 - front : Lấy giá trị ở đầu hàng đợi mà không loại bỏ nó.
 - rear :Xem giá trị của phần tử ở cuối hàng đợi mà không xóa nó
 
