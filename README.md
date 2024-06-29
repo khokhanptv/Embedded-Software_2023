@@ -3760,14 +3760,14 @@ int main() {
 
 
 **Destructor**
-- Destructor dùng để hủy đối tượng.
+- Destructor là một method sẽ được tự động gọi khi object được giải phóng
 - Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
 - Chỉ có duy nhất một hàm hủy trong một lớp. Hàm hủy tự động được gọi. Nếu như chúng ta không định nghĩa hàm hủy thì mặc định trình biên dịch sẽ tự tạo ra một hàm hủy mặc nhiên
 - Hàm hủy (Destructor) trong C++ được gọi tự động khi:
 	+ Kết thúc hàm
 	+ Kết thúc chương trình
 	+ Toán tử delete được gọi
-- Destructor dùng để giải phóng tài nguyên mà đối tượng sở hữu
+- 1 chương trình có nhiều  Constructor nhưng chỉ có 1 Destructor
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3831,56 +3831,51 @@ int main() {
 </details>
 
 **Static keyword:property**
-- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object được tạo ra từ class đó sẽ dùng chung địa chỉ của property này.
-- trước khi dùng Static phải khởi tạo giá trị cho nó  bên ngoài class:`KieuDuLieu TenLop::tenTruongStatic = Gia tri;`
-- Dùng biến Static để tiết kiệm bộ nhớ ,vì các đối tượng trong cùng một lớp truy cập vào một biến static, nó đang chia sẻ vùng nhớ lưu trữ cho biến static đó
-- Truy cập vào biến Static mà không cần tạo object
+- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object trỏ tới property sẽ cùng địa chỉ
+- Dùng biến Static để tiết kiệm bộ nhớ ,vì các đối tượng trong cùng một lớp truy cập vào một biến, nó đang chia sẻ vùng nhớ lưu trữ cho biến static đó
+-Biến Static thuộc về class, không thuộc về bất kỳ đối tượng cụ thể nào. Do đó, nó cần được khởi tạo ở phạm vi toàn cục, bên ngoài class.
+- ứng dụng trong việc  đếm số lượng đối tượng đã được tạo ra từ một class.
+
+
+ 
 
 <details>
 <summary>Ví dụ:</summary>
 
 ```C++
 #include <iostream>  
-using namespace std;  
-class NhanVien { 
-    int msnv;    
-    string ten;
-    int tuoi;
-    public:  
-       static string tenCongTy;
-       NhanVien(int msnv, string ten, int tuoi) {    
-            this->msnv = msnv;    
-            this->ten = ten;    
-            this->tuoi = tuoi; 
-       }    
-       void HienThi() {    
-            cout << ten << endl;
-            cout << "   Ma so nhan vien: " << msnv << endl;
-            cout << "   Tuoi: " << tuoi << endl;
-            cout << "   Ten cong ty: " << tenCongTy << endl;
-       }    
-};  
- 
-string NhanVien::tenCongTy = "TNHH Tin Hoc";
- 
-int main() {  
-    NhanVien n1 =  NhanVien(111231, "Nguyen Van A", 25);    
-    NhanVien n2 =  NhanVien(213214, "Nguyen Van B", 40);
-    NhanVien n3 =  NhanVien(213215, "Nguyen Van C", 67);
-    n1.HienThi();    
-    n2.HienThi();
-    n3.HienThi();
-    return 0;  
+class HinhChuNhat {
+
+public:
+    double chieuDai;
+    double chieuRong;
+    static int var;
+};
+
+int HinhChuNhat::var;
+
+int main()
+{
+    HinhChuNhat hinh1;
+    HinhChuNhat hinh2;
+    HinhChuNhat hinh3;
+
+	hinh1.var =10;
+	// thì hinh2.var cũng bằng 10;
+  
+
+    
+
+
+    return 0;
 }
+
 
 ```
 </details>
 
-**Static keyword:method**
-- Tiện lợi và linh hoạt :
-	+ gọi  static method từ bất kỳ nơi nào trong chương trình và không cần tạo object khi gọi 
--  truy cập được vào biến thành viên static, không thể truy cập vào biến thường
--  static method không thể gọi trực tiếp từ các methodc không static của lớp
+
+- Biến đếm chung, đếm object
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3888,51 +3883,68 @@ int main() {
 ```C++
 #include <iostream>
 
-class MyClass {
+class ObjectCounter {
 public:
-    static int staticVariable; // Biến thành viên static
+    static int count;  // Biến tĩnh để đếm số đối tượng
 
-    // Phương thức static - Đặc điểm 1 và 2
-    static void staticMethod() {
-        std::cout << "This is a static method." << std::endl;
+    ObjectCounter() {
+        count++;  // Tăng biến đếm khi tạo một đối tượng mới
     }
-
-    // Phương thức static truy cập vào biến thành viên static - Đặc điểm 3
-    static void printStaticVariable() {
-        std::cout << "Static variable value: " << staticVariable << std::endl;
-    }
-
-    // Phương thức static không thể truy cập biến thành viên không static - Đặc điểm 2
-    /*
-    static void printNonStaticVariable() {
-        std::cout << "Non-static variable value: " << nonStaticVariable << std::endl;
-    }
-    */
-
-    // Phương thức static không thể gọi từ phương thức không static - Đặc điểm 4
-    /*
-    void callStaticMethodFromNonStaticMethod() {
-        staticMethod(); // Lỗi biên dịch
-    }
-    */
 };
 
-// Khởi tạo biến thành viên static
-int MyClass::staticVariable = 42;
-
-// Phương thức static có thể gọi từ bất kỳ nơi nào trong chương trình thông qua hàm - Đặc điểm 5
-void callStaticMethodFromOutsideClass() {
-    MyClass::staticMethod();
-}
+int ObjectCounter::count = 0;  // Khởi tạo biến tĩnh
 
 int main() {
-    // Gọi phương thức static từ bên ngoài lớp
-    callStaticMethodFromOutsideClass();
+    ObjectCounter obj1;  // Tạo đối tượng thứ nhất, count = 1
+    ObjectCounter obj2;  // Tạo đối tượng thứ hai, count = 2
 
-    // Gọi phương thức static từ bên trong lớp
-    MyClass::printStaticVariable();
+    std::cout << "Number of objects: " << ObjectCounter::count << std::endl;  // In ra số lượng đối tượng: 2
+    return 0;
+}
+
+// nếu không dùng từ khóa static thì obj1 và obj2 có biến count riêng  không ảnh hưởng đến nhau.
+
+```
+</details>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Static keyword:method**
+- Có thể gọi mà không cần tạo một đối tượng của class.
+- Chỉ có thể truy cập các thành viên tĩnh khác của class (không thể truy cập các thành viên không tĩnh)
+	+ không cho phép thay đổi dữ liệu của từng đối tượng, từ đó tăng tính cô đọng và rõ ràng của mã nguồn.
+- Tiết kiệm bộ nhớ: Vì không cần tạo đối tượng, việc sử dụng phương thức tĩnh tiết kiệm bộ nhớ hơn trong một số trường hợp.
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <iostream>
+
+class MathUtils {
+public:
+    static int square(int x) {
+        return x * x;
+    }
+};
+
+int main() {
+    int result = MathUtils::square(5);  // Gọi phương thức tĩnh mà không cần đối tượng
+    std::cout << "Square of 5: " << result << std::endl;  // Output: Square of 5: 25
     return 0;
 }
 
