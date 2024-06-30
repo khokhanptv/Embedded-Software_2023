@@ -4280,6 +4280,7 @@ if (a_shared) {
 
 
 </details>
+</details>
 <details>
   <summary><h2>namespace</h2></summary>
 
