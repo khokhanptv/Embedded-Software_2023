@@ -4158,7 +4158,7 @@ delete[] arr; // giải phóng bộ nhớ của mảng động
 
 ```
 **Smart Pointer C++**
-- smart pointers là một cơ chế quản lý bộ nhớ tự động , tự động giải phóng vùng nhớ khi không còn bất kỳ smart pointer nào nắm giữ  vùng nhớ đó.Dựa vào cơ chế Destructer trong class
+- smart pointers là một cơ chế quản lý bộ nhớ tự động , tránh được việc quên giải phóng bộ nhớ đã được cấp phát.- Dựa vào cơ chế Destructer trong class
 
 **Unique Pointer**
 - unique_ptr là một loại smart pointer trong C++, Cơ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
@@ -4212,9 +4212,70 @@ int main() {
 - weak_ptr là 1 smart pointer  không tham gia vào việc giải phóng vùng nhớ trực tiếp.
 - Nó chỉ là một công cụ để theo dõi xem một đối tượng có tồn tại hay không mà không tăng số lượng tham chiếu đếm của nó. 
 - weak_ptr có một phương thức là lock(). Nếu shared_ptr mà weak_ptr theo dõi vẫn tồn tại, lock() sẽ trả về một shared_ptr hợp lệ có thể sử dụng để truy cập đối tượng. Ngược lại, nếu shared_ptr đã bị giải phóng, lock() sẽ trả về một shared_ptr rỗng.
+- Vấn đề vòng lặp tham chiếu là khi hai hoặc nhiều đối tượng sử dụng std::shared_ptr để tham chiếu lẫn nhau mà không được giải phóng bộ nhớ đúng cách sẽ gây ra rò rỉ bộ nhớ
+- weak_ptr thường được sử dụng để tránh vấn đề vòng lặp tham chiếu (reference cycles) giữa các đối tượng được quản lý bởi std::shared_ptr
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+#include <memory>
+#include <iostream>
+class B; // Forward declaration to use in A
+class A {
+public:
+    std::shared_ptr<B> ptrB; // A uses shared_ptr to reference B
+};
+class A; // Forward declaration to use in B
+class B {
+public:
+    std::weak_ptr<A> ptrA; // B uses weak_ptr to reference A
+};
+
+class A;
+class B;
+int main() {
+    std::shared_ptr<A> a = std::make_shared<A>();
+    std::shared_ptr<B> b = std::make_shared<B>();
+    a->ptrB = b; // A references B using shared_ptr
+    b->ptrA = a; // B references A using weak_ptr
+    // When main ends, a and b will be automatically released safely
+    return 0;
+}
 
 
+```
 
+1. Định nghĩa lớp A và B:
+- Lớp A có một shared_ptr<B> để tham chiếu mạnh   đến đối tượng B.
+- Lớp B có một weak_ptr<A> để tham chiếu yếu đến đối tượng A. 
+- Cả A và B đều có các hàm tạo và hàm hủy để in ra thông báo khi được khởi tạo và hủy.
+2. Hàm main():
+- Tạo std::shared_ptr a và b để quản lý đối tượng A và B tương ứng.
+- Gán a->ptrB = b; và b->ptrA = a; để thiết lập mối quan hệ giữa A và B.
+- Khi main() kết thúc, các shared_ptr a và b sẽ tự động giải phóng các đối tượng A và B một cách an toàn.
+3. Tham chiếu mạnh :Giữ quyền sở hữu đối tượng. Miễn là có ít nhất một shared_ptr trỏ đến đối tượng, đối tượng đó sẽ không bị hủy.
+4. Tham chiếu yếu :Không giữ quyền sở hữu đối tượng. Nó chỉ trỏ đến đối tượng mà không ảnh hưởng đến vòng đời của đối tượng đó.
+
+</details>
+
+<details>
+<summary>Ví dụ:</summary>
+
+```C++
+std::shared_ptr<A> a_shared = ptrA.lock();
+if (a_shared) {
+    // Thực hiện các thao tác với a_shared ở đây
+    std::cout << "Process A successful!" << std::endl;
+} else {
+    std::cout << "A is no longer available." << std::endl;
+}
+
+```
+
+-  lock() trên một std::weak_ptr, nếu đối tượng mà weak_ptr đang theo dõi vẫn tồn tại , lock() sẽ trả về một std::shared_ptr hợp lệ trỏ đến đối tượng đó. Điều này có nghĩa là bạn có thể sử dụng shared_ptr này để truy cập và thao tác với đối tượng an toàn.
+- Nếu A vẫn tồn tại, ptrA.lock() sẽ trả về một shared_ptr<A> hợp lệ (a_shared), và bạn có thể sử dụng a_shared để thực hiện các thao tác như thông báo "Process A successful!". Ngược lại, nếu A đã bị hủy, ptrA.lock() sẽ trả về một shared_ptr<A> rỗng, và bạn sẽ nhận được thông báo "A is no longer available."
+- lock():Giúp đảm bảo rằng bạn chỉ truy cập vào đối tượng khi nó vẫn còn tồn tại, tránh gây ra lỗi truy cập vào bộ nhớ đã giải phóng.
 
 
 
@@ -4448,7 +4509,7 @@ int main(){
 </details>
 
 **2/Inheritance (Tính kế thừa ):**
-- Một class có thể kế thừa các thuộc tính của một class khác đã tồn tại trước đó.Để kế thừa từ class khác, ta dùng ký tự “ : ”.Khi một class con được tạo ra bởi việc kế thừa thuộc tính của class cha thì chúng ta sẽ gọi class con đó là subclass trong C++, và class cha chính là superclass trongC++.
+- Tính kế thừa ( Inheritance) là khả năng sử dụng lại các property và method của một class trong một class khác
 - Class con có thể kế thừa property và method của class cha trong phạm vi public và protected  
 - Có 3 kiểu kế thừa là public, private và protected. Những property và method được kế thừa từ class cha sẽ nằm ở quyền truy cập của class con tương ứng với kiểu kế thừa.
 
@@ -4568,7 +4629,9 @@ class hs : private sinhvien{
 </details>
 
 **3/Polymorphism (Tính đa hình):**
-- Các method có thể trùng tên với nhau , nhưng phải khác các input parameter
+
+- Function overloading :Các method có thể trùng tên với nhau , nhưng phải khác các input parameter
+- Function overoverriding : Khi 1 class con kế thừa 1 method từ class cha và ta sửa nội dung của nos
 <details>
 <summary>Ví dụ:</summary>
 
