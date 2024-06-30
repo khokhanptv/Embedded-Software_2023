@@ -4159,6 +4159,9 @@ delete[] arr; // giải phóng bộ nhớ của mảng động
 ```
 **Smart Pointer C++**
 - smart pointers là một cơ chế quản lý bộ nhớ tự động , tránh được việc quên giải phóng bộ nhớ đã được cấp phát.- Dựa vào cơ chế Destructer trong class
+- Memory Leak: là hiện tượng xảy ra khi một chương trình không thể giải phóng bộ nhớ đã cấp phát dẫn đến sự chậm trễ và giảm hiệu suất của chương trình 
+	+ Quên giải phóng bộ nhớ
+	+ Mất điều kiện để giải phóng: Các tham chiếu vòng (circular references)
 
 **Unique Pointer**
 - unique_ptr là một loại smart pointer trong C++, Cơ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
@@ -4180,8 +4183,9 @@ int main() {
 
 ```
 **shared_ptr**
-- shared_ptr : Cớ chế của shared_ptr 1 biến(hoặc 1 vùng nhớ)  được nhiều Smart Pointer sỡ hữu , Smart Pointer này chỉ giải phóng khi không còn shared_ptr trỏ đến .Nó sử dụng một biến đếm tham chiếu để theo dõi số lượng các smart pointer đang trỏ đến đối tượng và giữ vùng nhớ được quản lý cho đến khi không còn smart pointer nào trỏ đến nó nữa.
-- Ví dụ có 2 shared_ptr  trỏ đến 1 biến việc giải phóng vùng nhớ sẽ chỉ xảy ra khi cả hai shared_ptr này đều bị hủy hoặc không còn trỏ đến vùng nhớ nữa
+- shared_ptr : Cơ chế của shared_ptr là  1 vùng nhớ  được nhiều Smart Pointer sỡ hữu , vùng nhớ này chỉ giải phóng khi không còn shared_ptr trỏ đến .
+- Nó sử dụng một biến đếm tham chiếu để theo dõi số lượng các smart pointer đang trỏ đến đối tượng và giữ vùng nhớ được quản lý cho đến khi không còn smart pointer nào trỏ đến nó nữa.
+- Ví dụ có 2 shared_ptr  trỏ đến 1 biến ,việc giải phóng vùng nhớ sẽ chỉ xảy ra khi cả hai shared_ptr này đều bị hủy hoặc không còn trỏ đến vùng nhớ nữa
 - Mục đích :Được sử dụng khi cần chia sẻ tài nguyên giữa nhiều thực thể.Tài nguyên sẽ chỉ được giải phóng khi không còn thực thể nào sở hữu nó nữa, điều này giúp tránh được rò rỉ bộ nhớ do quên giải phóng hay dangling pointer.
 - unique_ptr: Thường nhẹ hơn và hiệu suất cao hơn so với shared_ptr, vì nó không cần quản lý biến đếm tham chiếu. Tuy nhiên, chỉ sử dụng được trong các tình huống đơn sở hữu.
 
@@ -4215,7 +4219,7 @@ int main() {
 
 **weak_ptr**
 - weak_ptr là 1 smart pointer  không tham gia vào việc giải phóng vùng nhớ trực tiếp.
-- Nó chỉ là một công cụ để theo dõi xem một đối tượng có tồn tại hay không mà không tăng số lượng tham chiếu đếm của nó. 
+- Nó chỉ là một công cụ để xem một đối tượng có tồn tại shared_ptr  hay không mà không tăng số lượng tham chiếu đếm của  shared_ptr đó. 
 - weak_ptr có một phương thức là lock(). Nếu shared_ptr mà weak_ptr theo dõi vẫn tồn tại, lock() sẽ trả về một shared_ptr hợp lệ có thể sử dụng để truy cập đối tượng. Ngược lại, nếu shared_ptr đã bị giải phóng, lock() sẽ trả về một shared_ptr rỗng.
 - Vấn đề vòng lặp tham chiếu là khi hai hoặc nhiều đối tượng sử dụng std::shared_ptr để tham chiếu lẫn nhau mà không được giải phóng bộ nhớ đúng cách sẽ gây ra rò rỉ bộ nhớ
 - weak_ptr thường được sử dụng để tránh vấn đề vòng lặp tham chiếu (reference cycles) giữa các đối tượng được quản lý bởi std::shared_ptr
@@ -4252,7 +4256,7 @@ int main() {
 ```
 
 1. Định nghĩa lớp A và B:
-- Lớp A có một shared_ptr<B> để tham chiếu mạnh   đến đối tượng B.
+- Lớp A có một shared_ptr<B> để tham chiếu mạnh  đến đối tượng B.
 - Lớp B có một weak_ptr<A> để tham chiếu yếu đến đối tượng A. 
 - Cả A và B đều có các hàm tạo và hàm hủy để in ra thông báo khi được khởi tạo và hủy.
 2. Hàm main():
