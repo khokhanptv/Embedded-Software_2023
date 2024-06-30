@@ -4285,8 +4285,8 @@ if (a_shared) {
   <summary><h2>namespace</h2></summary>
 
 - Namespace:là từ khóa trong C++ được sử dụng để phân biệt các hàm, lớp, biến cùng tên trong các file khác nhau.
- tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,với 2 namespace khác nhau có thể tạo các biến trùng tên. Nhưng trong 1 namespace không thể có 2 biến cùng tên
-
+ tạo những vùng nhớ khác nhau ,mỗi namespace là 1 chương trình riêng ,Nhưng trong 1 namespace không thể có 2 biến cùng tên
+- using namespace std ,cho phép sử dụng các thành phần trong namespace std, mà không cần phải ghi rõ std::cout,cin 
 <details>
 <summary>Ví dụ:</summary>
 
@@ -4371,7 +4371,8 @@ int main() {
 - Có 2 loại  Templates:
 	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template, lúc này trong hàm chính , tùy mục đích có thể đặt kiểu dữ liệu(int ,double..) cho class và object sẽ có kiểu DL theo class
 	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. Bạn chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
-
+	+ Variadic Templates là một tính năng trong C++ ,Tạo một hàm với số lượng tham số đầu vào không xác định.
+	
 ```C++
 	// Khai báo một class template cho một cặp giá trị
 	template <class T, class U>
@@ -4855,8 +4856,11 @@ int main() {
 
 **Vector trong C++ là gì?**
 
-- vector là một mảng động,có thể mở rộng ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả
-- Sử dụng Vector: Thêm hoặc xóa phần tử ở cuối danh sách
+- vector là một mảng động,có thể thay đổi kích thước  ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả
+- Sử dụng Vector: 
+	+ Thêm hoặc xóa phần tử ở cuối danh sách
+	+ Cần truy cập ngẫu nhiên đến các phần tử.
+	
 - Một số method của vector:
 1. at(): Truy cập vào phần tử của vector
 2. size(): Trả về kích thước của vector
@@ -4865,9 +4869,35 @@ int main() {
 5. end(): Địa chỉ của phần tử cuối cùng của vector
 6. push_back(): Thêm phần tử vào vị trí cuối của vector
 
+```C++
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> numbers = {10, 20, 30, 40, 50};
+
+    // Truy cập ngẫu nhiên đến các phần tử trong vector
+    std::cout << "Phần tử đầu tiên: " << numbers[0] << std::endl; // 10
+    std::cout << "Phần tử thứ ba: " << numbers[2] << std::endl;   // 30
+    std::cout << "Phần tử cuối cùng: " << numbers[numbers.size() - 1] << std::endl; // 50
+
+    return 0;
+}
+
+
+
+
+
+
+```
+
 **Lish trong C++ là gì?**
-- List: Là một danh sách liên kết , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
-- Khi cần thêm hoặc xóa phần tử ở bất kỳ vị trí nào trong danh sách
+- List: Là một danh sách liên kết  , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
+- list trong C++ là danh sách liên kết đôi
+- Điều này cho phép duyệt danh sách theo cả hai chiều và thực hiện các thao tác chèn/xóa phần tử hiệu quả ở cả hai đầu của danh sách.
+- Truy cập các phần tử của list chỉ có thể thực hiện tuần tự, không hỗ trợ truy cập ngẫu nhiên.
+- Sử dụng Vector: 
+	+ Khi cần thêm hoặc xóa phần tử ở bất kỳ vị trí nào trong danh sách
 - Một số method của Lish:
 1. push_back() và push_front(): Thêm một phần tử vào cuối hoặc đầu của danh sách.
 2. pop_back() và pop_front(): Xóa phần tử cuối cùng hoặc đầu tiên của danh sách.
@@ -4888,12 +4918,15 @@ int main() {
 6. clear(): Xóa tất cả các phần tử trong set.
 
 **Map trong C++ là gì?**
-- Là một container lưu trữ dữ liệu theo cặp key-value. Mỗi phần tử trong map được liên kết với một key duy nhất và một giá trị
-- Cần ánh xạ (map) một giá trị (key) đến một giá trị khác (value), nơi mỗi key là duy nhất và không được phép trùng lặp.
+- Là một container lưu trữ dữ liệu theo cặp key-value.  
+- Các phần tử được sắp xếp theo thứ tự của key.(1,2,3,a,b,c)
+- Tìm kiếm nhanh: Cho phép tìm kiếm, chèn và xóa phần tử 
+- Key duy nhất: Mỗi key là duy nhất trong map, nhiều key có thể có cùng value
+- `Ứng dụng phổ biến của map bao gồm lưu trữ và tìm kiếm dữ liệu với một khóa duy nhất`
 - Một số method của Map:
-1. insert(): Thêm một cặp key-value vào std::map. Nếu key đã tồn tại, giá trị tương ứng sẽ được cập nhật.
-erase(): Xóa một phần tử từ std::map dựa trên key.
-2. find(): Tìm kiếm một phần tử trong std::map dựa trên key. Trả về iterator đến phần tử nếu nó tồn tại, hoặc trả về end() nếu không tìm thấy.
+1. insert(): Thêm một cặp key-value vào std::map. Nếu key đã tồn tại, sẽ bỏ qua thao tác chèn
+2. erase():để xóa phần tử theo key.
+2. find(): Sử dụng find() để tìm một phần tử theo key.
 3. size(): Trả về số lượng phần tử trong std::map.
  
 
@@ -4960,14 +4993,20 @@ int main()
 - Ta có thể thêm phần tử mới vào map bằng cách sử dụng operator [] hoặc hàm insert(). Để xóa phần tử, bạn có thể sử dụng hàm erase().
 - Ta có thể sử dụng iterator để duyệt qua các phần tử của map
 
-**Array**
-- Array là một container có kích thước cố định và có sẵn trong thư viện STL (Standard Template Library)
-- array có kích thước cố định được xác định tại thời điểm biên dịch và không thể thay đổi sau khi được khai báo.
-- array hỗ trợ truy cập ngẫu nhiên vào các phần tử thông qua toán tử []
+**set**
+- Là một cấu trúc dữ liệu tập hợp các phần tử duy nhất, tự động sắp xếp theo thứ tự (mặc định là tăng dần).
+- Không thể thay đổi giá trị của các phần tử sau khi chèn vào set.
+ 
+
+
+
+
+
 
 # Iterator
 - Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
 - Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
+- Iterator thường được sử dụng bằng cách sử dụng toán tử * để truy cập giá trị của iterator hiện tại và toán tử ++ để di chuyển đến phần tử tiếp theo trong cấu trúc dữ liệu
 - Nó giống như con trỏ, cho phép di chuyển qua các phần tử trong container.
 
 # Algorithm
@@ -5264,6 +5303,12 @@ int main() {
 **Lập trình đa luồng (Multithreading):**
 - Là việc sử dụng nhiều luồng đồng thời trong một chương trình để tăng hiệu suất và sử dụng tốt các tài nguyên hệ thống.Muốn sử dụng thì `#include <thread>`
 
+- Các vấn đề thường gặp trong đa luồng:
+-	 Data race: đồng bộ hóa dữ liệu
+	Deadlock: 
+  	Race condition: Điều kiện thực thi luồng
+
+
 **Synchronization Mechanisms (Cơ chế đồng bộ hóa):**
 - Đồng bộ hóa: Là quá trình đảm bảo rằng các luồng hoạt động đồng bộ khi truy cập và thay đổi dữ liệu chia sẻ. 
 - Cơ chế đồng bộ hóa: Là phương pháp được sử dụng để đạt được đồng bộ  giữa các luồng, bao gồm cơ chế locks,unlock,mutex.Muốn sử dụng cơ chế này thì `#include <mutex>`
@@ -5375,8 +5420,14 @@ int main() {
 
 **Challenges in Concurrency (Thách thức trong đồng thời hóa):**
 - Race Conditions (Điều kiện cạnh tranh): Khi hai hoặc nhiều luồng cố gắng truy cập và thay đổi dữ liệu chia sẻ mà không có sự đồng bộ hóa, có thể dẫn đến kết quả không đoán trước được.
-- Deadlocks (Mắc kẹt): Khi hai hoặc nhiều luồng đợi lẫn nhau để giải phóng tài nguyên mà họ cần, dẫn đến tình trạng tắc nghẽn không thể tiếp tục thực thi.
-- Starvation (Đói đứng): Khi một hoặc nhiều luồng không thể tiếp tục thực thi vì chúng không nhận được tài nguyên hoặc quá trình lập lịch không công bằng.
+- Deadlocks (Mắc kẹt): Deadlock có thể xảy ra khi mỗi luồng giữ một tài nguyên và yêu cầu một tài nguyên khác mà đã được một luồng khác giữ.
+- Ví dụ: Luồng A giữ khóa 1 và yêu cầu khóa 2, trong khi luồng B giữ khóa 2 và yêu cầu khóa 1. Nếu không có cơ chế giải quyết, hai luồng sẽ bị kẹt và không thể tiếp tục thực thi
+	+ Sử dụng Timeout:Thiết lập thời gian chờ khi yêu cầu tài nguyên. 
+	+ Nếu không nhận được tài nguyên trong khoảng thời gian nhất định, hủy yêu cầu.
+	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc):Đảm bảo luôn giữ tài nguyên theo thứ tự cấp bậc nhất định để tránh vòng lặp chờ.
+- Starvation (Đói đứng):  xảy ra khi một hoặc nhiều luồng luôn bị chặn hoặc không được ưu tiên thực thi do các luồng khác chiếm giữ tài nguyên quá lâu.
+	+ Sử dụng Semaphore hoặc Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
+	+ thiết lập giới hạn thời gian chờ cho các tài nguyên để đảm bảo rằng không có luồng nào bị chặn quá lâu.
 
 
 
@@ -5409,8 +5460,18 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+**array**
+- Trong C++, mảng (array) là một cấu trúc dữ liệu cố định, có kích thước xác định tại thời điểm biên dịch và không thể thay đổi kích thước khi đã được khai báo. 
+- Điều này khác với các cấu trúc dữ liệu động như std::vector, std::list, std::map, và std::set.
 
 
+**list trong C++ khác với danh sách liên kết (linked list) trong C**
+1. Triển khai sẵn: 
+	- list trong C++ là một container có sẵn trong thư viện chuẩn STL, cung cấp các thao tác tiện lợi như chèn, xóa, và duyệt qua các phần tử
+2. Quản lý bộ nhớ: 
+	- Trong C, khi sử dụng danh sách liên kết, bạn phải tự quản lý bộ nhớ bằng cách cấp phát và giải phóng thủ công. C++ list tự động quản lý bộ nhớ. 
+3. Tính năng: 
+	- list trong C++ có nhiều tính năng và phương thức hỗ trợ hơn, như push_back, push_front, pop_back, pop_front, v.v.
 
 
 **i++ và ++i**
