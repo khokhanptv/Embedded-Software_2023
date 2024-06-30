@@ -4378,8 +4378,10 @@ int main() {
 **Template**
 - Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...cho phép  viết mã một cách tổng quát cho nhiều loại dữ liệu khác nhau mà không cần phải viết lại mã nhiều lần
 - Có 2 loại  Templates:
-	+ Class Templates: cho phép proberti và method trong Class có kiểu dữ liệu template, lúc này trong hàm chính , tùy mục đích có thể đặt kiểu dữ liệu(int ,double..) cho class và object sẽ có kiểu DL theo class
-	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. Bạn chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
+	+ Class Templates: 
+		+ Cho phép tạo một lớp chung để làm việc với nhiều loại dữ liệu khác nhau mà không cần viết lại mã lập trình cho mỗi loại dữ liệu đó. 
+		+ Khi sử dụng một template class, bạn cần cung cấp các loại dữ liệu cụ thể cho các tham số khi khai báo đối tượng từ template
+	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
 	+ Variadic Templates là một tính năng trong C++ ,Tạo một hàm với số lượng tham số đầu vào không xác định.
 	
 ```C++
