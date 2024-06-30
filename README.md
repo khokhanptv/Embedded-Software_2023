@@ -4162,7 +4162,7 @@ delete[] arr; // giải phóng bộ nhớ của mảng động
 
 **Unique Pointer**
 - unique_ptr là một loại smart pointer trong C++, Cơ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
-
+-  unique_ptr  Được sử dụng khi chỉ có duy nhất một đối tượng  sở hữu tài nguyên vào một thời điểm
 ```C++
 #include <iostream>
 #include <memory>
@@ -4182,6 +4182,11 @@ int main() {
 **shared_ptr**
 - shared_ptr : Cớ chế của shared_ptr 1 biến(hoặc 1 vùng nhớ)  được nhiều Smart Pointer sỡ hữu , Smart Pointer này chỉ giải phóng khi không còn shared_ptr trỏ đến .Nó sử dụng một biến đếm tham chiếu để theo dõi số lượng các smart pointer đang trỏ đến đối tượng và giữ vùng nhớ được quản lý cho đến khi không còn smart pointer nào trỏ đến nó nữa.
 - Ví dụ có 2 shared_ptr  trỏ đến 1 biến việc giải phóng vùng nhớ sẽ chỉ xảy ra khi cả hai shared_ptr này đều bị hủy hoặc không còn trỏ đến vùng nhớ nữa
+- Mục đích :Được sử dụng khi cần chia sẻ tài nguyên giữa nhiều thực thể.Tài nguyên sẽ chỉ được giải phóng khi không còn thực thể nào sở hữu nó nữa, điều này giúp tránh được rò rỉ bộ nhớ do quên giải phóng hay dangling pointer.
+- unique_ptr: Thường nhẹ hơn và hiệu suất cao hơn so với shared_ptr, vì nó không cần quản lý biến đếm tham chiếu. Tuy nhiên, chỉ sử dụng được trong các tình huống đơn sở hữu.
+
+shared_ptr: Phù hợp khi cần chia sẻ tài nguyên giữa nhiều thực thể và không biết trước số lượng thực thể sẽ sở hữu tài nguyên. Tuy nhiên, có thể ảnh hưởng đến hiệu suất vì việc quản lý biến đếm tham chiếu.
+- Điều này giúp tránh được những vấn đề như memory leak (rò rỉ bộ nhớ) hoặc dangling pointer (con trỏ lạc). Tuy nhiên, cần lưu ý rằng shared_ptr không thể giải quyết được vấn đề vòng lặp tham chiếu (circular reference), vì nó chỉ dựa vào đếm tham chiếu để giải phóng bộ nhớ.
 
 ```C++
 #include <iostream>
