@@ -3797,7 +3797,7 @@ int main(void) {
 
 **Vitual Destructor**
 
-- virtual destructor nằm ở lớp cha( lớp cơ sở ), khi ta có 1 đối tượng của lớp con  được tạo ra và xóa từ con trỏ của lớp cha.Destructor của cả lớp con  và lớp cha đều được gọi, đảm bảo rằng tất cả các tài nguyên được giải phóng đúng đắn.
+- virtual destructor nằm ở lớp cha( lớp cơ sở ), khi ta có 1 đối tượng của lớp con được tạo ra và xóa từ con trỏ của lớp cha.Destructor của cả lớp con  và lớp cha đều được gọi, đảm bảo rằng tất cả các tài nguyên được giải phóng đúng đắn.
 
 <details>
 <summary>Ví dụ:</summary>
@@ -4806,8 +4806,8 @@ int main(void){
 
 
 **Virtual funtion trong C++ là gì?**
-- Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  . 
-
+- Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  .
+-  Nế
 
 <details>
 <summary>Ví dụ</summary>
@@ -5312,12 +5312,14 @@ int main() {
   <summary><h2>Multithreading</h2></summary>
 
 **Lập trình đa luồng (Multithreading):**
+- Tiến trình (process) trong lập trình là một chương trình đang được thực thi
+- một đơn vị thực thi độc lập trong một chương trình
 - Là việc sử dụng nhiều luồng đồng thời trong một chương trình để tăng hiệu suất và sử dụng tốt các tài nguyên hệ thống.Muốn sử dụng thì `#include <thread>`
 
 - Các vấn đề thường gặp trong đa luồng:
--	 Data race: đồng bộ hóa dữ liệu
-	Deadlock: 
-  	Race condition: Điều kiện thực thi luồng
+-	Data race: 
+-	Deadlock: 
+-   Race condition
 
 
 **Synchronization Mechanisms (Cơ chế đồng bộ hóa):**
@@ -5363,18 +5365,14 @@ int main() {
 - Cấu trúc dữ liệu đồng thời: Là  cấu trúc hỗ trợ truy cập  dữ liệu từ nhiều luồng mà không cần sử dụng locks hoặc mutexes.
 - condition_variable là  một cơ chế trong C++11 được sử dụng để đồng bộ hóa các luồng thông qua việc chờ đợi và thông báo về sự kiện xảy ra
 - condition_variable cho phép một hoặc nhiều luồng chờ đợi cho một điều kiện nhất định trở thành đúng trước khi tiếp tục thực hiện công việc của mình.
-- condition_variable được sử dụng kết hợp với một mutex để đảm bảo độ an toàn khi truy cập và thay đổi trạng thái của điều kiện.
-- condition_variable có các hàm :notify_one(),notify_all(),wait()
-- thread1 chạy và tăng giá trị của biến count mỗi lần lặp. Khi count đạt đến 5, nó gửi một tín hiệu thông báo cho thread2 bằng cách gọi cv.notify_one().
-thread2 chạy và đợi cho đến khi count đạt đến 5 trước khi tiếp tục thực hiện công việc của mình. Nó sử dụng cv.wait() để chờ đợi tín hiệu từ thread1.
+- condition_variable có các hàm :notify_one(),notify_all(),wait().Chúng sẽ tự động mở khóa mutexz
+
 
 **Bất đồng bộ (Asynchronous):**
 - Trong lập trình, bất đồng bộ thường ám chỉ việc thực hiện một tác vụ mà không cần chờ đợi kết quả của tác vụ trước đó hoàn thành.
-- Các tác vụ bất đồng bộ thường được thực hiện song song và có thể hoàn thành trong thời gian khác nhau.
-- Bất đồng bộ thường được sử dụng trong các tình huống khi bạn muốn tiếp tục thực hiện các tác vụ khác mà không cần chờ đợi kết quả từ các tác vụ trước đó
 
 <details>
-<summary>Ví dụ quan trọng</summary>
+<summary>Ví dụ</summary>
 
 ```c++
 #include <iostream>
@@ -5424,20 +5422,24 @@ int main() {
 ```
 </details>
 
-**Task Parallelism (Song song hóa công việc):**
-
-- Song song hóa công việc: Là phân chia một nhiệm vụ lớn thành các phần nhỏ và thực thi chúng song song trên nhiều luồng hoặc nhiều lõi CPU để tận dụng được sức mạnh tính toán của hệ thống.
-- Điều này thường được sử dụng trong các ứng dụng đòi hỏi tính toán cao như xử lý hình ảnh, video, và tính toán khoa học.
+- notify_one() nằm trong thread1 ,wait() nằm trong thread2.Điều này đảm bảo rằng khi điều kiện được thỏa mãn trong thread1, thread2 sẽ được thông báo và tỉnh dậy để tiếp tục thực thi.
+- Khi điều kiện thread 1 thõa mãn , thì wait() sẽ tự unlock tài nguyên , để các luồng khác có thể tiếp tục thực thi
 
 **Challenges in Concurrency (Thách thức trong đồng thời hóa):**
 - Race Conditions (Điều kiện cạnh tranh): Khi hai hoặc nhiều luồng cố gắng truy cập và thay đổi dữ liệu chia sẻ mà không có sự đồng bộ hóa, có thể dẫn đến kết quả không đoán trước được.
 - Deadlocks (Mắc kẹt): Deadlock có thể xảy ra khi mỗi luồng giữ một tài nguyên và yêu cầu một tài nguyên khác mà đã được một luồng khác giữ.
-- Ví dụ: Luồng A giữ khóa 1 và yêu cầu khóa 2, trong khi luồng B giữ khóa 2 và yêu cầu khóa 1. Nếu không có cơ chế giải quyết, hai luồng sẽ bị kẹt và không thể tiếp tục thực thi
+- Ví dụ: Luồng A khóa vùng dữ liệu 1 và yêu cầu vùng dữ liệu 2 từ B, trong khi luồng B khóa vùng dữ liệu 2 và yêu cầu vùng dữ liệu 1.Cả 2 luồng đều chờ lẫn nhau nên cả 2 đều mắc kẹt
 	+ Sử dụng Timeout:Thiết lập thời gian chờ khi yêu cầu tài nguyên. 
 	+ Nếu không nhận được tài nguyên trong khoảng thời gian nhất định, hủy yêu cầu.
-	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc):Đảm bảo luôn giữ tài nguyên theo thứ tự cấp bậc nhất định để tránh vòng lặp chờ.
-- Starvation (Đói đứng):  xảy ra khi một hoặc nhiều luồng luôn bị chặn hoặc không được ưu tiên thực thi do các luồng khác chiếm giữ tài nguyên quá lâu.
-	+ Sử dụng Semaphore hoặc Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
+	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc): theo ví dụ trên
+		+ Đảm bảo rằng các luồng đều tuân thủ thứ tự khóa giống nhau (khóa dữ liệu 1 trước, sau đó khóa dữ liệu 2 sau).
+		+ Thread A cố gắng khóa khóa dữ liệu 1. Nếu  dữ liệu 1 đang trống, nó sẽ khóa thành công và tiếp tục.
+		+ Thread A sau đó cố gắng khóa dữ liệu 2. Nếu  dữ liệu 2 đang trống, nó sẽ khóa thành công. Nếu không, nó sẽ chờ cho đến khi  dữ liệu 2 được mở khóa.
+
+
+
+- Starvation (Đói đứng):  xảy ra khi một luồng lock tài nguyên quá lâu mà không nhả ra , làm cho các luồng khác không thực thi được
+	+  Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
 	+ thiết lập giới hạn thời gian chờ cho các tài nguyên để đảm bảo rằng không có luồng nào bị chặn quá lâu.
 
 
