@@ -4391,22 +4391,41 @@ int main() {
 	
 ```C++
 	// Khai báo một class template cho một cặp giá trị
-	template <class T, class U>
-	class Pair {
-	public:
-		T first;
-		U second;
-		Pair(T a, U b) : first(a), second(b) {}
-	};
-	int main() {
-		Pair<int, double> p1(1, 3.14);
-		std::cout << "First: " << p1.first << ", Second: " << p1.second << std::endl;
+#include <iostream>
 
-		Pair<std::string, char> p2("Hello", 'X');
-		std::cout << "First: " << p2.first << ", Second: " << p2.second << std::endl;
+// Định nghĩa một class template
+template <typename T>
+class Box {
+public:
+    T value; // Thành viên dữ liệu kiểu T
+
+    // Constructor để khởi tạo giá trị
+    Box(T v) : value(v) {}
+};
+
+int main() {
+    // Tạo các đối tượng của Box với các kiểu dữ liệu khác nhau
+    Box<int> intBox(123); // Đối tượng Box với kiểu int
+    Box<double> doubleBox(45.67); // Đối tượng Box với kiểu double
+    Box<std::string> stringBox("Hello, World!"); // Đối tượng Box với kiểu std::string
+
+    // In ra giá trị của các đối tượng Box
+    std::cout << "Giá trị của intBox: " << intBox.value << std::endl; // 123
+    std::cout << "Giá trị của doubleBox: " << doubleBox.value << std::endl; // 45.67
+    std::cout << "Giá trị của stringBox: " << stringBox.value << std::endl; // Hello, World!
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
 	// Hàm template tính tổng của hai giá trị
 	template <class T>
 	T sum(T a, T b) {
