@@ -5900,9 +5900,10 @@ struct Person {
 - GCC là viết tắt của "GNU Compiler Collection," là bộ trình biên dịch mã nguồn mở được phát triển bởi Dự án GNU. GCC hỗ trợ nhiều ngôn ngữ lập trình như C, C++, Fortran, Ada, và nhiều ngôn ngữ khác.
 
 **Sự khác biệt giữa vi điều khiển và vi xử lý**
-- Bộ vi điều khiển tích hợp CPU, bộ nhớ và các thiết bị ngoại vi trên một con chip duy nhất, được thiết kế riêng cho các tác vụ cụ thể.
-- Bộ vi xử lý tập trung vào tính toán đa năng, yêu cầu các thành phần bên ngoài để tạo nên một hệ thống hoàn chỉnh.
 
+![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/d31fc2aa-30b4-43bc-86f4-8e9bad64a870)
+
+ 
 **Giải thích các phần tử của vi điều khiển.**
 - Một bộ vi điều khiển thường bao gồm CPU (Bộ xử lý trung tâm), RAM (Bộ nhớ truy cập ngẫu nhiên), ROM (Bộ nhớ chỉ đọc), bộ hẹn giờ và các thiết bị ngoại vi như GPIO, UART, SPI, I2C, ADC, DAC, PWM, timers/counters...
 
@@ -7406,21 +7407,49 @@ int main(){
 	+ PendSV Vector (Number 14): Được gọi khi sự kiện ngắt PendSV xảy ra.
 
 **Quá trình khởi động MCU**
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/8d67675a-fcd4-413d-95e4-fdadcf2ea23e)
-- Sau khi reset ,MCU khởi tạo giá trị SP bằng cách đọc giá trị tại địa chỉ 0X00000000  
-- Tiếp theo VDK sẽ đọc giá trị của địa chỉ 0x0000004  (vector table ) cụ thể là vector reset
-- Sau đó sẽ nhảy đến hàm main và thực hiện chương trình ứng dụng trong hàm main.
-s
+
+- Trường hợp 1: Khởi động bình thường (không có Bootloader)
+- Reset hệ thống:
+- Khi MCU được bật nguồn hoặc reset, nó bắt đầu từ địa chỉ khởi động mặc định (thường là 0x00000000).
+- Đọc vector table:
+- MCU đọc giá trị khởi tạo của Stack Pointer (SP) từ địa chỉ đầu tiên trong vector table.
+- MCU đọc địa chỉ của Reset_Handler từ địa chỉ thứ hai trong vector table.
+- Thực thi Reset_Handler:
+- Reset_Handler được thực thi, thường nằm tại địa chỉ 0x00000004.
+- `Reset_Handler thực hiện các bước khởi tạo hệ thống, như thiết lập bộ nhớ, cấu hình thanh ghi, khởi tạo thư viện C, v.v.`
+- Gọi hàm main:
+- Sau khi khởi tạo, Reset_Handler nhảy đến hàm main của ứng dụng.
+- Hàm main chứa mã chương trình chính và bắt đầu thực thi.
+- Trường hợp 2: Khởi động với Bootloader
+- Reset hệ thống:
+- Khi MCU được bật nguồn hoặc reset, nó bắt đầu từ địa chỉ khởi động mặc định (thường là 0x00000000).
+- Đọc vector table của Bootloader:
+- MCU đọc giá trị khởi tạo của Stack Pointer (SP) từ địa chỉ đầu tiên trong vector table của Bootloader.
+- MCU đọc địa chỉ của Reset_Handler của Bootloader từ địa chỉ thứ hai trong vector table của Bootloader.
+- Thực thi Reset_Handler của Bootloader:
+- Reset_Handler của Bootloader được thực thi.
+- Reset_Handler thực hiện các bước khởi tạo cần thiết cho Bootloader và sau đó nhảy đến hàm main của Bootloader.
+- Hàm main của Bootloader:
+- Hàm main của Bootloader thực hiện các nhiệm vụ như kiểm tra tính toàn vẹn của firmware, cập nhật firmware nếu cần, và chuẩn bị cho 
+- việc chuyển giao quyền điều khiển.
+- Thiết lập SCB_VTOR:
+- Bootloader thiết lập địa chỉ của vector table mới cho ứng dụng chính bằng cách ghi vào thanh ghi SCB_VTOR.
+- Nhảy đến ứng dụng chính:
+- Bootloader thiết lập lại Stack Pointer (SP) bằng cách đọc giá trị từ vector table mới của ứng dụng chính.
+- Bootloader nhảy đến Reset_Handler của ứng dụng chính bằng cách sử dụng địa chỉ từ vector table mới.
+- Thực thi Reset_Handler của ứng dụng chính:
+- Reset_Handler của ứng dụng chính được thực thi.
+-  Reset_Handler thực hiện các bước khởi tạo hệ thống cho ứng dụng chính và sau đó nhảy đến hàm main của ứng dụng chính.
+- Gọi hàm main của ứng dụng chính:
+- Hàm main của ứng dụng chính chứa mã chương trình chính và bắt đầu thực thi.
+- Stack Pointer (SP) là 1 thanh ghi
+- SP dùng lưu trữ  địa chỉ trả về của hàm, các biến cục bộ, và các tham số hàm.
+
 **Bootloader là gì?**
-![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b76ad27c-9c6b-4a9d-9651-33c224a26b44)
+
 - Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này, để lựa chọn chương trình ứng dụng nào để bắt đầu thực hiện
 - Qúa trình  bootloader:
 	+ Với arm coretex , thì có các chế độ boot mode , nếu chọn chế độ nào thì VĐK sẽ đến địa chỉ của chế độ đó để boot chương trình ,flash là 0x8M , sram là 0x2M, sytem là 0xff
-	+ Sau khi MCU reset thì SP sẽ nhảy Reset_Handler(),Reset_Handler() nằm trong vector table  ở địa chỉ 0x8M , sau đó sẽ nhảy đến hàm main của chương trình boot
-	+ trong hàm main của chương trình Boot , người lập trình  set  địa chỉ của chương trình ứng dụng(chẳng hạn 0x0800.8000).
-	+ Set thanh ghi SCB_VTOR theo địa chỉ Firmware muốn nhảy đến, SCB➔VTOR = 0x0800.8000. 
-	+ Khi mà set SCB➔VTOR ở địa chỉ này thì Reset_Handler() sẽ ở dỉa chỉ tiếp theo , ví dụ (0x0800.8004 )
-	+ Sau khi cài đặt xong , tiến hành reset chương trình , lúc này VĐK đã nhận Reset_Handler() ở địa chỉ mới , và  sẽ thực hiện từ dịa chỉ cứng chương trình ứng dụng
 
 
 
