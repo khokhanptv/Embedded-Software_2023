@@ -2314,6 +2314,8 @@ int main() {
 
 **Struct:**
 - Struct là một kiểu dữ liệu chứa nhiều kiểu dữ liệu khác trong nó , kích thước của struct bằng kích thước các thành viên bên trong + phần padding.
+- Gom  các biến liên quan dễ quản lý.
+- struct: Khi cần  truy cập nhiều thành viên đồng thời.
 - Struct padding :
 	+ Data alignment:Việc thao tác các biến có địa chỉ liền kề là 1 số lẻ là phức tạp , nên CPU luôn thao tác các địa chỉ là số chẵn >> Data alignment là việc 	sắp xếp data sao cho địa chỉ của các biến luôn là số chẵn và phù hợp với hệ thống.
 	+ Data padding: là thêm các vùng nhớ đệm để có địa chỉ chẵn
