@@ -1073,6 +1073,8 @@ và giá trị x,y không thay đổi được.
 	const int *ptr = &num; //thay đổi được địa chỉ của num nhưng không thay đổi được giá trị '10' của num
 	```
 - ***Con trỏ void (Void Pointers):*** Con trỏ void có thể trỏ tới bất kỳ kiểu dữ liệu nào, nhưng khi xuất ra giá trị thì phải ép kiểu.
+
+
 	```c
 	int num = 10;
 	float f = 3.14;
@@ -1758,7 +1760,8 @@ int main() {
 </details>
 
 **Con trỏ void**
-- Void Pointer  là một kiểu đặc biệt của con trỏ ,nó có thể trỏ đến bất kỳ địa chỉ nào mà không cần biết tới kiểu dữ liệu của giá trị tại địa chỉ đó.
+- Void Pointer có thể trỏ tới bất kỳ kiểu dữ liệu nào, nhưng khi xuất ra giá trị thì phải ép kiểu.
+- Vì nó không có thông tin về loại dữ liệu mà nó trỏ tới
 - Cách ép kiểu dữ liệu từ con trỏ Void:`(int*)(ptr)` đang ép về kiểu int.
 - Dùng trong bài toán , nhiều kiểu dữ liệu mà không muốn dùng nhiều loại con trỏ trỏ tới chúng .
 - Trong ví dụ bên dưới, con trỏ ptr trỏ tới tất cả các biến.
