@@ -4891,43 +4891,68 @@ int main() {
 
 **Vector trong C++ là gì?**
 
-- vector là một mảng động,có thể thay đổi kích thước  ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả
+- vector là một container cung cấp một mảng động ,có thể thay đổi kích thước  ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả. Nó khác mảng động ở chỗ là quản lý bộ nhớ tự động , 
+```c++
+int* arr = new int[5]; // Cấp phát bộ nhớ cho mảng động
+delete[] arr; // Giải phóng bộ nhớ
+///////////////////////
+vector<int> vec;
+vec.push_back(10); // Bộ nhớ được cấp phát tự động
+
+```
 - Sử dụng Vector: 
 	+ Thêm hoặc xóa phần tử ở cuối danh sách
 	+ Cần truy cập ngẫu nhiên đến các phần tử.
+- Có thể khai báo số lượng n  phần tử của vector và chỉ định cụ thể giá trị n phần tử đó là gì
+- Ví dụ:
+
+```c++
+vector <int > v(n,100);
+```
+
 	
 - Một số method của vector:
-1. at(): Truy cập vào phần tử của vector
-2. size(): Trả về kích thước của vector
-3. resize(): Thay đổi kích thước của vector
-4. begin(): Địa chỉ của phần tử đầu tiên của vector
-5. end(): Địa chỉ của phần tử cuối cùng của vector
-6. push_back(): Thêm phần tử vào vị trí cuối của vector
+1. size() : Trả về số lượng phần tử trong vector. Độ phức tạp O(1)
+2. length() : Trả về số lượng phần tử trong vector. Độ phức tạp O(1)
+3. push_back() : Thêm phần tử vào cuối vector. Độ phức tạp O(1)
+4. pop_back() : Xóa phần tử cuối cùng trong vector. Độ phức tạp O(1)
+
+- Duyệt các phần từ trong vector:
+1. Thông qua chỉ số 
+2. Thông qua interator : Con trỏ thông minh, trỏ tới phần tử trong vector: v.begin() >> v.end()( v.end là phần tử sau phần tử cuối cùng) ,hoặc cũng có thể dùng interator truy cập 1 phần tử trong vector
 
 ```C++
-#include <iostream>
+#include <bits/stdc++.h>
 #include <vector>
-
+using namespace std;
 int main() {
-    std::vector<int> numbers = {10, 20, 30, 40, 50};
-
-    // Truy cập ngẫu nhiên đến các phần tử trong vector
-    std::cout << "Phần tử đầu tiên: " << numbers[0] << std::endl; // 10
-    std::cout << "Phần tử thứ ba: " << numbers[2] << std::endl;   // 30
-    std::cout << "Phần tử cuối cùng: " << numbers[numbers.size() - 1] << std::endl; // 50
-
+    vector<int> v;
+    v.push_back(10);
+    v.push_back(20);
+    v.push_back(30);
+    // Duyệt các phần tử trong vector thông qua chỉ số
+    for(int i = 0; i < v.size(); i++) {
+        cout << v[i] << endl;
+    }
+    // Duyệt các phần tử trong vector thông qua vòng lặp for-each
+    for(int x : v) {
+        cout << x << endl;
+    }
+    // Duyệt các phần tử trong vector thông qua iterator
+    for(vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
+        cout << *it << endl;
+    }
+    // Sử dụng auto để duyệt các phần tử trong vector thông qua iterator
+    for(auto it = v.begin(); it != v.end(); ++it) {
+        cout << *it << endl;
+    }
     return 0;
 }
-
-
-
-
-
 
 ```
 
 **Lish trong C++ là gì?**
-- List: Là một danh sách liên kết  , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
+- List: Là một danh sách liên kết , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
 - list trong C++ là danh sách liên kết đôi
 - Điều này cho phép duyệt danh sách theo cả hai chiều và thực hiện các thao tác chèn/xóa phần tử hiệu quả ở cả hai đầu của danh sách.
 - Truy cập các phần tử của list chỉ có thể thực hiện tuần tự, không hỗ trợ truy cập ngẫu nhiên.
@@ -4940,71 +4965,50 @@ int main() {
 4. erase(): Xóa một hoặc nhiều phần tử từ danh sách dựa trên vị trí hoặc một khoảng vị trí.
 5. size(): Trả về số lượng phần tử trong danh sách.
 
-**Set trong C++ là gì?**
-- Set: Là một container không cho phép phần tử trùng lặp và sắp xếp tự động các phần tử theo thứ tự tăng dần
-- Khi cần sắp xếp tự động các phần tử theo thứ tự tăng dần hoặc giảm dần.
-- Khi cần lưu trữ một tập hợp các phần tử duy nhất.
-- Một số method của Set:
-1. insert(): Chèn một phần tử vào set. Nếu phần tử đã tồn tại, nó sẽ không được chèn lại.
-2. erase(): Xóa một hoặc nhiều phần tử từ set dựa trên giá trị hoặc iterator.
-3. find(): Tìm kiếm một phần tử trong set và trả về iterator đến nó nếu nó tồn tại, hoặc end() nếu không tìm thấy.
-4. size(): Trả về số lượng phần tử trong set.
-5. empty(): Kiểm tra xem set có rỗng không.
-6. clear(): Xóa tất cả các phần tử trong set.
+
 
 **Map trong C++ là gì?**
 - Là một container lưu trữ dữ liệu theo cặp key-value.  
 - Các phần tử được sắp xếp theo thứ tự của key.(1,2,3,a,b,c)
 - Tìm kiếm nhanh: Cho phép tìm kiếm, chèn và xóa phần tử 
+- Map không hỗ trợ truy cập thông qua chỉ số như mảng hay vector, string.
 - Key duy nhất: Mỗi key là duy nhất trong map, nhiều key có thể có cùng value
 - `Ứng dụng phổ biến của map bao gồm lưu trữ và tìm kiếm dữ liệu với một khóa duy nhất`
+- ứng dụng trong bài toán tần suất xuất hiện các giá trị trong mảng
 - Một số method của Map:
 1. insert(): Thêm một cặp key-value vào std::map. Nếu key đã tồn tại, sẽ bỏ qua thao tác chèn
-2. erase():để xóa phần tử theo key.
+2. earse():để xóa phần tử theo key.
 2. find(): Sử dụng find() để tìm một phần tử theo key.
 3. size(): Trả về số lượng phần tử trong std::map.
- 
+4. truy cập, gán value bằng  map[key] 	
+	- Ví dụ:mp[1] =200;
+5. Để duyệt các phẩn tử trong map
+	- For ..each
+	- For ..auto
+	- bằng iterator:begin>>end
 
-<details>
-<summary>Ví dụ </summary>
+**Multimap  trong C++ là gì?**
 
-```C++
-#include <iostream>
-#include <vector>
+1. Các phần tử trong map có thể có key trùng nhau
+2. Multimap lưu các phần tử theo thứ tự tăng dần về key
+3. Multimap không hỗ trợ truy cập value thông qua key bằng cú pháp map[key]
+4. Multimap không hỗ trợ chỉ số như mảng hay vector mà chỉ số của multimap chính là key
+5. Chỉ có thể thêm khai báo Multimap bằng insert
+6. Xóa thông qua iterator , không xóa bằng iterator vì có thể bay sạch key
+7. Dùng trong bài toán có key trùng 
 
-using namespace std;
 
-int main()
-{
-  
-    vector <int> arr1 = {2,5,7,4,9};
 
-    arr1.at(0) = 3;
-    arr1.resize(7);
 
-    for (int i = 0; i < arr1.size(); i++)
-    {
-        cout << "Value: " << arr1.at(i) << endl;
-    }
-    
-    arr1.push_back(10);
+**Unordered_map  trong C++ là gì?**
+1. unordered_map lưu trữ phần tử với các key là riêng biệt
+2. Các phần tử trong unordered_map không có thứ tự
 
-    cout << "-----------" << endl;
-    for (int i = 0; i < arr1.size(); i++)
-    {
-        cout << "Value: " << arr1.at(i) << endl;
-    }
-    
-
-    return 0;
-}
-
-```
 
 </details>
 
 **List là gì**
-- List là một c  danh sách liên kết hai chiều.
+- List là một danh sách liên kết hai chiều.
 - Dưới đây là một số đặc điểm quan trọng của list:
 	+ Truy cập tuần tự
 	+ Hiệu suất chèn và xóa: 
@@ -5022,16 +5026,39 @@ int main()
 	+ Thực hiện nhiều thao tác chèn/xóa ở bất kỳ vị trí nào trong danh sách.
 	+ Cần thực hiện nhiều thao tác chèn/xóa mà không làm ảnh hưởng đến các iterators hiện có.
 
-**Map**
-- Map là một container trong STL của C++, cung cấp một cấu trúc dữ liệu ánh xạ key-value
-- Map lưu trữ các phần tử dưới dạng cặp key-value, trong đó mỗi key phải là duy nhất trong map.
-- Ta có thể thêm phần tử mới vào map bằng cách sử dụng operator [] hoặc hàm insert(). Để xóa phần tử, bạn có thể sử dụng hàm erase().
-- Ta có thể sử dụng iterator để duyệt qua các phần tử của map
+ 
 
 **set**
-- Là một cấu trúc dữ liệu tập hợp các phần tử duy nhất, tự động sắp xếp theo thứ tự (mặc định là tăng dần).
-- Không thể thay đổi giá trị của các phần tử sau khi chèn vào set.
- 
+- Set: Là một container không cho phép phần tử trùng lặp và sắp xếp tự động các phần tử theo thứ tự tăng dần
+- Khi cần sắp xếp tự động các phần tử theo thứ tự tăng dần hoặc giảm dần.
+- Khi cần lưu trữ một tập hợp các phần tử duy nhất.
+- Một số method của Set:
+1. insert(): Chèn một phần tử vào set. Nếu phần tử đã tồn tại, nó sẽ không được chèn lại.
+2. erase(): Xóa một hoặc nhiều phần tử từ set dựa trên giá trị hoặc iterator.
+3. find(): Tìm kiếm một phần tử trong set và trả về iterator đến nó nếu nó tồn tại, hoặc end() nếu không tìm thấy.
+4. size(): Trả về số lượng phần tử trong set.
+5. empty(): Kiểm tra xem set có rỗng không.
+6. clear(): Xóa tất cả các phần tử trong set.
+7. Các phần tử trong set có giá trị khác nhau, không có 2 phần tử có cùng giá trị
+8. Các phần tử trong set được tự động sắp xếp theo thứ tự tăng dần
+9. Tìm kiếm phần tử trong set chỉ mất độ phức tạp O(logN)
+10. Set không thể truy cập phần tử thông qua chỉ số như mảng hay vector, string.
+11. Duyệt xóa phần tử thông qua iterator
+
+- Hàm	      Chức năng
+1. size()	checkSố lượng phần tử trong set
+2. insert()	Thêm phần tử vào trong set
+3. empty()	Kiểm tra set rỗng, nếu đúng trả về true, ngược lại trả về false
+4. clear()	Xóa toàn bộ phần tử trong set
+5. earse() xóa 1 phần tử
+
+- Multiset set:
+1. Các phần tử trong multiset có thể trùng nhau
+2. Các phần tử trong multiset có thứ tự mặc định theo thứ tự tăng dần
+3. Nếu dùng earse để xóa thì có thể xóa các phần tử cùng giá trị , nên dùng iterator để xóa 
+4. Ứng dụng tìm MAX , MIN trong 1 mảng
+- Unordered_set:
+1. unordered_set không duy trì bất kỳ thứ tự nào giữa các phần tử mà nó chứa
 
 
 
