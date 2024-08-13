@@ -7609,184 +7609,103 @@ int main(){
 
 </details>
 <details>
-  <summary><h1>▶ ⭐LoRa E32 Based Wireless </h1></summary>
+  <summary><h1>▶ ⭐RFID-RC522 </h1></summary>
 
-**Khái niệm**
-- LoRa là viết tắt của Long Range Radio ,có thể truyền dữ liệu với khoảng cách lên hàng km mà không cần các mạch khuếch đại công suất;từ đó giúp tiết kiệm năng lượng tiêu thụ khi truyền/nhận dữ liệu. Do đó, LoRa có thể được áp dụng rộng rãi trong các ứng dụng thu thập dữ liệu như sensor network 
-- Nguyên lý hoạt động của LoRa là sử dụng kỹ thuật điều chế Chirp Spread Spectrum. Dữ liệu được chia nhỏ thành các khối và sau đó được mã hóa thành các chuỗi tín hiệu chirp (up-chirp cho bit 1 và down-chirp cho bit 0). Tín hiệu này được truyền qua anten và tạo ra một dải tần số rộng, giúp tăng cường phạm vi truyền thông và chịu được nhiễu mạnh mẽ
+**Vấn đề về Thẻ nhớ SDCARD trong Dự án**
+1. Kiểm tra Dung lượng Thẻ nhớ SDCARD:
+- Theo dõi dung lượng lưu trữ: Vi điều khiển STM32 có thể được lập trình để theo dõi dung lượng trống trên thẻ nhớ SDCARD.
+- Cách thức thực hiện:
+	+ Sử dụng các hàm để lấy thông tin dung lượng thẻ nhớ (ví dụ: hàm f_getfree trong FATFS library cho hệ thống file FAT).
+	+ So sánh dung lượng trống với một ngưỡng nhất định (ví dụ: 10% dung lượng thẻ nhớ) để cảnh báo khi sắp đầy.
+	+ Gửi cảnh báo qua giao diện người dùng hoặc đèn LED khi dung lượng sắp đầy.
+2. Kiểm tra Thẻ nhớ SDCARD Bị Hỏng
+- Kiểm tra lỗi đọc/ghi: Vi điều khiển có thể thực hiện kiểm tra định kỳ các lỗi đọc/ghi trên thẻ nhớ.
+- Cách thức thực hiện:
+	+ Kiểm tra mã trả về của các hàm đọc/ghi (ví dụ: f_read, f_write trong FATFS).
+    +  Nếu mã trả về là lỗi (ví dụ: FR_DISK_ERR, FR_NOT_READY), có thể thẻ nhớ đã bị hỏng hoặc gặp vấn đề.
+3. Các loại định dạng thẻ nhớ
+	+ FAT32:Hỗ trợ dung lượng thẻ nhớ lên đến 2 TB.với khả năng tương thích cao trên nhiều thiết bị.
+	+ NTFS: Tốt cho các thiết bị lưu trữ cần các tính năng bảo mật và quản lý tệp tin nâng cao, nhưng không phổ biến trên các thiết bị di động.
+4. Tại sao Không Sử dụng Định dạng NTFS cho Dự án Nhúng
+	+ phức tạp: NTFS là một hệ thống tập tin phức tạp với nhiều tính năng nâng cao như quyền truy cập, mã hóa. Sự phức tạp này đòi hỏi nhiều tài nguyên hệ thống để quản lý.
+	+ Tài nguyên yêu cầu cao: NTFS yêu cầu bộ nhớ RAM và ROM lớn để lưu trữ và quản lý các cấu trúc dữ liệu phức tạp. Các vi điều khiển như STM32 thường có tài nguyên giới hạn, do đó việc sử dụng NTFS không khả thi.
+	+ Hỗ trợ hạn chế trên vi điều khiển: Không có nhiều thư viện mã nguồn mở hoặc các thư viện được hỗ trợ tốt cho NTFS trên vi điều khiển. Ngược lại, FATFS là một thư viện phổ biến và đã được kiểm chứng trên nhiều nền tảng nhúng.
+	+ Đơn giản và hiệu quả: FAT32 có cấu trúc đơn giản, dễ triển khai và tối ưu cho các hệ thống nhúng với tài nguyên hạn chế.
+5. Cấu trúc của FAT32:
+	+ Ưu Điểm:
+		+ Đơn Giản và Phổ Biến: FAT32 được hỗ trợ rộng rãi trên nhiều hệ điều hành và thiết bị.
+		+ Hiệu Năng Cao: Đơn giản và nhẹ, phù hợp cho các thiết bị lưu trữ nhỏ và các ứng dụng không đòi hỏi hiệu năng cao.
+	+ Nhược Điểm:
+		+ Giới Hạn Kích Thước Tập Tin: Kích thước tối đa của một tập tin trong FAT32 là 4 GB.
+		+ Giới Hạn Kích Thước Phân Vùng: Kích thước tối đa của phân vùng FAT32 là 2 TB.
+		+ Bảo Mật và Quản Lý Phân Quyền: Không hỗ trợ tính năng bảo mật và quản lý phân quyền như các hệ thống tập tin hiện đại khác.
+6. Thư viện FATFS
+	+ lấy thư viện này từ trang web chính thức của dự án ChaN
+7. Tính bảo mật :
+	+ Giới Hạn Quyền Truy Cập: Thiết lập các chính sách bảo mật để giới hạn quyền truy cập vào thẻ nhớ.
+	+ Sử dụng AES: Để mã hóa và giải mã dữ liệu thẻ RFID.
+	+ Thẻ Nhớ 1 (SD1):
+		+ Lưu Trữ Khóa AES: Khóa AES được mã hóa trước khi lưu.
+		+ Log Backup: Bản sao lưu log, giúp khôi phục nếu cần.
+		+ Dữ Liệu Thẻ Backup: Bản sao lưu dữ liệu thẻ (đã mã hóa).
+		+ Thẻ Nhớ 2 (SD2):
+		+ Log File: Lưu trữ log hoạt động hàng ngày.
+		+ Dữ Liệu Thẻ Mã Hóa: Lưu trữ dữ liệu thẻ đã mã hóa.
+	+ STM32:   lấy và lưu trữ khóa AES, mã hóa/giải mã dữ liệu thẻ RFID, và cập nhật file log.
+8. TinyAES là một thư viện mã hóa nhẹ dành cho ngôn ngữ lập trình C, sử dụng thuật toán Advanced Encryption Standard (AES)
+	+ Các đặc điểm chính của TinyAES:
+	+ Nhỏ gọn và nhẹ: Thư viện này được thiết kế để chiếm ít bộ nhớ và tài nguyên hệ thống.
+	+ Dễ dàng tích hợp: TinyAES có thể được tích hợp dễ dàng vào các dự án C/C++ mà không cần phải cài đặt các thư viện bên ngoài phức tạp.
+	+ Hỗ trợ nhiều chế độ mã hóa: TinyAES hỗ trợ các chế độ mã hóa AES-128, AES-192, và AES-256.
+	+ An toàn: Thuật toán AES được đánh giá cao về độ an toàn và được sử dụng rộng rãi trong các ứng dụng bảo mật.
 
-**Đặc tính**
-- Module SX1278
-- Đặc tính nó là truyền xa , tiết kiệm năng lượng
-- Sóng FM(radio) có khoảng cách thu phát tầm 2 km 
-- Điện áp hoạt đông: 3.3 VDC
-- Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
-- Giao tiếp thông qua giao thức SPI
-- Các mô-đun LoRa có hai chế độ nhận:
-	- Đơn : dữ liệu truyền 1 lần rồi dừng lại
-	- liên tục: Dữ liệu truyền liên tục
-- Các thông số cần chú ý:
-	+ frequency  : dải tần số từ 433 MHZ đến 915MHZ, tùy theo pháp lý mà ta có 
-		+ Khu vực châu á:Dải tần hoạt động 433MHZ  
-			+ phạm vi tần số  420MHz đến 450MHz.
-		+ Khu vực châu âu:868MHz   
-		+ Khu vực bắc mĩ:915MHz  
-		+ Tần số thấp thì tính đâm xuyên tốt hơn ,thích hợp truyền trong khu vực nhiều vật cản
-		+ Tần số cao thì truyền xa hơn trong môi trường ít vật cản
-		+ lamda =c/f>> f lớn ,lamda nhỏ thì tính đâm xuyên nhỏ hơn
-
-	+ spredingFactor(SF) một thông số mã hóa số lượng chấm(chips) của mỗi  bit truyền đi 
-		+ SF=7, mỗi bit dữ liệu được mã hóa thành một chuỗi 7 biểu đồ chấm. 
-		+ Nếu SF=12, mỗi bit dữ liệu sẽ được mã hóa thành một chuỗi 12 biểu đồ chấm.
-		+ (SF) càng thấp, tức là sử dụng ít biểu đồ chấm hơn. Điều này làm cho tín hiệu trở nên rộng hơn , cho phép truyền dữ liệu với tốc độ nhanh hơn. Tuy nhiên, phạm vi truyền dẫn sẽ giảm do tín hiệu yếu hơn, do đó thường chỉ được sử dụng trong khoảng cách gần
-		+ Ngược lại, khi SF càng cao, tức là sử dụng nhiều chips, . Điều này làm cho tín hiệu trở nên hẹp hơn tốc độ truyền dữ liệu sẽ giảm, nhưng lại có khả năng xuyên qua nhiễu tốt hơn và có thể truyền dữ liệu ở khoảng cách xa hơn.
-		+ SF từ 7-12 
-	+ bandWidth : (Băng thông) Nó xác định độ rộng của tín hiệu truyền dẫn và ảnh hưởng đến cả tốc độ truyền dữ liệu , cụ thể.  
-		+ BW càng lớn cho phép truyền dữ liệu ở tốc độ cao hơn xa hơn.Nhưng sẽ tốn năng lượng và dễ bị nhiễu hơn
-		+ BW càng nhỏ chống nhiễu tốt hơn, vì nó chia nhỏ dải tần số thành các kênh nhỏ hơn và do đó giảm khả năng bị nhiễu từ các tín hiệu khác.It tốn năng lương hơn  nhưng tốc độ và khoảng cách nhỏ hơn
-		+ BW LORA:7>>500KHZ
-
-	+ power  :
-		+  Đây là công suất truyền của module LoRa. Công suất này quyết định khả năng truyền xa  của module. Công suất phát càng cao, tín hiệu sẽ có thể truyền xa hơn, tốn nhiều năng lượng hơn
-		+  11 -20 dbm
-	+ overCurrentProtection:giới hạn dòng điện mà module LoRa có thể tiêu thụ.(mA) , theo data sheet , giá trị dòng điện tối đa mà có thể chịu được trong trạng thái gửi là 120mA       
-	+ preamble : là số bit bộ phát sẽ  sang bộ thu ,để bộ thu biết thời điểm khi nào bộ phát gửi, sau khi gửi preamble sẽ tới data
-		+  8-10 bit
-		+ Nếu chọn thông số 10 , thì thời gian gửi dữ liệu sẽ tăng lên
-	+ crcRate : một phương pháp kiểm tra lỗi trong truyền thông dữ liệu.
-		+ CR_4_5: mỗi 5 bit dữ liệu truyền đi sẽ có 1 bit CRC
-			+  8 bit dữ liệu dùng CR_4_5, dữ liệu sẽ được chia thành 2 gói, mỗi gói có 4 bit dữ liệu và 1 bit CRC. Do đó, tổng số bit được truyền đi là 10 bit.
-			+ Trong đó, có 8 bit dữ liệu và 2 bit CRC.
-		+ CR_4_8: mỗi 8 bit dữ liệu sẽ được mã hóa thành một chuỗi 4 bit dữ liệu và 4 bit CRC trước khi truyền đi
-		+ 5>8
-		+ Chú ý việc sử dụng CRC Rate (CR) 4/5 , thì tốc độ nhanh hơn nhưng  tỷ lệ phát hiện lỗi thấp hơn , đặc biệt trong môi trường có nhiều nhiễu.
-		+ Chú ý việc sử dụng CRC Rate (CR) 4/8  kích thước gói dữ liệu tăng lên, mỗi lần truyền đi cũng tăng lên một lượng dữ liệu lớn hơn, do đó làm giảm tốc độ truyền dữ liệu
-
-
-
-```c
-myLoRa.frequency             = 434;             // default = 433 MHz
-myLoRa.spredingFactor        = SF_9;            // default = SF_7
-myLoRa.bandWidth             = BW_250KHz;       // default = BW_125KHz
-myLoRa.crcRate               = CR_4_8;          // default = CR_4_5
-myLoRa.power                 = POWER_17db;      // default = 20db
-myLoRa.overCurrentProtection = 130;             // default = 100 mA
-myLoRa.preamble              = 10;              // default = 8;
-
-
-
-
-```
-
-
-
-1. Sơ đồ nguyên lý
-![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/9a32bf1e-970c-4f94-8f0a-ac07e067c544)
-
-![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ff08cc7-4bcd-4cc7-bb17-dfef703271cc)
-
-2. Phần cứng 
-
-- 2xLora E32-433T20D 433Mhz
-	+ Khoảng cách lý thuyết gửi bộ phát và thu là 3Km (với Lora E32 0.1 W) và 7Km ( với Lora E32 1W ) lưu ý phải dùng thêm ăng ten có độ lợi cao (5-7 dBi)
-- 2 x Esp32
-- TFT 1.8inch
-- Dust Sharp
-- DHT11
-3. Phần mềm:
-- Andruno IDE dùng để nạp code
-- Blynk.cloud : Dùng để theo dõi dữ liệu trong môi trường internet
-4. Giải thích:
--  Bộ phát :
-	+ ESP32
-	+ Module RF SX1278 Lora E32  433Mhz 
-	+ DHT22 
-	+ Dust 
-	+ Quản lý dữ liệu bằng Blynk.cloud ( app hoặc web)
--  Bộ thu :
-	+ ESP32
-	+ Module RF SX1278 Lora E32  433Mhz 
-	+ Màn hình TFT 1.8 inch ST7735 
-
-- giải thích ngắn gọn :
-	+ Bộ phát dùng ESP32  nhận dữ liệu từ 2 cảm biến Dust và DHT11, sau đó thông qua RF SX1278 Lora	truyền dữ liệu này qua RF SX1278 Lora của bộ thu , sau đó ESP32 sẽ hiển thị dữ liệu này qua màn hình TFT
-	+ Có thể quản lý dữ liệu bằng blynk.cloud
-		+ Tạo cơ sở dữ liệu :
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/444edcfc-a777-42d9-9932-6ec7880190d1)
-		+ Tạo virtual pin :
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/32dc7a28-5986-4e3f-ac47-642a8b913f64)
-			chú ý chế độ đồng bộ:Khi ESP bị lỗi sau khi kết nối sẽ đồng bộ với dữ liệu trên cloud
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/91720047-c516-43aa-8cf5-8901b093c937)
-		+ Thiết lập giao diện :
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/bc2ed3c3-fc87-4a76-b993-3743b083999c)
-		+ Kết nối và cài đặt thư viện blynk:
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/abad4dc6-ab2f-42f5-9352-636215244d05)
-			Chọn phiên bản MCU:
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b1afdfd5-911f-4981-b064-41c1974d8984)
-		+ Điền Blynk ID và Name vào code ESP32 để kết nối tới blynk sever
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/f3db3c67-0452-4fca-9797-57d03f617f4e)
-			![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/0550a10d-73fa-4714-84cd-71e8b2dba056)
-		+ Có thể tải app blynk và vào trang web của nó để quản lý dữ liệu từ ESP 32
-5. Giải thích phần cứng:	
-	+  Module RF SX1278 Lora E32  433Mhz 
-		- Có 2 loại:
-			+ Công suất: 20dbm (100mW) 
-			
-			+ Khoảng cách truyền tối đa trong điều kiện lý tưởng: 3000m
-			+ Độ nhạy: -130dBm
-			+ --------------------------------------------------------
-			+ Công suất: 30dbm (1W)
-			+ Khoảng cách truyền tối đa trong điều kiện lý tưởng: 8000m
-			+ Độ nhạy: -147dBm
-		- Dùng công nghệ LORA là một công nghệ tiết kiệm năng lượng và khoảng cách phát siêu xa 
-		- Điện áp hoạt đông: 2.3 – 5.5 VDC
-		- Tốc độ truyền: 0.3 – 19.2 Kbps ( mặc định 2.4 Kbps)
-		- Giao tiếp UART Data bits 8, Stop bits 1, Parity none, tốc độ từ 9600 – 115200
-		- 512bytes bộ đệm.
-		- Hỗ trợ 65536 địa chỉ cấu hình.
-		- Tần số: 410 – 441Mhz
-		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/1ca24868-03e8-49d1-83b5-c927bfafa81e)
-		- Chân M0,M1 là chế độ của Module:
-		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b06ff251-a387-49fa-8f38-dcf643415093)
-			+ Mode 0 - Chế độ Normal:
-				+ M0: 0
-				+ M1: 0
-			+ Mode 1 - Chế độ Wake-up:
-				+ M0: 0
-				+ M1: 1
-			+ Mode 2 - Chế độ Power saving:chỉ nhận ,Không thể truyền dữ liệu dưới chế độ này
-				+ M0: 1
-				+ M1: 0
-				+ Nếu set mode này thì master phải ở mode 1
-			+ Mode 3 - Chế độ Sleep:Không thể truyền dữ liệu dưới chế độ này
-				+ M0: 1
-				+ M1: 1
-				+ Dùng để cấu hình thông số , nghĩa là trước khi phát ta phải set nó ở mode 3 để cấu hình
-		- Chân AUX:
-			+ chức năng: Chân AUX được sử dụng để thông báo về trạng thái hoạt động của module, như trạng thái sẵn sàng truyền dữ liệu, trạng thái kết nối, v.v.
-			+ Thường không xài
-		- Cấu hình thông số của lora qua USB UART và phần mềm của nhà sản xuất
-		![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b8a2de2e-9867-4574-ad7c-7e9af67d9d82)
-		
-		- Khi cấu hình phải cùng địa chỉ , cùng chanel
-
-	+ ESP32:
-		+ ESP32 là một vi điều khiển 32 bit 
-		+ Hỗ trợ WiFi và Bluetooth, cung cấp khả năng kết nối mạng linh hoạt cho IoT.
-		+ GPIO và Giao Tiếp: Nhiều chân GPIO và hỗ trợ các giao tiếp như I2C, SPI, UART, và CAN.
-		+ Bộ dao động tinh thể 32 kHz
-	+ DHT22 :
-		+ Cảm biến độ ẩm và nhiệt độ
-		+ Giao tiếp với vi điều khiển qua chuẩn giao tiếp 1 dây.
-		+ Dùng thư viện do NSX để đọc dữ liệu
-		+ Dữ liệu được truyền đi qua một chuỗi tín hiệu số và được giải mã để lấy dữ liệu nhiệt độ và độ ẩm
-	+ Dust PM2.5:
-		+ là cảm biến được sử dụng để đo lượng bụi trong không khí
-		+ Nguyên lý hoạt động của cảm biến quang học để đo lượng bụi trong không khí.
-		+ sự thay đổi của ánh sáng khi bụi đi qua, và chuyển đổi sự thay đổi này thành tín hiệu điện để đánh giá mức độ ô nhiễm.
-		+ Giao tiếp với vi điều khiển qua ADC
-	+ Màn hình TFT 1.8 inch ST7735 
-		+ Chuẩn giao tiếp SPI
+9. Cơ Chế Của AES :
+	+ AES (Advanced Encryption Standard) là một thuật toán mã hóa khối đối xứng được sử dụng rộng rãi để bảo mật dữ liệu. Đây là thuật toán mã hóa tiêu chuẩn do Viện Tiêu chuẩn và Công nghệ Quốc gia Mỹ (NIST) chọn vào năm 2001.
+	+ Các Thành Phần Chính Của AES
+		+ Khối Dữ Liệu: AES mã hóa dữ liệu theo các khối có kích thước cố định là 128 bit (16 byte).
+		+ Khóa Mã Hóa: AES sử dụng các khóa mã hóa có độ dài 128, 192, hoặc 256 bit.
+10. Độ Dài Khóa
+	+ AES-128: Sử dụng khóa dài 128 bit (16 byte).có 10 vòng lặp
+	+ AES-192: Sử dụng khóa dài 192 bit (24 byte).Có 12 vòng lặp.
+	+ AES-256: Sử dụng khóa dài 256 bit (32 byte).Có 14 vòng lặp.
+14. AES-128 là lựa chọn hợp lý nhất:
+	+  Bảo Mật Đủ: AES-128 cung cấp mức độ bảo mật đủ cao cho hầu hết các ứng dụng, bao gồm cả kiểm soát truy cập.
+	+  Hiệu Suất Cao: Tốc độ xử lý nhanh, đảm bảo thời gian phản hồi nhanh chóng khi quét thẻ RFID.
+	+  Tiêu Tốn Ít Tài Nguyên: Giúp tiết kiệm tài nguyên của ESP32, để nó có thể thực hiện các tác vụ khác một cách hiệu quả.
+15. Chuyển Khóa AES Sang Chuỗi Hex Để Gửi Lên Trang Web
+	+ Khi gửi dữ liệu nhị phân (binary data) như khóa AES lên các dịch vụ web hoặc API, việc chuyển đổi dữ liệu thành chuỗi hex (hexadecimal string) là cần thiết vì các giao thức HTTP/HTTPS không hỗ trợ tốt cho dữ liệu nhị phân trực tiếp.
+16. Nhược Điểm Của ThingSpeak
+	+ Giới Hạn Dung Lượng:Tài khoản miễn phí có giới hạn về dung lượng và tần suất gửi dữ liệu, có thể không phù hợp cho các dự án lớn.
+	+ Số Lượng Tin Nhắn:Tài khoản miễn phí cho phép gửi tối đa 3 triệu tin nhắn mỗi năm. Mỗi lần gửi dữ liệu lên ThingSpeak được tính là một tin nhắn.
+	+ Tần Suất Gửi Dữ Liệu:Tài khoản miễn phí cho phép gửi dữ liệu với tần suất tối đa là 15 giây/lần. Điều này có nghĩa là bạn có thể gửi dữ liệu lên ThingSpeak mỗi 15 giây cho mỗi kênh.
+17. RC522 và Các Loại Thẻ RFID
+	+ Thẻ RFID HF (High Frequency):
+	+ Tần số: 13.56 MHz.
+	+ Khoảng cách đọc: Thường từ 1 cm đến 10 cm.
+	+ Chuẩn: ISO 14443A (MIFARE), ISO 15693.
+	+ Ứng dụng: Thẻ NFC, thẻ thanh toán không tiếp xúc, thẻ giao thông.
+18.	Hoạt Động của RC522 Khi Không Có Thẻ 
+	+ RC522 chờ lệnh: Khi không có thẻ trong phạm vi quét, RC522 sẽ không làm gì và chỉ chờ lệnh tiếp theo từ VĐK.
+	+ Lập trình kiểm tra chu kỳ: VĐK kiểm tra thẻ theo chu kỳ đã lập trình (ví dụ: mỗi 500 ms) để tối ưu hóa tài nguyên và năng lượng.
+	+ Không tiêu tốn tài nguyên khi không có thẻ: RC522 không thực hiện hành động nào, giúp tiết kiệm tài nguyên hệ thống.
+	+ RC522 phát hiện thẻ bằng cách kiểm tra sự thay đổi từ trường khi thẻ RFID nằm trong phạm vi.RC522 có một cuộn dây phát tín hiệu từ trường và một mạch nhận để cảm nhận sự thay đổi từ trường.
+	+ Nhận Phản Hồi: RC522 kiểm tra sự hiện diện của thẻ và phản hồi lại VĐK qua SPI.
+	+ Đọc UID Thẻ: Nếu có thẻ, VĐK sẽ gửi tiếp lệnh PICC_ReadCardSerial() để đọc UID của thẻ.
+19. Giám Sát Truy Cập Thẻ SD Bằng Ngắt Ngoài:
+	+ Khởi Động Hệ Thống Với Timer: Sử dụng timer để cho phép lấy khóa AES từ thẻ SD1 trong khoảng thời gian nhất định (ví dụ: 1 giây).
+	+ Để giám sát truy cập vào thẻ SD và đảm bảo tính bảo mật, bạn có thể sử dụng ngắt ngoài (external interrupt) để theo dõi trạng thái của thẻ SD. Cụ thể, bạn có thể giám sát các sự kiện sau:
+	+ Thẻ Bị Tháo Ra hoặc Lắp Vào:
+	+ Phát hiện khi thẻ SD bị tháo ra hoặc lắp vào để ngăn chặn truy cập trái phép.
+	+ Truy Cập Thẻ Ngoài Khoảng Thời Gian Cho Phép:
+	+ Phát hiện khi có truy cập vào thẻ SD ngoài khoảng thời gian cho phép (ví dụ: sau khoảng thời gian 1 giây ban đầu để lấy khóa).
+	+ Cách Thực Hiện
+		+ Sử Dụng Chân GPIO Để Giám Sát Trạng Thái Thẻ SD:
+		+ Sử dụng chân GPIO của STM32 để kết nối với chân phát hiện thẻ SD (card detect pin) trên khe cắm thẻ SD.
+		+ Cấu Hình Ngắt Ngoài (EXTI):
+		+ Cấu hình ngắt ngoài trên chân GPIO được kết nối với chân phát hiện thẻ SD để phát hiện khi thẻ bị tháo ra hoặc lắp vào.
+	+ Khởi Động Lại Hệ Thống: Khi phát hiện truy cập trái phép, hệ thống sẽ gửi cảnh báo và khởi động lại để đảm bảo an toàn.
+20. Phát Hiện Thẻ SD Bị Tháo Rời hoặc Lắp Vào trên STM32:
+	+  STM32 có thể phát hiện khi thẻ SD bị tháo rời hoặc lắp vào, bạn cần sử dụng một chân GPIO được cấu hình để nhận tín hiệu từ chân "Card Detect" (CD) của khe cắm thẻ SD. Khi thẻ SD được lắp vào hoặc tháo ra, chân CD sẽ thay đổi trạng thái, từ đó kích hoạt ngắt ngoài (external interrupt) trên STM32 để xử lý sự kiện.
 
 
 
