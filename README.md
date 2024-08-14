@@ -5524,6 +5524,53 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+
+**Memory leak trong C programming**
+- Memory leak: Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
+**Enum là gì?**
+- Enum (enumeration) là một kiểu dữ liệu cho phép định nghĩa các hằng số có tên.  
+- Ví dụ: enum dayOfWeek{Mon=2, Tue=3, Wed=4, Thur=5, Fri=6, Sat=7, Sun=8}; 
+- enum ten_enum {trang_thai_1: gia_tri_1, trang_thai_2: gia_tri_2,...}
+**Từ khóa typedef**
+- typedef KIỂU DỮ LIỆU  TÊN THAY THẾ; 
+- typedef được sử dụng để định nghĩa một tên mới cho một kiểu dữ liệu có sẵn.Hoặc các kiểu mà người dùng định nghĩa (class & struct)
+- `typedef double db;db val1 = 1.1;`
+- `typedef CodeLearn CL; Với CodeLearn là 1 struct`
+**Khác nhau giữa typedef giữa define**
+- typedef: Dùng để định nghĩa kiểu dữ liệu mới, được xử lý trong quá trình biên dịch.
+- #define: có thể thay thế bất kỳ đoạn mã nào, bao gồm cả biểu thức, giá trị và câu lệnh., được xử lý trong quá trình tiền xử lý.
+- Thay thế giá trị : `#define PI 3.14`
+- Ví Dụ Thay Thế Câu Lệnh:`#define PRINT_HELLO printf("Hello, World!\n");`
+- define có thể thay thế kiểu dữ liệu có sẵn không? 
+	+ Có , Ví dụ: #define INT long
+- Cú pháp :`define tên macro Văn bản sẽ thay thế` 
+```C
+#define PI 3.14
+		int main() {
+			float area, radius = 5.0;
+			area = PI * radius * radius;
+			return 0;
+		}
+```
+
+
+**Con trỏ là gì, chức năng của con trỏ**
+- Con trỏ: Là biến lưu trữ địa chỉ bộ nhớ của biến khác. Chức năng chính của con trỏ bao gồm:
+- Truy cập và sửa đổi giá trị của biến khác thông qua địa chỉ.
+- Quản lý bộ nhớ động.
+**Hàm sleep hoạt động như thế nào?**
+- Hàm sleep: Tạm dừng thực thi chương trình trong khoảng thời gian xác định (theo giây). Hàm này thường được sử dụng để tạo độ trễ.
+- Ví dụ:sleep(5);
+
+
+**Sự khác biệt khi cấp phát static memory và dynamic memory**
+- Static memory allocation: Bộ nhớ được cấp phát tại thời điểm biên dịch. Kích thước bộ nhớ cố định và không thể thay đổi tại thời điểm chạy.
+- Ưu điểm: Quản lý bộ nhớ đơn giản, không có nguy cơ memory leak.
+- Nhược điểm: Lãng phí bộ nhớ nếu không sử dụng hết.
+- Dynamic memory allocation: Bộ nhớ được cấp phát tại thời điểm chạy bằng các hàm như malloc(), calloc(), realloc().
+- Ưu điểm: Linh hoạt, có thể cấp phát bộ nhớ theo nhu cầu.
+- Nhược điểm: Quản lý phức tạp, có nguy cơ memory leak nếu không giải phóng bộ nhớ.
+
 **array**
 - Trong C++, mảng (array) là một cấu trúc dữ liệu cố định, có kích thước xác định tại thời điểm biên dịch và không thể thay đổi kích thước khi đã được khai báo. 
 - Điều này khác với các cấu trúc dữ liệu động như std::vector, std::list, std::map, và std::set.
@@ -7717,9 +7764,61 @@ int main(){
 
 </details>
 <details>
-  <summary><h1>▶ ⭐RTOS </h1></summary>
+  <summary><h1>▶ Linux 2024 </h1></summary>
 
-**RTOS là gì?**
+**Những cài đặt cần thiết**
+
+- Giao thức SFTP
+- Các bước cài chương trình:VS code
+![image](https://github.com/user-attachments/assets/3a5bbd8a-d75a-44aa-a464-6bf62de0944d)
+- Tạo 1 foder remote trên máy thật 
+- Sau đó add foder này vào work space
+![image](https://github.com/user-attachments/assets/4ef2741c-38ba-4cd4-aa08-ea7d7d10c7eb)
+- Sau đó bấm ctrl+ shift +p, chọn SFTP
+- Setup như trong ảnh
+![image](https://github.com/user-attachments/assets/3d410ffb-7f5b-4691-b3e9-4b7e2170d55e)
+- Cách fix cannot edit  ..
+![image](https://github.com/user-attachments/assets/a86cc93f-040f-41b5-9d86-53a90d5701e7)
+
+- Giao thức SSH: Dùng moba xtearm
+![image](https://github.com/user-attachments/assets/bbe9e9bb-32e9-4ab5-9bde-f7ee364a7b7c)
+
+
+**Cấu trúc MakeFile**
+![image](https://github.com/user-attachments/assets/701e4254-2c3a-4aa8-9ac1-9e530e06d8be)
++ hello.c  main.c  là điều kiện , nếu trong thư mục không có 2 file này thì bị lỗi
++ Action phải lùi 1 tab vào
+ 
+
+
+
+
+
+**1 số lệnh trên linux**
+1. Lệnh kiểm tra IP máy ảo: `ifconfig`
+2. Tạo 1 file : ví dụ `touch main.c`
+3. Hiển thị danh sách các tệp và thư mục:`ls -l`
+4. hiển thị nội dung của một hoặc nhiều tệp:`cat main.c`
+5. Khi  mở một tập tin bằng vim và muốn chỉnh sửa code:
+	+ Nhấn i để vào chế độ chèn (Insert mode).
+```C
+#include <stdio.h>
+	int main()
+	{
+		printf("Hello World!\n"); // Sửa lỗi thiếu dấu chấm than và xuống dòng
+		return 0;
+	}
+```
++ Nhấn Esc để thoát chế độ chèn.
++ Gõ :wq và nhấn Enter để lưu và thoát.
+6. Lệnh biên dịch 1 chương trình :`gcc -o main main.c`
+7. Lệnh chạy 1 file:`./main`
+
+
+
+
+
+
 
 - RTOS là viết tắt của Real-Time Operating System, tức là Hệ điều hành Thời gian thực. Đây là một hệ điều hành được thiết kế để xử lý các ứng dụng yêu cầu độ tin cậy cao và đáp ứng một cách chính xác về thời gian. 
 - Tại sao lại phải dùng RTOS ?
