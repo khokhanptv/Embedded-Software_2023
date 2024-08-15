@@ -5524,7 +5524,9 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
-
+**Câu lệnh if và switch**
+- if: Linh hoạt hơn, có thể sử dụng cho bất kỳ điều kiện nào.
+- switch: Hạn chế, chỉ sử dụng cho kiểm tra giá trị của biến nguyên, ký tự, hoặc enum.
 **Memory leak trong C programming**
 - Memory leak: Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
 **Enum là gì?**
