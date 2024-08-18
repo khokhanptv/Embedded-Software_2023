@@ -5528,19 +5528,21 @@ int main() {
 - if: Linh hoạt hơn, có thể sử dụng cho bất kỳ điều kiện nào.
 - switch: Hạn chế, chỉ sử dụng cho kiểm tra giá trị của biến nguyên, ký tự, hoặc enum.
 **Memory leak trong C programming**
-- Memory leak: Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
+- Memory leak(rò rỉ bộ nhớ) : Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
+
 **Enum là gì?**
 - Enum (enumeration) là một kiểu dữ liệu cho phép định nghĩa các hằng số có tên.  
-- Ví dụ: enum dayOfWeek{Mon=2, Tue=3, Wed=4, Thur=5, Fri=6, Sat=7, Sun=8}; 
-- enum ten_enum {trang_thai_1: gia_tri_1, trang_thai_2: gia_tri_2,...}
+- Ví dụ: enum Day{Mon=2, Tue=3, Wed=4, Thur=5, Fri=6, Sat=7, Sun=8}; 
+- Day myDay = Wed;
+- std::cout << "Day value of WEDNESDAY: " << myDay << std::endl;// in ra 4
 **Từ khóa typedef**
 - typedef KIỂU DỮ LIỆU  TÊN THAY THẾ; 
 - typedef được sử dụng để định nghĩa một tên mới cho một kiểu dữ liệu có sẵn.Hoặc các kiểu mà người dùng định nghĩa (class & struct)
 - `typedef double db;db val1 = 1.1;`
 - `typedef CodeLearn CL; Với CodeLearn là 1 struct`
 **Khác nhau giữa typedef giữa define**
-- typedef: Dùng để định nghĩa kiểu dữ liệu mới, được xử lý trong quá trình biên dịch.
-- #define: có thể thay thế bất kỳ đoạn mã nào, bao gồm cả biểu thức, giá trị và câu lệnh., được xử lý trong quá trình tiền xử lý.
+- typedef: Dùng để định nghĩa kiểu dữ liệu đã tồn tại, được xử lý trong quá trình biên dịch.
+- #define: có thể thay thế bất kỳ đoạn mã nào như giá trị và câu lệnh., được xử lý trong quá trình tiền xử lý.
 - Thay thế giá trị : `#define PI 3.14`
 - Ví Dụ Thay Thế Câu Lệnh:`#define PRINT_HELLO printf("Hello, World!\n");`
 - define có thể thay thế kiểu dữ liệu có sẵn không? 
@@ -7815,6 +7817,184 @@ int main(){
 + Gõ :wq và nhấn Enter để lưu và thoát.
 6. Lệnh biên dịch 1 chương trình :`gcc -o main main.c`
 7. Lệnh chạy 1 file:`./main`
+
+
+
+
+
+**Static library và  shared library**
+
+- Thư viện là một tập hợp các đoạn mã được biên dịch sẵn để có thể được sử dụng lại trong một chương trình.Có 2 loại
+- Static library :Static library là loại thư viện mà mã nguồn của nó được liên kết trực tiếp vào file thực thi (executable) tại thời điểm biên dịch.
+	+ File đuôi: .a trên Linux và .lib trên Windows.
+	+ Sử dụng static lib tốn nhiều bộ nhớ hơn shared lib. Vì mã nguồn từ thư viện tĩnh được chép vào file thực thi, kích thước của file thực thi có thể lớn hơn.
+	+ Nếu nhiều chương trình sử dụng cùng một thư viện tĩnh, mỗi chương trình sẽ có một bản sao riêng của thư viện trong bộ nhớ, điều này dẫn đến lãng phí tài nguyên.
+	+ Chương trình sử dụng thư viện tĩnh thường chạy nhanh hơn do toàn bộ mã đã được liên kết trước vào file thực thi. Tuy nhiên, kích thước của chương trình sẽ lớn hơn.
+	+ file A.exe=a.obj +b.a ( A là file thực thi = file ob + file thư viện) . File này sẽ được lưu trên ổ cứng(bộ nhớ lưu trữ)
+	
+
+- Shared library(dynamic) là loại thư viện mà mã nguồn của nó được liên kết vào chương trình tại thời điểm chạy (runtime), thay vì thời điểm biên dịch.
+	+ Chương trình sẽ không chứa mã nguồn của thư viện này, mà chỉ chứa một tham chiếu đến nơi tìm thấy thư viện chia sẻ.
+	+ File đuôi: .so (Shared Object) trên Linux và .dll (Dynamic Link Library) trên Windows.
+	+ Sử dụng Shared lib tốn ít bộ nhớ hơn shared lib. Vì mã nguồn của thư viện không được chép vào file thực thi, kích thước của file thực thi nhỏ hơn.
+	+ Chương trình cần có thư viện chia sẻ tại thời điểm chạy. Nếu không tìm thấy thư viện chia sẻ, chương trình sẽ không thể chạy.
+	+ Nhiều chương trình có thể sử dụng cùng một thư viện chia sẻ, giúp tiết kiệm bộ nhớ và tài nguyên hệ thống.
+	+ file.so , kể từ khi hệ thống boot lên thì file này sẽ dc hệ thống sẽ load lên RAM, sẽ nằm cùng với file thực thi
+	+ file B= .so+.obj ( 2 file này đang nằm trên RAM)
+
+**Chú ý**
+- Ví dụ file stdio.h ,time.h.... không phải là 1 thư viện mà là file header 
+- chứa các khai báo hàm, định nghĩa macro, kiểu dữ liệu, và các hằng số cần thiết để sử dụng chúng . 
+- file header không chứa mã thực thi mà chỉ chứa các khai báo để trình biên dịch biết về các hàm và biến khi bạn sử dụng chúng trong mã nguồn của mình.
+- Khi bạn sử dụng #include <stdio.h>, bạn đang chỉ định cho trình biên dịch tìm các khai báo cần thiết để sử dụng các hàm như printf, scanf, fopen,... Những khai báo này nằm trong file stdio.h.
+
+
+**Cách tạo static and sharelib**
+- Link :[text](https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/GCC/create-libraries/index)
+- Cấu tạo 1 project cơ bản:
+	+ mkdir inc // chưa file.h
+	+ mkdir src // chưa file.c
+	+ touch main.c
+	+ touch Makefile
+	+ touch bin // chứa chương trình thực thi
+	+ mkdir -p libs/static   // chứa chương trình thư viện
+	+ mkdir -p libs/shared
+	+ mkdir obj // chưa file.o
+	+ tree   // sẽ thấy cấu trúc
+
+- Các file mã cần thiết
+
+<details>
+<summary>Mã nguồn:</summary>
+1.main.c
+
+```c
+#include <stdio.h>
+ 
+void main()
+{
+	helloworld();
+	hellothai();
+
+
+
+
+}
+
+
+```
+2.hello_thai.h
+
+```c
+#include <stdio.h>
+void hellothai();
+
+```
+3.hello_thai.c
+
+```c
+#include <stdio.h>
+void hellothai()
+{
+	printf("hello thai\n");
+
+
+
+}
+
+```
+4.hello_word.h
+
+```c
+#include <stdio.h>
+void helloword();
+ 
+
+```
+5.hello_word.c
+
+```c
+#include <stdio.h>
+void helloword()
+{
+	printf("hello word\n");
+
+
+
+}
+
+```
+
+</details>
+
+
+**Viết Makefile**
+
+<details>
+<summary>Makefile</summary>
+
+```C
+	.PHONY:
+	CUR_DIR := .
+	INC_DIR := $(CUR_DIR)/inc
+	SRC_DIR := $(CUR_DIR)/src
+	OBJ_DIR := $(CUR_DIR)/obj
+	BIN_DIR := $(CUR_DIR)/bin
+	LIB_NAME := hello
+	LIBS_DIR := $(CUR_DIR)/libs
+	LIBS_STATIC_DIR := $(LIBS_DIR)/static
+	LIBS_SHARED_DIR := $(LIBS_DIR)/shared
+
+	# Create the object files
+	share_objs:
+		gcc -c -o  $(OBJ_DIR)/main.o main.c -I $(INC_DIR)
+		gcc -c -fPIC -o $(OBJ_DIR)/hello_thai.o $(SRC_DIR)/hello_thai.c 
+		gcc -c -fPIC -o $(OBJ_DIR)/hello_thai.o $(SRC_DIR)/hello_world.c 
+
+	# Create the shared library
+	create_shared_lib:
+		gcc -shared $(OBJ_DIR)/hello_thai.o  $(OBJ_DIR)/hello_thai.o -o $(LIBS_SHARED_DIR)/lib$(LIB_NAME).so
+
+	# Link dynamically	
+	link_shared_lib:
+		gcc  $(OBJ_DIR)n/main.o -L$(LIBS_SHARED_DIR) -l$(LIB_NAME) -o $(BIN_DIR)/use-shared-library
+
+	install_shared_lib:
+		install $(LIBS_SHARED_DIR)/lib$(LIB_NAME).so /usr/lib
+	all: share_objs create_shared_lib link_shared_lib install_shared_lib
+		@echo "make all target"
+	clean:
+		rm -rf $(OBJ_DIR)/*.o
+		rm -rf $(LIBS_SHARED_DIR)/lib$(LIB_NAME).so
+		rm -rf $(BIN_DIR)/use-shared-library
+
+
+
+```
+
+- tới đây thì chạy make install_shared_lib, nhưng không chạy dc , vì đang là user bình thường nên dùng sudo make install_shared_lib
+
+![image](https://github.com/user-attachments/assets/5475df32-ac70-43f9-9d80-6dca46f4b5a7)
+
+- Chạy tiếp ./bin/use -shared- library
+![image](https://github.com/user-attachments/assets/4cab69e2-dfcb-4019-bbf1-816dab557e10)
+- Gõ tree
+![image](https://github.com/user-attachments/assets/08d0c69b-c759-4791-9026-1bedf7d37477)
+- sudo make all
+![image](https://github.com/user-attachments/assets/c6053863-45ae-4943-9a35-4a3cf2ed4735)
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
