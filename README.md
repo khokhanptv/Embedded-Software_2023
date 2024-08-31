@@ -5524,11 +5524,144 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+**Tính chất của ngôn ngữ C:**
+- Ngôn ngữ lập trình bậc thấp (Low-level language): C gần với ngôn ngữ máy hơn các ngôn ngữ lập trình bậc cao khác, điều này giúp nó có khả năng điều khiển phần cứng mạnh mẽ và tối ưu hóa hiệu suất.
+- Ngôn ngữ thủ tục (Procedural Language): C chủ yếu dựa trên cách lập trình thủ tục, tức là chương trình được cấu trúc thành các hàm 
+**Tính chất của ngôn ngữ C++:**
+- C++ là một ngôn ngữ bậc trung:C++ cung cấp cả tính năng gần gũi với phần cứng như C (ví dụ như quản lý bộ nhớ thủ công, truy cập địa chỉ bộ nhớ trực tiếp,...) và các tính năng bậc cao như lập trình hướng đối tượng, xử lý ngoại lệ (exception handling), và thư viện chuẩn phong phú (STL).
+
+
 **Câu lệnh if và switch**
-- if: Linh hoạt hơn, có thể sử dụng cho bất kỳ điều kiện nào.
+- if: 
+	+ Ở đây, if kiểm tra một điều kiện phức tạp liên quan đến nhiều biến và phép toán logic (&&, ||).
+	+ if có thể kiểm tra mọi loại điều kiện, bao gồm cả biểu thức logic phức tạp.
 - switch: Hạn chế, chỉ sử dụng cho kiểm tra giá trị của biến nguyên, ký tự, hoặc enum.
+
+```C
+int a = 10;
+int b = 20;
+int c = 30;
+
+if (a < b && c > b) {
+    std::cout << "a nhỏ hơn b và c lớn hơn b" << std::endl;
+} else if (a == b || c < b) {
+    std::cout << "a bằng b hoặc c nhỏ hơn b" << std::endl;
+} else {
+    std::cout << "Điều kiện không thỏa mãn" << std::endl;
+}
+
+```
+
+```c
+int option = 2;
+
+switch (option) {
+    case 1:
+        std::cout << "Lựa chọn 1" << std::endl;
+        break;
+    case 2:
+        std::cout << "Lựa chọn 2" << std::endl;
+        break;
+    case 3:
+        std::cout << "Lựa chọn 3" << std::endl;
+        break;
+    default:
+        std::cout << "Lựa chọn không hợp lệ" << std::endl;
+}
+
+#include <iostream>
+
+// Định nghĩa một enum để đại diện cho các ngày trong tuần
+enum Day {
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
+};
+
+int main() {
+    Day today = Wednesday;
+
+    switch (today) {
+        case Monday:
+            std::cout << "Hôm nay là Thứ Hai." << std::endl;
+            break;
+        case Tuesday:
+            std::cout << "Hôm nay là Thứ Ba." << std::endl;
+            break;
+        default:
+            std::cout << "Ngày không hợp lệ!" << std::endl;
+    }
+
+    return 0;
+}
+
+```
 **Memory leak trong C programming**
 - Memory leak(rò rỉ bộ nhớ) : Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
+
+**Phân biệt Program và Process,Thread:**
+1. Program: Nó là một thực thể thụ động (passive entity) và không có trạng thái thực thi. được lưu trữ trên một thiết bị lưu trữ (như ổ cứng) dưới dạng một tệp thực thi Ví dụ, tệp .exe hoặc .bin là các chương trình.Nó không hoạt động cho đến khi được thực thi.
+2. Process: Là một thực thể hoạt động (active entity) đại diện cho việc thực thi của một chương trình. Khi một chương trình(Program) được chạy, nó trở thành một process. Process bao gồm các tài nguyên như CPU thời gian, bộ nhớ, các tập tin đang mở,  
+3. Tóm lại, program là "kế hoạch" còn process là "thực thi kế hoạch đó". Khi bạn chạy một chương trình, nó sẽ trở thành một hoặc nhiều process trên hệ thống.
+4. Thread:Là đơn vị nhỏ hơn của một process, một luồng thực thi bên trong process. Một process có thể chứa nhiều thread.
+5.  Các thread trong cùng một process chia sẻ cùng không gian địa chỉ, có thể chia sẻ dữ liệu và tài nguyên với nhau nhưng vẫn có ngăn xếp và bộ đếm chương trình riêng.
+6.  So sánh giữa Process và Thread:
+ - Memory:
+	+ Process: Có không gian địa chỉ riêng biệt. Mỗi process có bộ nhớ riêng không chia sẻ với các process khác.
+	+ Thread: Các thread trong cùng một process chia sẻ không gian địa chỉ và tài nguyên của process đó. Mỗi thread có ngăn xếp riêng nhưng chia sẻ mã lệnh, dữ liệu, và heap với các thread khác trong cùng process.
+ - Data Sharing:
+	+ Process: Dữ liệu không thể dễ dàng chia sẻ giữa các process vì chúng có không gian địa chỉ riêng. Việc chia sẻ dữ liệu giữa các process thường yêu cầu các cơ chế IPC (Inter-Process Communication) như pipes, message queues, hoặc shared memory.
+	+ Thread: Dễ dàng chia sẻ dữ liệu với các thread khác trong cùng process vì chúng chia sẻ cùng một không gian địa chỉ.
+ - Process Switching vs Thread Switching:
+	+ Process Switching (Chuyển đổi tiến trình): Process switching xảy ra khi hệ điều hành dừng việc thực thi của một process hiện tại và chuyển sang thực thi một process khác. Quá trình này thường xảy ra khi một process bị chuyển sang trạng thái chờ (waiting) hoặc hệ điều hành quyết định thực hiện lập lịch lại (scheduling) để phân chia tài nguyên CPU cho các process khác.
+	+ Thread Switching (Chuyển đổi luồng) Thread switching xảy ra khi hệ điều hành chuyển đổi việc thực thi từ một thread này sang thread khác, thường là trong cùng một process. Điều này có thể xảy ra khi một thread bị chuyển sang trạng thái chờ hoặc khi một thread khác có độ ưu tiên cao hơn cần được thực thi.
+	+ Process Switching: Đòi hỏi nhiều tài nguyên vì cần phải lưu và khôi phục ngữ cảnh đầy đủ của process, bao gồm không gian địa chỉ và tài nguyên hệ thống. Quá trình này chậm hơn so với thread switching.
+	+ Thread Switching: Nhanh hơn vì chỉ cần lưu và khôi phục ngữ cảnh của thread, và các thread chia sẻ cùng không gian địa chỉ nên không cần chuyển đổi toàn bộ không gian địa chỉ.
+
+
+**Context Switching hoạt động như thế nào?**
+- Context Switching: Là quá trình mà hệ điều hành dừng việc thực thi một process hiện tại để chuyển sang thực thi một process khác. Trong quá trình này, ngữ cảnh (context) của process hiện tại (bao gồm các thanh ghi CPU, chương trình đếm, ngăn xếp, v.v.) được lưu trữ vào một nơi nào đó (thường là PCB - Process Control Block). Sau đó, ngữ cảnh của process khác được nạp vào để tiếp tục thực thi. Đây là một quá trình nặng về tài nguyên vì cần phải lưu và nạp lại nhiều thông tin từ bộ nhớ.
+**Phân biệt Zombie Process và Orphan Process**
+1. Zombie Process: Là một process đã kết thúc việc thực thi nhưng vẫn còn tồn tại trong bảng process vì nó chưa được parent process lấy thông tin trạng thái (status) của nó thông qua lệnh wait. Nó vẫn giữ một PID nhưng không còn sử dụng tài nguyên hệ thống.
+2. Orphan Process: Là một process mà parent process đã kết thúc hoặc bị kill trước khi nó kịp hoàn thành. Khi một process trở thành orphan, hệ điều hành (thường là init process) sẽ nhận làm parent mới của nó để quản lý.
+3. PID (Process ID): Mỗi process trong hệ thống đều có một mã định danh duy nhất gọi là PID. Ngay cả khi process đã chuyển sang trạng thái Zombie, PID của nó vẫn được hệ điều hành giữ lại.
+4. Nếu có quá nhiều Zombie Process, chúng có thể làm cạn kiệt số lượng PID có sẵn trong hệ thống, dẫn đến việc không thể tạo thêm process mới.
+5. Tại sao PID được giữ lại?: Khi một process kết thúc, nó cần báo cáo lại cho parent process về kết quả thực thi của mình (thông qua tín hiệu như SIGCHLD). PID được giữ lại để parent process có thể xác định và xử lý thông tin này. Nếu parent process gọi lệnh wait() hoặc waitpid() sau khi nhận tín hiệu, PID của Zombie Process sẽ được giải phóng và process này sẽ bị xóa khỏi bảng process.
+6. Orphan Process: Là một process mà parent process đã kết thúc hoặc bị kill trước khi nó kịp hoàn thành. Khi một process trở thành orphan, hệ điều hành (thường là init process) sẽ nhận làm parent mới của nó để quản lý.
+7. Process Image: bao gồm tất cả dữ liệu và mã lệnh cần thiết để thực thi process.
+8. Khi Child Process kết thúc vòng đời thực thi của mình, signal nào được gửi đến Parent Process?
+	- nó sẽ gửi một tín hiệu SIGCHLD đến parent process của nó. Parent process có thể xử lý tín hiệu này để gọi hàm wait() hoặc waitpid() nhằm lấy thông tin trạng thái và dọn dẹp tài nguyên của child process.
+
+**Synchronous/Asynchronous là gì?**
+1. Synchronous (Đồng bộ):
+- Các hoạt động đồng bộ đòi hỏi phải hoàn thành từng bước một. Một hoạt động phải hoàn tất trước khi hoạt động tiếp theo có thể bắt đầu.
+- Ví dụ: Khi gọi một hàm đồng bộ, chương trình sẽ chờ hàm đó hoàn thành trước khi tiếp tục.
+2. Asynchronous (Bất đồng bộ):
+- Các hoạt động bất đồng bộ cho phép các bước tiếp theo được thực hiện mà không cần chờ hoạt động trước hoàn thành.
+- Ví dụ: Khi gọi một hàm bất đồng bộ, chương trình có thể tiếp tục thực thi mà không cần chờ hàm đó hoàn thành, và kết quả của hàm sẽ được xử lý sau khi hoàn thành.
+3. Mutex (Mutual Exclusion):
+-  Là một cơ chế đồng bộ được sử dụng để tránh tình trạng truy cập đồng thời vào một tài nguyên dùng chung (shared resource), như một biến hoặc một đoạn mã. Chỉ một thread có thể nắm giữ mutex tại một thời điểm, do đó ngăn chặn các thread khác truy cập vào tài nguyên dùng chung đó.
+4. Conditional Variable:
+- Là một cơ chế đồng bộ cho phép các thread chờ cho đến khi một điều kiện cụ thể trở thành đúng. Nó thường được sử dụng kết hợp với mutex để quản lý truy cập vào tài nguyên dùng chung dựa trên điều kiện.
+
+**Atomic/Non-Atomic, Shared Resource, Critical Section**
+1. Atomic/Non-Atomic:
+- Atomic Operation: Là một hoạt động hoàn toàn không thể bị ngắt giữa chừng. Điều này có nghĩa là nếu một hoạt động atomic bắt đầu, nó sẽ hoàn thành mà không bị gián đoạn, đảm bảo tính toàn vẹn dữ liệu.
+- Non-Atomic Operation: Là hoạt động có thể bị ngắt giữa chừng, dẫn đến khả năng gặp phải các vấn đề như race condition khi nhiều thread hoặc process truy cập vào cùng một tài nguyên.
+2. Shared Resource:
+- Là tài nguyên (như biến, file, hoặc bộ nhớ) được nhiều thread hoặc process cùng truy cập và sử dụng. Việc truy cập đồng thời vào tài nguyên chia sẻ có thể dẫn đến xung đột và đòi hỏi cơ chế đồng bộ như mutex để đảm bảo tính toàn vẹn.
+3. Critical Section:
+- Là một đoạn mã mà tại đó tài nguyên chia sẻ được truy cập. Để ngăn chặn tình trạng race condition, chỉ một thread hoặc process được phép vào critical section tại một thời điểm, thường được bảo vệ bằng mutex hoặc các cơ chế đồng bộ khác.
+4. Một vài trường hợp gây ra hiện tượng Deadlock
+- Deadlock xảy ra khi hai hoặc nhiều process hoặc thread rơi vào tình trạng chờ lẫn nhau, dẫn đến không thể tiếp tục thực thi. Một số tình huống dẫn đến deadlock:
+- Mutual Exclusion: Hai thread đều cần truy cập một tài nguyên và tài nguyên này không thể chia sẻ (như khóa mutex).
+- Hold and Wait: Một thread đã giữ một tài nguyên và chờ để có được tài nguyên khác, trong khi thread khác đang giữ tài nguyên đó và cũng chờ tài nguyên của thread đầu tiên.
+- No Preemption: Tài nguyên không thể bị thu hồi từ một thread khi nó đã nắm giữ.
+Circular Wait: Một chuỗi các thread hình thành một vòng lặp trong đó mỗi thread chờ tài nguyên mà thread tiếp theo đang giữ.
 
 **Enum là gì?**
 - Enum (enumeration) là một kiểu dữ liệu cho phép định nghĩa các hằng số có tên.  
@@ -7986,6 +8119,64 @@ void helloword()
 </details>
 
 
+**Tổng quan về file trên linux**
+![image](https://github.com/user-attachments/assets/47fbaaad-1838-4bfc-98f8-cf14a2ec1ad9)
+
+- Cách thêm quyền cho 1 file:
+- Ví dụ file A.TXT
+![image](https://github.com/user-attachments/assets/b69ffe9b-10c2-4cd2-80de-ee2284cce596)
+![image](https://github.com/user-attachments/assets/602eeae1-8ed1-468a-b1f6-b5afecefe933)
+- Dùng lệnh `sudo chmod 0642 A.txt` sau đó `ls -l`
+![image](https://github.com/user-attachments/assets/fc2ee822-84bb-4792-b162-d2e6763fabc3)
+![image](https://github.com/user-attachments/assets/252093de-a363-47ab-be6c-9b735ced15d3)
+
+- Đổi user bằng lệnh `sudo chown slayer:slayer A.txt`
+![image](https://github.com/user-attachments/assets/30b948de-9372-4643-897f-f40c6d862029)
+
+**Thao tác file trên linux**
+- Chương trình
+
+```C
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+int main (void)
+{
+    int fd;
+    int numb_read, numb_write;
+    char buf[12] = "hello world\n";
+
+    // assume foobar.txt is already created
+    fd = open("hello.txt", O_RDWR | O_CREAT, 0667);
+    if (-1 == fd) {
+        printf("open() hello.txt failed\n");
+    }
+
+    numb_write = write(fd, buf, strlen(buf));
+    printf("Write %d bytes to hello.txt\n", numb_write);
+
+    lseek(fd, 2, SEEK_SET);
+    write(fd, "AAAAAAAAAA", strlen("AAAAAAAAAA"));
+
+    close(fd);
+
+    return 0;
+}
+
+```
+
+- Trang web chính để tìm hiểu các hàm:
+[text](https://man7.org/linux/man-pages/man2/open.2.html)
+1. open()
+` int open(const char *pathname, int flags, ... /* mode_t mode */ );`
+` fd = open("hello.txt", O_RDWR | O_CREAT, 0667);`
+- O_RDWR: Đây là cờ chỉ định rằng tệp tin sẽ được mở với quyền đọc và ghi (Read and Write).
+- O_CREAT: Đây là cờ tạo tệp tin nếu tệp tin chưa tồn tại.
+- Câu lệnh này sẽ cố gắng mở tệp tin "hello.txt" với quyền đọc/ghi. Nếu tệp tin chưa tồn tại, nó sẽ được tạo với quyền truy cập là 0667 (đọc và ghi cho chủ sở hữu và nhóm, và đọc, ghi, thực thi cho người khác). Nếu quá trình mở tệp không thành công (ví dụ, tệp tin không thể mở được do không có quyền), hàm open() sẽ trả về -1.
+
+- Hàm open() trả về một giá trị đại diện cho "file descriptor" (fd), một chỉ số nguyên không âm đại diện cho tệp tin đã được mở thành công. Tệp tin này có thể được sử dụng trong các thao tác tiếp theo như đọc (read), ghi (write), hoặc đóng (close).
 
 
 
@@ -8000,12 +8191,6 @@ void helloword()
 
 
 
-
-
-- RTOS là viết tắt của Real-Time Operating System, tức là Hệ điều hành Thời gian thực. Đây là một hệ điều hành được thiết kế để xử lý các ứng dụng yêu cầu độ tin cậy cao và đáp ứng một cách chính xác về thời gian. 
-- Tại sao lại phải dùng RTOS ?
-	+ Chia sẻ tài nguyên một cách đơn giản: cung cấp cơ chế để phân chia các yêu cầu về bộ nhớ và ngoại vi của MCU
-	+ Tăng tính linh động và dễ dàng bảo trì: thông qua API của RTOS
 
 
 **Các khái niệm cơ bản**
