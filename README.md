@@ -7957,29 +7957,56 @@ int main(){
 
 **Static library và  shared library**
 
-- Thư viện là một tập hợp các đoạn mã được biên dịch sẵn để có thể được sử dụng lại trong một chương trình.Có 2 loại
+- Thư viện là một tập hợp các đoạn mã được biên dịch sẵn để tái sử sụng.Có 2 loại
 - Static library :Static library là loại thư viện mà mã nguồn của nó được liên kết trực tiếp vào file thực thi (executable) tại thời điểm biên dịch.
-	+ File đuôi: .a trên Linux và .lib trên Windows.
-	+ Sử dụng static lib tốn nhiều bộ nhớ hơn shared lib. Vì mã nguồn từ thư viện tĩnh được chép vào file thực thi, kích thước của file thực thi có thể lớn hơn.
-	+ Nếu nhiều chương trình sử dụng cùng một thư viện tĩnh, mỗi chương trình sẽ có một bản sao riêng của thư viện trong bộ nhớ, điều này dẫn đến lãng phí tài nguyên.
-	+ Chương trình sử dụng thư viện tĩnh thường chạy nhanh hơn do toàn bộ mã đã được liên kết trước vào file thực thi. Tuy nhiên, kích thước của chương trình sẽ lớn hơn.
-	+ file A.exe=a.obj +b.a ( A là file thực thi = file ob + file thư viện) . File này sẽ được lưu trên ổ cứng(bộ nhớ lưu trữ)
+- Thời điểm biên dịch là quá trình chuyển mã nguồn sang mã máy 
+- Đặc điểm:
+	+ Khi chương trình được biên dịch, toàn bộ nội dung của thư viện tĩnh được sao chép và gắn trực tiếp vào file thực thi. Do đó, file thực thi chứa tất cả các mã cần thiết để chạy mà không phụ thuộc vào các thư viện bên ngoài khi thực thi.
+	+ File thư viện tĩnh có đuôi mở rộng là .a (trên Unix/Linux) hoặc .lib (trên Windows).
+- Ví dụ: libmylib.a.
+- Ưu điểm:
+	+ Không phụ thuộc vào môi trường bên ngoài: Khi chương trình đã được biên dịch, nó không cần thư viện tĩnh để chạy, vì mã đã được nhúng vào trong file thực thi.
+	+ Chạy nhanh hơn vì không cần tìm và tải thư viện bên ngoài trong lúc chạy.
+- Nhược điểm:
++ Kích thước file thực thi lớn: Do mã của thư viện được sao chép vào file thực thi, kích thước của file thực thi sẽ tăng lên đáng kể.
++ Mỗi khi thư viện thay đổi, bạn cần biên dịch lại toàn bộ chương trình để áp dụng thay đổi.
 	
 
 - Shared library(dynamic) là loại thư viện mà mã nguồn của nó được liên kết vào chương trình tại thời điểm chạy (runtime), thay vì thời điểm biên dịch.
-	+ Chương trình sẽ không chứa mã nguồn của thư viện này, mà chỉ chứa một tham chiếu đến nơi tìm thấy thư viện chia sẻ.
-	+ File đuôi: .so (Shared Object) trên Linux và .dll (Dynamic Link Library) trên Windows.
-	+ Sử dụng Shared lib tốn ít bộ nhớ hơn shared lib. Vì mã nguồn của thư viện không được chép vào file thực thi, kích thước của file thực thi nhỏ hơn.
-	+ Chương trình cần có thư viện chia sẻ tại thời điểm chạy. Nếu không tìm thấy thư viện chia sẻ, chương trình sẽ không thể chạy.
-	+ Nhiều chương trình có thể sử dụng cùng một thư viện chia sẻ, giúp tiết kiệm bộ nhớ và tài nguyên hệ thống.
-	+ file.so , kể từ khi hệ thống boot lên thì file này sẽ dc hệ thống sẽ load lên RAM, sẽ nằm cùng với file thực thi
-	+ file B= .so+.obj ( 2 file này đang nằm trên RAM)
+	+ Thời điểm chạy là  chương trình đã được biên dịch thành công (tạo ra file thực thi)
+- Đặc điểm:
+	+ Thư viện dùng chung không được gắn trực tiếp vào file thực thi. Thay vào đó, file thực thi chứa các liên kết đến thư viện và khi chương trình chạy, hệ điều hành sẽ tải thư viện này vào bộ nhớ.
+	+ File thư viện dùng chung có đuôi mở rộng là .so (trên Unix/Linux) hoặc .dll (trên Windows).
+
+- Ưu điểm:
+	+ Kích thước file thực thi nhỏ hơn: Vì thư viện không được sao chép vào file thực thi, kích thước của file thực thi sẽ nhỏ hơn.
+	+ Tiết kiệm bộ nhớ: Nhiều chương trình có thể dùng chung một thư viện, và hệ điều hành chỉ cần tải một bản của thư viện vào bộ nhớ.
+	+ Dễ bảo trì và nâng cấp: Bạn chỉ cần cập nhật phiên bản của thư viện và tất cả các chương trình sử dụng nó sẽ tự động được cập nhật theo mà không cần phải biên dịch lại.
+- Nhược điểm:
+	+ Phụ thuộc vào môi trường: Chương trình cần thư viện phải tồn tại và được đặt đúng chỗ trên hệ thống khi chương trình chạy, nếu không chương trình sẽ không thể chạy được.
+	+ Tốc độ chạy có thể chậm hơn: Vì hệ điều hành cần tải thư viện vào bộ nhớ khi chương trình chạy.
+![image](https://github.com/user-attachments/assets/ae643c48-1158-44cc-9115-51d72a943c96)
+
 
 **Chú ý**
 - Ví dụ file stdio.h ,time.h.... không phải là 1 thư viện mà là file header 
-- chứa các khai báo hàm, định nghĩa macro, kiểu dữ liệu, và các hằng số cần thiết để sử dụng chúng . 
+- chứa các khai báo.Nó không chứa định nghĩa (definitions)(chính là mã thực thi)  do đó không phải là một thư viện (static hay shared).
 - file header không chứa mã thực thi mà chỉ chứa các khai báo để trình biên dịch biết về các hàm và biến khi bạn sử dụng chúng trong mã nguồn của mình.
 - Khi bạn sử dụng #include <stdio.h>, bạn đang chỉ định cho trình biên dịch tìm các khai báo cần thiết để sử dụng các hàm như printf, scanf, fopen,... Những khai báo này nằm trong file stdio.h.
+- stdio.h không thuộc static library hay shared library, nhưng nó là cầu nối để các hàm từ những thư viện này có thể được sử dụng trong chương trình của bạn.
+- Tổng quan các thành phần chứa trong cả static và shared library:
+- Mã máy:
+- Được biên dịch từ mã nguồn C/C++ và lưu dưới dạng mã nhị phân. 
+- Bảng ký hiệu (Symbol Table):
+	+ Chứa tên của các hàm, biến, và đối tượng khác trong thư viện. Đây là nơi trình biên dịch tìm kiếm khi chương trình gọi đến một hàm hay biến trong thư viện.
+	+ Trong static library, bảng này giúp trình liên kết biết những gì cần sao chép vào file thực thi.
+	+ Trong shared library, bảng này giúp hệ điều hành biết cách kết nối các hàm tại thời điểm chạy.
+- Relocation Information (chỉ có trong shared library):
+	+ Thông tin về cách điều chỉnh địa chỉ bộ nhớ khi thư viện được tải vào chương trình. Vì shared library được tải vào địa chỉ bộ nhớ khác nhau trong các chương trình khác nhau, cần có thông tin điều chỉnh để hàm trong thư viện hoạt động chính xác.
+Metadata:
++ phiên bản của thư viện, kiến trúc CPU  (ví dụ: x86, ARM) ..
+- Ví dụ:
+Giả sử bạn có một thư viện (static hoặc shared) chứa các hàm toán học như add, subtract, multiply, và divide. Cả static và shared library sẽ chứa mã nhị phân đã được biên dịch của các hàm này, cùng với các thông tin cần thiết để trình biên dịch hoặc hệ điều hành có thể sử dụng lại chúng mà không cần phải viết lại từ đầu.Khi sử dụng static library, mã nhị phân của các hàm sẽ được sao chép vào chương trình, trong khi với shared library, các hàm sẽ được tải vào bộ nhớ khi chương trình thực thi.
 
 
 **Cách tạo static and sharelib**
