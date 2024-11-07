@@ -1,0 +1,6 @@
+ 
+Giải thích tại sao phải sử dụng  #ifndef, #define, và #endif
+#ifndef MATH_UTILS_H
+Là 1 điều kiện để check xem MATH_UTILS_H đã được định nghĩa ở file khác hay không 
+Nếu không sẽ định nghĩa nó bằng #define MATH_UTILS_H .
+#endif: Đây là kết thúc của điều kiện biên dịch.
