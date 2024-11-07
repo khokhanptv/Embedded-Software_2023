@@ -1,23 +1,5 @@
-
-
-
 <details>
 <summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## 1 số BT liên quan con trỏ
 <details>
@@ -5662,6 +5644,311 @@ int main() {
 - Hold and Wait: Một thread đã giữ một tài nguyên và chờ để có được tài nguyên khác, trong khi thread khác đang giữ tài nguyên đó và cũng chờ tài nguyên của thread đầu tiên.
 - No Preemption: Tài nguyên không thể bị thu hồi từ một thread khi nó đã nắm giữ.
 Circular Wait: Một chuỗi các thread hình thành một vòng lặp trong đó mỗi thread chờ tài nguyên mà thread tiếp theo đang giữ.
+5. IPC là gì?
+- IPC là viết tắt của Inter-Process Communication (Giao tiếp giữa các tiến trình).
+- IPC được sử dụng khi:
+- Các tiến trình cần chia sẻ dữ liệu hoặc tài nguyên.
+- Các tiến trình cần phối hợp hoặc đồng bộ hóa để thực hiện một tác vụ chung.
+- Thực hiện truyền tải dữ liệu giữa các tiến trình trên cùng một hệ thống hoặc trên các hệ thống khác nhau (qua mạng).
+6.  Một vài phương thức IPC phổ biến
+- Pipe: Giao tiếp một chiều giữa hai tiến trình, thường là giữa tiến trình cha và con.
+- FIFO (Named Pipe): Giao tiếp hai chiều, cho phép các tiến trình không cùng họ (không phải cha-con) giao tiếp.
+- Message Queue: Hàng đợi lưu trữ các thông điệp để các tiến trình đọc/ghi không đồng bộ.
+- Shared Memory: Bộ nhớ chia sẻ giữa các tiến trình, cho phép tốc độ truyền dữ liệu nhanh nhưng cần đồng bộ hóa.
+- Socket: Giao tiếp giữa các tiến trình trên cùng máy hoặc giữa các máy khác nhau qua mạng.
+- Semaphore: Đồng bộ hóa truy cập tài nguyên giữa các tiến trình.
+- Signal: Gửi tín hiệu để thông báo hoặc điều khiển tiến trình khác.
+7. Phân loại IPC
+- Communication (Truyền thông)
+	- Data Transfer (Truyền dữ liệu): Phương thức IPC này được sử dụng để truyền dữ liệu giữa các tiến trình.
+	- Pipe: Giao tiếp một chiều, chỉ cho phép một tiến trình ghi và tiến trình khác đọc.
+	- FIFO (Named Pipe): Giao tiếp hai chiều, có thể dùng cho các tiến trình không liên quan.
+	- Stream Socket: Giao tiếp hai chiều qua mạng, thường dùng cho giao tiếp TCP.
+	- Message (Thông điệp): Cho phép các tiến trình gửi và nhận thông điệp theo cơ chế hàng đợi hoặc gói dữ liệu.
+	- Message Queue: Lưu trữ các thông điệp để tiến trình khác đọc khi cần.
+	- Datagram Socket: Giao tiếp qua UDP, không đảm bảo thứ tự và tính toàn vẹn dữ liệu.
+- 3.2. Synchronization (Đồng bộ hóa)
+	- Phương thức này được sử dụng để đảm bảo các tiến trình hoặc luồng thực thi đúng trình tự hoặc không xảy ra xung đột khi truy cập tài nguyên dùng chung.
+	- Semaphore: Dùng để đồng bộ hóa truy cập tài nguyên, kiểm soát số lượng tiến trình có thể truy cập tài nguyên cùng lúc.
+	- Mutex: Đảm bảo chỉ có một tiến trình duy nhất truy cập tài nguyên tại một thời điểm.
+	- Barrier: Đồng bộ các tiến trình để tất cả phải đạt đến một điểm chung trước khi tiếp tục.
+	Condition Variable: Cơ chế đồng bộ cho phép tiến trình chờ một điều kiện cụ thể xảy ra.
+- Tổng kết:
+	- Communication tập trung vào việc truyền dữ liệu.
+	- Synchronization đảm bảo tính đúng đắn trong việc truy cập tài nguyên hoặc thực hiện các tác vụ đồng thời.
+8. volatile trong C là gì?
+	- Khi khai báo một biến là volatile, trình biên dịch sẽ không tối ưu hóa việc truy cập vào biến đó. Điều này đảm bảo rằng giá trị của biến luôn được đọc từ bộ nhớ mỗi khi nó được tham chiếu và luôn được ghi trực tiếp vào bộ nhớ khi cập nhật.Khi nào cần khai báo một biến là volatile?
+		-  Thanh ghi ngoại vi có ánh xạ đến ô nhớ (Memory-mapped Peripheral Registers)
+			-  Trong các hệ thống nhúng, các thiết bị ngoại vi (như bộ đếm, bộ định thời, cổng I/O) thường được điều khiển thông qua các thanh ghi phần cứng.
+			-  Giá trị của các thanh ghi này có thể thay đổi bất cứ lúc nào bởi phần cứng, không phải do chương trình.
+		 
+		- Biến toàn cục được truy xuất từ nhiều tác vụ trong ứng dụng đa luồng
+			-  Trong các ứng dụng đa luồng, các luồng khác nhau có thể truy cập và thay đổi giá trị của một biến toàn cục.
+			-  Nếu không dùng volatile, trình biên dịch có thể tối ưu hóa và giữ giá trị của biến trong một bộ nhớ cache cục -  bộ, dẫn đến các luồng khác không nhìn thấy được thay đổi
+			- Nếu không sử dụng volatile, trình biên dịch có thể tối ưu hóa và chỉ đọc giá trị này một lần, dẫn đến sai sót khi thanh ghi tự động thay đổi.
+
+		-   Biến toàn cục được truy xuất từ các tiến trình xử lý ngắt (Interrupt Service Routine - ISR)
+			- 	Trong các hệ thống nhúng, các tiến trình ISR có thể thay đổi giá trị của biến toàn cục.
+			- 	Nếu luồng chính không nhận ra rằng giá trị của biến đã được thay đổi bởi ISR, nó có thể tiếp tục sử dụng giá trị cũ (do trình biên dịch tối ưu hóa).
+	- Sử dụng volatile trong các trường hợp:
+		- 	Giá trị của biến có thể thay đổi do phần cứng (thanh ghi ngoại vi).
+		- 	Biến bị thay đổi trong ISR.
+		- 	Biến toàn cục được chia sẻ giữa nhiều luồng hoặc tác vụ.
+- Trong lập trình nhúng, chúng ta hay gặp đoạn code khi ta khai báo 1 biến đếm count, mỗi khi bấm nút xảy ra ngắt ngoài, chúng ta tăng biến đếm count. Tuy nhiên, khi chúng ta bật tính năng tối ưu code của compiler, nó sẽ hiểu rằng các biến như vậy dường như không thay đổi giá trị bởi phần mềm nên compiler có xu hướng loại bỏ biến count để có thể tối ưu kích cỡ file code chạy được sinh ra.
+- Lý do trình biên dịch loại bỏ biến không dùng volatile
+	- Khi bật các tính năng tối ưu hóa, trình biên dịch sẽ cố gắng:
+	- Tối ưu hóa kích thước mã lệnh.
+	- Giảm số lượng truy cập bộ nhớ.
+	- Vì trình biên dịch không biết rằng biến count có thể bị thay đổi bên ngoài (do ISR), nó có thể:
+	- Chuyển count vào một thanh ghi CPU.
+	- Sử dụng giá trị cũ mà không cập nhật từ bộ nhớ.
+- Tóm lại
+	- Khai báo volatile là bắt buộc khi:
+		- Biến có thể bị thay đổi bởi ngắt ngoài hoặc phần cứng.
+		- Biến được chia sẻ giữa nhiều luồng hoặc ISR để đảm bảo mọi thay đổi đều được phản ánh chính xác.
+
+9. Hiện tượng Race Condition
+- Khái niệm:
+	- Race Condition xảy ra khi nhiều thread hoặc tiến trình cùng truy cập và thao tác trên critical resource (tài nguyên quan trọng) mà không được đồng bộ hóa đúng cách.
+	- Nếu các thao tác không diễn ra theo thứ tự dự kiến, hệ thống có thể rơi vào trạng thái không xác định, dẫn đến lỗi.
+	- Ví dụ về Race Condition:
+	- Giả sử có hai thread cùng thao tác trên một biến đếm counter:
+```c
+Sao chép mã
+// Thread 1
+counter++;
+
+// Thread 2
+counter++;
+```
+- Nếu hai thread này chạy đồng thời, kết quả của counter có thể sai do:
+	- counter được đọc, tăng, rồi ghi lại một cách không đồng bộ, dẫn đến giá trị cuối cùng không đúng.
+	- Cơ chế xử lý: Mutual Exclusion
+	- Mutual Exclusion đảm bảo rằng tại mỗi thời điểm, chỉ một thread có quyền truy cập và thao tác trên critical resource.
+- Công cụ để thực thi:
+	- Mutex (Mutual Exclusion Lock).
+	- Semaphore.
+	- Spinlock.
+10. Atomic
+- Khái niệm:
+	- Atomic operations là các thao tác trên dữ liệu mà không thể bị gián đoạn hoặc bị ảnh hưởng bởi các thread khác.
+	Chúng đảm bảo rằng một thao tác đọc-ghi (ví dụ, tăng giá trị của biến) sẽ diễn ra trọn vẹn mà không bị xen ngang.
+- Case sử dụng:
+	- Khi critical resource chỉ là một biến đơn giản hoặc một bit.
+	- Ví dụ: Tăng, giảm giá trị một biến đếm (counter), hoặc kiểm tra, đặt một cờ (flag) trạng thái.
+- Các thao tác Atomic thường gặp:
+	- Atomic trên số nguyên:
+	
+```c
+//Tăng hoặc giảm giá trị nguyên tử:
+__sync_fetch_and_add(&counter, 1);  // Tăng counter một cách nguyên tử
+__sync_fetch_and_sub(&counter, 1);  // Giảm counter một cách nguyên tử
+```
+- Atomic trên bit:
+```c
+//Kiểm tra, đặt hoặc xóa bit:
+__sync_or_and_fetch(&flags, 0x01);  // Đặt bit 0
+__sync_and_and_fetch(&flags, ~0x01); // Xóa bit 0
+
+```
+
+11. Spinlock
+- Khái niệm:
+	- Spinlock là một loại khóa giúp thực thi mutual exclusion.
+	- Khi một thread cố gắng khóa spinlock, nếu nó chưa có sẵn, thread sẽ liên tục kiểm tra (spin) cho đến khi khóa được giải phóng.
+- Hoạt động:
+	- Nếu spinlock đã bị khóa bởi một thread khác, thread hiện tại sẽ:
+	- Không bị chặn (block) mà sẽ liên tục kiểm tra trạng thái khóa.
+	- Khi khóa được giải phóng, thread giành được quyền truy cập và tiếp tục thực thi.
+- Case sử dụng:
+	- Khi critical resource là một cấu trúc dữ liệu phức tạp hoặc bộ nhớ chia sẻ cần đồng bộ hóa.
+	- Thích hợp khi thời gian giữ khóa ngắn vì việc spin tiêu tốn CPU.
+- Ưu điểm:
+	- Hiệu quả cho các tác vụ ngắn, tránh chi phí cao của việc block/unblock thread.
+- Nhược điểm:
+	- Tiêu tốn tài nguyên CPU nếu thời gian chờ khóa dài.
+- Tóm tắt
+	- Race Condition: Xảy ra khi nhiều thread truy cập và thao tác trên cùng một tài nguyên mà không có đồng bộ hóa.
+	- Atomic: Đảm bảo thao tác trên biến đơn giản diễn ra toàn vẹn, không bị gián đoạn.
+	- Spinlock: Một dạng khóa cho phép thực hiện mutual exclusion, hiệu quả cho các tác vụ cần khóa ngắn.
+12. Mutex
+- Khái niệm
+	- Mutex (Mutual Exclusion) là một cơ chế đồng bộ hóa, đảm bảo rằng chỉ một thread hoặc tiến trình có thể truy cập vào critical resource tại một thời điểm.
+	- Khác với spinlock, mutex cho phép blocking. Thread không giành được mutex sẽ bị đưa vào trạng thái chờ và không tiêu tốn CPU trong khi đợi.
+- Case sử dụng
+	- Khi critical resource là cấu trúc dữ liệu phức tạp hoặc khi critical section gồm nhiều câu lệnh.
+	- Kỹ thuật atomic không phù hợp vì chỉ hoạt động tốt với các thao tác đơn giản như tăng hoặc giảm biến.
+	- Mutex phù hợp khi cần:
+	- Đồng bộ hóa tài nguyên phức tạp.
+	- Tránh busy-waiting như trong spinlock.
+	- Cấu tạo của Mutex
+	- Mutex trong hệ điều hành thường bao gồm các thành phần sau:
+- atomic_t count
+	- count đại diện cho trạng thái của mutex:
+	- count = 1: Mutex đang mở (UNLOCKED), có thể được giành bởi thread khác.
+	- count = 0: Mutex đang đóng (LOCKED), thread khác phải chờ.
+- *struct task_struct owner
+	- Biến này lưu trữ thông tin về thread hiện tại đang nắm giữ mutex.
+	- Dùng để xác định thread nào đang chiếm giữ tài nguyên và có thể ưu tiên xử lý nếu cần.
+	- struct list_head wait_list
+	- Hàng đợi các thread đang chờ mutex.
+	- Nếu một thread không giành được mutex, nó sẽ được thêm vào danh sách wait_list và chuyển sang trạng thái chờ (sleep).
+	- Hoạt động của Mutex
+- Locking (Khóa):
+	- Khi một thread gọi acquire_mutex:
+	- Nếu mutex đang UNLOCKED (count = 1), thread đó giành được mutex, count = 0.
+	- Nếu mutex đang LOCKED (count = 0), thread đó được thêm vào wait_list và chuyển sang trạng thái chờ.
+- Unlocking (Mở khóa):
+	- Khi thread giữ mutex hoàn thành critical section và gọi release_mutex:
+	count được đặt lại thành 1.
+	- Nếu có thread trong wait_list, một thread sẽ được đánh thức và giành mutex.
+- Thread Ownership:
+	- Mutex thường yêu cầu chủ sở hữu (owner) chính là thread đã khóa mutex.
+	- Chỉ thread này mới có thể mở khóa mutex, giúp ngăn ngừa lỗi khi một thread không hợp lệ cố gắng mở khóa mutex.
+	- Ưu điểm của Mutex
+	- Tránh lãng phí CPU:
+	- Thread không giành được mutex sẽ bị block và không tiêu tốn CPU trong khi chờ.
+	- Đồng bộ hóa hiệu quả:
+- Đảm bảo mutual exclusion cho critical section phức tạp với nhiều thao tác.
+- Nhược điểm của Mutex
+- Deadlock:
+	- Nếu hai thread giữ mutex và chờ mutex khác, có thể dẫn đến deadlock. Ví dụ:
+	- Thread 1 giữ Mutex A, chờ Mutex B.
+	- Thread 2 giữ Mutex B, chờ Mutex A.
+- Overhead lớn hơn spinlock:
+	- Do mutex phải quản lý wait_list và chuyển trạng thái thread.
+13. Semaphore
+- Khái niệm
+	- Semaphore là một cấu trúc dữ liệu được sử dụng để:
+	- Đồng bộ tài nguyên: Quản lý truy cập đồng thời vào critical resource.
+	- Đồng bộ hoạt động: Đảm bảo thứ tự thực thi giữa các thread.
+- Case sử dụng
+	- Semaphore được ví như bộ chìa khóa dự phòng:
+	- Counting semaphore: Quản lý số lượng tài nguyên giới hạn, cho phép nhiều thread đồng thời sử dụng tài nguyên.
+	- Binary semaphore: Hoạt động như mutex, cho phép một thread truy cập tài nguyên tại một thời điểm.
+- Ví dụ:
+	- Counting semaphore:
+	- Kiểm soát số lượng kết nối vào một dịch vụ mạng (ví dụ: tối đa 10 kết nối cùng lúc).
+	- Binary semaphore:
+	- Đồng bộ hóa truy cập vào một critical section tương tự như mutex, nhưng không yêu cầu thread giữ khóa phải là thread - giải phóng khóa.
+- Cấu tạo của Semaphore
+	- raw_spinlock_t lock:
+	- Spinlock bảo vệ các thành phần bên trong semaphore.
+	- Do semaphore là một critical resource, cần spinlock để đảm bảo các thao tác trên count và wait_list được thực hiện nguyên tử.
+- atomic_t count:
+	- Quản lý số lượng tài nguyên sẵn có.
+	- Khi một thread giành được semaphore, count giảm.
+	- Khi một thread giải phóng semaphore, count tăng.
+- struct task_struct *owner:
+	- Lưu trữ thông tin về thread hiện tại đang giữ semaphore (nếu có).
+- struct list_head wait_list:
+	- Hàng đợi các thread đang chờ semaphore.
+	- Nếu không giành được semaphore, thread sẽ được thêm vào wait_list và chuyển sang trạng thái chờ.
+- Phân loại Semaphore
+	- Counting Semaphore:
+		- Giá trị count có thể lớn hơn 1.
+		- Quản lý tài nguyên có giới hạn nhiều đơn vị (ví dụ: số lượng kết nối, bộ nhớ dùng chung).
+	- Binary Semaphore:
+		- Count chỉ có 2 giá trị: 0 hoặc 1.
+- Tương tự như mutex, đảm bảo mutual exclusion nhưng không yêu cầu thread giữ khóa phải là thread giải phóng khóa.
+- Chú ý khi sử dụng Semaphore
+- Chỉ sử dụng trong thread được phép đi ngủ:
+
+- Semaphore sử dụng cơ chế sleep-waiting, do đó:
+- Phù hợp: Kernel threads thông thường hoặc bottom-half sử dụng workqueue.
+- Không phù hợp: ISR hoặc bottom-half dựa trên tasklet/softirq vì các ngữ cảnh này không cho phép sleep.
+- Critical section dài:
+	- Semaphore phù hợp với critical section chứa nhiều câu lệnh hoặc có thể gọi sleep/schedule.
+	- Thread khác có thể giải phóng Semaphore:
+	- Không như mutex hay spinlock, một thread có thể giải phóng semaphore ngay cả khi nó không phải thread giữ semaphore.
+	- Điều này giúp semaphore linh hoạt hơn trong các mô hình đồng bộ phức tạp.
+- Không đệ quy semaphore:
+	- Semaphore không hỗ trợ đệ quy. Nếu một thread cố gắng giành lại semaphore mà nó đã giữ, hệ thống sẽ rơi vào trạng thái deadlock.
+
+14. RCU (Read-Copy-Update)
+- Khái niệm:
+	- RCU (Read-Copy-Update) là một cơ chế đồng bộ hóa trong kernel, cho phép nhiều thread đọc đồng thời một vùng dữ liệu mà không cần khóa (lock).
+	- Khi cần ghi, RCU tạo một bản sao (clone) của dữ liệu để ghi vào đó. Sau khi hoàn thành ghi, dữ liệu sẽ được cập nhật vào vùng nhớ chung khi không còn thread nào đang đọc.
+- Cách hoạt động:
+	- Nhiều thread có thể đọc đồng thời mà không cần sử dụng mutex hoặc spinlock.
+- Khi có thread ghi:
+	- Tạo bản sao vùng dữ liệu cần ghi.
+	- Ghi dữ liệu vào bản sao.
+	- Sau khi không còn thread nào đang đọc dữ liệu gốc, tiến hành thay thế dữ liệu gốc bằng dữ liệu đã chỉnh sửa.
+	- Lock-free reading: Đọc không cần khóa, giúp giảm độ trễ và tăng hiệu năng trong hệ thống có nhiều luồng đọc.
+- Ưu điểm:
+	- Tối ưu hóa hiệu năng khi có nhiều tác vụ đọc.
+	- Giảm thiểu xung đột truy cập dữ liệu giữa các thread.
+- Nhược điểm:
+	- Chi phí bộ nhớ cao hơn do cần tạo bản sao dữ liệu trong quá trình ghi.
+	- Độ phức tạp trong việc triển khai, đặc biệt khi cần xác định thời điểm không còn thread đọc dữ liệu cũ.
+15. Virtual Memory và Physical Memory
+-  Vì sao cơ chế Virtual Memory ra đời?
+- Khái niệm cơ bản:
+	- Process Address Space: Mỗi tiến trình có một không gian địa chỉ riêng, bao gồm các địa chỉ mà tiến trình sử dụng để tham chiếu tới lệnh và dữ liệu.
+	- CPU 32-bit: Không gian địa chỉ tối đa là 4GB (2³² địa chỉ).
+- Phân tích vấn đề:
+- Yêu cầu vùng nhớ liên tục:
+	- Trong một số hệ thống (ví dụ: uCLinux), chương trình được đưa vào một vùng nhớ liên tục trên RAM khi khởi chạy.
+- Lợi ích:
+	- Lệnh và dữ liệu luôn sẵn sàng, dễ quản lý.
+- Nhược điểm:
+	- Không thể chạy chương trình có kích thước lớn hơn RAM.
+	- Khó tìm vùng nhớ liên tục đủ lớn để chứa chương trình, gây lãng phí bộ nhớ.
+- Không cần toàn bộ chương trình trong RAM:
+	- Không phải tất cả mã đều được thực thi:
+		- Tiến trình chỉ thực thi một số đoạn mã tại một thời điểm.
+		- Ví dụ: Trong if-else, đoạn mã else hiếm khi chạy.
+	- Một số tính năng ít sử dụng:
+		- Mã cho các tính năng này không cần thiết phải tải vào RAM.
+	- CPU thực thi tuần tự:
+		- Mã chỉ được thực thi lần lượt, không cần đồng thời tải toàn bộ chương trình vào RAM.
+- Kết luận:
+	- Virtual Memory ra đời để giải quyết các vấn đề trên.
+	- Không gian địa chỉ ảo (virtual address space) lớn hơn không gian vật lý, cho phép chương trình sử dụng bộ nhớ hiệu quả.
+	- Tăng hiệu suất bằng cách:
+		- Chỉ tải các phần cần thiết của chương trình vào RAM.
+		- Cho phép chạy chương trình lớn hơn RAM.
+- Virtual Memory hoạt động như thế nào?
+	- Tách biệt giữa Virtual Memory và Physical Memory:
+		- Virtual Address Space: Không gian địa chỉ mà tiến trình sử dụng.
+		- Physical Memory: Không gian bộ nhớ vật lý (RAM) thực tế.
+- Cơ chế phân trang (Paging):
+	- Virtual Memory được chia thành các trang (pages).
+	- Khi một trang được tham chiếu, nếu chưa có trong RAM, Page Fault xảy ra và hệ điều hành tải trang từ đĩa cứng vào RAM.
+- Lợi ích của Virtual Memory:
+	- Sử dụng hiệu quả RAM:
+		- Chỉ giữ các trang đang được sử dụng trong RAM.
+	- Tăng không gian bộ nhớ:
+		- Cho phép các chương trình lớn hơn bộ nhớ vật lý thực tế.
+	- Bảo vệ bộ nhớ:
+		- Mỗi tiến trình có không gian địa chỉ riêng, giúp cách ly giữa các tiến trình.
+- Tóm tắt
+	- RCU: Cơ chế đồng bộ hóa, cho phép nhiều thread đọc không cần khóa và ghi thông qua bản sao dữ liệu.
+	- Virtual Memory: Tối ưu hóa bộ nhớ bằng cách tách biệt địa chỉ ảo và địa chỉ vật lý, cho phép sử dụng hiệu quả RAM và chạy chương trình lớn hơn bộ nhớ vật lý.
+16. Cơ chế Virtual Memory:
+	- Virtual Memory cho phép ánh xạ không gian địa chỉ ảo (virtual address space) của tiến trình tới không gian địa chỉ vật lý (physical address space) trên RAM. Điều này giúp hệ điều hành quản lý bộ nhớ hiệu quả hơn.
+	- Các thành phần chính:
+		- Paging (Phân trang):
+			- Bộ nhớ ảo được chia thành các trang (pages) có kích thước cố định.
+			- Bộ nhớ vật lý được chia thành các khung trang (page frames) có cùng kích thước.
+			- Khi một trang được tham chiếu, hệ điều hành kiểm tra xem trang đó có trong RAM không
+				- Nếu có, tiến trình tiếp tục thực thi.
+				- Nếu không, xảy ra Page Fault, và hệ điều hành sẽ tải trang từ đĩa cứng (swap space) vào RAM.
+
+		- Page Table (Bảng trang):
+			- Mỗi tiến trình có một bảng trang riêng để ánh xạ từ địa chỉ ảo sang địa chỉ vật lý.
+			- Giúp đảm bảo tách biệt và bảo mật giữa các tiến trình.
+
+
+
+
+
+
+
+
+
+
 
 **Enum là gì?**
 - Enum (enumeration) là một kiểu dữ liệu cho phép định nghĩa các hằng số có tên.  
