@@ -5506,6 +5506,25 @@ int main() {
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+**cross compiler**
+- Cross compiler là một loại trình biên dịch (compiler) được sử dụng để biên dịch mã nguồn thành mã máy (machine code) cho một nền tảng khác với nền tảng mà trình biên dịch đó đang chạy
+Các thành phần chính:
+- Host System: Hệ thống nơi trình biên dịch đang chạy (ví dụ: PC Windows/Linux).
+- Target System: Hệ thống đích mà mã máy sẽ chạy (ví dụ: vi điều khiển, Raspberry Pi).
+- Cross Compiler: Trình biên dịch tạo ra mã máy cho hệ thống đích.
+- Ví dụ:
+- Bạn đang làm việc trên máy tính Windows/Linux và muốn viết chương trình chạy trên vi điều khiển ARM Cortex-M. Trong trường hợp này, bạn cần một cross compiler để tạo mã nhị phân có thể chạy trên vi điều khiển.
+- Tại sao Keil C là một cross compiler?
+- Host System:
+- Keil C chạy trên máy tính (Windows) để viết mã nguồn.
+- Target System:
+- Keil C biên dịch mã thành mã nhị phân để chạy trên các vi điều khiển (như ARM Cortex-M, 8051...).
+- Chức năng cross compiling:
+- Keil C biên dịch mã C/C++ trên máy tính thành mã máy (machine code) có thể chạy trên các vi điều khiển đích.
+- Hệ nhị phân (firmware) này sau đó được nạp vào vi điều khiển thông qua giao tiếp như SWD, JTAG, hoặc UART.
+
+
+
 **Tính chất của ngôn ngữ C:**
 - Ngôn ngữ lập trình bậc thấp (Low-level language): C gần với ngôn ngữ máy hơn các ngôn ngữ lập trình bậc cao khác, điều này giúp nó có khả năng điều khiển phần cứng mạnh mẽ và tối ưu hóa hiệu suất.
 - Ngôn ngữ thủ tục (Procedural Language): C chủ yếu dựa trên cách lập trình thủ tục, tức là chương trình được cấu trúc thành các hàm 
