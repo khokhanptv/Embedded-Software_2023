@@ -1975,11 +1975,11 @@ int main() {
 ```
 
 **Biến static toàn cục:**  
-- Biến toàn cục static sẽ chỉ có thể được truy cập và sử dụng trong File khai báo nó, các File khác không có cách nào truy cập được.Nghĩa là `extern` không dùng được
+- Biến toàn cục static sẽ chỉ có thể được truy cập và sử dụng trong File định nghĩa nó, các File khác không có cách nào truy cập được.Nghĩa là `extern` không dùng được
 - Ví dụ:globalStaticVar được khai báo là static và nằm trong file "File1.c". Do đó, bạn không thể trực tiếp truy cập nó từ file "File2.c", bằng extern int globalStaticVar; trong File2.c, chương trình sẽ không biên dịch được và thông báo lỗi.
-
+- Hạn chế phạm vi của biến chỉ trong một file, tránh xung đột tên biến giữa các file khác nhau.
 **Biến Extern:**
-- Extern trước 1 biến để thông báo biến này đã được khai báo ở một nơi file khác.
+- Từ khóa extern được sử dụng để khai báo một biến mà đã được định nghĩa bên ngoài chương trình hoặc tệp tin.
 - Biến extern không tạo ra bộ nhớ mới cho biến , tiết kiệm dung lượng chương trình
 - Biến được tham chiếu phải được khai báo toàn cục.
 - Lưu ý: khi sử dụng extern, không được khai báo giá trị ban đầu cho biến
@@ -5696,23 +5696,23 @@ Circular Wait: Một chuỗi các thread hình thành một vòng lặp trong đ
 	- Communication tập trung vào việc truyền dữ liệu.
 	- Synchronization đảm bảo tính đúng đắn trong việc truy cập tài nguyên hoặc thực hiện các tác vụ đồng thời.
 8. volatile trong C là gì?
-	- Khi khai báo một biến là volatile, trình biên dịch sẽ không tối ưu hóa việc truy cập vào biến đó. Điều này đảm bảo rằng giá trị của biến luôn được đọc từ bộ nhớ mỗi khi nó được tham chiếu và luôn được ghi trực tiếp vào bộ nhớ khi cập nhật.Khi nào cần khai báo một biến là volatile?
-		-  Thanh ghi ngoại vi có ánh xạ đến ô nhớ (Memory-mapped Peripheral Registers)
-			-  Trong các hệ thống nhúng, các thiết bị ngoại vi (như bộ đếm, bộ định thời, cổng I/O) thường được điều khiển thông qua các thanh ghi phần cứng.
-			-  Giá trị của các thanh ghi này có thể thay đổi bất cứ lúc nào bởi phần cứng, không phải do chương trình.
-		 
+	- Khi khai báo một biến là volatile, trình biên dịch sẽ không tối ưu hóa giá trị của biến đó. 
+	- Trình biên dịch thường tối ưu hóa mã bằng cách giữ các giá trị trong thanh ghi hoặc bỏ qua việc đọc lại giá trị từ bộ nhớ nếu nó cho rằng giá trị không thay đổi
+	- Điều này đảm bảo Luôn đọc giá trị mới nhất của biến từ bộ nhớ, thay vì sử dụng giá trị được lưu trong thanh ghi và luôn được ghi trực tiếp vào bộ nhớ khi cập nhật.
+	- Khi nào cần khai báo một biến là volatile?
+		- Phần cứng: Các thanh ghi phần cứng có thể thay đổi giá trị tự động.
 		- Biến toàn cục được truy xuất từ nhiều tác vụ trong ứng dụng đa luồng
 			-  Trong các ứng dụng đa luồng, các luồng khác nhau có thể truy cập và thay đổi giá trị của một biến toàn cục.
 			-  Nếu không dùng volatile, trình biên dịch có thể tối ưu hóa và giữ giá trị của biến trong một bộ nhớ cache cục -  bộ, dẫn đến các luồng khác không nhìn thấy được thay đổi
 			- Nếu không sử dụng volatile, trình biên dịch có thể tối ưu hóa và chỉ đọc giá trị này một lần, dẫn đến sai sót khi thanh ghi tự động thay đổi.
+		-  Ngắt (Interrupt): Giá trị của biến có thể được cập nhật trong trình xử lý ngắt.Ví dụ nhấn nút
+	- Ví dụ thanh ghi Phần cứng:
+		- Thanh ghi dữ liệu ADC, Thanh ghi đếm timer ,trạng thái GPIO:	
+			- Các giá trị này liên tục và giống nhau , khi tối ưu thì sẽ mất dữ liệu 
+		- Ngắt (Interrupt):Tình biên dịch thường cố gắng tối ưu hóa hiệu suất bằng cách giữ giá trị của biến trong thanh ghi CPU thay vì đọc từ bộ nhớ mỗi lần.
+			- Nếu biến buttonPressed không được khai báo là volatile, trình biên dịch có thể giả định rằng giá trị của biến này không thay đổi trong suốt vòng lặp chính của chương trình, dẫn đến:
+			- Vòng lặp chính sẽ sử dụng giá trị cũ trong thanh ghi mà không biết rằng trình xử lý ngắt đã thay đổi giá trị của biến.
 
-		-   Biến toàn cục được truy xuất từ các tiến trình xử lý ngắt (Interrupt Service Routine - ISR)
-			- 	Trong các hệ thống nhúng, các tiến trình ISR có thể thay đổi giá trị của biến toàn cục.
-			- 	Nếu luồng chính không nhận ra rằng giá trị của biến đã được thay đổi bởi ISR, nó có thể tiếp tục sử dụng giá trị cũ (do trình biên dịch tối ưu hóa).
-	- Sử dụng volatile trong các trường hợp:
-		- 	Giá trị của biến có thể thay đổi do phần cứng (thanh ghi ngoại vi).
-		- 	Biến bị thay đổi trong ISR.
-		- 	Biến toàn cục được chia sẻ giữa nhiều luồng hoặc tác vụ.
 - Trong lập trình nhúng, chúng ta hay gặp đoạn code khi ta khai báo 1 biến đếm count, mỗi khi bấm nút xảy ra ngắt ngoài, chúng ta tăng biến đếm count. Tuy nhiên, khi chúng ta bật tính năng tối ưu code của compiler, nó sẽ hiểu rằng các biến như vậy dường như không thay đổi giá trị bởi phần mềm nên compiler có xu hướng loại bỏ biến count để có thể tối ưu kích cỡ file code chạy được sinh ra.
 - Lý do trình biên dịch loại bỏ biến không dùng volatile
 	- Khi bật các tính năng tối ưu hóa, trình biên dịch sẽ cố gắng:
@@ -5721,10 +5721,6 @@ Circular Wait: Một chuỗi các thread hình thành một vòng lặp trong đ
 	- Vì trình biên dịch không biết rằng biến count có thể bị thay đổi bên ngoài (do ISR), nó có thể:
 	- Chuyển count vào một thanh ghi CPU.
 	- Sử dụng giá trị cũ mà không cập nhật từ bộ nhớ.
-- Tóm lại
-	- Khai báo volatile là bắt buộc khi:
-		- Biến có thể bị thay đổi bởi ngắt ngoài hoặc phần cứng.
-		- Biến được chia sẻ giữa nhiều luồng hoặc ISR để đảm bảo mọi thay đổi đều được phản ánh chính xác.
 
 9. Hiện tượng Race Condition
 - Khái niệm:
