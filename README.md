@@ -1665,16 +1665,12 @@ int main()
 
 **Con trỏ hàm**
 - Hàm (function) bản chất là 1 địa chỉ vùng nhớ
-- con trỏ hàm là một biến chứa địa chỉ của một hàm.`void (*ptr)();`
-- khi khởi tạo xong thì phải gán địa chỉ của hàm cho con trỏ hàm.`ptr = add;`
-- sau khi gán rồi có thể gọi hàm thông qua con trỏ hàm  .`ptr();`
-- Cú pháp:
-`kiểu dữ liệu (*tên con trỏ hàm)(kieu du liêu1, kieu du liêu2)` 
-- kiểu dữ liệu trùng với kiểu dữ liệu của hàm trỏ tới.
-- Nếu cần truyền tham số thì kiểu dữ liệu 1 ,2 trùng với hàm truyền vào.
-**Lợi ích**
-- Điều này cho phép truyền một hàm cụ thể vào một hàm khác 
-- Có thể thông qua mảng để lưu giá trị các hàm mà nó trỏ tới
+- Con trỏ hàm lưu trữ địa chỉ của một hàm, tương tự như cách mà con trỏ thông thường lưu trữ địa chỉ của biến.
+- Bạn có thể sử dụng con trỏ hàm để gọi hàm hoặc chuyển nó như một tham số cho hàm khác.
+
+**Chức năng**
+- Gọi hàm thông qua con trỏ: Thay vì gọi hàm trực tiếp,có thể gọi thông qua con trỏ hàm.
+- Chuyển hàm làm tham số: Một hàm có thể nhận con trỏ hàm làm tham số để quyết định hàm nào sẽ được gọi trong quá trình thực thi.
  <details>
 <summary>Ví dụ:</summary>
 
@@ -1791,10 +1787,9 @@ int main() {
 </details>
 
 **Con trỏ hằng- Pointer to Constant**
-- Khai báo:`const　<Kiểu dữ liệu>　* <Tên con trỏ>;`
 - không thể thay đổi giá trị tại biến mà nó đang trỏ đến.
-- Bảo vệ dữ liệu không bị thay đổi thông qua con trỏ. 
-- Đảm bảo giá trị mà con trỏ, trỏ đến không bị thay đổi bởi các hàm nhận con trỏ này làm tham số.
+- Ngăn chặn thay đổi dữ liệu mà con trỏ trỏ tới.
+- Thường dùng khi truyền tham số cho hàm.
 <details>
 <summary>Ví dụ:</summary>
 
@@ -1843,7 +1838,7 @@ int main() {
 **Hằng con trỏ- Constant Pointer**
 - Khai báo:`int *const const_ptr = &value;`
 - Đặc điểm:
-	- Khi khai báo hằng con trỏ cần khởi tạo giá trị địa chỉ cho nó.
+	- Chắc chắn rằng con trỏ luôn trỏ tới một vùng nhớ cụ thể.
 	- Khi hằng con trỏ đã trỏ đến 1 địa chỉ nào rồi,nó không thể trỏ tới bất kỳ 1 địa chỉ nào khác.
 	- Có thể thay đổi được giá trị tại địa chỉ đã khởi gán ban đầu.
 
@@ -5530,6 +5525,15 @@ Các thành phần chính:
 - Ngôn ngữ thủ tục (Procedural Language): C chủ yếu dựa trên cách lập trình thủ tục, tức là chương trình được cấu trúc thành các hàm 
 **Tính chất của ngôn ngữ C++:**
 - C++ là một ngôn ngữ bậc trung:C++ cung cấp cả tính năng gần gũi với phần cứng như C (ví dụ như quản lý bộ nhớ thủ công, truy cập địa chỉ bộ nhớ trực tiếp,...) và các tính năng bậc cao như lập trình hướng đối tượng, xử lý ngoại lệ (exception handling), và thư viện chuẩn phong phú (STL).
+g.
+**Mảng và con trỏ**
+- Tên của mảng là một con trỏ hằng, trỏ đến địa chỉ ô nhớ đầu tiên của mảng
+- Truy cập phần tử mảng bằng con trỏ.
+- Khi làm việc với mảng động,dùng  con trỏ để quản lý bộ nhớ.
+- Khi truyền mảng vào hàm, thực chất bạn đang truyền địa chỉ của phần tử đầu tiên của mảng.
+- Khác biệt :
+	- Mảng là một vùng nhớ liên tiếp được định nghĩa cố định.
+	- Con trỏ là một biến có thể trỏ đến bất kỳ địa chỉ nào, không nhất thiết phải là mản
 
 
 **Câu lệnh if và switch**
