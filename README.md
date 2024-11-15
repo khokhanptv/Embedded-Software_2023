@@ -4788,41 +4788,6 @@ int main(void){
 - Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  .
 
 
-<details>
-<summary>Ví dụ</summary>
-
-```C++
-#include <iostream>
-
-// Lớp cha
-class Base {
-public:
-    // Hàm ảo
-    virtual void display() {
-        std::cout << "This is a Base class method." << std::endl;
-    }
-};
-
-// Lớp con kế thừa từ lớp cha
-class Derived : public Base {
-public:
-    // Ghi đè (override) hàm ảo của lớp cha
-    void display() override {
-        std::cout << "This is a Derived class method." << std::endl;
-    }
-};
-
-int main() {
-    Derived obj;
-    obj.display(); // Gọi phương thức display() của lớp con
-
-    return 0;
-}
-
-
-
-```
-</details>
 </details>
 <details>
   <summary><h2>Standard template library </h2></summary>
@@ -4831,94 +4796,25 @@ int main() {
 
 **Một số thành phần chính của STL:**
 - Container(Bộ chứa)
-- Một container là một cấu trúc dữ liệu chứa nhiều phần tử gồm:
-	+ Vector
-	+ List
-	+ Map
-
 - Iterator: Cung cấp 1 cách chung để duyệt các phần tử trong Container mà không cần quan tâm tới container đó là gi.
+- Kết hợp với các thuật toán STL (std::sort, std::find, std::for_each) để thực hiện các thao tác như sắp xếp, tìm kiếm, và lọc dữ liệu.
  - Trong STL, có nhiều loại iterators:
 	+ Input Iterators: Cho phép duyệt qua các phần tử của một container từ đầu đến cuối, nhưng không thể thay đổi giá trị của các phần tử.
 	+ Output Iterators: Cho phép ghi dữ liệu vào một container từ đầu đến cuối.
 - Algorithms: STL cung cấp một loạt các thuật toán tiêu chuẩn như sort, find, binary_search, etc. Những thuật toán này có thể được áp dụng trên các containers.
 
-
-
 **Vector trong C++ là gì?**
 
-- vector là một container cung cấp một mảng động ,có thể thay đổi kích thước  ,có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả. Nó khác mảng động ở chỗ là quản lý bộ nhớ tự động , 
-```c++
-int* arr = new int[5]; // Cấp phát bộ nhớ cho mảng động
-delete[] arr; // Giải phóng bộ nhớ
-///////////////////////
-vector<int> vec;
-vec.push_back(10); // Bộ nhớ được cấp phát tự động
+- vector là một container cung cấp một mảng động ,có thể thay đổi kích thước 
+- có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả. 
+- Không chèn xóa ở đầu , vì phải di chuyển các phần tử còn lại về phía trước > tốn time so với các loại khác
+- Nó khác mảng động ở chỗ là quản lý bộ nhớ tự động 
 
-```
 - Sử dụng Vector: 
 	+ Thêm hoặc xóa phần tử ở cuối danh sách
-	+ Cần truy cập ngẫu nhiên đến các phần tử.
-- Có thể khai báo số lượng n  phần tử của vector và chỉ định cụ thể giá trị n phần tử đó là gì
-- Ví dụ:
+	+ Cần truy cập ngẫu nhiên  thông qua chỉ số.
+![image](https://github.com/user-attachments/assets/fb20cb53-317f-4f83-a4db-e971372f2c6a)
 
-```c++
-vector <int > v(n,100);
-```
-
-	
-- Một số method của vector:
-1. size() : Trả về số lượng phần tử trong vector. Độ phức tạp O(1)
-2. length() : Trả về số lượng phần tử trong vector. Độ phức tạp O(1)
-3. push_back() : Thêm phần tử vào cuối vector. Độ phức tạp O(1)
-4. pop_back() : Xóa phần tử cuối cùng trong vector. Độ phức tạp O(1)
-
-- Duyệt các phần từ trong vector:
-1. Thông qua chỉ số 
-2. Thông qua interator : Con trỏ thông minh, trỏ tới phần tử trong vector: v.begin() >> v.end()( v.end là phần tử sau phần tử cuối cùng) ,hoặc cũng có thể dùng interator truy cập 1 phần tử trong vector
-
-```C++
-#include <bits/stdc++.h>
-#include <vector>
-using namespace std;
-int main() {
-    vector<int> v;
-    v.push_back(10);
-    v.push_back(20);
-    v.push_back(30);
-    // Duyệt các phần tử trong vector thông qua chỉ số
-    for(int i = 0; i < v.size(); i++) {
-        cout << v[i] << endl;
-    }
-    // Duyệt các phần tử trong vector thông qua vòng lặp for-each
-    for(int x : v) {
-        cout << x << endl;
-    }
-    // Duyệt các phần tử trong vector thông qua iterator
-    for(vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
-        cout << *it << endl;
-    }
-    // Sử dụng auto để duyệt các phần tử trong vector thông qua iterator
-    for(auto it = v.begin(); it != v.end(); ++it) {
-        cout << *it << endl;
-    }
-    return 0;
-}
-
-```
-
-**Lish trong C++ là gì?**
-- List: Là một danh sách liên kết , List cung cấp khả năng chèn và xóa phần tử ở bất kỳ vị trí nào 
-- list trong C++ là danh sách liên kết đôi
-- Điều này cho phép duyệt danh sách theo cả hai chiều và thực hiện các thao tác chèn/xóa phần tử hiệu quả ở cả hai đầu của danh sách.
-- Truy cập các phần tử của list chỉ có thể thực hiện tuần tự, không hỗ trợ truy cập ngẫu nhiên.
-- Sử dụng Vector: 
-	+ Khi cần thêm hoặc xóa phần tử ở bất kỳ vị trí nào trong danh sách
-- Một số method của Lish:
-1. push_back() và push_front(): Thêm một phần tử vào cuối hoặc đầu của danh sách.
-2. pop_back() và pop_front(): Xóa phần tử cuối cùng hoặc đầu tiên của danh sách.
-3. insert(): Chèn một phần tử vào vị trí cụ thể trong danh sách.
-4. erase(): Xóa một hoặc nhiều phần tử từ danh sách dựa trên vị trí hoặc một khoảng vị trí.
-5. size(): Trả về số lượng phần tử trong danh sách.
 
 
 
@@ -4930,17 +4826,7 @@ int main() {
 - Key duy nhất: Mỗi key là duy nhất trong map, nhiều key có thể có cùng value
 - `Ứng dụng phổ biến của map bao gồm lưu trữ và tìm kiếm dữ liệu với một khóa duy nhất`
 - ứng dụng trong bài toán tần suất xuất hiện các giá trị trong mảng
-- Một số method của Map:
-1. insert(): Thêm một cặp key-value vào std::map. Nếu key đã tồn tại, sẽ bỏ qua thao tác chèn
-2. earse():để xóa phần tử theo key.
-2. find(): Sử dụng find() để tìm một phần tử theo key.
-3. size(): Trả về số lượng phần tử trong std::map.
-4. truy cập, gán value bằng  map[key] 	
-	- Ví dụ:mp[1] =200;
-5. Để duyệt các phẩn tử trong map
-	- For ..each
-	- For ..auto
-	- bằng iterator:begin>>end
+ 
 
 **Multimap  trong C++ là gì?**
 
@@ -4959,8 +4845,6 @@ int main() {
 1. unordered_map lưu trữ phần tử với các key là riêng biệt
 2. Các phần tử trong unordered_map không có thứ tự
 
-
-</details>
 
 **List là gì**
 - List là một danh sách liên kết hai chiều.
@@ -5000,12 +4884,6 @@ int main() {
 10. Set không thể truy cập phần tử thông qua chỉ số như mảng hay vector, string.
 11. Duyệt xóa phần tử thông qua iterator
 
-- Hàm	      Chức năng
-1. size()	checkSố lượng phần tử trong set
-2. insert()	Thêm phần tử vào trong set
-3. empty()	Kiểm tra set rỗng, nếu đúng trả về true, ngược lại trả về false
-4. clear()	Xóa toàn bộ phần tử trong set
-5. earse() xóa 1 phần tử
 
 - Multiset set:
 1. Các phần tử trong multiset có thể trùng nhau
@@ -5029,287 +4907,6 @@ int main() {
 # Algorithm
 - Thư viện STL (Standard Template Library) cung cấp một số thuật toán tiêu biểu thông qua algorithm. 
 - Các thuật toán này hoạt động trên các phạm vi hoặc các loại dữ liệu khác nhau, giúp thực hiện các nhiệm vụ như sắp xếp, tìm kiếm, chuyển đổi dữ liệu, và nhiều thao tác khác. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<details>
-<summary>Ví dụ quan trọng</summary>
-
-```C++
-#include <iostream>
-#include <string>
-#include <vector>
-
-#define in 0
-#define intb 1
-#define add 2
-#define del 3
-#define fix 4
-#define rs 5
-#define out 6
-
-
- 
-
-using namespace std;
-
-class sinhvien {
-protected:
-    string tensv;
-    int tuoisv;
-    int idsv;
-    float diemtoansv;
-    float diemlysv;
-    float diemhoasv;
-    float diemtrungbinhsv;
-
-public:
-    sinhvien() : tuoisv(0), idsv(0), diemtoansv(0.0), diemlysv(0.0), diemhoasv(0.0), diemtrungbinhsv(0.0) {}
-
-    sinhvien(string name, int old, int id, float diemtoan, float diemly, float diemhoa)
-        : tensv(name), tuoisv(old), idsv(id), diemtoansv(diemtoan), diemlysv(diemly), diemhoasv(diemhoa) {}
-
-    void nhapthongtinsv() {
-        cout << "Nhap ten sinh vien: ";
-        cin.ignore();
-        getline(cin, tensv);
-
-        cout << "Nhap tuoi sinh vien: ";
-        cin >> tuoisv;
-
-        do {
-        cout << "Nhap diem toan sinh vien (0>>10): ";
-        cin >> diemtoansv;
-        } while (diemtoansv < 0 || diemtoansv >10 );
-        
-       
-
-        do {
-            cout << "Nhap diem ly sinh vien (0>>10): ";
-            cin >> diemlysv;
-        } while (diemlysv < 0 || diemlysv > 10);
-
-        do {
-            cout << "Nhap diem hoa sinh vien (0>>10): ";
-            cin >> diemhoasv;
-        } while (diemhoasv < 0 || diemhoasv > 10);
-    }
-
-    float diemtrungbinh() {
-        diemtrungbinhsv = (diemtoansv + diemlysv + diemhoasv) / 3;
-        return diemtrungbinhsv;
-    }
-
-    string layXepLoai()  {
-        float dtb = diemtrungbinh();
-        if (dtb > 8) {
-            return "Gioi";
-        } else if (dtb >= 6.5 && dtb < 8) {
-            return "Kha";
-        } else {
-            return "TB";
-        }
-    }
-
-    string layThongTin()  {
-        return "Ten: " + tensv + "\nTuoi: " + to_string(tuoisv) + "\nID: " + to_string(idsv) +
-               "\nDiem Toan: " + to_string(diemtoansv) + "\nDiem Ly: " + to_string(diemlysv) +
-               "\nDiem Hoa: " + to_string(diemhoasv) + "\nDiem Trung Binh: " + to_string(diemtrungbinhsv) +
-               "\nXep loai: " + layXepLoai();
-    }
-
-    int layIdSV()  {
-        return idsv;
-    }
-    void setIdSV(int newId) {
-        idsv = newId;
-    }
- 
-};
-
-class danhsachSV {
-private:
-    vector<sinhvien> danhsachsinhvien;
-    static int maxId ;
-    
-
-public:
-   
-    void xoasv(int id) {
-        int n = danhsachsinhvien.size();
-        bool found = false;
-        for (int i = 0; i < n; i++) {
-            if (danhsachsinhvien[i].layIdSV() == id) {
-                found = true;
-                // Xóa sinh viên tại vị trí i
-                danhsachsinhvien.erase(danhsachsinhvien.begin() + i);
-                cout << "Da xoa sinh vien co ID " << id << endl;
-
-            break;  
-            }   
-        }  
-        if (!found) {
-        cout << "Khong tim thay sinh vien co ID " << id << endl;   
-        }
-
-    }
-
-    void suaThongTinSV(int id) {
-        int n = danhsachsinhvien.size();
-        bool found = false;
-
-        for (int i = 0; i < n; i++) {
-            if (danhsachsinhvien[i].layIdSV() == id) {
-                found = true;
-                cout << "Nhap thong tin moi cho sinh vien:\n";
-                sinhvien svMoi;
-                svMoi.nhapthongtinsv();
-                svMoi.diemtrungbinh();
-                danhsachsinhvien[i] = svMoi;
-                cout << "Da cap nhat thong tin cho sinh vien co ID " << id << endl;
-
-                break;  
-            }
-        }
-
-        if (!found) {
-            cout << "Khong tim thay sinh vien co ID " << id << endl;
-        }
-    }
-
-
-    void sapXepTheoDiemTB() {
-        int n = danhsachsinhvien.size();
-        
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                 
-                if (danhsachsinhvien[j].diemtrungbinh() > danhsachsinhvien[j + 1].diemtrungbinh()) {                  
-                    sinhvien temp = danhsachsinhvien[j];
-                    danhsachsinhvien[j] = danhsachsinhvien[j + 1];
-                    danhsachsinhvien[j + 1] = temp;
-                }
-            }
-        }
-    }
-
-    void inThongTinDanhSach() const {
-        for (auto sv : danhsachsinhvien) {
-            cout << sv.layThongTin() << endl;
-            cout << "-------------" << endl;
-        }
-    }
-
-    void nhapThemSV() {
-        sinhvien sv;
-        maxId++;
-        sv.setIdSV(maxId);
-        sv.nhapthongtinsv();
-        sv.diemtrungbinh();
-        danhsachsinhvien.push_back(sv);
-    }
-    
-    void reset(){
-        danhsachsinhvien.clear();
-
-
-    }
-};
-
-int danhsachSV::maxId = 0;
-
-int main() {
-    danhsachSV dssv;
-    int nhapkey;
-    int i_id;
-    
-    int soluongsv;
-
-    do {
-        cout << "Nhap so luong sinh vien (khong duoc am): ";
-        cin >> soluongsv;
-    } while (soluongsv < 0);
-
-    for (int i = 0; i < soluongsv; i++) {
-        dssv.nhapThemSV();
-    }
-    do {
-        cout << "Vui long lam theo huong dan: "<< endl;
-        cout << "Nhap 0:In ra danh sach sinh vien "<< endl;
-        cout << "Nhap 1:In ra danh sach sinh vien theo diem TB"<< endl;
-        cout << "Nhap 2:them sinh vien va in ra theo diem TB"<< endl;
-        cout << "Nhap 3:xoa sinh vien va in ra theo diem TB"<< endl;
-        cout << "Nhap 4:sua sinh vien va in ra theo diem TB"<< endl;
-        cout << "Nhap 5:reset chuong trinh"<< endl;
-        cout << "Nhap 6:thoat chuong trinh"<< endl;
-    
-    
-        cin >> nhapkey;
-        switch (nhapkey)
-        {
-        case  in:
-            cout << "Danh sach sinh vien:"<< endl;;
-            dssv.inThongTinDanhSach();
-            break;
-
-        case  intb:
-            dssv.sapXepTheoDiemTB();
-            cout << "Danh sach sinh vien sau khi sap xep theo diem trung binh:"<< endl;;
-            dssv.inThongTinDanhSach();
-            break;
-
-        case add:
-            dssv.nhapThemSV(); 
-            dssv.inThongTinDanhSach();  
-            break;
-
-        case del:
-            cout << "vui long nhap id sinh vien can xoa:"<< endl;;
-            cin >> i_id;
-            dssv.xoasv(i_id);
-            dssv.inThongTinDanhSach();  
-            break;
-
-        case fix:
-            cout << "vui long nhap id sinh vien can sua:"<< endl;;
-            cin >> i_id;
-            dssv.suaThongTinSV(i_id); 
-            dssv.inThongTinDanhSach();  
-            break;
-        case rs:
-            cout << "reset tat ca du lieu" << endl;
-            dssv.reset();
-            break;
-        case out:
-            cout << "Thoat chuong trinh" << endl;
-            break;
-        
-        default:
-            cout << "Lua chon khong hop le. Vui long nhap lai"<< endl;
-            break;
-        }
-    }
-    while (nhapkey!=6);
- 
-    return 0;
-
-}
-
-
-```
-</details>
 
 
 
