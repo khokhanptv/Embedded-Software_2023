@@ -4977,6 +4977,21 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+**Phân biệt Macro và Function trong C/C++**
+ 
+
+1. Macro:
+	- Macro là một đoạn mã được định nghĩa  bằng chỉ thị #define, được xử lý trong quá trình tiền xử lý 
+	- Khi biên dịch,thay thế tên macro bằng nội dung của nó .
+2. Function :
+	- Function là một khối mã được định nghĩa với  tên 
+	- Có thể được gọi nhiều lần trong chương trình.
+	- Function được xử lý trong giai đoạn Compilation và Linking.
+		+ Compilation	Biên dịch Function thành mã máy 
+		+ Linking	Liên kết các Function từ các file hoặc thư viện để tạo file thực thi cuối cùng.
+![image](https://github.com/user-attachments/assets/d7764ecd-1bf9-457a-ad0d-99c91b6833e0)
+
+
 **Cách hệ điều hành xử lý hàm ngắt**
 Bước 1: Phát hiện ngắt
 - Ngắt có thể được gửi từ phần cứng (như bàn phím, timer, mạng) hoặc phần mềm (như lỗi chương trình hoặc yêu cầu hệ thống).
