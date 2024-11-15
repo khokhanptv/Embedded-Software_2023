@@ -3605,13 +3605,20 @@ public:
 
 ```
 **Constructor**
--  Constructor  là một method , nó sẽ tự động gọi khi khởi tạo object. Constructor sẽ có tên trùng với tên của class,Nó dùng để khởi tạo giá trị cho đối tượng 
+-  Constructor là một phương thức trong lớp (class) dùng để khởi tạo đối tượng.. 
+-  Constructor được gọi tự động khi một đối tượng của lớp được tạo.
+- Đặc điểm của Constructor:
+	- Nếu không định nghĩa Constructor, trình biên dịch sẽ tự động tạo ra một Constructor mặc định.
+	- Tên trùng với tên lớ
+	- Không có kiểu trả về
+	- Tự động gọi khi khởi tạo đối tượng.
+	- Có thể có tham số:
+
 -  Có hai loại chính:
-	+ Default Constructor (Constructor mặc định):Hệ thống sẽ tự động tạo
-	+ Parameterized Constructor (Constructor với tham số):   constructor được khởi tạo và có tham số truyền vào.
-	+  Có constructor là cần thiết và quan trọng:
-		+ Khởi tạo đối tượng
-		+ Thiết lập các giá trị ban đầu
+	+ Constructor mặc định: Hệ thống sẽ tự động tạo
+	+ Constructor với tham số :Cho phép truyền giá trị khi khởi tạo đối tượng.
+	+ Constructor sao chép :Được sử dụng để khởi tạo một đối tượng mới từ một đối tượng hiện có.
+
 <details>
 <summary>Ví dụ:</summary>
 
@@ -3654,16 +3661,14 @@ int main() {
 </details>
 
 **copy Constructor**
-- Mục đích của constructor sao chép là sao chép các giá trị thuộc tính từ một đối tượng đã tồn tại sang một đối tượng mới
 - Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
 	+ Shallow copy
-		+ Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy.
-		+ hỉ các giá trị của các property được sao chép từ đối tượng gốc sang đối tượng mới.
-		+ Nếu các property là các con trỏ , sẽ chỉ sao chép địa chỉ của các con trỏ đó dẫn đến nếu 1 đối tượng bị thay đổi sẽ ảnh hưởng tới đối tượng khác
+		+ Chỉ sao chép địa chỉ bên trong , không sao chép dữ liệu 
+		+ Khi một đối tượng bị hủy, dữ liệu chung sẽ bị giải phóng, làm cho đối tượng còn lại trỏ tới vùng nhớ không hợp lệ
 
 	+ Deep copp
-		+ Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao
-		+ Điều này đảm bảo rằng các đối tượng không chia sẻ cùng một vùng nhớ.thay đổi dữ liệu trong một đối tượng không ảnh hưởng đến dữ liệu của đối tượng khác.
+		+ Tạo một bản sao độc lập của tất cả dữ liệu ,có vùng nhớ riêng
+	
 
 <details>
 <summary>Ví dụ:</summary>
@@ -3742,8 +3747,9 @@ int main() {
 
 
 **Destructor**
-- Destructor là một method sẽ được tự động gọi khi object được giải phóng
+- là một phương thức trong lớp (class) được sử dụng để giải phóng tài nguyên
 - Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
+- Không có tham số
 - Chỉ có duy nhất một hàm hủy trong một lớp. Hàm hủy tự động được gọi. Nếu như chúng ta không định nghĩa hàm hủy thì mặc định trình biên dịch sẽ tự tạo ra một hàm hủy mặc nhiên
 - Hàm hủy (Destructor) trong C++ được gọi tự động khi:
 	+ Kết thúc hàm
@@ -3780,7 +3786,8 @@ int main(void) {
 **Vitual Destructor**
 
 - virtual destructor nằm ở lớp cha( lớp cơ sở ), khi ta có 1 đối tượng của lớp con được tạo ra và xóa từ con trỏ của lớp cha.Destructor của cả lớp con  và lớp cha đều được gọi, đảm bảo rằng tất cả các tài nguyên được giải phóng đúng đắn.
-
+- Khi nào cần sử dụng Virtual Destructor?
+	- Khi bạn làm việc với đa hình (polymorphism).
 <details>
 <summary>Ví dụ:</summary>
 
@@ -3813,12 +3820,12 @@ int main() {
 </details>
 
 **Static keyword:property**
-- Khi một property trong class được khai báo với từ khóa static, thì tất cả các object trỏ tới property sẽ cùng địa chỉ
-- Dùng biến Static để tiết kiệm bộ nhớ ,vì các đối tượng trong cùng một lớp truy cập vào một biến, nó đang chia sẻ vùng nhớ lưu trữ cho biến static đó
--Biến Static thuộc về class, không thuộc về bất kỳ đối tượng cụ thể nào. Do đó, nó cần được khởi tạo ở phạm vi toàn cục, bên ngoài class.
-- ứng dụng trong việc  đếm số lượng đối tượng đã được tạo ra từ một class.
-
-
+- Static data member là một biến thành viên của lớp, nhưng không thuộc về bất kỳ đối tượng cụ thể nào.
+- Thay vào đó, static property được chia sẻ giữa tất cả các đối tượng của lớp.
+- Chỉ tồn tại một bản sao duy nhất của static property trong bộ nhớ
+- Static property được khởi tạo ngoài lớp 
+- Có thể được truy cập thông qua tên lớp hoặc đối tượng.
+-  Ví dụ Đếm số lượng đối tượng được tạo từ một lớp
  
 
 <details>
@@ -3891,26 +3898,11 @@ int main() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 **Static keyword:method**
-- Có thể gọi mà không cần tạo một đối tượng của class.
-- Chỉ có thể truy cập các thành viên tĩnh khác của class (không thể truy cập các thành viên không tĩnh)
-	+ không cho phép thay đổi dữ liệu của từng đối tượng, từ đó tăng tính cô đọng và rõ ràng của mã nguồn.
-- Tiết kiệm bộ nhớ: Vì không cần tạo đối tượng, việc sử dụng phương thức tĩnh tiết kiệm bộ nhớ hơn trong một số trường hợp.
+- Static method trong C++ là một method khai báo với từ khóa static
+- Không cần tạo đối tượng để gọi static method, có thể gọi thông qua tên lớp
+- Static method chỉ có thể truy cập static property hoặc static method khác.
+
 <details>
 <summary>Ví dụ:</summary>
 
@@ -3937,12 +3929,10 @@ int main() {
 
 **Con trỏ this trong C++**
 - This là một con trỏ đặc biệt dùng để trỏ đến địa chỉ của đối tượng hiện tại
-- Trong ví dụ dưới thì đối tượng hiện tại là n1, n2
 - Khi nào nên dùng con trỏ this:
-	+ Nó có thể được sử dụng để truyền đối tượng hiện tại làm tham số cho method khác
-	+ Khi gọi method từ các đối tượng khác nhau, nó sẽ trỏ tới địa chỉ của các đối tượng tương ứng.
-- Trong trường hợp ta đặt tên của tham số method trùng tên với property, và gán property = tham số method, thì lúc này chương trình hiểu rằng đang gán giá trị của các tham số cho chính các tham số đó. Nên các property giữ giá trị mặc định của chúng (0) khi được tạo ra.
-- Khi bạn sử dụng this->, bạn đang xác định rõ ràng rằng các phép gán áp dụng cho các proberty, không phải là các tham số của phương thức.
+	+ Khi một đối tượng gọi một hàm thành viên, this trỏ đến đối tượng đó.
+	+ phân biệt giữa biến thành viên và tham số(Nếu trùng tên)
+	+ Static method không thể sử dụng con trỏ this vì static method không gắn với bất kỳ đối tượng nào.
 
 ```c++
 void setData(int msnv, string ten, int tuoi) {  
@@ -4140,14 +4130,14 @@ delete[] arr; // giải phóng bộ nhớ của mảng động
 
 ```
 **Smart Pointer C++**
-- smart pointers là một cơ chế quản lý bộ nhớ tự động , tránh được việc quên giải phóng bộ nhớ đã được cấp phát.- Dựa vào cơ chế Destructer trong class
+- smart pointers là một cơ chế quản lý bộ nhớ tự động.
 - Memory Leak: là hiện tượng xảy ra khi một chương trình không thể giải phóng bộ nhớ đã cấp phát dẫn đến sự chậm trễ và giảm hiệu suất của chương trình 
 	+ Quên giải phóng bộ nhớ
 	+ Mất điều kiện để giải phóng: Các tham chiếu vòng (circular references)
 
 **Unique Pointer**
-- unique_ptr là một loại smart pointer trong C++, Cơ chế của nó cho phép  một smart pointer sở hữu vùng nhớ và khi smart pointer này bị hủy, vùng nhớ cũng sẽ được giải phóng.Sẽ tự động giải phóng vùng nhớ khi ra khỏi phạm vi của nó,phạm vi của nó có thể là kết thúc 1 hàm con hoặc kết thúc chương trình , nếu nằm ở hàm main()
--  unique_ptr  Được sử dụng khi chỉ có duy nhất một đối tượng  sở hữu tài nguyên vào một thời điểm
+- Chỉ có một smart pointer duy nhất được sở hữu tài nguyên tại một thời điểm.
+- Không thể sao chép (copy), chỉ có thể chuyển nhượng quyền sở hữu bằng cách dùng std::move.
 ```C++
 #include <iostream>
 #include <memory>
@@ -4165,14 +4155,10 @@ int main() {
 
 ```
 **shared_ptr**
-- shared_ptr : Cơ chế của shared_ptr là  1 vùng nhớ  được nhiều Smart Pointer sỡ hữu , vùng nhớ này chỉ giải phóng khi không còn shared_ptr trỏ đến .
-- Nó sử dụng một biến đếm tham chiếu để theo dõi số lượng các smart pointer đang trỏ đến đối tượng và giữ vùng nhớ được quản lý cho đến khi không còn smart pointer nào trỏ đến nó nữa.
-- Ví dụ có 2 shared_ptr  trỏ đến 1 biến ,việc giải phóng vùng nhớ sẽ chỉ xảy ra khi cả hai shared_ptr này đều bị hủy hoặc không còn trỏ đến vùng nhớ nữa
-- Mục đích :Được sử dụng khi cần chia sẻ tài nguyên giữa nhiều thực thể.Tài nguyên sẽ chỉ được giải phóng khi không còn thực thể nào sở hữu nó nữa, điều này giúp tránh được rò rỉ bộ nhớ do quên giải phóng hay dangling pointer.
-- unique_ptr: Thường nhẹ hơn và hiệu suất cao hơn so với shared_ptr, vì nó không cần quản lý biến đếm tham chiếu. Tuy nhiên, chỉ sử dụng được trong các tình huống đơn sở hữu.
+- Chia sẻ quyền sở hữu của một tài nguyên giữa nhiều shared_ptr.
+- Bộ đếm tham chiếu (reference count) được duy trì để theo dõi số lượng shared_ptr sở hữu tài nguyên.
+- Tài nguyên được giải phóng khi bộ đếm tham chiếu bằng 0 (không còn shared_ptr nào sở hữu).
 
-shared_ptr: Phù hợp khi cần chia sẻ tài nguyên giữa nhiều thực thể và không biết trước số lượng thực thể sẽ sở hữu tài nguyên. Tuy nhiên, có thể ảnh hưởng đến hiệu suất vì việc quản lý biến đếm tham chiếu.
-- Điều này giúp tránh được những vấn đề như memory leak (rò rỉ bộ nhớ) hoặc dangling pointer (con trỏ lạc). Tuy nhiên, cần lưu ý rằng shared_ptr không thể giải quyết được vấn đề vòng lặp tham chiếu (circular reference), vì nó chỉ dựa vào đếm tham chiếu để giải phóng bộ nhớ.
 
 ```C++
 #include <iostream>
@@ -4200,11 +4186,13 @@ int main() {
 ```
 
 **weak_ptr**
-- weak_ptr là 1 smart pointer  không tham gia vào việc giải phóng vùng nhớ trực tiếp.
-- Nó chỉ là một công cụ để xem một đối tượng có tồn tại shared_ptr  hay không mà không tăng số lượng tham chiếu đếm của  shared_ptr đó. 
-- weak_ptr có một phương thức là lock(). Nếu shared_ptr mà weak_ptr theo dõi vẫn tồn tại, lock() sẽ trả về một shared_ptr hợp lệ có thể sử dụng để truy cập đối tượng. Ngược lại, nếu shared_ptr đã bị giải phóng, lock() sẽ trả về một shared_ptr rỗng.
-- Vấn đề vòng lặp tham chiếu là khi hai hoặc nhiều đối tượng sử dụng std::shared_ptr để tham chiếu lẫn nhau mà không được giải phóng bộ nhớ đúng cách sẽ gây ra rò rỉ bộ nhớ
-- weak_ptr thường được sử dụng để tránh vấn đề vòng lặp tham chiếu (reference cycles) giữa các đối tượng được quản lý bởi std::shared_ptr
+- Cũng chia sẻ tài nguyên với shared_ptr, nhưng không tăng bộ đếm tham chiếu.
+- Được sử dụng để ngăn chặn vòng tham chiếu giữa các shared_ptr, giúp tránh rò rỉ bộ nhớ.
+- Trước khi sử dụng tài nguyên, cần chuyển weak_ptr thành shared_ptr bằng lock().
+**Lặp tham chiếu**
+- Xảy ra khi hai hoặc nhiều đối tượng shared_ptr tham chiếu lẫn nhau.
+- bộ đếm tham chiếu của chúng sẽ luôn lớn hơn 0 .Do đó, tài nguyên sẽ không bao giờ được giải phóng.
+- Điều này thường xảy ra khi sử dụng std::shared_ptr để quản lý tài nguyên động.
 
 <details>
 <summary>Ví dụ:</summary>
@@ -4236,17 +4224,7 @@ int main() {
 
 
 ```
-
-1. Định nghĩa lớp A và B:
-- Lớp A có một shared_ptr<B> để tham chiếu mạnh  đến đối tượng B.
-- Lớp B có một weak_ptr<A> để tham chiếu yếu đến đối tượng A. 
-- Cả A và B đều có các hàm tạo và hàm hủy để in ra thông báo khi được khởi tạo và hủy.
-2. Hàm main():
-- Tạo std::shared_ptr a và b để quản lý đối tượng A và B tương ứng.
-- Gán a->ptrB = b; và b->ptrA = a; để thiết lập mối quan hệ giữa A và B.
-- Khi main() kết thúc, các shared_ptr a và b sẽ tự động giải phóng các đối tượng A và B một cách an toàn.
-3. Tham chiếu mạnh :Giữ quyền sở hữu đối tượng. Miễn là có ít nhất một shared_ptr trỏ đến đối tượng, đối tượng đó sẽ không bị hủy.
-4. Tham chiếu yếu :Không giữ quyền sở hữu đối tượng. Nó chỉ trỏ đến đối tượng mà không ảnh hưởng đến vòng đời của đối tượng đó.
+ 
 
 </details>
 
@@ -4523,10 +4501,9 @@ int main(){
 </details>
 
 **2/Inheritance (Tính kế thừa ):**
-- Tính kế thừa ( Inheritance) là khả năng sử dụng lại các property và method của một class trong một class khác
+- 1 class được kế thừa property và method của một class khác
 - Class con có thể kế thừa property và method của class cha trong phạm vi public và protected  
 - Có 3 kiểu kế thừa là public, private và protected. Những property và method được kế thừa từ class cha sẽ nằm ở quyền truy cập của class con tương ứng với kiểu kế thừa.
-
 - Nên dùng: Khi một lớp B được miêu tả là "B là một A". Ví dụ: một lớp hình tròn có thể kế thừa từ một lớp hình học.
 - Không nên:Mối quan hệ "has-a" (có một) diễn ra khi một lớp chứa một đối tượng của một lớp khác. ví dụ: danhsachSV chứa một đối tượng sinhvien, do đó chúng ta có thể nói danhsachSV "có" hoặc "bao gồm" danh sách các sinh viên.
 
@@ -4645,7 +4622,8 @@ class hs : private sinhvien{
 **3/Polymorphism (Tính đa hình):**
 
 - Function overloading :Các method có thể trùng tên với nhau , nhưng phải khác các input parameter
-- Function overoverriding : Khi 1 class con kế thừa 1 method từ class cha và ta sửa nội dung của nos
+- Function overoverriding : Lớp con Ghi đè lên hàm của lớp cha.
+- Để ghi đè đúng cách, hàm trong lớp cơ sở nên được khai báo với từ khóa virtual.
 <details>
 <summary>Ví dụ:</summary>
 
@@ -4681,7 +4659,7 @@ int main() {
 
 **4/Abstraction (Tính trừu tượng ):**
 
-- Ẩn đi những thành phần tạo ra đối tượng .chỉ hiển thị những gì cần thiết để sử dụng đối tượng đó, tức là các method mà người sử dụng bên ngoài có thể truy cập và tương tác.
+- Chỉ cung cấp giao diện, ẩn đi chi tiết triển khai.
 - Ví dụ tính phương trình bậc 2 , để tính nghiệm x1,x2 thì ta có hàm tính detal = b * b - 4 * a * c .delta là 1 trong những thành phần tạo ra kết quả.Vậy thì hàm tính delta này phải được ẩn đi bằng cách để nó vào phạm vi private
 
 <details>
@@ -4808,7 +4786,7 @@ int main(void){
 
 **Virtual funtion trong C++ là gì?**
 - Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  .
--  Nế
+
 
 <details>
 <summary>Ví dụ</summary>
@@ -5698,13 +5676,11 @@ Circular Wait: Một chuỗi các thread hình thành một vòng lặp trong đ
 	- Synchronization đảm bảo tính đúng đắn trong việc truy cập tài nguyên hoặc thực hiện các tác vụ đồng thời.
 8. volatile trong C là gì?
 	- Khi khai báo một biến là volatile, trình biên dịch sẽ không tối ưu hóa giá trị của biến đó. 
-	- Trình biên dịch thường tối ưu hóa mã bằng cách giữ các giá trị trong thanh ghi hoặc bỏ qua việc đọc lại giá trị từ bộ nhớ nếu nó cho rằng giá trị không thay đổi
-	- Điều này đảm bảo Luôn đọc giá trị mới nhất của biến từ bộ nhớ, thay vì sử dụng giá trị được lưu trong thanh ghi và luôn được ghi trực tiếp vào bộ nhớ khi cập nhật.
 	- Khi nào cần khai báo một biến là volatile?
 		- Phần cứng: Các thanh ghi phần cứng có thể thay đổi giá trị tự động.
 		- Biến toàn cục được truy xuất từ nhiều tác vụ trong ứng dụng đa luồng
-			-  Trong các ứng dụng đa luồng, các luồng khác nhau có thể truy cập và thay đổi giá trị của một biến toàn cục.
-			-  Nếu không dùng volatile, trình biên dịch có thể tối ưu hóa và giữ giá trị của biến trong một bộ nhớ cache cục -  bộ, dẫn đến các luồng khác không nhìn thấy được thay đổi
+			- Trong các ứng dụng đa luồng, các luồng khác nhau có thể truy cập và thay đổi giá trị của một biến toàn cục.
+			- Nếu không dùng volatile, trình biên dịch có thể tối ưu hóa và giữ giá trị của biến trong một bộ nhớ cache cục -  bộ, dẫn đến các luồng khác không nhìn thấy được thay đổi
 			- Nếu không sử dụng volatile, trình biên dịch có thể tối ưu hóa và chỉ đọc giá trị này một lần, dẫn đến sai sót khi thanh ghi tự động thay đổi.
 		-  Ngắt (Interrupt): Giá trị của biến có thể được cập nhật trong trình xử lý ngắt.Ví dụ nhấn nút
 	- Ví dụ thanh ghi Phần cứng:
