@@ -4795,7 +4795,7 @@ int main(void){
 ## STL là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các  hàm mẫu và thuật toán để lưu trữ và thao tác dữ liệu.
 
 **Một số thành phần chính của STL:**
-- Container(Bộ chứa)
+- Container(Bộ chứa) :là các cấu trúc dữ liệu được sử dụng để lưu trữ các phần tử.
 - Iterator: Cung cấp 1 cách chung để duyệt các phần tử trong Container mà không cần quan tâm tới container đó là gi.
 - Kết hợp với các thuật toán STL (std::sort, std::find, std::for_each) để thực hiện các thao tác như sắp xếp, tìm kiếm, và lọc dữ liệu.
  - Trong STL, có nhiều loại iterators:
@@ -4809,61 +4809,38 @@ int main(void){
 - có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả. 
 - Không chèn xóa ở đầu , vì phải di chuyển các phần tử còn lại về phía trước > tốn time so với các loại khác
 - Nó khác mảng động ở chỗ là quản lý bộ nhớ tự động 
-
 - Sử dụng Vector: 
 	+ Thêm hoặc xóa phần tử ở cuối danh sách
 	+ Cần truy cập ngẫu nhiên  thông qua chỉ số.
 ![image](https://github.com/user-attachments/assets/fb20cb53-317f-4f83-a4db-e971372f2c6a)
 
 
-
-
-**Map trong C++ là gì?**
-- Là một container lưu trữ dữ liệu theo cặp key-value.  
-- Các phần tử được sắp xếp theo thứ tự của key.(1,2,3,a,b,c)
-- Tìm kiếm nhanh: Cho phép tìm kiếm, chèn và xóa phần tử 
-- Map không hỗ trợ truy cập thông qua chỉ số như mảng hay vector, string.
-- Key duy nhất: Mỗi key là duy nhất trong map, nhiều key có thể có cùng value
-- `Ứng dụng phổ biến của map bao gồm lưu trữ và tìm kiếm dữ liệu với một khóa duy nhất`
-- ứng dụng trong bài toán tần suất xuất hiện các giá trị trong mảng
- 
-
-**Multimap  trong C++ là gì?**
-
-1. Các phần tử trong map có thể có key trùng nhau
-2. Multimap lưu các phần tử theo thứ tự tăng dần về key
-3. Multimap không hỗ trợ truy cập value thông qua key bằng cú pháp map[key]
-4. Multimap không hỗ trợ chỉ số như mảng hay vector mà chỉ số của multimap chính là key
-5. Chỉ có thể thêm khai báo Multimap bằng insert
-6. Xóa thông qua iterator , không xóa bằng iterator vì có thể bay sạch key
-7. Dùng trong bài toán có key trùng 
-
-
-
-
-**Unordered_map  trong C++ là gì?**
-1. unordered_map lưu trữ phần tử với các key là riêng biệt
-2. Các phần tử trong unordered_map không có thứ tự
-
-
 **List là gì**
 - List là một danh sách liên kết hai chiều.
-- Dưới đây là một số đặc điểm quan trọng của list:
-	+ Truy cập tuần tự
-	+ Hiệu suất chèn và xóa: 
-- Một số method của list:
-	+ push_back():
-	+ pop_back():
-	+ insert(): Chèn một node vào list
-	+ erase(): Xóa một node của list
-	+ size(): Trả về kích thước của list
-- Sử dụng vector khi:
-	+ Cần truy cập ngẫu nhiên đến các phần tử.
-    + Thực hiện nhiều thao tác chèn/xóa ở cuối danh sách.
-	+ Dung lượng có thể biết trước hoặc thay đổi ít.
+- trong đó mỗi phần tử là một nút chứa:
+	+ Giá trị dữ liệu.
+	+ Con trỏ trỏ tới phần tử trước và sau nó.
+- Không hỗ trợ truy cập ngẫu nhiên	
 - Sử dụng list khi:
 	+ Thực hiện nhiều thao tác chèn/xóa ở bất kỳ vị trí nào trong danh sách.
 	+ Cần thực hiện nhiều thao tác chèn/xóa mà không làm ảnh hưởng đến các iterators hiện có.
+**Deque là gì**
+- là một container cho phép thêm/xóa ở cả hai đầu và truy cập ngẫu nhiên.(như Vector)
+**Map trong C++ là gì?**
+- dùng để lưu trữ các cặp khóa-giá trị (key-value pairs).
+- Mỗi khóa là duy nhất và được sử dụng để truy cập giá trị tương ứng. 
+- Các phần tử được sắp xếp theo khóa, không cần thao tác sắp xếp thủ công.
+- truy cập dữ liệu thông qua khóa, giúp tổ chức và quản lý dữ liệu dễ dàng hơn.
+- Ví dụ:Lưu trữ thông tin cá nhân theo ID.
+**Multimap  trong C++ là gì?**
+1. Khóa trùng lặp: nhiều giá trị cho cùng khóa 
+2. Sắp xếp: Các phần tử được sắp xếp tự động theo thứ tự của khóa.
+**Unordered_map  trong C++ là gì?**
+1. Không cho phép khóa trùng lặp; mỗi khóa phải duy nhất.
+2. Sắp xếp: Không có thứ tự sắp xếp giữa các phần tử.
+**unordered_multimap  trong C++ là gì?**
+1. Khóa trùng lặp: nhiều giá trị cho cùng khóa 
+2.  Không có thứ tự sắp xếp giữa các phần tử.
 
  
 
@@ -4871,33 +4848,24 @@ int main(void){
 - Set: Là một container không cho phép phần tử trùng lặp và sắp xếp tự động các phần tử theo thứ tự tăng dần
 - Khi cần sắp xếp tự động các phần tử theo thứ tự tăng dần hoặc giảm dần.
 - Khi cần lưu trữ một tập hợp các phần tử duy nhất.
-- Một số method của Set:
-1. insert(): Chèn một phần tử vào set. Nếu phần tử đã tồn tại, nó sẽ không được chèn lại.
-2. erase(): Xóa một hoặc nhiều phần tử từ set dựa trên giá trị hoặc iterator.
-3. find(): Tìm kiếm một phần tử trong set và trả về iterator đến nó nếu nó tồn tại, hoặc end() nếu không tìm thấy.
-4. size(): Trả về số lượng phần tử trong set.
-5. empty(): Kiểm tra xem set có rỗng không.
-6. clear(): Xóa tất cả các phần tử trong set.
-7. Các phần tử trong set có giá trị khác nhau, không có 2 phần tử có cùng giá trị
-8. Các phần tử trong set được tự động sắp xếp theo thứ tự tăng dần
-9. Tìm kiếm phần tử trong set chỉ mất độ phức tạp O(logN)
-10. Set không thể truy cập phần tử thông qua chỉ số như mảng hay vector, string.
-11. Duyệt xóa phần tử thông qua iterator
-
-
-- Multiset set:
-1. Các phần tử trong multiset có thể trùng nhau
+- Hiệu suất:Tìm kiếm, chèn, xóa
+**Multiset set:**
+1. Cho phép phần tử trùng lặp.
 2. Các phần tử trong multiset có thứ tự mặc định theo thứ tự tăng dần
-3. Nếu dùng earse để xóa thì có thể xóa các phần tử cùng giá trị , nên dùng iterator để xóa 
-4. Ứng dụng tìm MAX , MIN trong 1 mảng
-- Unordered_set:
-1. unordered_set không duy trì bất kỳ thứ tự nào giữa các phần tử mà nó chứa
+ 
+**Unordered_set:**
+1. Không cho phép phần tử trùng lặp.
+2. Sắp xếp: Không duy trì thứ tự sắp xếp.
 
-
-
-
-
-
+**unordered_multiset**
+1. Cho phép phần tử trùng lặp.
+2. Không duy trì thứ tự sắp xếp.
+**stack**
+1. Nguyên tắc hoạt động LIFO  (Last In, First Out).
+2. Thêm/xóa  tại đỉnh ngăn xếp.
+**queue**
+1. Nguyên tắc hoạt động FIFO (First In, First Out).
+2. Thêm ở cuối hàng đợi, xóa ở đầu hàng đợi.
 # Iterator
 - Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
 - Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
@@ -4907,6 +4875,15 @@ int main(void){
 # Algorithm
 - Thư viện STL (Standard Template Library) cung cấp một số thuật toán tiêu biểu thông qua algorithm. 
 - Các thuật toán này hoạt động trên các phạm vi hoặc các loại dữ liệu khác nhau, giúp thực hiện các nhiệm vụ như sắp xếp, tìm kiếm, chuyển đổi dữ liệu, và nhiều thao tác khác. 
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4920,9 +4897,18 @@ int main(void){
 - Là việc sử dụng nhiều luồng đồng thời trong một chương trình để tăng hiệu suất và sử dụng tốt các tài nguyên hệ thống.Muốn sử dụng thì `#include <thread>`
 
 - Các vấn đề thường gặp trong đa luồng:
--	Data race: 
--	Deadlock: 
--   Race condition
+-	Data race: Nhiều luồng truy cập và ghi dữ liệu cùng lúc mà không có đồng bộ.
+	+ Dùng mutex, lock_guard, atomic operations để tránh
+-	Deadlock: Các luồng chờ nhau giải phóng tài nguyên, dẫn đến tình trạng chờ vĩnh viễn.
+	+ Dùng lock 
+	+ Sử dụng Timeout:Thiết lập thời gian chờ khi yêu cầu tài nguyên. 
+	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc): 
+		+ Đảm bảo rằng các luồng đều tuân thủ thứ tự khóa giống nhau (khóa dữ liệu 1 trước, sau đó khóa dữ liệu 2 sau).
+		+ Thread A cố gắng khóa khóa dữ liệu 1. Nếu  dữ liệu 1 đang trống, nó sẽ khóa thành công và tiếp tục.
+		+ Thread A sau đó cố gắng khóa dữ liệu 2. Nếu  dữ liệu 2 đang trống, nó sẽ khóa thành công. Nếu không, nó sẽ chờ cho đến khi  dữ liệu 2 được mở khóa.
+
+-   Race condition: Xảy ra khi các luồng không có thứ tự logic khi tranh chấp tài nguyên
+	+ Sử dụng cờ đồng bộ hoặc điều kiện chờ như std::condition_variable
 
 
 **Synchronization Mechanisms (Cơ chế đồng bộ hóa):**
@@ -4934,34 +4920,7 @@ int main(void){
 - std::unique_lock: Cơ bản có tính năng giống lock(),unlock(). nghĩa là 1 thời điểm chỉ cho 1 luồng truy cập dữ liệu , nhưng việc unlock là tự động
 - std::shared_lock:cho phép nhiều luồng đọc cùng một lúc.
 
-<details>
-<summary>Ví dụ unique_lock</summary>
 
-```c++
-
-#include <iostream>
-#include <thread>
-#include <mutex>
-
-std::mutex mtx;
-int sharedData = 0;
-void threadFunction() {
-    std::unique_lock<std::mutex> lock(mtx); // Khóa mutex
-    ++sharedData; // Truy cập và thay đổi biến dữ liệu được chia sẻ
-    std::cout << "Thread " << std::this_thread::get_id() << ": sharedData = " << sharedData << std::endl;
-} 
-int main() {
-    std::thread t1(threadFunction);
-    std::thread t2(threadFunction);
-
-    t1.join();
-    t2.join();
-
-    return 0;
-}
-
-```
-</details>
 
 
 **Concurrent Data Structures (Cấu trúc dữ liệu đồng thời)**
@@ -4973,76 +4932,14 @@ int main() {
 
 **Bất đồng bộ (Asynchronous):**
 - Trong lập trình, bất đồng bộ thường ám chỉ việc thực hiện một tác vụ mà không cần chờ đợi kết quả của tác vụ trước đó hoàn thành.
-
-<details>
-<summary>Ví dụ</summary>
-
-```c++
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-
-std::mutex mtx;
-std::condition_variable cv;
-int count = 0;
-
-void thread1() {
-    for (int i = 0; i < 5; ++i) {
-        // Simulate some work
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        
-        // Increase count
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            ++count;
-            std::cout << "Thread 1: Count = " << count << std::endl;
-        }
-
-        // If count reaches 5, notify thread 2
-        if (count == 5) {
-            cv.notify_one();
-        }
-    }
-}
-
-void thread2() {
-    std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, [] { return count == 5; });
-    std::cout << "Thread 2: Condition met, count = " << count << std::endl;
-}
-
-int main() {
-    std::thread t1(thread1);
-    std::thread t2(thread2);
-
-    t1.join();
-    t2.join();
-
-    return 0;
-}
-
-```
-</details>
-
 - notify_one() nằm trong thread1 ,wait() nằm trong thread2.Điều này đảm bảo rằng khi điều kiện được thỏa mãn trong thread1, thread2 sẽ được thông báo và tỉnh dậy để tiếp tục thực thi.
 - Khi điều kiện thread 1 thõa mãn , thì wait() sẽ tự unlock tài nguyên , để các luồng khác có thể tiếp tục thực thi
 
-**Challenges in Concurrency (Thách thức trong đồng thời hóa):**
-- Race Conditions (Điều kiện cạnh tranh): Khi hai hoặc nhiều luồng cố gắng truy cập và thay đổi dữ liệu chia sẻ mà không có sự đồng bộ hóa, có thể dẫn đến kết quả không đoán trước được.
-- Deadlocks (Mắc kẹt): Deadlock có thể xảy ra khi mỗi luồng giữ một tài nguyên và yêu cầu một tài nguyên khác mà đã được một luồng khác giữ.
-- Ví dụ: Luồng A khóa vùng dữ liệu 1 và yêu cầu vùng dữ liệu 2 từ B, trong khi luồng B khóa vùng dữ liệu 2 và yêu cầu vùng dữ liệu 1.Cả 2 luồng đều chờ lẫn nhau nên cả 2 đều mắc kẹt
-	+ Sử dụng Timeout:Thiết lập thời gian chờ khi yêu cầu tài nguyên. 
-	+ Nếu không nhận được tài nguyên trong khoảng thời gian nhất định, hủy yêu cầu.
-	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc): theo ví dụ trên
-		+ Đảm bảo rằng các luồng đều tuân thủ thứ tự khóa giống nhau (khóa dữ liệu 1 trước, sau đó khóa dữ liệu 2 sau).
-		+ Thread A cố gắng khóa khóa dữ liệu 1. Nếu  dữ liệu 1 đang trống, nó sẽ khóa thành công và tiếp tục.
-		+ Thread A sau đó cố gắng khóa dữ liệu 2. Nếu  dữ liệu 2 đang trống, nó sẽ khóa thành công. Nếu không, nó sẽ chờ cho đến khi  dữ liệu 2 được mở khóa.
 
 
-
-- Starvation (Đói đứng):  xảy ra khi một luồng lock tài nguyên quá lâu mà không nhả ra , làm cho các luồng khác không thực thi được
-	+  Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
+- Starvation (Thiếu tài nguyên):   
+	+ xảy ra khi một hoặc nhiều luồng không thể truy cập tài nguyên cần thiết để tiếp tục thực thi, vì các luồng khác liên tục chiếm dụng tài nguyên đó.
+	+ Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
 	+ thiết lập giới hạn thời gian chờ cho các tài nguyên để đảm bảo rằng không có luồng nào bị chặn quá lâu.
 
 
