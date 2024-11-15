@@ -4973,6 +4973,62 @@ int main(void){
 <details>
   <summary><h2>1 Số câu hỏi</h2></summary
 
+ 
+![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
+
+
+**Cách hệ điều hành xử lý hàm ngắt**
+Bước 1: Phát hiện ngắt
+- Ngắt có thể được gửi từ phần cứng (như bàn phím, timer, mạng) hoặc phần mềm (như lỗi chương trình hoặc yêu cầu hệ thống).
+- Khi một ngắt xảy ra, CPU tạm dừng thực thi chương trình hiện tại.
+Bước 2: Lưu trạng thái hiện tại
+- CPU lưu trạng thái hiện tại (giá trị thanh ghi, bộ đếm chương trình - PC) vào stack.
+Bước 3: Chuyển quyền điều khiển đến hàm xử lý ngắt(ISR)
+- CPU tìm địa chỉ của hàm xử lý ngắt  thông qua bảng vector ngắt
+- Hệ điều hành nhảy đến ISR tương ứng để xử lý sự kiện.
+Bước 4: Xử lý ngắt
+- ISR thực hiện công việc cần thiết:
+	- Ví dụ: Nếu ngắt do bàn phím, ISR sẽ đọc dữ liệu từ bộ đệm bàn phím.
+Bước 5: Khôi phục trạng thái và tiếp tục chương trình
+- Sau khi ISR hoàn thành, hệ điều hành:
+	- Khôi phục trạng thái CPU từ stack.
+	- Tiếp tục thực thi chương trình trước đó từ điểm bị ngắt.
+
+**enum,typedef**
+- enum là một kiểu dữ liệu liệt kê, cho phép định nghĩa một tập hợp các hằng số nguyên có tên
+- Các giá trị trong enum mặc định được gán giá trị nguyên tăng dần từ 0.
+enum EnumName {
+    VALUE1,
+    VALUE2,
+    VALUE3,
+    // ...
+};
+- typedef: Định nghĩa tên mới cho kiểu dữ liệu hiện có.
+typedef unsigned int uint;
+uint x = 10;  // x là một unsigned int
+
+**Atomic**
+- Atomic operations là  thao tác trên dữ liệu mà không  bị gián đoạn bởi các thread khác.
+- Chúng đảm bảo rằng một thao tác đọc-ghi (ví dụ, tăng giá trị của biến) sẽ diễn ra trọn vẹn mà không bị xen ngang
+- Khi nào sử dụng, cần thao tác nhanh, đơn giản.Không cần dùng mutex
+**Spinlock(c++ không hỗ trợ)**
+- Spinlock là một loại lock nhẹ
+- Khác với mutex: Mutex có thể đưa luồng vào trạng thái ngủ, còn spinlock không làm vậy mà tiếp tục "quay vòng".
+- Ưu điểm:Hiệu quả hơn mutex khi thời gian giữ khóa ngắn, vì không có chi phí chuyển trạng thái giữa chạy và ngủ.
+**Semaphore**
+- Semaphore là một công cụ đồng bộ hóa cho phép giới hạn số lượng luồng truy cập vào một tài nguyên cụ thể cùng một lúc.
+- Có hai loại chính
+	- Giới hạn số lượng luồng có thể truy cập.
+	- Giống như mutex, chỉ cho phép một luồng truy cập.
+
+**fork()**
+- fork() là một hàm hệ thống trong các hệ điều hành Unix/Linux, 
+- được sử dụng để tạo ra một tiến trình con (child process) từ tiến trình cha (parent process). 
+- Sau khi gọi fork(), tiến trình cha và tiến trình con sẽ chạy song song và độc lập
+- Hàm fork() trả về các giá trị khác nhau tùy thuộc vào ngữ cảnh:
+	- 0: Trả về trong tiến trình con.
+	- Dương số (> 0): Trả về PID (Process ID) của tiến trình con trong tiến trình cha.
+	- Âm số (< 0): Trả về nếu có lỗi, không thể tạo tiến trình con.
 **cross compiler**
 - Cross Compiler là trình biên dịch có khả năng tạo ra mã nhị phân có thể chạy trên một nền tảng khác với nền tảng nơi trình biên dịch đang hoạt động.
 - Biên dịch mã trên máy tính (x86_64) để chạy trên vi điều khiển STM32 (kiến trúc ARM Cortex-M).
@@ -5919,106 +5975,51 @@ return n;
 <details>
   <summary><h3>Các giao thức (Protocols)</h3></summary>
 
-**SMT32F4**
-- Watchdog timer (WDT)  là một tính năng quan trọng để bảo vệ chương trình . Nó giám sát hoạt động của chương trình và thực hiện các hành động nhất định nếu hệ thống lỗi
-
--	Khi bắt đầu một chu kỳ, chương trình phải feed một giá trị cụ thể vào thanh ghi của watchdog timer. Nếu chương trình không feed trong khoảng thời gian nhất định, watchdog timer sẽ tự động reset hoặc thực hiện một hành động khác như kích hoạt một ngắt, tùy thuộc vào cấu hình của nó.
-	+ Independent Watchdog (IWDG):	
-		+ IWDG hoạt động độc lập với hệ thống chính.
-		+ Nó được cấu hình để đếm một khoảng thời gian cố định.
-		+ Nếu không feed (reset) IWDG trong khoảng thời gian cấu hình, nó sẽ kích hoạt một hành động nhất định như reset hệ thống.
-		+ Thích hợp cho các ứng dụng yêu cầu một cơ chế đơn giản để kiểm tra hoạt động của hệ thống và reset nếu cần.
-	+ Window Watchdog (WWDG):  
-		+ WWDG cũng hoạt động độc lập với hệ thống chính.
-		+ Nó được cấu hình với hai giá trị: giá trị trễ (delay) và giá trị cửa sổ (window).
-		+ Trong thời gian delay, bạn phải feed WWDG. Sau thời gian delay và trước khi kết thúc cửa sổ, bạn phải feed nó một lần nữa.
-		+ Nếu không feed WWDG trong thời gian delay hoặc nếu feed nó sau thời gian cửa sổ, nó sẽ kích hoạt một hành động nhất định như reset hệ thống.
-		+ WWDG thường được sử dụng trong các ứng dụng yêu cầu một cơ chế kiểm tra chặt chẽ hơn, nơi mà không chỉ thời gian mà còn thứ tự của các sự kiện được quan trọng.
-
-- stm32F4 thuộc dòng ARM-M(có 3 loại)
-	+ Cortex-A :Dùng trong oto
-	+ Cortex-R :Dùng trong y tế 
-	+ Cortex-M :Tiêu thu năng lượng thấp , chi phí thấp
-- ARM Cortex  được thiết kế dựa trên kiến trúc RISC.RISC  phương pháp thiết kế tập trung vào sự đơn giản của tập lệnh.
-và  cấu trúc Von Neumann, một kiểu cấu trúc trong đó dữ liệu và lệnh được lưu trữ trong cùng một bộ nhớ, để giảm chi phí và độ phức tạp của hệ thống.
-**STM32F4**
-- Flash memory có thể lên đến 1 megabyte
-- SRAM có dung lượng 192+4 kilobytes
-- 16  bộ DMA ,17 timer
-- 3 × I2C ,4 USARTs/2 UARTs ,3 SPIs (42 Mbits/s),
-- 2 × CAN interfaces (2.0B Active)
--  SDIO interface
-
-![z4957623054341_76e371e0a646a50f810f7ba8450aed45](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b64d3b82-97fc-4c9d-a9d4-f05e9bb794f3)
 
 <details>
   <summary><h4>SPI protocol</h4></summary>
 
+- Tốc độ của SPI phụ thuộc xung cloc, thông thường từ vài M tới vài chục M bps(bit/s)
 - Các bit dữ liệu được truyền nối tiếp nhau và có xung clock đồng bộ.
 - Giao tiếp song công, có thể truyền và nhận cùng một thời điểm.
 - Có chế độ 1 dây: truyền hoặc nhận
 - Khoảng cách truyền ngắn
 - Giao tiếp 1 Master với nhiều Slave.
-- Tốc độ truyền khoảng vài Mbps hoặc vài chục Mbps.
+- Tốc độ truyền khoảng vài MHz hoặc vài chục MHz.
 - ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1287cafd-d263-4991-9fca-1d90ae15081e)
-- Với STM32F4 :tần số xung  là 84 MHz, qua bộ chia 8(có thể chọn bộ chia 2,4,8....)>> tốc độ bằng 10.5 Mbps.
-- Để xử lý lỗi truyền dữ liệu trong giao thức SPI,có thể sử dụng cờ (flags) để kiểm tra trạng thái của các lỗi như Overrun, Mode Fault, CRC Error
-**Master/Slave Configuration:**
 
-- Master (Thiết Bị Chủ Động): Master là thiết bị kiểm soát quá trình truyền/nhận dữ liệu. Nó tạo ra xung clock và chọn slave để gửi hoặc nhận dữ liệu từ.
-- Slave (Thiết Bị Bị Động): Slave là thiết bị nghe lệnh từ Master và truyền hoặc nhận dữ liệu tùy thuộc vào yêu cầu của Master.
-Các Dây Truyền Thông Chính:
+Các bước truyền dữ liệu trong SPI
+Bước 1: Master kích hoạt Slave
+- Master sử dụng chân SS (Slave Select) để chọn Slave cụ thể:
+- Đưa chân SS của Slave xuống mức thấp (LOW) để kích hoạt.
+- Khi có nhiều Slave, chỉ một Slave được kích hoạt tại một thời điểm
+Bước 2: Gửi xung clock (SCLK)
+- Tùy gửi hoặc nhận là 8 bit hoặc 16 bit
+- Master bắt đầu tạo xung clock trên đường SCLK.
+- Mỗi cạnh xung clock (lên hoặc xuống) sẽ đồng bộ dữ liệu giữa Master và Slave.
+Bước 3: Truyền dữ liệu từ Master đến Slave (MOSI)
+- Dữ liệu từ Master sẽ được gửi qua đường MOSI (Master Out Slave In).
+- Slave đọc dữ liệu từ MOSI vào mỗi cạnh xung clock (dựa trên cấu hình CPOL và CPHA).
+Bước 4: Truyền dữ liệu từ Slave đến Master (MISO)
+- Đồng thời, Slave có thể gửi dữ liệu ngược lại Master qua đường MISO (Master In Slave Out).
+- Master đọc dữ liệu từ MISO vào mỗi cạnh xung clock.
+Bước 5: Dừng giao tiếp
+- Sau khi truyền xong, Master đưa chân SS lên mức cao (HIGH) để kết thúc giao tiếp với Slave
 
-- MOSI (Master Out Slave In): Dữ liệu được truyền từ Master đến Slave qua dây này.
-- MISO (Master In Slave Out): Dữ liệu được truyền từ Slave đến Master qua dây này.
-- SCK (Serial Clock): Tín hiệu xung clock được tạo ra bởi Master để đồng bộ hóa truyền dữ liệu.
-**Nguyên Tắc Full-Duplex:**
 
-Khi Master muốn truyền dữ liệu, nó tạo ra một xung clock và đặt giá trị dữ liệu trên dây MOSI.
-Đồng thời, Slave lắng nghe xung clock và đọc giá trị dữ liệu từ dây MOSI.
-Ngược lại, khi Slave muốn truyền dữ liệu, nó đặt giá trị dữ liệu trên dây MISO và lắng nghe xung clock.
-Master nhận dữ liệu từ Slave thông qua dây MISO đồng bộ với xung clock.
-(CS).
 **Vấn Đề Đồng Bộ Hóa Trong SPI**
 - Kiểm tra xung clock (CPOL và CPHA) 2 con cài như nhau chưa?
 - Check mode truyền của 2 con (master-slayer)
 - Khung truyền 2 con đúng chưa(8-16 bit)
-**Ứng Dụng Thực Tế của SPI:**
-- Truyền Dữ Liệu Trong Các Ứng Dụng IoT :  ví dụ như mô-đun cảm biến nhiệt độ và độ ẩm sẽ gửi thông số cho microcontroller 
-- Truyền Dữ Liệu Giữa Vi xử lý và Các Thiết Bị Ngoại Vi:LCD,EEPROM
-**Cờ quan trọng trong STM32F4**
-- SPI_I2S_FLAG_TXE: Cờ báo truyền, cờ này sẽ set lên 1 khi truyền xong data trong buffer.
-- SPI_I2S_FLAG_RXNE: Cờ báo nhận, cờ này set lên 1 khi nhận xong data.
-- SPI_I2S_FLAG_BSY: Cờ báo bận,set lên 1 khi SPI đang bận truyền nhận
-- SPI_I2S_FLAG_MODF:Được set khi có lỗi trong chế độ hoạt động của SPI.
-- SPI_I2S_FLAG_OVR :Được set khi có một lỗi Overrun xảy ra, tức là khi dữ liệu mới nhận được trước khi kịp đọc dữ liệu cũ từ bộ đệm.
-- SPI_I2S_FLAG_CRCERR:Được set khi có lỗi trong việc so sánh giá trị  truyền và nhận.
 **Quy tình cơ bản khi lập trình SPI**
 - Cấp Xung cho SPI:
 - Cấu Hình Chân Dựa Trên Reference Manual (RM) của Nhà Sản Xuất
 - Cấu Hình Các Chức Năng cho SPI
-![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_single_slave.svg/800px-SPI_single_slave.svg.png)
+	+ Cài đặt chế độ Master/Slave.
+	+ Thiết lập tốc độ truyền (Baud Rate).
+	+ Cấu hình CPOL, CPHA cho pha và cực của xung clock.
+	+ Kích hoạt giao thức SPI để bắt đầu giao tiếp.
 
-![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_three_slaves.svg/350px-SPI_three_slaves.svg.png)
-- ***SCLK (Serial Clock):*** Xung clock phát ra từ master
-- ***MOSI (Master Out Slave In):*** Truyền data từ `master` đến `slave`. Chân `MOSI` ở `master` sẽ kết nối đến chân `MOSI` ở `slave`.
-- ***MISO (Master In Slave Out):*** Truyền data từ `slave` đến `master`. Chân `MISO
-` ở `master` sẽ kết nối đến chân `MISO` ở `slave`.
-- ***CS/SS (Chip/Slave Select):*** Chân CS được master sử dụng để lựa chọn slave cần giao tiếp. Master chỉnh chân SS xuống mức 0 để chọn slave truyền data.
-
-![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/SPI_8-bit_circular_transfer.svg/500px-SPI_8-bit_circular_transfer.svg.png)
-Khung truyền SPI:
-
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/5ed1598f-be34-4626-833e-2f3e6fdd89d0)
-- Tùy thuộc vào bit chọn định dạng khung dữ liệu (DFF trong thanh ghi SPI_CR1), dữ liệu
-gửi hoặc nhận là 8 bit hoặc 16 bit. Lựa chọn này phải được thực hiện trước khi kích hoạt SPI để đảm bảo hoạt động chính xác.
-- Bắt đầu quá trình, master sẽ kéo chân CS của slave muốn giao tiếp xuống 0 để báo hiệu muốn truyền nhận.
-- Mỗi xung clock, Master sẽ gửi đi 1 bit từ thanh ghi dịch (Shift Register) của nó đến thanh ghi dịch của Slave thông qua đường MOSI. Đồng thời Slave cũng gửi lại 1 bit đến cho Master qua đường MISO.Như vậy sau 8 chu kỳ clock thì hoàn tất việc truyền và nhận 1 byte dữ liệu.
-
-- Trong giao tiếp SPI, chỉ có thể có 1 Master nhưng có thể 1 hoặc nhiều Slave cùng lúc. Ở trạng thái nghỉ, chân SS của các Slave ở mức 1, muốn giao tiếp với Slave nào thì ta chỉ việc kéo chân SS của Slave đó xuống mức 0.
-
-
-![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/SPI_timing_diagram2.svg/400px-SPI_timing_diagram2.svg.png)
 - Có 4 chế độ truyền dữ liệu:
   	| Mode | CPOL | CPHA |
   	|:---:|:---:|:---:|
@@ -6041,289 +6042,7 @@ gửi hoặc nhận là 8 bit hoặc 16 bit. Lựa chọn này phải được t
   - Chỉ cho phép một master duy nhất.
   - khoảng cách truyền ngắn
 
-### SPI trong STM32F407VET6.
-**SPI Software:**
-- Trên mỗi dòng vi điều khiển khác nhau module SPI khác nhau, đấy gọi là SPI cứng (hardware SPI). Như vậy bản chất chuẩn truyền thông SPI giống nhau trên mỗi chip nhưng lại được cài đặt và sử dụng không giống nhau. 
-- Để khắc phục nhược điểm trên, có 1 cách lập trình giả lập SPI cứng đó là “SPI mềm”. Thực chất SPI mềm là cách “mô phỏng” bằng cách tạo ra một giao thức truyền thông giống SPI.
 
-- Bước đầu, ta định nghĩa cho 4 chân sử dụng cho SPI và cấp xung CLK:
-<details>
-		<summary>Software:</summary>
-    
-```C
-// định nghĩa chân
-#define SPI_SCK GPIO_Pin_0	// output
-#define SPI_NSS GPIO_Pin_1	// ouput
-#define SPI_MOSI GPIO_Pin_2	// ouput
-#define SPI_MISO GPIO_Pin_3 // input
-#define SPI_GPIO GPIOA
-// cấp xung CK
-void RCC_Config(){
-	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-	
-}
-// cấu hình chân
-void GPIO_Config(){
-	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Pin = SPI_SCK| SPI_MOSI| SPI_NSS;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(SPI_GPIO, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = SPI_MISO;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(SPI_GPIO, &GPIO_InitStructure);
-
-}
-// cấu hình timer
-void TIM_Config(){
-TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
-RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-	TIM_TimeBaseInitStruct.TIM_Prescaler = 16800-1;
-	TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF-1; 
-	TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
-	TIM_Cmd(TIM2, ENABLE);
-}
-// hàm delay
-void delay_ms(uint32_t time){
-	
-	TIM_SetCounter(TIM2,0);
-	while(TIM_GetCounter(TIM2) < time*10);
-}
-// Mode truyền 
-Void Clock(){
-	GPIO_WriteBit(SPI_GPIO, SPI_SCK, Bit_SET);
-	delay_ms(2);
-	GPIO_WriteBit(SPI_GPIO, SPI_SCK, Bit_RESET);
-	delay_ms(2);
-}
-//Hàm truyền ở master:
-void SPI_Master_Transmit(uint8_t u8Data){
-	uint8_t u8Mask = 0x80;
-	uint8_t tempData;
-	GPIO_WriteBit(SPI_GPIO, SPI_NSS, Bit_RESET);
-	delay_ms(1);
-	for(int i=0; i<8; i++){
-		tempData = u8Data & u8Mask;
-		if(tempData){
-			GPIO_WriteBit(SPI_GPIO, SPI_MOSI, Bit_SET);
-			delay_ms(1);
-		} else{
-			GPIO_WriteBit(SPI_GPIO, SPI_MOSI, Bit_RESET);
-			delay_ms(1);
-		}
-		u8Data=u8Data<<1;
-		Clock();
-	}
-	GPIO_WriteBit(SPI_GPIO, SPI_NSS, Bit_SET);
-	delay_ms(1);
-}
-uint8_t array[] = {7, 8, 4, 2};
-
-int main(){
-	RCC_Config();
-	GPIO_Config();
-	TIM_Config();
-	
-	while(1){
-		for(uint8_t i = 0; i< 8; i++){
-				SPI_Master_Transmit(array[i]);
-				delay_ms(1000);
-		}
-	}
-
-}
-```
-</details>
-
-**SPI Hardware:**
-- Dựa vào tài liệu nhà sản xuất ta cấu hình chân:\
-![STM32F4_AF](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/74503806-d47a-4395-8beb-6152728f7423)
- 
-<details>
-		<summary>Hardware_rcv</summary>
-
-```C
-// Slayer Hardware
-// DỰA VÀO PHẦN CỨNG STM32F1
-#include "stm32f10x.h"                  // Device header
-#include "stm32f10x_gpio.h"             // Keil::Device:StdPeriph Drivers:GPIO
-#include "stm32f10x_spi.h"              // Keil::Device:StdPeriph Drivers:SPI
-#include "stm32f10x_rcc.h"              // Keil::Device:StdPeriph Drivers:RCC
-
-
-#define SPI1_NSS 	GPIO_Pin_4
-#define SPI1_SCK	GPIO_Pin_5
-#define SPI1_MISO 	GPIO_Pin_6
-#define SPI1_MOSI 	GPIO_Pin_7
-#define SPI1_GPIO 	GPIOA
-
-
-void delay (uint32_t time){
-	uint32_t i;
-	for (i = 0; i< time; i++){
-	}
-	
-}
-
-void RCC_CONFIG(){
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-}
-
-void GPIO_Cofig(){
-	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Pin = SPI1_NSS| SPI1_SCK| SPI1_MISO| SPI1_MOSI;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(SPI1_GPIO, &GPIO_InitStructure);
-}
-
-void SPI_config(){
-	SPI_InitTypeDef SPI_InitStructure;
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
-	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
-	SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;
-	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;	
-	SPI_Init(SPI1, &SPI_InitStructure);
-	SPI_Cmd(SPI1, ENABLE);
-}
-
-uint8_t SPI_RCV(void){
-	volatile uint8_t temp;
-	while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY)==1);
-	temp =(uint8_t)SPI_I2S_ReceiveData(SPI1);
-	return temp;
-
-}
-
-uint8_t arr[4]; 
-uint8_t i=0;
-int main(){
-	RCC_CONFIG();
-	GPIO_Cofig();
-	SPI_config();
-		while(1)
-		{	
-			
-			while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_RXNE)== 0);
-			if(GPIO_ReadInputDataBit(SPI1_GPIO, SPI1_NSS ) == 0){
-					arr[i] = SPI_RCV();
-					i++;
-					if(i > 3){ 
-						i = 0;
-					}
-			}
-
-		}
-}
-
-```
-</details>
-
-<details>
-		<summary>Hardware_Mater</summary>
-
-```C
-#include "stm32f4xx.h"
-
-#define SPI1_NSS 	GPIO_Pin_4
-#define SPI1_SCK	GPIO_Pin_5
-#define SPI1_MISO 	GPIO_Pin_6
-#define SPI1_MOSI 	GPIO_Pin_7
-#define SPI1_GPIO 	GPIOA
-
-void delay (uint32_t time){
-	uint32_t i;
-	for (i = 0; i< time; i++){
-	}
-	
-}
-void RCC_Config(){
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
-}
-
-void GPIO_Config(){
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = SPI1_NSS|SPI1_SCK|SPI1_MISO|SPI1_MOSI;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_Init(SPI1_GPIO,&GPIO_InitStruct); 
-	
-	
-	
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
-	GPIO_WriteBit(GPIOA,GPIO_Pin_4,1);
-}
-void SPI_Config(){
-	SPI_InitTypeDef SPI_InitStruct;
-	SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
-	SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex; 
-	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128; //84mhz /16
-	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
-	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
-	SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
-	SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
-	SPI_InitStruct.SPI_CRCPolynomial = 10;
-	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
-	SPI_Init(SPI1, &SPI_InitStruct);
-	SPI_Cmd(SPI1,ENABLE);
-	
-}
-void SPI_Trans(uint8_t arr ){
-	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
-	SPI_SendData(SPI1,arr);
-	while(!SPI_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY)==0);
-	GPIO_SetBits(GPIOA,GPIO_Pin_4);
-}
-
-uint8_t arr[4]={5,2,3,4};
-int main(){
-	RCC_Config();
-	GPIO_Config();
-	SPI_Config();
-	while(1){
-		
-		for(uint8_t i=0;i<4;i++){	
-			SPI_Trans(arr[i]);		 
-			delay(1000000);
-		}
-		 
-		
-	}
-	
-	
-	
-}
-
-
-
-
-
-
-
-
-
-```
-
-
-
-
-</details>
 
 </details>
 
@@ -6332,10 +6051,21 @@ int main(){
 
 - I2C (Inter-Integrated Circuit) là một giao thức truyền thông nối tiếp đồng bộ. Nên các bit dữ liệu truyền đi được đồng bộ hóa với xung nhịp do Master điều khiển.
 - Hỗ trợ nhiều Master và Slave trên một đường truyền
--Tốc Độ Truyền (Baud Rate): Thông thường 100 kbps, 400 kbps đối với STM32F4( bit trên giây)
+- Tốc Độ Truyền (Baud Rate): Thông thường 100 kbps, 400 kbps đối với STM32F4( bit trên giây)
+ 
 
-![Connect with orther](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/I2C.svg/220px-I2C.svg.png)
-
+**Các thông số cần cấu hình:**
+1. Chế độ hoạt động (Master/Slave):
+- Master: Điều khiển quá trình truyền dữ liệu.
+- Slave: Nhận và phản hồi dữ liệu khi được yêu cầu.
+2. Tốc độ truyền (I2C Speed):
+- Standard Mode: Tốc độ tối đa 100 kHz.
+- Fast Mode: Tốc độ tối đa 400 kHz.
+-  Ngoài ra, một số vi điều khiển hỗ trợ Fast Mode Plus (1 MHz).
+3. Địa chỉ thiết bị (Addressing Mode):
+- 7-bit hoặc 10-bit địa chỉ cho các thiết bị Slave.
+4. Acknowledge (ACK):
+- Kích hoạt hoặc vô hiệu hóa ACK để xác nhận khi dữ liệu được nhận thành công.
 **Vấn đề về đồng bộ hóa trong I2C:**
 - Kiểm tra Master,Slayer tốc độ truyền có đồng bộ chưa
 - Khung truyền ,nhận có giống nhau chưa
@@ -6350,12 +6080,8 @@ int main(){
 - Yêu Cầu Dây Dẫn Ít Hơn
 - Cần Kết Nối Nhiều Thiết Bị 
 - Tiết Kiệm Năng Lượng : các thiết bị không hoạt động không ảnh hưởng đến bus, giúp tiết kiệm năng lượng
+ 
 
-**Cờ quan trọng trong IC2:**
-- I2C_FLAG_TXE:Được set khi thanh ghi truyền (Transmit Data Register) trống và có thể gửi dữ liệu mới.
-- I2C_FLAG_RXNE:Được set khi thanh ghi nhận (Receive Data Register) không trống và có dữ liệu để đọc.
-- I2C_FLAG_AF :Được set khi không nhận được ACK từ thiết bị Slave.
-- I2C_FLAG_OVR:Được set khi có lỗi Overrun xảy ra trong quá trình truyền dữ liệu.
 ### Cách hoạt động:
 
 ![Connect with orther](https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-I2C-Message-Frame-and-Bit-2.png)
@@ -6510,25 +6236,6 @@ int main() {
 - Tiếp theo là truyền hoặc nhận khung dữ liệu 8 bit trên đường SDA + 1 bit ACK/NACK
 - SCL sẽ gửi 9 xung CK.
 - Điều kiện để kết thúc SCL sẽ kéo từ mức 0 lên mức 1 , rồi SDA từ mức 0 lên 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -7175,175 +6882,25 @@ int main(void)
 <details>
   <summary><h3>ADC</h3></summary>
 
-- ADC Analog to Digital Convert là bộ chuyển đổi tương tự sang số.Cho phép chuyển đổi tín hiệu analog như điện áp , dòng điện ,ánh sáng .. thông số thay đổi liên tục thành dạng số để máy tính hoặc VXL xử lý
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/4e15c95b-de89-4019-af49-143daffd8e26)
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/bc01ddc4-82b8-4a6f-8ea6-0d39a13d3768)
-- Độ phân giải (resolution):Đó là số bit mà ADC sử dụng để biểu diễn giá trị đầu vào trong tín hiệu số .Tính theo Bit bộ ADC có độ phân giải 12 Bit sẽ có 2^12 giá trị.ADC có độ phân giải càng lớn thì mô phỏng tín hiệu analog càng mịn.
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b9b2600b-1a30-4aa1-ae3b-8361ef724222)
--  Tần số lấy mẫu: số lần ADC chuyển đổi tín hiệu analog thành tín hiệu số trong một đơn vị thời gian.
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c4cd8997-b0e7-4f4b-8af6-10f7786700a6)
+- ADC Analog to Digital Convert là bộ chuyển đổi tương tự sang số.
+- Cho phép chuyển đổi tín hiệu analog như điện áp , dòng điện ,ánh sáng .. thông số thay đổi liên tục thành dạng số để máy tính hoặc VXL xử lý
+- Cách hoạt động:
+	- Tín hiệu đầu vào: Là tín hiệu điện áp tương tự, ví dụ: từ 0V đến 3.3V.
+	- Chuyển đổi thành số: ADC chia dải điện áp này thành các mức số rời rạc. Ví dụ: một ADC 10-bit sẽ chia dải điện áp thành 1024 mức.
+- Độ phân giải (Resolution):
+	- Số lượng bit đầu ra (ví dụ: 8-bit, 10-bit, 12-bit). Độ phân giải càng cao, tín hiệu số càng chính xác.
+- Tốc độ lấy mẫu (Sampling Rate):
+	- Tốc độ mà ADC có thể đọc tín hiệu analog (đơn vị: Samples per second).
 
-**ADC trong STM3207.**
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/22085530-0851-4946-8000-bb02e601d350)
 
-- STM32F4 có 3 bộ ADC
-- Thanh ghi dữ liệu là 16 bit, chuyển đổi là 12bit, thanh ghi này sẽ xác định dữ liệu sẽ được căn lề bên trái hoặc phải
-- Có 19 kênh , 16 kênh đo từ bên ngoài ,2 bên trong và 1 đo Vpin
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/7d544f34-6e85-4ae2-8097-caaef649f919)
-
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/fed58cd4-a937-48b8-9058-bc926a0d9e97)
-
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/b5d64739-049e-441c-80cb-f4ac10dd458b)
-- Cấu hình chân ADC ở PA0
-<details>
-<summary>CODE_STM32F4</summary>
-
-```C
-#include "stm32f4xx.h"
-
-#define SPI1_NSS 	GPIO_Pin_4
-#define SPI1_SCK	GPIO_Pin_5
-#define SPI1_MISO 	GPIO_Pin_6
-#define SPI1_MOSI 	GPIO_Pin_7
-#define SPI1_GPIO 	GPIOA
-
-void delay (uint32_t time){
-	uint32_t i;
-	for (i = 0; i< time; i++){
-	}
-	
-}
-void RCC_Config(){
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);// ADC
-	
-}
-
-void GPIO_Config(){
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = SPI1_NSS|SPI1_SCK|SPI1_MISO|SPI1_MOSI;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_Init(SPI1_GPIO,&GPIO_InitStruct); 
-
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
-	GPIO_WriteBit(GPIOA,GPIO_Pin_4,1);
-	
-	//CAU HINH CHAN ADC
-	
-	GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AN; 
-	GPIO_InitStruct.GPIO_Pin    =  GPIO_Pin_0  ; 
-	GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-	GPIO_InitStruct.GPIO_Speed =  GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStruct);
-}
-
-void ADC_config(){
-	ADC_InitTypeDef ADC_InitStructure;
-	ADC_StructInit(&ADC_InitStructure);
-  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b; // Ð? phân gi?i ADC
-  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
-  ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
-  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConvEdge_None;
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-  ADC_InitStructure.ADC_NbrOfConversion = 1;
-  ADC_Init(ADC1, &ADC_InitStructure);
-  ADC_Cmd(ADC1, ENABLE);
-}
-void SPI_Config(){
-	SPI_InitTypeDef SPI_InitStruct;
-	SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
-	SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex; 
-	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128; //84mhz /16
-	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
-	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
-	SPI_InitStruct.SPI_DataSize = SPI_DataSize_16b;
-	SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
-	SPI_InitStruct.SPI_CRCPolynomial = 10;
-	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
-	SPI_Init(SPI1, &SPI_InitStruct);
-	SPI_Cmd(SPI1,ENABLE);
-	
-}
-void SPI_Trans(uint8_t arr ){
-	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
-	SPI_SendData(SPI1,arr);
-	while(!SPI_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY)==0);
-	GPIO_SetBits(GPIOA,GPIO_Pin_4);
-}
-
-uint8_t arr[4]={5,2,3,4};
-uint16_t val;
-int main(){
-	
-	RCC_Config();
-	GPIO_Config();
-	SPI_Config();
-	ADC_config();
-	while(1){
-		// TRUYEN DU LIEU spi
-		//for(uint8_t i=0;i<4;i++){	
-			//SPI_Trans(arr[i]);		 
-			//delay(1000000);
-		///}
-		
-		ADC_SoftwareStartConv(ADC1);
-		while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-			val= ADC_GetConversionValue(ADC1);
-			SPI_Trans(val);
-					
-	}
-	
-}
-```
-
-</details>
 
 
 </details> 
 <details>
   <summary><h3>DMA</h3></summary>
 
-**DMA – Direct memory access được sử dụng với mục đích truyền data với tốc độ cao từ thiết bị ngoại vi đến bộ nhớ cũng như từ bộ nhớ đến bộ nhớ**
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/cce6b54e-d870-4dc0-b413-6482951feb9a)
-
-- DMA có thể điều khiển data truyền từ :
-	+ Bộ nhớ đến Peripheral 
-	+ Ngược lại, Periph đến Bộ nhớ.
-	+ Giữa 2 vùng nhớ.
-- Không thông qua data bus  của CPU. 
-- Giữ cho tài nguyên của CPU được rảnh rỗi cho các thao tác khác. Đồng thời tránh việc data nhận về từ ngoại vi bị mất mát.
-
-- Sơ đồ khối bộ DMA.
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/36c6a3e8-3412-4c96-ae29-11ea7bbcc439)
-
-- STM32F4 có 2 bộ DMA với nhiều kênh, mỗi kênh có nhiều ngoại vi có thể dùng DMA:
-
-
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1f242652-a0d1-4dff-a3a1-78f46c894e84)
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/c79dec05-7b5b-4ab5-ba82-f5472c5b7009)
-
-- STM32F4 có 4 chế độ hoạt động:
-
-	+	Circular Buffer Mode: DMA có thể được cấu hình để hoạt động trong chế độ vòng lặp với khả năng tự động quay lại địa chỉ ban đầu sau khi hoàn thành mỗi lần truyền.
-
-	+	Normal Mode: Truyền dữ liệu một lần và sau đó dừng lại.
-
-	+	Double Buffer Mode: DMA có thể được cấu hình để truyền dữ liệu giữa hai bộ đệm, giúp giảm thiểu thời gian chờ khi một bộ đệm đang được truyền dữ liệu, trong khi bộ đệm khác có thể được chuẩn bị cho truyền tiếp theo.
-
-	+	Peripheral Increment Mode: Cho phép tăng địa chỉ của bộ nhớ đích hoặc nguồn dữ liệu sau mỗi lần truyền.
-
-	+ Memory Increment Mode: Cho phép tăng địa chỉ của bộ nhớ đích hoặc nguồn dữ liệu sau mỗi lần truyền.
-
-**Cấu hình DMA**
-
-- Không như các ngoại vi khác, DMA cần được cấp xung từ AHB, cả 2 bộ DMA đều có xung cấp từ AHB. Ngoài ra cần cấp xung cho AFIO.
-![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/d48dc46a-b8f1-4ab5-8baa-d44c2cd8aa2e)
+- DMA cho phép các thiết bị ngoại vi như ADC, UART, hoặc SPI truy cập trực tiếp vào bộ nhớ mà không cần CPU can thiệp.
+- Điều này giúp Giảm tải cho CPU. tăng hiệu suất hệ thống.
 
 
 </details>
@@ -7393,49 +6950,51 @@ int main(){
 **Quá trình khởi động MCU**
 
 - Trường hợp 1: Khởi động bình thường (không có Bootloader)
-- Reset hệ thống:
-- Khi MCU được bật nguồn hoặc reset, nó bắt đầu từ địa chỉ khởi động mặc định (thường là 0x00000000).
-- Đọc vector table:
-- MCU đọc giá trị khởi tạo của Stack Pointer (SP) từ địa chỉ đầu tiên trong vector table.
-- MCU đọc địa chỉ của Reset_Handler từ địa chỉ thứ hai trong vector table.
-- Thực thi Reset_Handler:
-- Reset_Handler được thực thi, thường nằm tại địa chỉ 0x00000004.
-- `Reset_Handler thực hiện các bước khởi tạo hệ thống, như thiết lập bộ nhớ, cấu hình thanh ghi, khởi tạo thư viện C, v.v.`
-- Gọi hàm main:
-- Sau khi khởi tạo, Reset_Handler nhảy đến hàm main của ứng dụng.
-- Hàm main chứa mã chương trình chính và bắt đầu thực thi.
+	1. Bước 1: Reset hệ thống
+	- Khi MCU được bật nguồn hoặc reset, CPU bắt đầu thực thi từ địa chỉ khởi động mặc định.
+	- Địa chỉ này thường là 0x00000000 (vùng đầu của bộ nhớ Flash hoặc ROM tùy MCU).
+	2. Bước 2: Đọc Vector Table
+	- Vector Table nằm ở địa chỉ khởi động mặc định, thường chứa:
+	- Stack Pointer (SP): Giá trị khởi tạo của SP được lấy từ địa chỉ đầu tiên (0x00000000).
+	- Địa chỉ của Reset_Handler: Lấy từ địa chỉ thứ hai (0x00000004).
+	3. Bước 3: Thực thi Reset_Handler
+	- Reset_Handler được thực thi và thường thực hiện các nhiệm vụ sau:
+	- Khởi tạo hệ thống: Thiết lập bộ nhớ (RAM, heap, stack).
+	- Cấu hình các thanh ghi ngoại vi.
+	- Khởi tạo thư viện C (runtime C).
+	4. Bước 4: 
+	- Sau khi hoàn tất khởi tạo, Reset_Handler sẽ nhảy đến hàm main.
+	- Hàm main bắt đầu thực thi chương trình chính.
+	- Startup code (nằm trong file startup) được viết để đảm bảo hệ thống luôn gọi main() sau khi hoàn thành khởi tạo.
 - Trường hợp 2: Khởi động với Bootloader
-- Reset hệ thống:
-- Khi MCU được bật nguồn hoặc reset, nó bắt đầu từ địa chỉ khởi động mặc định (thường là 0x00000000).
-- Đọc vector table của Bootloader:
-- MCU đọc giá trị khởi tạo của Stack Pointer (SP) từ địa chỉ đầu tiên trong vector table của Bootloader.
-- MCU đọc địa chỉ của Reset_Handler của Bootloader từ địa chỉ thứ hai trong vector table của Bootloader.
-- Thực thi Reset_Handler của Bootloader:
-- Reset_Handler của Bootloader được thực thi.
-- Reset_Handler thực hiện các bước khởi tạo cần thiết cho Bootloader và sau đó nhảy đến hàm main của Bootloader.
-- Hàm main của Bootloader:
-- Hàm main của Bootloader thực hiện các nhiệm vụ như kiểm tra tính toàn vẹn của firmware, cập nhật firmware nếu cần, và chuẩn bị cho 
-- việc chuyển giao quyền điều khiển.
-- Thiết lập SCB_VTOR:
-- Bootloader thiết lập địa chỉ của vector table mới cho ứng dụng chính bằng cách ghi vào thanh ghi SCB_VTOR.
-- Nhảy đến ứng dụng chính:
-- Bootloader thiết lập lại Stack Pointer (SP) bằng cách đọc giá trị từ vector table mới của ứng dụng chính.
-- Bootloader nhảy đến Reset_Handler của ứng dụng chính bằng cách sử dụng địa chỉ từ vector table mới.
-- Thực thi Reset_Handler của ứng dụng chính:
-- Reset_Handler của ứng dụng chính được thực thi.
--  Reset_Handler thực hiện các bước khởi tạo hệ thống cho ứng dụng chính và sau đó nhảy đến hàm main của ứng dụng chính.
-- Gọi hàm main của ứng dụng chính:
-- Hàm main của ứng dụng chính chứa mã chương trình chính và bắt đầu thực thi.
-- Stack Pointer (SP) là 1 thanh ghi
-- SP dùng lưu trữ  địa chỉ trả về của hàm, các biến cục bộ, và các tham số hàm.
+	- Khi xảy ra ngắt hoặc reset:CPU sẽ tham chiếu Vector Table tại địa chỉ được chỉ định bởi SCB->VTOR.
+	Bước 1: Reset hệ thống
+	- Khi MCU khởi động, nó vẫn bắt đầu từ địa chỉ khởi động mặc định (0x00000000).
+	Bước 2: Đọc Vector Table của Bootloader
+	- Tương tự như khởi động bình thường:
+	- Stack Pointer (SP) được lấy từ địa chỉ đầu tiên của Vector Table của Bootloader.
+	- Địa chỉ Reset_Handler của Bootloader từ địa chỉ thứ hai trong Vector Table của Bootloader.
+	Bước 3: Thực thi Reset_Handler của Bootloader
+	- Reset_Handler của Bootloader thực hiện các nhiệm vụ:
+	- Khởi tạo phần cứng cơ bản.
+	- Kiểm tra firmware hoặc nạp firmware mới.
+	- Thiết lập SCB_VTOR để trỏ đến địa chỉ Vector Table của ứng dụng chính.( khác 0x00000)
+	Bước 4: Thực thi main của Bootloader
+	- Sau khi hoàn tất nhiệm vụ của bootloader, nó sẽ:
+	- Thiết lập địa chỉ Vector Table  > Reset_Handler cũng bắt đầu từ địa chỉ Vector Table
+	Bước 5: Thực thi Reset_Handler của ứng dụng chính
+	- Reset_Handler của ứng dụng chính thực hiện các bước khởi tạo như:
+	- Thiết lập bộ nhớ, khởi tạo biến toàn cục và cấu hình phần cứng cần thiết.
+	Bước 6: Gọi main của ứng dụng chính
+	- Sau khi Reset_Handler hoàn tất, ứng dụng chính bắt đầu thực thi từ hàm main..
 
+- Tóm lại muốn chương trình khởi động từ địa chỉ nào chỉ cần thay đổi vector VTOR
 **Bootloader là gì?**
 
 - Chương trình Boot chương trình được lưu trong bộ nhớ. Khi Vi điều khiển Reset.nó sẽ nhảy vào chương trình Boot này, để lựa chọn chương trình ứng dụng nào để bắt đầu thực hiện
-- Qúa trình  bootloader:
-	+ Với arm coretex , thì có các chế độ boot mode , nếu chọn chế độ nào thì VĐK sẽ đến địa chỉ của chế độ đó để boot chương trình ,flash là 0x8M , sram là 0x2M, sytem là 0xff
-
-
+- Tại sao Bootloader cập nhật từ địa chỉ khác địa chỉ 0x0000:
+	+ Tránh ghi đè chính Bootloader trong quá trình cập nhật.
+	+ Phân vùng rõ ràng giữa Bootloader và ứng dụng, giúp dễ bảo trì và quản lý.
 
 
 
@@ -7568,6 +7127,61 @@ int main(){
 <details>
   <summary><h1>▶ ⭐RFID-RC522 </h1></summary>
 
+
+
+**MQTT**
+![image](https://github.com/user-attachments/assets/1df22b89-d581-4ddd-bfe6-ac9b6db701e9)
+
+- MQTT  là một giao thức giao tiếp nhẹ dựa trên mô hình publish-subscribe. 
+- Giao thức này cho phép các thiết bị IOT gửi và nhận các tin nhắn nhỏ và đơn giản qua mạng Internet.
+- MQTT có ba thành phần chính: publisher, broker và subscriber
+- Publisher là thiết bị gửi tin nhắn đến broker, 
+- broker là máy chủ trung gian quản lý các tin nhắn và chuyển tiếp chúng đến subscriber,
+- subscriber là thiết bị nhận tin nhắn từ broker.
+- Tạo broker MQTT: sử dụng HiveMQ broker. Bạn truy cập vào website: https://www.hivemq.com/
+
+**Blynk IOT**
+- Blynk IoT là một nền tảng đơn giản, cho phép  kết nối và điều khiển các thiết bị IoT từ xa qua internet.
+- Cung cấp giao diện người dùng
+- Dùng  https://blynk.cloud/ 
+**Zigbee**
+- Cả Zigbee ều là giao thức không dây
+- sử dụng băng tần 2.4 GHz (Zigbee cũng hỗ trợ các tần số khác như 868 MHz, 915 MHz).
+- Tiêu thụ năng lượng thấp , dùng pin trong nhiều năm
+- Tốc độ truyền dữ liệu thấp , tối da 250kb/s
+- Khả năng mở rộng cao
+**WIFI**
+![image](https://github.com/user-attachments/assets/d2ffaa36-58f0-4434-8a0f-929f38ab2029)
+
+
+**Mục tiêu chính:**
+- Xây dựng một hệ thống kiểm soát truy cập an toàn, có thể giám sát và điều khiển từ xa
+- sử dụng các công cụ như Trello để quản lý công việc và Git để quản lý mã nguồn.
+- Tôi chọn ESP32 vì nó có tích hợp Wi-Fi
+- Tôi tích hợp ESP32 với Blynk qua Wi-Fi, cho phép người dùng theo dõi trạng thái (ví dụ: cửa mở hay đóng) và điều khiển từ xa (mở cửa) thông qua ứng dụng di động.
+![image](https://github.com/user-attachments/assets/d67d0c54-6c7d-4d18-a2d0-e658683103e0)
+
+**Servo Motor**
+- Chu kỳ PWM phổ biến: 20ms (50 Hz).
+- Chiều rộng xung (duty cycle) quyết định góc quay của trục:
+	- 1ms (hoặc 5%): Góc 0°.
+	- 1.5ms (hoặc 7.5%): Góc 90° (vị trí trung tâm).
+	- 2ms (hoặc 10%): Góc 180°.
+- 3 chân: Nguồn , đất , PWM
+
+
+
+**Vấn đề bảo mật**
+1. Mã hóa dữ liệu khi truyền giữa ESP32 và các thiết bị ngoại vi qua giao thức SPI.
+- Sử dụng các thuật toán mã hóa như AES-128 hoặc AES-256.
+2. Bảo mật kết nối IoT (ESP32 - Blynk IoT)
+- Cấu hình ESP32 kết nối Wi-Fi với WPA2 hoặc WPA3
+- Xác thực hai lớp (2FA): Tích hợp xác thực hai lớp cho ứng dụng Blynk
+3. Bảo mật dữ liệu lưu trữ trên SD Card
+- Dữ liệu ID thẻ RFID trên SD Card cần được mã hóa bằng AES
+4. Bảo mật xác thực RFID
+- Áp dụng rolling code: Mỗi lần quẹt thẻ, hệ thống và thẻ sẽ đồng bộ một mã xác thực mới.
+5. Bảo mật phần cứng : Bảo vệ vật lý
 **Vấn đề về Thẻ nhớ SDCARD trong Dự án**
 1. Kiểm tra Dung lượng Thẻ nhớ SDCARD:
 - Theo dõi dung lượng lưu trữ: Vi điều khiển STM32 có thể được lập trình để theo dõi dung lượng trống trên thẻ nhớ SDCARD.
