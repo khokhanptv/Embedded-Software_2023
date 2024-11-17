@@ -4186,13 +4186,16 @@ int main() {
 ```
 
 **weak_ptr**
-- Cũng chia sẻ tài nguyên với shared_ptr, nhưng không tăng bộ đếm tham chiếu.
-- Được sử dụng để ngăn chặn vòng tham chiếu giữa các shared_ptr, giúp tránh rò rỉ bộ nhớ.
+- weak_ptr không sở hữu đối tượng, chỉ giám sát đối tượng do shared_ptr quản lý.
+- Muốn sd weak_ptr phải chuyển weak_ptr thành shared_ptr bằng lock, bạm thời tăng ref count của đối tượng.
+- lock() sẽ trả về nullptr.Nếu đối tượng bị hủy
 - Trước khi sử dụng tài nguyên, cần chuyển weak_ptr thành shared_ptr bằng lock().
 **Lặp tham chiếu**
-- Xảy ra khi hai hoặc nhiều đối tượng shared_ptr tham chiếu lẫn nhau.
+- xảy ra khi hai hoặc nhiều đối tượng trỏ qua lại lẫn nhau bằng shared_ptr
 - bộ đếm tham chiếu của chúng sẽ luôn lớn hơn 0 .Do đó, tài nguyên sẽ không bao giờ được giải phóng.
-- Điều này thường xảy ra khi sử dụng std::shared_ptr để quản lý tài nguyên động.
+- Object A có một shared_ptr quản lý để đảm bảo sự tồn tại của nó.
+- Object A có một shared_ptr trỏ đến Object B, làm tăng ref count của Object B.
+- Object B giữ một weak_ptr trỏ ngược lại Object A, giúp tránh vòng lặp tham chiếu.
 
 <details>
 <summary>Ví dụ:</summary>
@@ -6907,7 +6910,17 @@ int main(void)
 - Tốc độ lấy mẫu (Sampling Rate):
 	- Tốc độ mà ADC có thể đọc tín hiệu analog (đơn vị: Samples per second).
 
+Quy trình lập trình ADC:
+1. Cấu hình xung nhịp cho ADC (Clock Configuration):
+- Cấp xung
+2. Cấu hình các chân GPIO làm ngõ vào Analog.
 
+3. Cấu hình ADC:
+
+- Chọn độ phân giải ADC: Ví dụ: 8-bit, 10-bit, 12-bit.
+- Chọn kênh ADC: Xác định kênh nào sẽ được sử dụng (ADC1, ADC2,...).
+- Chọn chế độ quét: Single Conversion (chuyển đổi 1 lần) hoặc Continuous Conversion (chuyển đổi liên tục).
+- Chọn Nguồn tham chiếu 
 
 
 </details> 
@@ -6916,7 +6929,25 @@ int main(void)
 
 - DMA cho phép các thiết bị ngoại vi như ADC, UART, hoặc SPI truy cập trực tiếp vào bộ nhớ mà không cần CPU can thiệp.
 - Điều này giúp Giảm tải cho CPU. tăng hiệu suất hệ thống.
+Quy trình lập trình DMA:
 
+
+1. Cấp xung
+2. Cấu hình nguồn dữ liệu và đích:
+- Nguồn dữ liệu (Source): Ví dụ, thanh ghi dữ liệu ADC.
+- Đích (Destination): Bộ nhớ RAM nơi lưu trữ dữ liệu.
+Cấu hình các chế độ DMA:
+
+Mode: Normal (truyền một lần) hoặc Circular (truyền liên tục).
+Data Size: Chọn kích thước dữ liệu (byte, half-word, word).
+Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ nhớ) hoặc ngược lại.
+Kích hoạt DMA:
+
+Sau khi cấu hình, kích hoạt DMA để bắt đầu quá trình truyền dữ liệu.
+Kiểm tra trạng thái DMA:
+
+DMA thường sử dụng ngắt (interrupt) để báo hiệu khi truyền dữ liệu hoàn tất.
+Kiểm tra các cờ trạng thái để đảm bảo truyền dữ liệu thành công.
 
 </details>
 
