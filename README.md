@@ -4980,6 +4980,192 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+**Khó khăn khi lập trình C/C++ với vi điều khiển**
+1. Phải Hiểu về phần cứng , hiểu cách cấu hình thanh ghi ngoại vi
+	+ Ví dụ:Khi sử dụng ADC, bạn cần cấu hình đúng nguồn tham chiếu, độ phân giải, và các kênh phù hợp.
+2. Phải quản lý tốt bộ nhớ vì thiết bị thường có bộ nhớ hạn chế
+3. Tối ưu hóa hiệu suất:
+	+ Vi điều khiển thường có tốc độ xử lý thấp (ví dụ: từ vài MHz đến vài trăm MHz), 
+	+ nên chương trình cần được tối ưu hóa để chạy mượt.
+4. Thiếu thư viện, công cụ hỗ trợ
+	+ Không phải thiết bị nào cũng có sẵn thư viện
+	+ Phải viết driver từ đầu để giao tiếp phần cứng
+5. Tính đồng bộ
+	+ Xử lý vấn đề Trong các hệ thống đa nhiệm 
+
+**CI/CD**
+- Lập trình viên và QA là những người viết test.
+- CI/CD giúp tự động hóa quy trình xây dựng, kiểm thử và triển khai ứng dụng.
+
+**Quy trình làm việc ở FPT**
+1. Thu thập yêu cầu và đánh giá sản phẩm từ đối tác:
+	+ Thu thập yêu cầu:
+		+ Yêu cầu từ bộ phận kỹ thuật và khách hàng về các tính năng cần thiết cho modem/router.
+		+ Họp BGD về chi phí,các kỹ thuật liên quan
+	+ Đánh giá sản phẩm từ đối tác:
+		+ Lựa chọn phần cứng (chipset, modem, router) và firmware phù hợp từ danh mục sản phẩm của đối tác.
+		+ Kiểm tra xem firmware có đáp ứng được các yêu cầu kỹ thuật
+			+ Hiệu năng Wi-Fi (MU-MIMO, Beamforming, Wi-Fi 6).
+2. Tùy chỉnh firmware theo yêu cầu nội bộ
+	+ Làm việc trực tiếp với đối tác để tùy chỉnh firmware theo các yêu cầu riêng:
+		+ Giao diện quản lý web hoặc ứng dụng phải mang thương hiệu FPT.
+		+ Thêm hoặc gỡ bỏ các tính năng không cần thiết.
+3. Release và triển khai sản phẩm
+	+  Release  là  phát hành sản phẩm đã hoàn thiện để sử dụng trong môi trường thực tế
+	+ Sau khi đối tác hoàn tất tùy chỉnh firmware, sản phẩm sẽ được kiểm thử lần cuối và triển khai qua:
+		+ OTA (Over-the-Air Update): Firmware tự động cập nhật từ xa cho các modem/router đang hoạt động.
+	+ Đưa sản phẩm ra thị trường
+		+ Triển khai sản phẩm đến khách hàng với phiên bản firmware đã tinh chỉnh phù hợp.
+		+ Release Code là  phát hành  firmware đã hoàn thiện để sử dụng trong môi trường thực tế, mục đích:
+		+ Cung cấp tính năng mới.
+		+ Sửa lỗi và vá bảo mật.
+		+ Đảm bảo hiệu suất và sự ổn định cho khách hàng.
+		+ Trước khi release bản chính thức, firmware sẽ được thử nghiệm trên môi trường staging (giả lập gần giống môi trường thực tế).
+		+ Release firmware trực tiếp đến modem/router của khách hàng thông qua cập nhật từ xa.
+	+ Ai chịu trách nhiệm trong Release Code?
+		+ Team Dev: Phát triển tính năng và sửa lỗi.
+		+ Team QA: Kiểm tra chất lượng trước khi release.
+
+4. Trách nhiệm của Team bạn (Development Team)
+	+ Phát triển tính năng nội bộ ( sẽ thêm sau)
+	+ thực hiện kiểm thử ở cấp độ cơ bản để đảm bảo rằng phần code mới hoạt động đúng
+	+ Unit Testing (Kiểm thử đơn vị):
+		+ Team bạn sẽ kiểm tra các module hoặc chức năng riêng lẻ mà bạn phát triển.
+		+ Ví dụ: Gửi lệnh bật/tắt Wi-Fi, thay đổi mật khẩu qua API điều khiển từ xa.
+		+ công cụ Google Test 
+	+ Integration Testing (Kiểm thử tích hợp):
+        + Đảm bảo rằng code tính năng nội bộ hoạt động đúng khi tương tác với firmware của modem do phía Trung Quốc cung cấp.
+		+  công cụ Google Test 
+	+ Developer khác hoặc Team Lead sẽ kiểm tra mã nguồn (code review) để đảm bảo:( tý hỏi CI/CD)
+		+ Code tuân thủ coding standard.
+		+ Logic và hiệu năng của code đúng yêu cầu.
+	+ QC/QA kiểm thử sản phẩm (Testing)
+		+ QC/QA không trực tiếp đọc mã nguồn, nhưng họ sẽ kiểm thử phần mềm dựa trên các kịch bản sử dụng thực tế để phát hiện lỗi.
+	+ Mục tiêu của QC/QA:
+		+ Đảm bảo rằng sản phẩm cuối cùng đáp ứng đúng yêu cầu chức năng.
+		+ Tìm ra các lỗi logic, giao diện, hoặc hiệu năng mà không cần phải đọc mã nguồn.
+	+ Chip của FPT là ZTE và media tek
+	+ Modem FPT dùng hệ điều hành Linux nhúng không phải RT OS hỗ trợ   đa nhiệm
+		+ OpenWRT: Một hệ điều hành Linux mã nguồn mở cho router.
+	+ Các modem/router có nhiều tính năng phức tạp (ví dụ: quản lý nhiều kết nối, QoS, VPN, Mesh Networking) 
+
+
+5. Nếu bạn là Developer (Lập trình viên)
++ Nhiệm vụ chính:
+	+ Phát triển tính năng mới:
+		+ Viết mã nguồn (C/C++) cho các tính năng mới trên modem/router, 
+		+ ví dụ như lấy log lỗi, quản lý từ xa, tối ưu hiệu năng Wi-Fi.
+	+ Viết test code:
+		+ Tự viết Unit Test và Integration Test để đảm bảo các module hoạt động đúng.
+		+ Sửa lỗi (Bug Fixing):
+		+ Phân tích và sửa các lỗi phát hiện trong quá trình kiểm thử hoặc từ feedback của khách hàng.
+	+ Tích hợp mã nguồn:
+		+  Đẩy mã nguồn lên hệ thống Git (GitHub/GitLab).
+		+ Làm việc chặt chẽ với CI/CD để đảm bảo mã nguồn được kiểm thử tự động sau mỗi lần commit.
+	+ Công việc cụ thể trong quy trình:
+		+ Viết mã để tích hợp các tính năng mới trên firmware.
+		+ Thực hiện các bài test cơ bản để đảm bảo mã hoạt động đúng.
+		+ Chạy các bài kiểm thử tự động qua CI/CD và xử lý lỗi phát hiện trong quá trình kiểm thử.
+
+6. Nếu bạn là QA/QC 
+	+ Kiểm tra toàn bộ hệ thống sau khi Dev tích hợp mã.
+	+ Viết báo cáo kiểm thử chi tiết, bao gồm trạng thái của từng Test Case.
+	+ Phê duyệt hoặc yêu cầu chỉnh sửa trước khi sản phẩm được release.
+	+ Đảm bảo rằng tất cả các tính năng hoạt động ổn định trước khi phát hành firmware.
+7. Project Manager (PM)
+	+ Quản lý dự án:
+		+ Theo dõi tiến độ phát triển của dự án, từ khi bắt đầu đến khi hoàn thành.
+		+ Phân công nhiệm vụ cho các thành viên trong team Dev, QA, và DevOps.
+	+ Đảm bảo chất lượng và thời gian phát hành:
+		+ Đảm bảo sản phẩm được phát hành đúng lịch trình và đạt tiêu chuẩn chất lượng.
+		+ Phê duyệt phiên bản firmware trước khi phát hành chính thức.
+	+ Giao tiếp với các bộ phận liên quan:
+		+ Làm việc với các team khác (Marketing, Sales, Hỗ trợ khách hàng) để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
+8. Dựa vào kinh nghiệm và kỹ năng của bạn, bạn có thể:
+	+ Nếu là Dev: Phát triển tính năng, viết test, tích hợp mã nguồn.
+	+ Nếu là QA: Thiết kế và thực hiện kiểm thử để đảm bảo chất lượng.
+	+ Nếu là PM/Team Lead: Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
+
+**lập trình firmware& soft ware**
+
+
+**FreeRTOS,RTOS**
+- FreeRTOS là một hệ điều hành thời gian thực (Real-Time Operating System - RTOS) mã nguồn mở, được thiết kế đặc biệt cho các thiết bị nhúng (embedded systems). Nó cung cấp môi trường để phát triển các ứng dụng nhúng có yêu cầu về xử lý thời gian thực.
+- Đặc điểm chính của FreeRTOS:
+Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các vi điều khiển với tài nguyên hạn chế.
+- Quản lý đa nhiệm (Multitasking):Hỗ trợ chạy nhiều tác vụ (task) đồng thời bằng cách sử dụng lập lịch ưu tiên (priority scheduling).
+- Thời gian thực:Đảm bảo đáp ứng các yêu cầu thời gian khắt khe, như xử lý sự kiện trong khoảng thời gian cố định.
+-  ESP32 muốn dùng FreeRTOS thì cài framework  ESP-IDF
+- Framework là một công cụ mạnh mẽ giúp lập trình viên phát triển phần mềm nhanh chóng, dễ bảo trì và có chất lượng cao
+- Khác biệt lớn giữa FreeRTOS và Windows:
+	- Thời gian thực vs Không thời gian thực:
+		- FreeRTOS: Hỗ trợ thời gian thực, đảm bảo phản hồi nhanh và chính xác trong khoảng thời gian xác định. Điều này rất quan trọng trong các hệ thống nhúng, nơi thời gian xử lý phải được kiểm soát nghiêm ngặt.
+		- Windows: Không được thiết kế cho thời gian thực. Nó ưu tiên trải nghiệm người dùng và chạy các ứng dụng không đòi hỏi sự đáp ứng chính xác theo thời gian.
+	- Tài nguyên phần cứng:
+		- FreeRTOS;Hạn chế
+		- Windows: Yêu cầu tài nguyên cao,
+		- FreeRTOS: Hỗ trợ thời gian thực, đảm bảo phản hồi nhanh và chính xác trong khoảng thời gian xác định. Điều này rất quan trọng trong các hệ thống nhúng, nơi thời gian xử lý phải được kiểm soát nghiêm ngặt.
+		- Windows: Không được thiết kế cho thời gian thực. Nó ưu tiên trải nghiệm người dùng và chạy các ứng dụng không đòi hỏi sự đáp ứng chính xác theo thời gian.
+	- lập trình ESP32 bằng VS CODE tích hợp extencion PlatformIO IDE	
+**Yocto Project là gì?**
+- Yocto Project là một công cụ Cho phép tạo ra một hệ điều hành Linux nhẹ nhàng và tối ưu theo nhu cầu phần cứng cụ thể.
+![image](https://github.com/user-attachments/assets/4063075b-9890-4464-8e71-b15adb58e380)
+
+**OpenWrt là gì?**
+- OpenWrt là một hệ điều hành nhúng dựa trên Linux, được thiết kế để thay thế firmware gốc trên các thiết bị mạng như router
+-  SDK là bộ công cụ phát triển cung cấp API, thư viện, và công cụ để lập trình viên phát triển phần mềm.
+- Bên china cấp SDK , kết hợp với VS code
+**JTAG/SWD là gì?**
+- Khi nào sử dụng JTAG hoặc SWD Debugger?
+	- Sửa lỗi mã nguồn nhúng (debug):
+		- Khi cần kiểm tra mã nguồn chạy trên vi điều khiển.
+	- Lập trình firmware:
+		- Nạp chương trình hoặc cập nhật firmware trực tiếp.
+	- Phân tích hiệu năng và tài nguyên:
+		- Theo dõi sử dụng CPU, bộ nhớ.
+	- Kiểm tra phần cứng:
+		- JTAG có thể kiểm tra kết nối phần cứng và phát hiện lỗi vật lý trên bo mạch.
+	- Easy JTAG không hỗ trợ debug 
+		- Sửa lỗi firmware: Khi cần khôi phục hoặc sửa chữa firmware trên thiết bị.
+		- Khôi phục dữ liệu: Khi cần lấy lại dữ liệu từ các thiết bị bị hỏng. 
+**Những điểm cần chú ý khi đọc Datasheet và Reference Manual của vi điều khiển**
+1. Datasheet:
++ Là tài liệu cung cấp các thông số kỹ thuật chính của vi điều khiển và các ngoại vi.
++ Mục đích: Giúp bạn hiểu về tính năng, đặc điểm kỹ thuật và khả năng của vi điều khiển.
++ Tính năng chính : Số lượng và loại GPIO, ADC, DAC, Timers, UART, SPI, I2C.
++ Thông số kỹ thuật :
+	+ Nguồn điện,nhiệt độ, clk
++ Chức năng của từng chân:
++ Kích thước bộ nhớ
+2. Reference Manual:
++ Là tài liệu chi tiết hơn, cung cấp hướng dẫn sử dụng từng khối ngoại vi, cách cấu hình các thanh ghi, và cách tương tác với phần cứng.
++ Mục đích: Dành cho việc lập trình và cấu hình chi tiết.
++ Tổng quan về cấu trúc bộ nhớ
+	+  địa chỉ bắt đầu các thanh ghi ngoại vi.
++ Cách sử dụng các khối ngoại vi 
+	+ VD: Hướng dẫn cấu hình timer cho PWM,GPIO
++ Cấu hình và quản lý ngắt
+**Tối ưu hóa lập trình C/C++ cho vi điều khiển**
+1. Sử dụng các kiểu dữ liệu phù hợp
+2. Tránh cấp phát bộ nhớ động
+3. Sử dụng các cấp độ tối ưu hóa của trình biên dịch
+	+ Trình biên dịch C/C++ (GCC, Keil, IAR) cung cấp các tùy chọn tối ưu hóa:
+	+ -O1: Tối ưu cơ bản, cân bằng giữa tốc độ và kích thước.
+	+ -O2: Tối ưu cao hơn, tăng tốc độ chương trình.
+	+ -O3: Tối ưu hóa mạnh nhất, nhưng có thể làm tăng kích thước mã.
+	+ -Os: Tối ưu để giảm kích thước mã.
+4. Dùng thư viện phù hợp , nhẹ
+
+
+
+**Makefile**
+1. Make file là một script bên trong có chứa các thông tin:
+- Cấu trúc của một project(file, dependency).
+- Các command line dùng để tạo-hủy file.
+
+
+
+
 **Phân biệt Macro và Function trong C/C++**
  
 
@@ -5026,7 +5212,7 @@ typedef unsigned int uint;
 uint x = 10;  // x là một unsigned int
 
 **Atomic**
-- Atomic operations là  thao tác trên dữ liệu mà không  bị gián đoạn bởi các thread khác.
+ 
 - Chúng đảm bảo rằng một thao tác đọc-ghi (ví dụ, tăng giá trị của biến) sẽ diễn ra trọn vẹn mà không bị xen ngang
 - Khi nào sử dụng, cần thao tác nhanh, đơn giản.Không cần dùng mutex
 **Spinlock(c++ không hỗ trợ)**
@@ -5038,6 +5224,8 @@ uint x = 10;  // x là một unsigned int
 - Có hai loại chính
 	- Giới hạn số lượng luồng có thể truy cập.
 	- Giống như mutex, chỉ cho phép một luồng truy cập.
+	- Các luồng khác có thể giải phóng luồng nắm giữ dữ liệu
+- Mục đích là điều phối luồng có thể truy cập dữ liệu, không bảo vệ
 
 **fork()**
 - fork() là một hàm hệ thống trong các hệ điều hành Unix/Linux, 
@@ -6936,18 +7124,13 @@ Quy trình lập trình DMA:
 2. Cấu hình nguồn dữ liệu và đích:
 - Nguồn dữ liệu (Source): Ví dụ, thanh ghi dữ liệu ADC.
 - Đích (Destination): Bộ nhớ RAM nơi lưu trữ dữ liệu.
-Cấu hình các chế độ DMA:
-
-Mode: Normal (truyền một lần) hoặc Circular (truyền liên tục).
-Data Size: Chọn kích thước dữ liệu (byte, half-word, word).
+3. Cấu hình các chế độ DMA:
+- Mode: Normal (truyền một lần) hoặc Circular (truyền liên tục).
+-  Data Size: Chọn kích thước dữ liệu (byte, half-word, word).
 Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ nhớ) hoặc ngược lại.
-Kích hoạt DMA:
 
-Sau khi cấu hình, kích hoạt DMA để bắt đầu quá trình truyền dữ liệu.
-Kiểm tra trạng thái DMA:
 
-DMA thường sử dụng ngắt (interrupt) để báo hiệu khi truyền dữ liệu hoàn tất.
-Kiểm tra các cờ trạng thái để đảm bảo truyền dữ liệu thành công.
+
 
 </details>
 
