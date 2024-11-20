@@ -5224,10 +5224,12 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 	+ Xây dựng kernel Linux: Yocto cho phép bạn tùy chỉnh và biên dịch kernel dựa trên nhu cầu cụ thể của thiết bị.
 	+ Xây dựng root filesystem: Tạo hệ điều hành Linux đầy đủ (gồm kernel, file system, driver, các ứng dụng).
 	+ Tích hợp các layer: Dễ dàng thêm hoặc bớt các tính năng, driver, hoặc ứng dụng thông qua các layer cấu hình.
+
 **OpenWrt là gì?**
 - OpenWrt là một hệ điều hành nhúng dựa trên Linux, được thiết kế để thay thế firmware gốc trên các thiết bị mạng như router
 -  SDK là bộ công cụ phát triển cung cấp API, thư viện, và công cụ để lập trình viên phát triển phần mềm.
 - Bên china cấp SDK , kết hợp với VS code
+
 **JTAG/SWD là gì?**
 - Khi nào sử dụng JTAG hoặc SWD Debugger?
 	- Sửa lỗi mã nguồn nhúng (debug):
@@ -5241,6 +5243,7 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 	- Easy JTAG không hỗ trợ debug 
 		- Sửa lỗi firmware: Khi cần khôi phục hoặc sửa chữa firmware trên thiết bị.
 		- Khôi phục dữ liệu: Khi cần lấy lại dữ liệu từ các thiết bị bị hỏng. 
+
 **Những điểm cần chú ý khi đọc Datasheet và Reference Manual của vi điều khiển**
 1. Datasheet:
 + Là tài liệu cung cấp các thông số kỹ thuật chính của vi điều khiển và các ngoại vi.
@@ -5258,6 +5261,7 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 + Cách sử dụng các khối ngoại vi 
 	+ VD: Hướng dẫn cấu hình timer cho PWM,GPIO
 + Cấu hình và quản lý ngắt
+
 **Tối ưu hóa lập trình C/C++ cho vi điều khiển**
 1. Sử dụng các kiểu dữ liệu phù hợp
 2. Tránh cấp phát bộ nhớ động
@@ -5268,8 +5272,6 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 	+ -O3: Tối ưu hóa mạnh nhất, nhưng có thể làm tăng kích thước mã.
 	+ -Os: Tối ưu để giảm kích thước mã.
 4. Dùng thư viện phù hợp , nhẹ
-
-
 
 **Makefile**
 1. Make file là một script bên trong có chứa các thông tin:
@@ -5328,10 +5330,12 @@ uint x = 10;  // x là một unsigned int
  
 - Chúng đảm bảo rằng một thao tác đọc-ghi (ví dụ, tăng giá trị của biến) sẽ diễn ra trọn vẹn mà không bị xen ngang
 - Khi nào sử dụng, cần thao tác nhanh, đơn giản.Không cần dùng mutex
+
 **Spinlock(c++ không hỗ trợ)**
 - Spinlock là một loại lock nhẹ
 - Khác với mutex: Mutex có thể đưa luồng vào trạng thái ngủ, còn spinlock không làm vậy mà tiếp tục "quay vòng".
 - Ưu điểm:Hiệu quả hơn mutex khi thời gian giữ khóa ngắn, vì không có chi phí chuyển trạng thái giữa chạy và ngủ.
+
 **Semaphore**
 - Semaphore là một công cụ đồng bộ hóa cho phép giới hạn số lượng luồng truy cập vào một tài nguyên cụ thể cùng một lúc.
 - Có hai loại chính
@@ -5348,6 +5352,7 @@ uint x = 10;  // x là một unsigned int
 	- 0: Trả về trong tiến trình con.
 	- Dương số (> 0): Trả về PID (Process ID) của tiến trình con trong tiến trình cha.
 	- Âm số (< 0): Trả về nếu có lỗi, không thể tạo tiến trình con.
+	
 **cross compiler**
 - Cross Compiler là trình biên dịch có khả năng tạo ra mã nhị phân có thể chạy trên một nền tảng khác với nền tảng nơi trình biên dịch đang hoạt động.
 - Biên dịch mã trên máy tính (x86_64) để chạy trên vi điều khiển STM32 (kiến trúc ARM Cortex-M).
@@ -5367,9 +5372,11 @@ uint x = 10;  // x là một unsigned int
 **Tính chất của ngôn ngữ C:**
 - Ngôn ngữ lập trình bậc thấp (Low-level language): C gần với ngôn ngữ máy hơn các ngôn ngữ lập trình bậc cao khác, điều này giúp nó có khả năng điều khiển phần cứng mạnh mẽ và tối ưu hóa hiệu suất.
 - Ngôn ngữ thủ tục (Procedural Language): C chủ yếu dựa trên cách lập trình thủ tục, tức là chương trình được cấu trúc thành các hàm 
+
 **Tính chất của ngôn ngữ C++:**
 - C++ là một ngôn ngữ bậc trung:C++ cung cấp cả tính năng gần gũi với phần cứng như C (ví dụ như quản lý bộ nhớ thủ công, truy cập địa chỉ bộ nhớ trực tiếp,...) và các tính năng bậc cao như lập trình hướng đối tượng, xử lý ngoại lệ (exception handling), và thư viện chuẩn phong phú (STL).
 g.
+
 **Mảng và con trỏ**
 - Tên của mảng là một con trỏ hằng, trỏ đến địa chỉ ô nhớ đầu tiên của mảng
 - Truy cập phần tử mảng bằng con trỏ.
@@ -5474,6 +5481,7 @@ int main() {
 
 **Context Switching hoạt động như thế nào?**
 - Context Switching: Là quá trình mà hệ điều hành dừng việc thực thi một process hiện tại để chuyển sang thực thi một process khác. Trong quá trình này, ngữ cảnh (context) của process hiện tại (bao gồm các thanh ghi CPU, chương trình đếm, ngăn xếp, v.v.) được lưu trữ vào một nơi nào đó (thường là PCB - Process Control Block). Sau đó, ngữ cảnh của process khác được nạp vào để tiếp tục thực thi. Đây là một quá trình nặng về tài nguyên vì cần phải lưu và nạp lại nhiều thông tin từ bộ nhớ.
+
 **Phân biệt Zombie Process và Orphan Process**
 1. Zombie Process: Là một process đã kết thúc việc thực thi nhưng vẫn còn tồn tại trong bảng process vì nó chưa được parent process lấy thông tin trạng thái (status) của nó thông qua lệnh wait. Nó vẫn giữ một PID nhưng không còn sử dụng tài nguyên hệ thống.
 2. Orphan Process: Là một process mà parent process đã kết thúc hoặc bị kill trước khi nó kịp hoàn thành. Khi một process trở thành orphan, hệ điều hành (thường là init process) sẽ nhận làm parent mới của nó để quản lý.
