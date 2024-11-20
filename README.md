@@ -5085,11 +5085,121 @@ int main(void){
 	+ Nếu là Dev: Phát triển tính năng, viết test, tích hợp mã nguồn.
 	+ Nếu là QA: Thiết kế và thực hiện kiểm thử để đảm bảo chất lượng.
 	+ Nếu là PM/Team Lead: Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
+9. Dùng gì để debug modem
+	+ UART
+	+ PUTTY
+	+ SDK nha sản xuất cung cấp
+10. Tính năng team Dev Việt Nam  phát triển :
+	+ Hệ thống thu thập và phân tích log:
+		+ log kết nối, log bảo mật, lỗi hệ thống
+		+ Gửi log về server quản lý trung tâm để phân tích và xử lý sự cố từ xa.
+		+ sử dụng syslog, dmesg để thu thập lỗi
+	+ Hệ thống điều khiển từ xa :
+		+ Cho phép quản lý modem từ xa qua giao diện web hoặc ứng dụng di động.
+	+ Giao diện người dùng tùy chỉnh 
+		+ Tùy chỉnh giao diện quản lý modem trên web  
+        + Tích hợp thêm các tính năng như hiển thị trạng thái kết nối, số lượng thiết bị đang kết nối, tốc độ mạng thực tế.
+	+ Hệ thống chẩn đoán tự động:
+		+ Modem có thể tự kiểm tra trạng thái hệ thống và báo cáo về người dùng
+		+ Tự động đề xuất gói cước phù hợp
+	+ Chặn các trang web không phù hợp
+	+ Phát triển giao diện quản lý đa ngôn ngữ để phục vụ nhiều đối tượng khách hàng.
+
+**tùy chỉnh kernel Linux**
+- Có, tôi đã từng cấu hình và tùy chỉnh kernel Linux trong modem/router 
+	+ Sử dụng menuconfig để kích hoạt các module liên quan đến network stack và file system.
+	+ Tích hợp driver của đối tác Trung Quốc để đảm bảo modem có thể hoạt động đúng với phần cứng
+
+
 
 **lập trình firmware& soft ware**
+- Firmware: Là phần mềm được lập trình và cài đặt trực tiếp lên phần cứng (như vi điều khiển, vi xử lý), thường được lưu trong bộ nhớ ROM, Flash hoặc EEPROM.
+- Software: Là ứng dụng hoặc chương trình chạy trên hệ điều hành của máy tính hoặc thiết bị, thường được lưu trữ trong bộ nhớ RAM hoặc ổ đĩa.
+![image](https://github.com/user-attachments/assets/ba3c0f7f-4da6-4a94-9364-32bae01ce170)
 
 
+**tình huống vi điều khiển chạy chậm hoặc bị treo? Bạn đã xử lý thế nào?**
+- 1 số nguyên nhân 
+	+ cấu hình Xung nhịp không đúng
+	+ Chương trình bị kẹt trong vòng lặp vô hạn,Sử dụng Watchdog Timer (WDT) để tự động reset vi điều khiển khi treo.
+	+ Chương trình chứa nhiều tác vụ nặng (tính toán, xử lý dữ liệu) dẫn đến thời gian đáp ứng chậm: Tối ưu mã nguồn
+	+ Giao tiếp ngoại vi bị lỗi
+		+ check kết nối vật lý
+	+ Nguồn điện không ổn định
+		+ check nguồn , thêm  tụ lọc (capacitor) để giảm nhiễu.
+	+ Stack Overflow hoặc Memory Leak: hạn chế cấp phát động
+
+
+**Trong một sản phẩm đa chức năng, làm thế nào bạn đảm bảo các chức năng hoạt động ổn định mà không ảnh hưởng đến nhau?**
+1. Phân chia rõ ràng các chức năng
+2. Quản lý tài nguyên dùng chung tránh cac vấn đề đa luồng
+3. Sử dụng hệ điều hành thời gian thực
+4. Kiểm tra và giám sát hệ thống dùng Cơ chế giám sát Watchdog Timer (WDT)
+5. Tối ưu hóa hiệu suất và bộ nhớ
+	+ Quản lý bộ nhớ hiệu quả:
+		+ Sử dụng bộ nhớ stack và heap một cách hợp lý, tránh tràn stack hoặc lãng phí bộ nhớ.
+	+ Tối ưu hóa mã:
+		+ Giảm thiểu độ phức tạp trong mã nguồn, đảm bảo các chức năng chỉ làm đúng nhiệm vụ của chúng.
+
+
+
+
+
+
+**Khi làm việc với một dự án firmware, bạn phát hiện rằng thiết bị hoạt động không đúng như dự kiến. Bạn sẽ làm gì để xác định và khắc phục lỗi?**
+1. Xác định nguyên nhân Lỗi
+	- Phần cứng:
+		- Đảm bảo rằng phần cứng hoạt động đúng (nguồn điện, giao tiếp ngoại vi, thạch anh).
+		- Kiểm tra kết nối vật lý như cáp, chân cắm IC, hoặc cảm biến.
+	- Phần mềm:
+		- Kiểm tra logic chương trình và các điều kiện biên, đặc biệt ở các module liên quan.
+		- Đảm bảo rằng cấu hình hệ thống (clock, bộ nhớ) phù hợp với thiết kế.
+2. Sử dụng cụ hỗ trợ gỡ lỗi
+	- Sử dụng debugger (ví dụ: JTAG, SWD) để theo dõi trạng thái vi điều khiển, xem giá trị biến và bước thực thi mã.
+	- Oscilloscope hoặc Logic Analyzer:
+		- Kiểm tra tín hiệu ngoại vi (SPI, I2C, UART) để xác định lỗi giao tiếp hoặc tín hiệu không ổn định.
+3.  Kiểm tra từng module riêng lẻ
+	- Nếu thiết bị có nhiều chức năng, thử ngắt từng module để tìm xem lỗi phát sinh từ đâu.
+4. Kiểm tra với các phiên bản firmware khác nhau
+
+**một tình huống mà bạn phải tối ưu hóa firmware để cải thiện hiệu năng hoặc giảm tiêu thụ năng lượng.**
+- Trong một dự án phát triển thiết bị IoT  sử dụng vi điều khiển để thu thập dữ liệu từ cảm biến và truyền qua mạng không dây (Wi-Fi), 
+tôi nhận thấy :
+- Tiêu thụ năng lượng cao: Thiết bị không đáp ứng được thời lượng pin kỳ vọng, đặc biệt trong các chế độ nhàn rỗi.
+- Tôi cấu hình vi điều khiển và các module ngoại vi (như cảm biến và module Wi-Fi) vào chế độ Deep Sleep khi không cần hoạt động.
+- Tối ưu thời gian hoạt động của module Wi-Fi::
+	- Module Wi-Fi ban đầu luôn bật, gây tiêu thụ năng lượng không cần thiết.
+	-  Tôi chỉnh sửa firmware để chỉ bật module khi cần truyền dữ liệu, sau đó đưa nó vào chế độ tiết kiệm năng lượng.
+
+
+**firmware  an toàn trước các cuộc tấn công bên ngoài**
+- Mã hóa và bảo vệ dữ liệu truyền tải
+	+ Thuật toán mạnh như AES-256.
+- Bảo vệ chống sửa đổi firmware
+	+ Triển khai cơ chế xác minh tính toàn vẹn của firmware tại thời điểm khởi động hoặc định kỳ trong quá trình hoạt động.
+- Cập nhật OTA an toàn 
+	+ Mã hóa toàn bộ dữ liệu cập nhật để ngăn chặn việc bị thay đổi trong quá trình truyền tải.
+	+ Thực hiện xác minh checksum hoặc hash của firmware mới trước khi cài đặt.
+- Quản lý quyền truy cập:
+	+ Triển khai cơ chế xác thực (authentication) và phân quyền (authorization) cho các giao tiếp từ bên ngoài.
+    + Sử dụng mã hóa giao tiếp giữa thiết bị và hệ thống quản lý để ngăn chặn truy cập trái phép.
+- Các giao diện JTAG hoặc SWD bị vô hiệu hóa trong các phiên bản firmware cuối cùng để ngăn chặn việc truy cập trái phép.
+- Nếu cần mở lại, phải qua cơ chế xác thực (ví dụ: nhập mật khẩu hoặc sử dụng khóa phần cứng).
+- Sử dụng WDT để phát hiện các hoạt động bất thường, như chương trình bị treo do mã độc tấn công.
+
+
+
+**Phối hợp với các thành viên trong nhóm phát triển nhúng**
+1. Với team dev:
+	+ Đảm bảo hiểu rõ thiết kế phần cứng (datasheet, sơ đồ mạch) để tích hợp phần mềm nhúng tương ứng.
+    + Phối hợp để kiểm tra khả năng tương thích giữa firmware và phần cứng, như giao tiếp I2C, SPI, UART.
+2. Với nhóm QA 
+	+ Lên kế hoạch để test các tính năng của sản phẩm
+3. Xử lý vấn đề chưa từng làm trước đó
+	+ Tự học, nghiên cứu vấn đề đó và không ngại tìm kiếm sự trợ giúp.
 **FreeRTOS,RTOS**
+![image](https://github.com/user-attachments/assets/e2b58085-b9ef-4a43-983d-d6e4ee2bd1c7)
+
 - FreeRTOS là một hệ điều hành thời gian thực (Real-Time Operating System - RTOS) mã nguồn mở, được thiết kế đặc biệt cho các thiết bị nhúng (embedded systems). Nó cung cấp môi trường để phát triển các ứng dụng nhúng có yêu cầu về xử lý thời gian thực.
 - Đặc điểm chính của FreeRTOS:
 Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các vi điều khiển với tài nguyên hạn chế.
@@ -5108,9 +5218,12 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 		- Windows: Không được thiết kế cho thời gian thực. Nó ưu tiên trải nghiệm người dùng và chạy các ứng dụng không đòi hỏi sự đáp ứng chính xác theo thời gian.
 	- lập trình ESP32 bằng VS CODE tích hợp extencion PlatformIO IDE	
 **Yocto Project là gì?**
-- Yocto Project là một công cụ Cho phép tạo ra một hệ điều hành Linux nhẹ nhàng và tối ưu theo nhu cầu phần cứng cụ thể.
+- Yocto Project là một công cụ Cho phép tạo ra một hệ điều hành Linux tùy chỉnh và tối ưu theo nhu cầu phần cứng cụ thể.
 ![image](https://github.com/user-attachments/assets/4063075b-9890-4464-8e71-b15adb58e380)
-
+- Yocto Project hỗ trợ toàn bộ quá trình phát triển hệ điều hành nhúng, bao gồm:
+	+ Xây dựng kernel Linux: Yocto cho phép bạn tùy chỉnh và biên dịch kernel dựa trên nhu cầu cụ thể của thiết bị.
+	+ Xây dựng root filesystem: Tạo hệ điều hành Linux đầy đủ (gồm kernel, file system, driver, các ứng dụng).
+	+ Tích hợp các layer: Dễ dàng thêm hoặc bớt các tính năng, driver, hoặc ứng dụng thông qua các layer cấu hình.
 **OpenWrt là gì?**
 - OpenWrt là một hệ điều hành nhúng dựa trên Linux, được thiết kế để thay thế firmware gốc trên các thiết bị mạng như router
 -  SDK là bộ công cụ phát triển cung cấp API, thư viện, và công cụ để lập trình viên phát triển phần mềm.
