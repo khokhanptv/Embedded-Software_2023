@@ -4996,6 +4996,38 @@ int main(void){
 **CI/CD**
 - Lập trình viên và QA là những người viết test.
 - CI/CD giúp tự động hóa quy trình xây dựng, kiểm thử và triển khai ứng dụng.
+- Quy trình cơ bản của Pipeline CI/CD:
+	+ Commit Code: Nhà phát triển đẩy mã nguồn lên kho lưu trữ (Git, GitLab, GitHub, v.v.).
+	+ Build: Hệ thống tự động build ứng dụng từ mã nguồn mới.
+	+ Test: Thực hiện kiểm thử tự động (unit test, integration test, v.v.) để đảm bảo chất lượng.
+	+ Deploy: Triển khai ứng dụng tới môi trường staging hoặc production.
+	+ Monitor: Theo dõi hoạt động của ứng dụng sau triển khai để phát hiện và xử lý lỗi.
+
+**Watchdog Timer là gì?**
+- WDT là một bộ đếm thời gian độc lập trong vi điều khiển.
+- Nó được thiết kế để phát hiện và khắc phục các lỗi phần mềm, như:
+	- Lỗi treo hệ thống (system hang): Khi chương trình dừng hoạt động hoặc rơi vào vòng lặp vô hạn.
+	- Lỗi thời gian thực (real-time deadline miss): Khi một tác vụ không hoàn thành trong thời gian yêu cầu.
+- Cách hoạt động của Watchdog Timer
+- Khởi tạo WDT:
+	- Bạn cấu hình thời gian chờ của WDT (timeout). Ví dụ: 5 giây.
+- Làm mới WDT (Feed/Kick the Dog):
+	- Trong chương trình chính, bạn phải "làm mới" WDT thường xuyên trước khi hết thời gian chờ. Nếu không, WDT sẽ reset hệ thống.
+- Reset khi không làm mới:
+	- Nếu WDT không được làm mới, hệ thống sẽ bị reset.
+- Tích hợp trong phần cứng của vi điều khiển.
+
+**bảo mật cho các modem/router**
+- FPT Telecom đã phát triển và tích hợp tính năng bảo mật F-Safe trực tiếp trên các modem/router
+
+**Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
+
+
+
+
+
+
+
 
 **Quy trình làm việc ở FPT**
 1. Thu thập yêu cầu và đánh giá sản phẩm từ đối tác:
@@ -5263,15 +5295,31 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 + Cấu hình và quản lý ngắt
 
 **Tối ưu hóa lập trình C/C++ cho vi điều khiển**
-1. Sử dụng các kiểu dữ liệu phù hợp
-2. Tránh cấp phát bộ nhớ động
-3. Sử dụng các cấp độ tối ưu hóa của trình biên dịch
-	+ Trình biên dịch C/C++ (GCC, Keil, IAR) cung cấp các tùy chọn tối ưu hóa:
-	+ -O1: Tối ưu cơ bản, cân bằng giữa tốc độ và kích thước.
-	+ -O2: Tối ưu cao hơn, tăng tốc độ chương trình.
-	+ -O3: Tối ưu hóa mạnh nhất, nhưng có thể làm tăng kích thước mã.
-	+ -Os: Tối ưu để giảm kích thước mã.
-4. Dùng thư viện phù hợp , nhẹ
+
+1. Tối ưu hóa kích thước 
+	+ Sử dụng các kiểu dữ liệu phù hợp
+	+ Sử dụng các thư viện chuẩn thay vì tự viết những hàm phức tạp.
+	+ Xóa các đoạn mã hoặc biến không được sử dụng.
+	+ Viết code ngắn gọn và dễ đọc
+	+ Hạn chế sử dụng biến cục bộ có kích thước lớn trong hàm, chuyển sang dùng biến toàn cục nếu cần.
+		+ Vi vùng stack nhỏ hơn vùng data/bss >> dễ tràn vùng nhớ stack
+		+ vùng data/bss có kích thước lớn hơn
+		+ Biến toàn cục không bị giải phóng khi hàm kết thúc, nên không tốn thời gian cấp phát và giải phóng
+	+ Không đùng đệ quy
+2. Tối ưu hóa tốc độ xử lý
+	+ Tránh các phép tính phức tạp
+		+ VD: Thay vì dùng phép nhân thì dùng dịch bit
+	+ Tránh cấp phát động vì nó gây phân mảnh bộ nhớ và tăng thời gian thực thi.
+	+ Giảm số lần lặp,điều kiện kiểm tra trong vòng lặp
+		+ Hiệu suất: Mỗi lần lặp là CPU phải thực thi,càng ít lần lặp thì thời gian thực thi càng ngắn.
+		+ 2 vòng for >> 1 vòng for
+	+ Sử dụng hàm (inline) để giảm thời gian gọi hàm.
+	+ Sử dụng tùy chọn tối ưu của trình biên dịch 
+		+ -O1: Tối ưu cơ bản, cân bằng giữa tốc độ và kích thước.
+		+ -O2: Tối ưu cao hơn, tăng tốc độ chương trình.
+		+ -O3: Tối ưu hóa mạnh nhất, nhưng có thể làm tăng kích thước mã.
+		+ -Os: Tối ưu để giảm kích thước mã.
+	
 
 **Makefile**
 1. Make file là một script bên trong có chứa các thông tin:
@@ -7494,12 +7542,40 @@ Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ
 - Blynk IoT là một nền tảng đơn giản, cho phép  kết nối và điều khiển các thiết bị IoT từ xa qua internet.
 - Cung cấp giao diện người dùng
 - Dùng  https://blynk.cloud/ 
+- Tối ưu hóa hiệu suất và độ ổn định của hệ thống khi sử dụng Blynk IoT?
+	+ chỉ gửi dữ liệu khi có sự kiện xảy ra (ví dụ: khi có thẻ được quẹt). 
+	+ Điều này giúp giảm băng thông và tiết kiệm năng lượng.
 **Zigbee**
 - Cả Zigbee ều là giao thức không dây
 - sử dụng băng tần 2.4 GHz (Zigbee cũng hỗ trợ các tần số khác như 868 MHz, 915 MHz).
 - Tiêu thụ năng lượng thấp , dùng pin trong nhiều năm
 - Tốc độ truyền dữ liệu thấp , tối da 250kb/s
 - Khả năng mở rộng cao
+
+**Về kết quả và ứng dụng thực tế**
+- hệ thống được thiết kế để sẵn sàng tích hợp vào các hệ thống smart home
+ 
+**phối hợp với các thành viên như thế nào**
+1. Phân chia công việc
+	+ thiết kế phần cứng, 
+	+ lập trình giao tiếp cảm biến, và tôi
+	+ phụ trách lập trình vi điều khiển
+2. Trao đổi ý tưởng, tiến độ, và giải quyết các vấn đề phát sinh nhanh chóng.
+3. Hỗ trợ các thành viên
+	+ giải quyết các lỗi phần mềm hoặc tối ưu hóa giao tiếp giữa các module.
+
+**trình bày kết quả hoặc thuyết phục khách hàng/đồng đội ra sao?**
+1. Trình bày qua các bước cụ thể:
+	+  Chia nhỏ kết quả thành các phần dễ hiểu như thiết kế hệ thống, mã nguồn chính, và dữ liệu thử nghiệm.
+2. Sử dụng công cụ hỗ trợ:
+	+ sử dụng slide PowerPoint hoặc biểu đồ để minh họa rõ ràng các quy trình và kết quả.
+3. Trình bày hiệu quả của giải pháp:
+	+ Độ chính xác: Tỷ lệ nhận diện thẻ RFID thành công.
+	+ Tốc độ: Thời gian từ lúc quẹt thẻ đến khi cửa mở.
+	+ Độ ổn định: Hệ thống hoạt động liên tục mà không xảy ra lỗi trong các thử nghiệm dài hạn.
+	+ Tính mở rộng
+
+
 **WIFI**
 ![image](https://github.com/user-attachments/assets/d2ffaa36-58f0-4434-8a0f-929f38ab2029)
 
@@ -7510,6 +7586,44 @@ Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ
 - Tôi chọn ESP32 vì nó có tích hợp Wi-Fi
 - Tôi tích hợp ESP32 với Blynk qua Wi-Fi, cho phép người dùng theo dõi trạng thái (ví dụ: cửa mở hay đóng) và điều khiển từ xa (mở cửa) thông qua ứng dụng di động.
 ![image](https://github.com/user-attachments/assets/d67d0c54-6c7d-4d18-a2d0-e658683103e0)
+
+
+**Về vai trò và đóng góp**
+- Tôi là người thiết kế hệ thống, ựa chọn linh kiện, đến lập trình các thành phần chính. 
+- Tôi đảm nhận việc lập trình ESP32 để giao tiếp với RFID RC522 qua giao thức SPI, xử lý dữ liệu trên SDCARD, và điều khiển servo motor. 
+- Ngoài ra, tôi  tích hợp hệ thống với nền tảng Blynk IoT để hỗ trợ giám sát và điều khiển từ xa.
+
+**Làm thế nào  quản lý kết nối, lập trình các cảm biến, đặc biệt là giao tiếp SPI trong dự án này?**
+1. phần cứng:
+	- Đảm bảo các chân SPI (MISO, MOSI, SCK, CS) của ESP32 được kết nối đúng với RC522 và SDCARD.
+2. Lập trình  SPI:
+	- Sử dụng thư viện SPI có sẵn.
+	- Đảm bảo cấu hình đúng các thông số SPI ( tốc độ, chế độ)
+3. Quản lý đa thiết bị trên cùng bus SPI:
+	- Sử dụng chân Chip Select (CS) để chọn thiết bị . 
+	- Khi làm việc với RC522, chân CS của SDCARD sẽ được đặt ở trạng thái không hoạt động, và ngược lại.
+4. Xử lý dữ liệu:
+	- Tôi viết hàm đọc và ghi dữ liệu qua SPI, sau đó tích hợp với logic hệ thống.
+	- Ví dụ, đọc thẻ RFID từ RC522 và kiểm tra dữ liệu với thông tin lưu trên SDCARD.
+
+**giải quyết những thách thức**
+1. Xung đột t khi kết nối nhiều thiết bị:
+	+ Quản lý chân (CS) Mđảm bảo chỉ một thiết bị được kích hoạt tại một thời điểm. 
+	+ Giảm tốc độ xung nhịp SPI nếu có vấn đề tín hiệu.
+2. Độ trễ khi đọc dữ liệu từ SDCARD:
+	+ truy xuất dữ liệu bị chậm, ảnh hưởng đến hiệu suất tổng thể.
+	+ Tối ưu hóa mã lập trình bằng cách giảm kích thước  dữ liệu đọc/ghi
+3. Khả năng mất ổn định của servo motor
+	+ hệ thống gặp hiện tượng nhiễu tín hiệu PWM, khiến motor hoạt động không chính xác.
+	+ Sử dụng PWM với tần số phù hợp hơn
+	+ Cấp nguồn riêng cho servo để tránh nhiễu từ các thành phần khác.
+4. Tích hợp Blynk IoT:
+	+ Gặp khó khăn khi đường truyền Wi-Fi không ổn định.
+	+ Lưu trữ tạm thời dữ liệu gửi đi, đảm bảo khi kết nối Wi-Fi khôi phục, dữ liệu sẽ được gửi mà không mất mát.
+5. Tại sao lại chọn ESP32
+	+ Có Wi-Fi tích hợp sẵn, giúp tôi dễ dàng thêm tính năng IoT vào hệ thống.
+
+
 
 **Servo Motor**
 - Chu kỳ PWM phổ biến: 20ms (50 Hz).
@@ -7522,8 +7636,13 @@ Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ
 
 
 **Vấn đề bảo mật**
+- AES là một thuật toán mã hóa được sử dụng để   bảo mật dữ liệu
+- Thuật toán hoạt động bằng cách chia dữ liệu thành các khối 128-bit và mã hóa chúng thông qua một chuỗi các vòng (rounds) chuyển đổi dữ liệu dựa trên khóa.
+- ESP32:Tích hợp phần cứng hỗ trợ AES-128.
+- Sử dụng thư viện được cung cấp bởi SDK (ESP-IDF)
+
 1. Mã hóa dữ liệu khi truyền giữa ESP32 và các thiết bị ngoại vi qua giao thức SPI.
-- Sử dụng các thuật toán mã hóa như AES-128 hoặc AES-256.
+- Sử dụng các thuật toán mã hóa như AES-128
 2. Bảo mật kết nối IoT (ESP32 - Blynk IoT)
 - Cấu hình ESP32 kết nối Wi-Fi với WPA2 hoặc WPA3
 - Xác thực hai lớp (2FA): Tích hợp xác thực hai lớp cho ứng dụng Blynk
@@ -7532,6 +7651,7 @@ Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ
 4. Bảo mật xác thực RFID
 - Áp dụng rolling code: Mỗi lần quẹt thẻ, hệ thống và thẻ sẽ đồng bộ một mã xác thực mới.
 5. Bảo mật phần cứng : Bảo vệ vật lý
+
 **Vấn đề về Thẻ nhớ SDCARD trong Dự án**
 1. Kiểm tra Dung lượng Thẻ nhớ SDCARD:
 - Theo dõi dung lượng lưu trữ: Vi điều khiển STM32 có thể được lập trình để theo dõi dung lượng trống trên thẻ nhớ SDCARD.
