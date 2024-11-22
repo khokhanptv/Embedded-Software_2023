@@ -4993,8 +4993,154 @@ int main(void){
 5. Tính đồng bộ
 	+ Xử lý vấn đề Trong các hệ thống đa nhiệm 
 
+
+**vi điều khiển 8-bit, 16-bit, hay 32-bit**
+![image](https://github.com/user-attachments/assets/39dc2403-ce78-4e20-838c-ece6be6578e5)
+
+
+**kinh nghiệm làm việc của mình với các hệ điều hành nhúng không**
+- FreeRTOS: Sử dụng trong các dự án yêu cầu đa nhiệm, như quản lý nhiều giao thức truyền thông đồng thời (SPI, UART) hoặc điều khiển thời gian thực. 
+- Tôi đã sử dụng FreeRTOS để quản lý luồng dữ liệu cảm biến và giao tiếp mạng trong một thiết bị IoT.
+- Linux nhúng (Embedded Linux): Tôi đã sử dụng Embedded Linux trong các dự án phát triển firmware cho router/modem.
+
+**làm thế nào bạn đảm bảo hệ thống không bị treo hoặc mất dữ liệu khi xử lý nhiều ngắt cùng lúc?**
+1. Ưu tiên ngắt (Interrupt Priority): Tôi cấu hình mức ưu tiên (priority) cho các ngắt, đảm bảo rằng các ngắt quan trọng nhất (ví dụ: Timer hoặc UART) được xử lý trước.
+2. Thời gian ngắt ngắn: Tôi hạn chế xử lý logic phức tạp trong ISR (Interrupt Service Routine), chỉ thực hiện các tác vụ tối thiểu như ghi dữ liệu vào buffer. Phần xử lý còn lại sẽ được chuyển sang luồng chính (main loop) hoặc task FreeRTOS.
+3. Sử dụng buffer vòng (Circular Buffer): Với các giao tiếp như UART, tôi sử dụng buffer vòng để lưu trữ dữ liệu tạm thời, tránh mất dữ liệu khi nhận hoặc gửi liên tục.
+4. Quản lý đồng bộ: Sử dụng  mutex để đảm bảo không xảy ra xung đột dữ liệu giữa ISR và các phần còn lại của hệ thống
+
+
+**Khi làm việc với một sơ đồ mạch mới**
+1. Nguồn cấp (Power Supply): Đảm bảo nguồn điện ổn định và đủ cho tất cả các thành phần. Kiểm tra mạch ổn áp (voltage regulator) và điện áp cấp cho vi điều khiển.
+2. Kết nối chân (Pinout): Xác định các chân GPIO, chân giao tiếp (I2C, SPI, UART), và chân chức năng đặc biệt (ADC, PWM).
+3. Mạch ngoại vi: Kiểm tra sơ đồ kết nối với các linh kiện như cảm biến, màn hình, hoặc động cơ, đảm bảo chúng được kết nối chính xác và tuân theo thông số kỹ thuật.
+4. Đường mạch giao tiếp: Xác định tốc độ truyền thông và tương thích giữa vi điều khiển và thiết bị ngoại vi.
+5. Mạch bảo vệ: Kiểm tra các mạch bảo vệ như diode chống ngược dòng hoặc mạch hạn dòng cho các chân giao tiếp."
+
+**Bạn đã từng đọc sơ đồ mạch vi điều khiển chưa? Mức độ hiểu biết của bạn về việc tích hợp firmware với phần cứng là như thế nào?**
+- tôi đã sử dụng sơ đồ mạch để xác định chân PWM và kết nối của driver động cơ, sau đó cấu hình firmware tương ứng để điều chỉnh tốc độ và hướng quay.
+- Mức độ hiểu biết về tích hợp firmware:
+	+ Đảm bảo rằng các thông số như xung clock, điện áp, và tốc độ giao tiếp được điều chỉnh phù hợp với thiết bị ngoại vi.
+	+ Trong trường hợp phát hiện lỗi phần cứng, tôi thường phối hợp với kỹ sư thiết kế mạch để xác định nguyên nhân và sửa đổi firmware hoặc mạch
+
+
+**Lợi ích con trỏ**
+1. Truy cập và thao tác trực tiếp với bộ nhớ
+2. Quản lý bộ nhớ động
+	- (malloc, calloc, realloc, free).
+	- cấp phát, quản lý, và giải phóng bộ nhớ một cách linh hoạt trong thời gian chạy.
+3. Truyền tham chiếu vào hàm, giúp tiết kiệm bộ Nhớ
+	+ Khi truyền giá trị, một bản sao của biến được tạo ra và truyền vào hàm.Việc này tốn thêm bộ nhớ để lưu trữ bản sao
+	+ Khi truyền tham chiếu, chỉ địa chỉ của biến được truyền vào hàm, không tạo ra bản sao của giá trị.
+	+ Điều này tiết kiệm bộ nhớ, vì địa chỉ của biến (thường chiếm 4 hoặc 8 byte) nhỏ hơn nhiều so với việc sao chép toàn bộ dữ liệu.
+4. Khi con trỏ truy cập vượt ngoài phạm vi của một mảng
+	+ Hành vi không xác định
+	+ Hỏng dữ liệu : Ghi đè lên dữ liệu quan trọng khác
+5. Trong lập trình firmware, con trỏ thường được sử dụng để truy cập các thanh ghi phần cứng (hardware registers) hoặc điều khiển thiết bị ngoại vi. Các thanh ghi phần cứng thường được ánh xạ tới các địa chỉ cụ thể trong bộ nhớ (Memory-Mapped I/O). 
+	+ Con trỏ được sử dụng để trỏ đến các địa chỉ này và thao tác trực tiếp với thanh ghi.
+6. Sự khác biệt giữa truyền tham số bằng giá trị và bằng tham chiếu 
+	+ Truyền tham số bằng giá trị (Pass by Value)
+		+ Khi truyền tham số bằng giá trị, một bản sao của giá trị biến được truyền vào hàm.
+		+ Hàm chỉ thao tác trên bản sao này, không ảnh hưởng đến biến gốc. giảm nguy cơ lỗi không mong muốn.
+		+ Tốn bộ nhớ nếu kiểu dữ liệu lớn do tạo bản sao.
+	+ bằng tham chiếu (Pass by Reference)
+		+ Trong C, truyền tham số bằng tham chiếu thực hiện thông qua con trỏ.
+		+ Thay vì truyền giá trị, địa chỉ của biến được truyền vào hàm.
+		+ Hàm có thể thao tác trực tiếp trên địa chỉ đó, làm thay đổi giá trị của biến gốc.
+		+ Tiết kiệm bộ nhớ vì không tạo bản sao.
+
+**chuỗi (string) trong C**
+- Trong ngôn ngữ C, không có kiểu dữ liệu string. 
+- Thay vào đó, chuỗi được biểu diễn như một mảng (char[]) hoặc một con trỏ tới ký tự (char *), với ký tự null (\0) được sử dụng để đánh dấu kết thúc chuỗi.
+char str1[] = "Hello";
+char *str2 = "Hello";
+
+- Để xử lý chuỗi, C cung cấp các hàm trong thư viện <string.h>
+- Sự khác biệt giữa mảng ký tự (char arr[]) và con trỏ ký tự (char *ptr)
+	+ mảng ký tự :
+		+ Là một mảng các ký tự được lưu trữ liên tiếp trong bộ nhớ.	
+		+ Có thể thay đổi nội dung mảng
+		+ Kích thước Được cố định khi khai báo
+	+ con trỏ ký tự 
+		+ Trỏ tới địa chỉ của một chuỗi ký tự.
+		+ không thể thay đổi  nội dung mảng (text)
+		+ Kích thước không cố định khi khai báo(4 byte hoặc 8 byte)
+
+**Khai báo biến struct**
+1. Cách khai báo trực tiếp:
+`struct Student s1, s2;`
+2. Sử dụng từ khóa typedef:
+```c
+typedef struct {
+    int id;
+    char name[50];
+    float grade;
+} Student;
+
+Student s1, s2; // Không cần viết "struct" nữa
+```
+- Quản lý bộ nhớ: Nếu một struct chứa con trỏ (ví dụ, con trỏ chuỗi),  cấp phát và giải phóng bộ nhớ cẩn thận.
+- sử dụng con trỏ để thao tác trên một cấu trúc.
+1. Khai báo struct và con trỏ
+2. Dùng toán tử -> để truy cập thành phần của struct.
+3. Thay đổi giá trị của struct qua con trỏ
+- Lợi ích khi dùng con trỏ với struct:
+1. Tiết kiệm bộ nhớ:
+	+ Khi truyền dữ liệu vào hàm bằng cách truyền giá trị, một bản sao của toàn bộ dữ liệu được tạo ra trong bộ nhớ.
+	+ Nếu dữ liệu lớn (ví dụ: một struct hoặc mảng lớn), việc sao chép toàn bộ dữ liệu này sẽ tiêu tốn rất nhiều bộ nhớ.
+	+ Sử dụng con trỏ thay vì truyền giá trị cho phép hàm nhận địa chỉ của dữ liệu. Địa chỉ chỉ chiếm một vài byte>> tiết Kiệm
+2. tăng Hiệu suất 
+	+ Khi truyền tham chiếu, hàm thao tác trực tiếp trên biến gốc , thay vì làm việc trên một bản sao của dữ liệu.
+	+ Điều này giúp tránh chi phí xử lý dư thừa>> tăng hiệu suất
+
+**typedef và #define**
+
+1. typedef:
++ Là một từ khóa được xử lý bởi trình biên dịch.
++ Dùng để định nghĩa kiểu dữ liệu mới.
++ Có phạm vi  nơi nó được khai báo.
++ Trình biên dịch có thể kiểm tra lỗi cú pháp.
+2. #define:
++ Là một chỉ thị tiền xử lý (preprocessor directive).
++ Thay thế văn bản trong mã nguồn trước khi biên dịch
++ Thay thế toàn bộ mã nguồn trước khi biên dịch.
++ Trình biên dịch không  kiểm tra lỗi cú pháp.
++ #ifdef là chỉ thị tiền xử lý cho phép kiểm tra xem một macro có được định nghĩa hay không.
+
+
+**Function pointer là gì và khi nào nên sử dụng nó**
+- Thông thường, trong C, hàm được gọi trực tiếp bằng tên của nó, 
+- và tên hàm này phải được quyết định tại thời gian biên dịch (compile time).
+- Function pointer cho phép chọn hàm cần gọi tại runtime, 
+- Chọn hàm dựa trên điều kiện hoặc tham số.
+- Ví dụ : bấm 1,2,3,4 bằng swich - case ,Dựa vào lựa chọn  (choice), chương trình gán địa chỉ hàm tương ứng cho con trỏ  .
+
+
+**Sự khác biệt giữa fgets() và gets() trong C**
+- fgets() và gets() đều được sử dụng để nhập chuỗi từ đầu vào
+- gets():Không an toàn, dễ gây lỗi tràn bộ nhớ.F
+- fgets() :An toàn hơn do kiểm soát được số ký tự nhập.
+- fgets() kích thước bằng  kích thước mảng
+- gets() đã bị loại bỏ trong tiêu chuẩn C11 
+
+**Dịch bit**
+1. Set bit tại vị trí n
+-  Dịch bit 1 sang trái n vị trí,OR bit 1 đó tại vị trí n với giá trị ban đầu
+2. clear bit tại vị trí n
+- Dịch bit 1 sang trái n đơn vị , đảo bit 1 đó tại ví trí  n và And với giá trị ban đầu
+3. check bit 0/1
+- Dịch bit 1 sang vị trí cần check và and với bit đó
+	+ kẾT quả bằng 1 >> SET
+	+ 0 >> CLEAR
+
+
 **CI/CD**
-- Lập trình viên và QA là những người viết test.
+- Devops  
+	+ Thiết kế và duy trì hệ thống:
+		- Thiết kế và xây dựng cơ sở hạ tầng hỗ trợ quy trình DevOps
+		- Quản lý môi trường phát triển, kiểm thử và sản xuất.(bao gồm server, container, cloud services...).
+	+ Tự động hóa quy trình:Tạo và duy trì pipelines CI/CD
+	+ Đề xuất công cụ CI/CD để tích hợp và kiểm thử tự động.
 - CI/CD giúp tự động hóa quy trình xây dựng, kiểm thử và triển khai ứng dụng.
 - Quy trình cơ bản của Pipeline CI/CD:
 	+ Commit Code: Nhà phát triển đẩy mã nguồn lên kho lưu trữ (Git, GitLab, GitHub, v.v.).
@@ -5020,14 +5166,269 @@ int main(void){
 **bảo mật cho các modem/router**
 - FPT Telecom đã phát triển và tích hợp tính năng bảo mật F-Safe trực tiếp trên các modem/router
 
+
+
+
+
+
+**Phong cách quản lý của tôi tập trung vào sự phối hợp và trao quyền. Tôi ưu tiên việc:**
+
+1. Phân công công việc rõ ràng: Xác định vai trò và trách nhiệm của từng thành viên trong nhóm để đảm bảo họ hiểu rõ công việc của mình.
+2. Hỗ trợ và phát triển: Tôi luôn sẵn sàng hỗ trợ khi nhóm gặp khó khăn và khuyến khích họ nâng cao kỹ năng cá nhân.
+3. Khuyến khích giao tiếp: Tôi tạo môi trường mở để các thành viên có thể chia sẻ ý kiến và đóng góp ý tưởng. Điều này giúp xây dựng sự gắn kết và sáng tạo trong nhóm."
+
+
+
+
+
+**Tóm tắt công việc và vai trò chính tại FPT**
+1. Quản lý và phát triển sản phẩm:
+Phối hợp với nhà sản xuất để kiểm tra mã nguồn, phát triển và tích hợp các tính năng phù hợp với nhu cầu của thị trường Việt Nam.
+Quản lý các dự án firmware, từ giai đoạn lập kế hoạch đến triển khai và vận hành.
+2. Kiểm thử và đảm bảo chất lượng:
+Làm việc với team QA/Test để xây dựng và thực hiện các kịch bản kiểm thử, đảm bảo sản phẩm đạt chất lượng trước khi ra mắt.
+Kết hợp với team DevOps triển khai hệ thống CI/CD, tự động hóa quá trình kiểm thử và phát hành firmware.
+3. Hỗ trợ kỹ thuật và vận hành:
+Hỗ trợ xử lý các vấn đề kỹ thuật từ phía khách hàng hoặc trong quá trình vận hành sản phẩm.
+Phối hợp với team vận hành để giám sát hệ thống và triển khai bản cập nhật qua OTA
+
+
+
+**Quy trình phát triển modem có sự tham gia đầy đủ**
+- Team Dev, DevOps, Team Vận hành và Team Test/QA
+1. Lập kế hoạch (Planning Phase):
+Mục tiêu:
+- Xác định các tính năng của modem, yêu cầu kỹ thuật, và kế hoạch kiểm thử.
+- Thiết lập sự phối hợp giữa các team: Dev, QA/Test, DevOps, và Vận hành.
+Vai trò của các team:
+Team Dev:
+- Xác định yêu cầu phát triển và lên kế hoạch mã hóa các tính năng.
+Team QA/Test:
+- Xác định các kịch bản kiểm thử (test cases) cho từng tính năng.
+- Phối hợp với Dev để đảm bảo các tính năng có thể kiểm thử dễ dàng.
+Team DevOps:
+- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
+- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
+Team Vận hành:
+- Đưa ra các yêu cầu từ thực tế, chẳng hạn như tính ổn định của firmware, khả năng OTA, và quản lý log.
+Kết quả:
+- Lộ trình phát triển.
+- Kế hoạch kiểm thử chi tiết từ QA/Test.
+- Danh sách công cụ cần thiết (CI/CD, monitoring).
+2. Phát triển (Development Phase)
+Mục tiêu:
+Phát triển mã nguồn (firmware) và chuẩn bị các tính năng cho kiểm thử.
+Vai trò của các team:
+Team Dev:
+- Phát triển mã nguồn firmware theo yêu cầu.
+- Kiểm tra sơ bộ (unit test) để phát hiện lỗi trước khi chuyển sang QA/Test.
+Team QA/Test:
+- Phối hợp với Dev để xây dựng các kịch bản kiểm thử tự động và thủ công.
+- Chuẩn bị bộ test cases cho các tính năng quan trọng.
+Team DevOps:
+- Tích hợp pipeline CI/CD để tự động hóa việc build firmware và chạy các bài kiểm thử cơ bản.
+- Cung cấp môi trường kiểm thử độc lập (Docker, Kubernetes, staging).
+Team Vận hành:
+- Theo dõi các yêu cầu vận hành có được tích hợp vào firmware hay không (quản lý log, khả năng reset từ xa).
+Kết quả:
+- Phiên bản firmware đầu tiên (build) sẵn sàng để kiểm thử.
+3. Kiểm thử (Testing Phase)
+Mục tiêu:
+Đảm bảo firmware hoạt động đúng và ổn định.
+Vai trò của các team:
+Team QA/Test:
+Chạy các bài kiểm thử thủ công và tự động trên firmware.
+Kiểm thử tính năng (functional test) và hiệu suất (performance test).
+Báo cáo lỗi và phối hợp với Dev để khắc phục.
+Team DevOps:
+Duy trì pipeline CI/CD:
+Tích hợp kiểm thử tự động (unit, integration, end-to-end).
+Theo dõi kết quả kiểm thử và tạo báo cáo tự động.
+Hỗ trợ QA/Test bằng cách cập nhật môi trường kiểm thử gần giống sản xuất.
+Team Dev:
+Sửa lỗi được báo cáo bởi QA/Test.
+Tinh chỉnh các tính năng dựa trên phản hồi từ kiểm thử.
+Team Vận hành:
+Thử nghiệm khả năng giám sát và các kịch bản sự cố (incident simulation).
+Kết quả:
+Firmware đã qua kiểm thử toàn diện, sẵn sàng cho triển khai.
+4. Triển khai (Deployment Phase)
+Mục tiêu:
+Đưa firmware lên thiết bị thực và triển khai trên diện rộng.
+Vai trò của các team:
+Team Dev:
+Sửa lỗi hoặc tinh chỉnh nếu phát sinh vấn đề trong giai đoạn triển khai.
+Team QA/Test:
+Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
+Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
+Team DevOps:
+Tự động hóa triển khai firmware qua pipeline CD.
+Triển khai bản cập nhật qua OTA (Over-The-Air).
+Team Vận hành:
+Theo dõi trạng thái thiết bị trong quá trình triển khai.
+Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
+Kết quả:
+Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
+5. Vận hành và Bảo trì (Operations and Maintenance Phase)
+Mục tiêu:
+
+Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
+Vai trò của các team:
+
+Team Dev:
+Phát hành các bản vá lỗi hoặc tính năng mới dựa trên phản hồi từ vận hành.
+Team QA/Test:
+Chạy lại các bài kiểm thử khi có bản cập nhật để đảm bảo tính tương thích.
+Team DevOps:
+Quản lý hạ tầng giám sát (monitoring) để phát hiện sớm các vấn đề.
+Triển khai nhanh các bản vá lỗi hoặc cải tiến qua pipeline CD.
+Team Vận hành:
+Giám sát hoạt động thực tế của thiết bị.
+Thu thập log và báo cáo các vấn đề thực tế để phản hồi cho Dev và QA.
+Kết quả:
+Modem hoạt động ổn định, các bản cập nhật được phát hành nhanh chóng.
+![image](https://github.com/user-attachments/assets/6b75987b-f445-4bdd-925c-d93de7b52347)
+
+
+
+
 **Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
+- Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
+- Với đội dev:
+	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
+- Với đội test: 
+	- kiểm tra kỹ càng tính năng phần cứng từ đối tác Trung Quốc 
+	- các tính năng do đội dev phát triển.
+- Tôi thiết lập các mục tiêu rõ ràng và yêu cầu các Team Leader báo cáo tiến độ thông qua Jira hoặc phần mềm quản lý công việc nội bộ của FPT.
+- Ngoài ra, tôi tổ chức các cuộc họp định kỳ với Team Leader để cập nhật tình hình và hỗ trợ kịp thời khi họ gặp khó khăn.
 
 
 
 
+**đảm bảo đội nhóm của mình duy trì sự sáng tạo và năng suất khi phát triển phần mềm nhúng?**
+- Tôi thường tổ chức các buổi họp cùng Team Leader để đánh giá ý tưởng và đề xuất cải tiến từ đội nhóm. 
+- Tôi cũng khuyến khích Team Leader dành thời gian hỗ trợ các thành viên thử nghiệm những giải pháp mới.
+- Ngoài ra, tôi tạo điều kiện để mọi người tham gia các khóa đào tạo kỹ thuật chuyên sâu và chia sẻ kinh nghiệm nội bộ. 
+- Quan trọng hơn, tôi luôn công nhận và khen thưởng các ý tưởng có giá trị, giúp thúc đẩy tinh thần sáng tạo trong nhóm
+
+**Khi gặp xung đột trong nhóm, bạn thường giải quyết như thế nào để đảm bảo tiến độ dự án không bị ảnh hưởng?**
+
+- Tôi thường để Team Leader xử lý các vấn đề nhỏ trong đội nhóm trước, nhưng nếu xung đột phức tạp hoặc kéo dài, tôi sẽ trực tiếp tham gia.
+- Nếu xung đột mang tính cá nhân, tôi gặp riêng các thành viên để tìm hiểu nguyên nhân và đưa ra giải pháp phù hợp, đồng thời hỗ trợ Team Leader trong việc xây dựng lại môi trường làm việc tích cực.
+- Nếu xung đột liên quan đến công việc, tôi tổ chức cuộc họp nhóm để làm rõ vấn đề, xác định nguyên nhân và cùng nhau thảo luận giải pháp. 
+- Điều quan trọng là tôi luôn giữ không khí cuộc họp tích cực, tập trung vào giải quyết vấn đề thay vì đổ lỗi.”
+
+**Khi đảm nhận vai trò quản lý dự án, bạn thường lập kế hoạch công việc như thế nào?** 
+- Làm thế nào bạn phân bổ nguồn lực (nhân sự, thời gian) để đạt được các mục tiêu đề ra?
+- Quy trình lập kế hoạch tại FPT Telecom bắt đầu bằng việc thu thập thông tin từ các phòng ban về tính năng cần phát triển.
+- Sau đó, tôi tham gia các buổi họp với ban giám đốc để thống nhất về kinh phí, thời gian, và các tính năng cần có.
+- Dựa trên các yêu cầu đã được phê duyệt, tôi chia dự án thành các giai đoạn cụ thể:
+	- Giai đoạn kiểm tra mã nguồn từ nhà sản xuất.
+	- Giai đoạn phát triển tính năng mới.
+	- Giai đoạn kiểm thử toàn bộ hệ thống.
+- Tôi làm việc chặt chẽ với các Team Leader để phân bổ nguồn lực, đảm bảo rằng mỗi thành viên được giao đúng nhiệm vụ phù hợp với kỹ năng và kinh nghiệm của họ.
+- Ngoài ra, tôi luôn có một kế hoạch dự phòng để ứng phó với các tình huống bất ngờ.”
 
 
+**Cân bằng giữa các yêu cầu từ khách hàng và giới hạn về thời gian hoặc tài nguyên trong dự án** 
+- Làm việc với phòng kinh doanh và khách hàng để phân loại các yêu cầu theo mức độ ưu tiên.
+- ưu tiên phát triển những tính năng cần thiết nhất trước và lên kế hoạch bổ sung các tính năng ít quan trọng hơn trong các bản cập nhật sau
+- báo cáo với ban giám đốc về những giới hạn tài nguyên, từ đó đề xuất thêm nhân sự hoặc thời gian nếu cần thiết
 
+**biện pháp nào để đảm bảo sản phẩm WiFi/router và FPT Play Box đạt chất lượng cao trước khi ra mắt**
+1. Quy trình kiểm thử nghiêm ngặt:
+Phân công đội test thực hiện các kịch bản kiểm thử chi tiết, bao gồm:
+- Kiểm tra tính năng phần cứng từ nhà sản xuất.
+- Kiểm thử các tính năng mới được phát triển nội bộ, như giao tiếp mạng, hiệu suất băng thông, và khả năng tương thích với hệ sinh thái của FPT (như FPT Play Box).
+- Kiểm tra độ ổn định trong điều kiện sử dụng thực tế tại Việt Nam (nhiệt độ, độ ẩm, và môi trường mạng đa dạng).
+2. Công cụ và quy trình tự động hóa kiểm thử:
+Sử dụng công cụ tự động hóa kiểm thử (automation testing) để giảm thời gian và tăng độ chính xác, đặc biệt trong các bài test hiệu suất cao hoặc stress test.
+3. Kiểm tra mã nguồn:
+- Với đội dev, tôi yêu cầu kiểm tra mã nguồn từ nhà sản xuất để phát hiện và xử lý các vấn đề bảo mật hoặc hiệu suất trước khi tích hợp.
+4. Phối hợp chặt chẽ với nhà sản xuất:
+- Làm việc trực tiếp với đối tác Trung Quốc để sửa lỗi phần cứng hoặc firmware, đồng thời đảm bảo rằng họ cung cấp các bản cập nhật phù hợp với thị trường Việt Nam.
+5. Thử nghiệm người dùng cuối:
+- Tôi tổ chức các thử nghiệm beta (beta testing) với một nhóm khách hàng giới hạn để thu thập phản hồi thực tế trước khi ra mắt sản phẩm.”
+
+**Khi xảy ra lỗi, cách xử lý**
+1. Xác định và thu thập thông tin lỗi:
+Tôi yêu cầu đội test ghi lại chi tiết vấn đề, bao gồm điều kiện tái hiện lỗi, nhật ký hệ thống (logs), và tác động cụ thể lên sản phẩm.
+Nếu lỗi xảy ra ở khách hàng, tôi làm việc với đội hỗ trợ kỹ thuật để thu thập thông tin thực tế từ môi trường sử dụng.
+nhân chính.
+3. Triển khai biện pháp khắc phục:
+Với lỗi phần cứng: Báo cáo trực tiếp với nhà sản xuất, yêu cầu sửa đổi thiết kế hoặc cung cấp bản cập nhật firmware.
+Với lỗi phần mềm: Yêu cầu đội dev sửa lỗi và triển khai kiểm thử lại để đảm bảo lỗi không tái xuất hiện.
+4. Ngăn chặn lỗi tương tự trong tương lai:
+Cập nhật kịch bản kiểm thử để bao gồm các trường hợp gây ra lỗi.
+Thiết lập các bài kiểm tra bổ sung, chẳng hạn stress test, để phát hiện các vấn đề tiềm tàng sớm hơn.
+Tạo tài liệu ghi nhận lỗi và giải pháp khắc phục, đồng thời chia sẻ với các phòng ban liên quan để nâng cao kiến thức chung.
+5. Báo cáo và cải tiến:
+Sau khi lỗi được xử lý, tôi báo cáo chi tiết cho các bên liên quan, bao gồm đội ngũ quản lý và nhà sản xuất.
+Đồng thời, tổ chức buổi rút kinh nghiệm với đội nhóm để cải thiện quy trình phát triển và kiểm thử sản phẩm trong tương lai.”
+
+
+**thương lượng giá cả, thiết kế, và các tính năng với họ**
+1. Thu thập và phân tích yêu cầu từ FPT Telecom:
+Tôi phối hợp với các phòng ban liên quan (phòng kinh doanh, phòng kỹ thuật) để tổng hợp các yêu cầu về tính năng, chi phí, và thời gian triển khai.
+Điều này giúp tôi nắm rõ mức độ ưu tiên của từng yếu tố khi thương lượng.
+2. Chuẩn bị thông tin kỹ lưỡng trước khi đàm phán:
+Trước mỗi buổi làm việc, tôi nghiên cứu kỹ giá thị trường, khả năng sản xuất của nhà cung cấp, và các giải pháp thay thế.
+ Điều này giúp tôi có cơ sở để thương lượng hiệu quả hơn.
+3. Thương lượng giá cả:
+Tôi tập trung vào việc cân bằng giữa chi phí và chất lượng. 
+Khi thương lượng, tôi thường đề cập đến các yếu tố như số lượng đặt hàng, chi phí vận chuyển, và thời gian giao hàng để thuyết phục nhà sản xuất đưa ra mức giá tốt nhất.
+4. Thảo luận về thiết kế và tính năng:
+Với thiết kế và tính năng, tôi đảm bảo rằng sản phẩm đáp ứng tiêu chuẩn kỹ thuật của FPT và phù hợp với nhu cầu thị trường Việt Nam. 
+Tôi sử dụng bản vẽ thiết kế hoặc tài liệu kỹ thuật chi tiết để giải thích rõ ràng yêu cầu của mình. 
+Đồng thời, tôi luôn lắng nghe ý kiến phản hồi từ nhà sản xuất để đưa ra giải pháp tối ưu.”
+
+**Khó khăn**
+- Một lần, tôi phải làm việc với nhà sản xuất để giải quyết vấn đề chậm tiến độ trong việc cập nhật firmware cho thiết bị WiFi. 
+- Nhà sản xuất gặp khó khăn trong việc điều chỉnh mã nguồn để phù hợp với điều kiện mạng tại Việt Nam
+Xác định nguyên nhân gốc rễ: Tôi tổ chức một cuộc họp với đội kỹ thuật của nhà sản xuất để tìm hiểu nguyên nhân chính, phát hiện rằng vấn đề đến từ việc thiếu thông tin về môi trường mạng tại Việt Nam.
+Cung cấp thông tin hỗ trợ: Tôi phối hợp với đội kỹ thuật FPT để cung cấp các thông tin chi tiết như cấu trúc mạng, phổ tần số, và yêu cầu phần mềm đặc thù tại Việt Nam.
+Thiết lập thời hạn cụ thể: Tôi thương lượng với nhà sản xuất để đặt ra các mốc thời gian cụ thể cho từng giai đoạn sửa lỗi và cập nhật. Đồng thời, tôi yêu cầu họ cung cấp báo cáo tiến độ định kỳ.
+Tăng cường liên lạc: Tôi duy trì liên lạc chặt chẽ qua email và họp trực tuyến hàng tuần để đảm bảo không có thông tin nào bị bỏ sót và các vấn đề phát sinh được giải quyết ngay lập tức.
+
+
+**Đào tạo**
+- Là Project Manager, nhiệm vụ đào tạo đội ngũ thường được giao cho các Team Leader, nhưng tôi luôn theo sát để đảm bảo quá trình đào tạo đáp ứng mục tiêu dự án.
+
+1. Phân công nhiệm vụ đào tạo:
+Tôi yêu cầu Team Leader tổ chức các buổi hướng dẫn và chia sẻ kiến thức về C/C++ cũng như các công nghệ nhúng mà dự án yêu cầu. Điều này bao gồm cả lý thuyết cơ bản và thực hành trên các tình huống thực tế trong dự án.
+2. Đảm bảo đội nhóm học tập qua dự án:
+Tôi giao nhiệm vụ phù hợp với năng lực của từng thành viên để họ vừa hoàn thành công việc, vừa học hỏi thêm kỹ năng. Đội Dev có thể học cách tối ưu mã nguồn, trong khi đội QA có thể cải thiện các kịch bản kiểm thử.
+3. Định hướng và đánh giá:
+Mặc dù không trực tiếp đào tạo, tôi thường xuyên tổ chức các buổi họp định kỳ với Team Leader để đánh giá hiệu quả đào tạo. Tôi cũng khuyến khích các Team Leader ghi nhận phản hồi từ đội nhóm để cải thiện nội dung đào tạo cho phù hợp.”
+
+**phương pháp nào để đánh giá hiệu suất**
+1. Đánh giá định lượng:
+	+ Dùng các công cụ quản lý dự án như Jira hoặc phần mềm nội bộ của FPT để theo dõi tiến độ từng nhiệm vụ.
+	+ Các chỉ số chính (KPIs) như số lượng task hoàn thành, thời gian hoàn thành, và chất lượng công việc được dùng làm tiêu chí đánh giá.
+2. Đánh giá định tính:
+	+ Thường xuyên thảo luận với Team Leader để thu thập ý kiến về năng lực, thái độ, và sự hợp tác của từng thành viên.
+	+ Quan sát trực tiếp cách các thành viên làm việc, đặc biệt trong các buổi họp nhóm hoặc xử lý các tình huống khẩn cấp.
+
+**thành viên không đạt yêu cầu không?**
+1. Tìm hiểu nguyên nhân
+2. Hỗ trợ và đào tạo
+3. Điều chỉnh nhiệm vụ
+4. Theo dõi tiến độ
+
+**Thách thức**
+
+1. Phần mềm gốc từ nhà sản xuất không tương thích hoàn toàn với hạ tầng mạng tại Việt Nam, dẫn đến hiệu suất kém và lỗi kết nối.
+2. Tiến độ bị áp lực vì thời hạn ra mắt đã được công bố trước với khách hàng.
+
+Cách tôi giải quyết:
+1. Phối hợp với nhà sản xuất: Tôi làm việc trực tiếp với nhà sản xuất để yêu cầu sửa đổi phần mềm và cung cấp bản vá lỗi.
+2. Phát triển nội bộ: Đội Dev của tôi đã xây dựng các module bổ sung để tối ưu hiệu suất và tương thích với hạ tầng mạng tại Việt Nam.
+3. Kiểm thử toàn diện: Đội Test thực hiện các kịch bản kiểm thử trong nhiều môi trường khác nhau để đảm bảo chất lượng sản phẩm.
+4. Điều chỉnh kế hoạch: Tôi tái phân bổ nguồn lực để giảm thời gian phát triển các tính năng không quan trọng, tập trung vào các tính năng cốt lõi.
+
+**sự thay đổi yêu cầu từ phía khách hàng hoặc nhà sản xuất**
+- Điều chỉnh kế hoạch: Tùy mức độ thay đổi, tôi có thể lùi thời hạn ra mắt hoặc đề xuất cắt giảm những tính năng không quan trọng để tập trung vào yêu cầu mới.
+- Thông báo và đồng thuận: Tôi luôn thông báo rõ ràng cho ban giám đốc và các phòng ban liên quan về thay đổi và lý do điều chỉnh. Đồng thời, cập nhật khách hàng để đảm bảo sự hài lòng của họ.”
 
 **Quy trình làm việc ở FPT**
 1. Thu thập yêu cầu và đánh giá sản phẩm từ đối tác:
