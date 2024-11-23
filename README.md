@@ -4994,6 +4994,23 @@ int main(void){
 	+ Xử lý vấn đề Trong các hệ thống đa nhiệm 
 
 
+
+
+
+2. Cách trả lời khéo léo
+Nếu bạn từng biết nhưng quên do lâu không sử dụng
+Trả lời:
+"Thú thật là trước đây tôi đã từng làm việc với vấn đề này, nhưng vì thời gian gần đây tôi tập trung vào quản lý dự án nên chưa có cơ hội cập nhật lại kiến thức. 
+Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể nhanh chóng nắm bắt và áp dụng lại khi cần thiết."
+
+
+
+
+
+
+
+
+
 **vi điều khiển 8-bit, 16-bit, hay 32-bit**
 ![image](https://github.com/user-attachments/assets/39dc2403-ce78-4e20-838c-ece6be6578e5)
 
@@ -5005,10 +5022,11 @@ int main(void){
 
 **làm thế nào bạn đảm bảo hệ thống không bị treo hoặc mất dữ liệu khi xử lý nhiều ngắt cùng lúc?**
 1. Ưu tiên ngắt (Interrupt Priority): Tôi cấu hình mức ưu tiên (priority) cho các ngắt, đảm bảo rằng các ngắt quan trọng nhất (ví dụ: Timer hoặc UART) được xử lý trước.
-2. Thời gian ngắt ngắn: Tôi hạn chế xử lý logic phức tạp trong ISR (Interrupt Service Routine), chỉ thực hiện các tác vụ tối thiểu như ghi dữ liệu vào buffer. Phần xử lý còn lại sẽ được chuyển sang luồng chính (main loop) hoặc task FreeRTOS.
-3. Sử dụng buffer vòng (Circular Buffer): Với các giao tiếp như UART, tôi sử dụng buffer vòng để lưu trữ dữ liệu tạm thời, tránh mất dữ liệu khi nhận hoặc gửi liên tục.
-4. Quản lý đồng bộ: Sử dụng  mutex để đảm bảo không xảy ra xung đột dữ liệu giữa ISR và các phần còn lại của hệ thống
-
+2. Quản lý đồng bộ: Sử dụng  mutex để đảm bảo không xảy ra xung đột dữ liệu giữa ISR và các phần còn lại của hệ thống
+3. Ngắt quan trọng
+	+ Ngắt thời gian:timer
+	+ Ngắt hệ thống:watch dog timer
+	+ Ngắt truyền thông:adc, spi
 
 **Khi làm việc với một sơ đồ mạch mới**
 1. Nguồn cấp (Power Supply): Đảm bảo nguồn điện ổn định và đủ cho tất cả các thành phần. Kiểm tra mạch ổn áp (voltage regulator) và điện áp cấp cho vi điều khiển.
@@ -5134,20 +5152,6 @@ Student s1, s2; // Không cần viết "struct" nữa
 	+ 0 >> CLEAR
 
 
-**CI/CD**
-- Devops  
-	+ Thiết kế và duy trì hệ thống:
-		- Thiết kế và xây dựng cơ sở hạ tầng hỗ trợ quy trình DevOps
-		- Quản lý môi trường phát triển, kiểm thử và sản xuất.(bao gồm server, container, cloud services...).
-	+ Tự động hóa quy trình:Tạo và duy trì pipelines CI/CD
-	+ Đề xuất công cụ CI/CD để tích hợp và kiểm thử tự động.
-- CI/CD giúp tự động hóa quy trình xây dựng, kiểm thử và triển khai ứng dụng.
-- Quy trình cơ bản của Pipeline CI/CD:
-	+ Commit Code: Nhà phát triển đẩy mã nguồn lên kho lưu trữ (Git, GitLab, GitHub, v.v.).
-	+ Build: Hệ thống tự động build ứng dụng từ mã nguồn mới.
-	+ Test: Thực hiện kiểm thử tự động (unit test, integration test, v.v.) để đảm bảo chất lượng.
-	+ Deploy: Triển khai ứng dụng tới môi trường staging hoặc production.
-	+ Monitor: Theo dõi hoạt động của ứng dụng sau triển khai để phát hiện và xử lý lỗi.
 
 **Watchdog Timer là gì?**
 - WDT là một bộ đếm thời gian độc lập trong vi điều khiển.
@@ -5167,6 +5171,83 @@ Student s1, s2; // Không cần viết "struct" nữa
 - FPT Telecom đã phát triển và tích hợp tính năng bảo mật F-Safe trực tiếp trên các modem/router
 
 
+**Project Manager (PM)**
+- Trong 7 năm tại FPT Telecom, tôi đã quản lý các dự án phát triển modem/router và FPT Play Box.
+- phối hợp với nhiều team để đảm bảo tiến độ và chất lượng sản phẩm, 
+- làm việc với nhà sản xuất để tích hợp các tính năng mới và tối ưu hóa hiệu suất thiết bị
+- đồng thời xử lý các sự cố kỹ thuật sau khi triển khai. 
+
+Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
+1. Quản lý dự án:
+- Theo dõi tiến độ phát triển của dự án, từ khi bắt đầu đến khi hoàn thành.
+- Phân công nhiệm vụ cho các thành viên trong team Dev, QA, và DevOps.
+2. Đảm bảo chất lượng và thời gian phát hành:
+- Đảm bảo sản phẩm được phát hành đúng lịch trình và đạt tiêu chuẩn chất lượng.
+- Phê duyệt phiên bản firmware trước khi phát hành chính thức.
+3. Giao tiếp với các bộ phận liên quan:
+- Làm việc với các team khác (Marketing, Sales, Hỗ trợ khách hàng) để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
+- Nếu là PM/Team Lead: Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
+4. Quản lý và phát triển sản phẩm:
+- Phối hợp với nhà sản xuất để kiểm tra mã nguồn, phát triển và tích hợp các tính năng phù hợp với nhu cầu của thị trường Việt Nam.
+- Quản lý các dự án firmware, từ giai đoạn lập kế hoạch đến triển khai và vận hành.
+5. . Kiểm thử và đảm bảo chất lượng:
+Làm việc với team QA/Test để xây dựng và thực hiện các kịch bản kiểm thử, đảm bảo sản phẩm đạt chất lượng trước khi ra mắt.
+Kết hợp với team DevOps triển khai hệ thống CI/CD, tự động hóa quá trình kiểm thử và phát hành firmware.
+3. Hỗ trợ kỹ thuật và vận hành:
+Hỗ trợ xử lý các vấn đề kỹ thuật từ phía khách hàng hoặc trong quá trình vận hành sản phẩm.
+Phối hợp với team vận hành để giám sát hệ thống và triển khai bản cập nhật qua OTA
+
+
+
+
+
+
+**Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
+- Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
+- Với đội dev:
+	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
+- Với đội test: 
+	- kiểm tra kỹ càng tính năng phần cứng từ đối tác Trung Quốc 
+	- các tính năng do đội dev phát triển.
+- Tôi thiết lập các mục tiêu rõ ràng và yêu cầu các Team Leader báo cáo tiến độ thông qua Jira hoặc phần mềm quản lý công việc nội bộ của FPT.
+- Ngoài ra, tôi tổ chức các cuộc họp định kỳ với Team Leader để cập nhật tình hình và hỗ trợ kịp thời khi họ gặp khó khăn.
+
+- Team DevOps:
+	- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
+	- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
+	- Jenkins để quản lý pipeline CI/CD.
+	- Docker để thiết lập môi trường kiểm thử đồng nhất.
+	- Tự động kiểm thử: Tích hợp unit test, integration test để kiểm tra mã nguồn của team Dev ngay khi có thay đổi.
+	- Tự động build: Build firmware mỗi khi mã nguồn được cập nhật.	
+
+
+
+
+
+
+
+
+
+
+**Tính năng team Dev Việt Nam phát triển:**
+1. Hệ thống thu thập và phân tích log:
+- log kết nối, log bảo mật, lỗi hệ thống
+- Gửi log về server quản lý trung tâm để phân tích và xử lý sự cố từ xa.
+- sử dụng syslog, dmesg để thu thập lỗi
+2. Hệ thống điều khiển từ xa :
+- Cho phép quản lý modem từ xa qua giao diện web hoặc ứng dụng di động.
+3. Giao diện người dùng tùy chỉnh
+- Tùy chỉnh giao diện quản lý modem trên web
+- Tích hợp thêm các tính năng như hiển thị trạng thái kết nối, số lượng thiết bị đang kết nối, tốc độ mạng thực tế.
+4. Hệ thống chẩn đoán tự động:
+- Modem có thể tự kiểm tra trạng thái hệ thống và báo cáo về người dùng
+- Tự động đề xuất gói cước phù hợp
+- Chặn các trang web không phù hợp
+- Phát triển giao diện quản lý đa ngôn ngữ để phục vụ nhiều đối tượng khách hàng.
+
+
+
+
 
 
 
@@ -5181,17 +5262,6 @@ Student s1, s2; // Không cần viết "struct" nữa
 
 
 
-**Tóm tắt công việc và vai trò chính tại FPT**
-1. Quản lý và phát triển sản phẩm:
-Phối hợp với nhà sản xuất để kiểm tra mã nguồn, phát triển và tích hợp các tính năng phù hợp với nhu cầu của thị trường Việt Nam.
-Quản lý các dự án firmware, từ giai đoạn lập kế hoạch đến triển khai và vận hành.
-2. Kiểm thử và đảm bảo chất lượng:
-Làm việc với team QA/Test để xây dựng và thực hiện các kịch bản kiểm thử, đảm bảo sản phẩm đạt chất lượng trước khi ra mắt.
-Kết hợp với team DevOps triển khai hệ thống CI/CD, tự động hóa quá trình kiểm thử và phát hành firmware.
-3. Hỗ trợ kỹ thuật và vận hành:
-Hỗ trợ xử lý các vấn đề kỹ thuật từ phía khách hàng hoặc trong quá trình vận hành sản phẩm.
-Phối hợp với team vận hành để giám sát hệ thống và triển khai bản cập nhật qua OTA
-
 
 
 **Quy trình phát triển modem có sự tham gia đầy đủ**
@@ -5201,33 +5271,41 @@ Mục tiêu:
 - Xác định các tính năng của modem, yêu cầu kỹ thuật, và kế hoạch kiểm thử.
 - Thiết lập sự phối hợp giữa các team: Dev, QA/Test, DevOps, và Vận hành.
 Vai trò của các team:
+
 Team Dev:
 - Xác định yêu cầu phát triển và lên kế hoạch mã hóa các tính năng.
 Team QA/Test:
 - Xác định các kịch bản kiểm thử (test cases) cho từng tính năng.
 - Phối hợp với Dev để đảm bảo các tính năng có thể kiểm thử dễ dàng.
+
 Team DevOps:
 - Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
 - Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
+
 Team Vận hành:
 - Đưa ra các yêu cầu từ thực tế, chẳng hạn như tính ổn định của firmware, khả năng OTA, và quản lý log.
 Kết quả:
 - Lộ trình phát triển.
 - Kế hoạch kiểm thử chi tiết từ QA/Test.
 - Danh sách công cụ cần thiết (CI/CD, monitoring).
+
 2. Phát triển (Development Phase)
 Mục tiêu:
 Phát triển mã nguồn (firmware) và chuẩn bị các tính năng cho kiểm thử.
 Vai trò của các team:
+
 Team Dev:
 - Phát triển mã nguồn firmware theo yêu cầu.
 - Kiểm tra sơ bộ (unit test) để phát hiện lỗi trước khi chuyển sang QA/Test.
+
 Team QA/Test:
 - Phối hợp với Dev để xây dựng các kịch bản kiểm thử tự động và thủ công.
 - Chuẩn bị bộ test cases cho các tính năng quan trọng.
+
 Team DevOps:
 - Tích hợp pipeline CI/CD để tự động hóa việc build firmware và chạy các bài kiểm thử cơ bản.
 - Cung cấp môi trường kiểm thử độc lập (Docker, Kubernetes, staging).
+
 Team Vận hành:
 - Theo dõi các yêu cầu vận hành có được tích hợp vào firmware hay không (quản lý log, khả năng reset từ xa).
 Kết quả:
@@ -5292,15 +5370,6 @@ Modem hoạt động ổn định, các bản cập nhật được phát hành 
 
 
 
-**Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
-- Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
-- Với đội dev:
-	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
-- Với đội test: 
-	- kiểm tra kỹ càng tính năng phần cứng từ đối tác Trung Quốc 
-	- các tính năng do đội dev phát triển.
-- Tôi thiết lập các mục tiêu rõ ràng và yêu cầu các Team Leader báo cáo tiến độ thông qua Jira hoặc phần mềm quản lý công việc nội bộ của FPT.
-- Ngoài ra, tôi tổ chức các cuộc họp định kỳ với Team Leader để cập nhật tình hình và hỗ trợ kịp thời khi họ gặp khó khăn.
 
 
 
