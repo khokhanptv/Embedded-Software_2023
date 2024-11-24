@@ -5206,11 +5206,35 @@ Phối hợp với team vận hành để giám sát hệ thống và triển kh
 - Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
 - Với đội dev:
 	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
+	- Vd:
+		+ Kiểm tra phát hiện và sửa lỗi( nếu có)trước khi tích hợp với hệ thống
+		+ Xác định các tính năng có đúng với yêu cầu của dự án hay không.
+		+ Đảm bảo không có lỗ hổng bảo mật tiềm ẩn 
+		+ Đảm bảo mã nguồn tương thích hệ thống hiện đang sử dụng.
+		+ 1 số chức năng chưa tối ưu,viết lại để tối ưu  hơn.
+		+ Kểm tra: Phân tích đoạn mã liên quan đến  WiFi
+		+ Đảm bảo các chức năng này hoạt động tốt với hạ tầng của FPT, 
+		+ đồng thời không có lỗi bảo mật trong phần NAT.
+	- Các bài test của dev:
+		+ Kiểm thử đơn vị (Unit Test):Đảm bảo  module hoạt động đúng như mong đợi.
+			+ Ví dụ: Kiểm tra hàm xử lý dữ liệu từ cổng WAN, đảm bảo dữ liệu được định dạng và truyền tải chính xác.
+		+  Kiểm thử tích hợp (Integration Test):M Đảm bảo các module hoạt động hài hòa khi kết hợp.
+			+ Ví dụ: Kiểm tra sự tương tác giữa module quản lý kết nối Wi-Fi và module cấp phát địa chỉ IP (DHCP), đảm bảo thiết bị kết nối nhận được IP hợp lệ.
+
 - Với đội test: 
 	- kiểm tra kỹ càng tính năng phần cứng từ đối tác Trung Quốc 
+		- Mục tiêu: Đảm bảo phần cứng modem hoạt động đúng như thiết kế.
+		- Đánh giá độ ổn định khi modem hoạt động liên tục trong nhiều giờ hoặc nhiều ngày.
+		- Kiểm tra các cổng kết nối như Ethernet, USB, hoặc nguồn điện.
 	- các tính năng do đội dev phát triển.
-- Tôi thiết lập các mục tiêu rõ ràng và yêu cầu các Team Leader báo cáo tiến độ thông qua Jira hoặc phần mềm quản lý công việc nội bộ của FPT.
-- Ngoài ra, tôi tổ chức các cuộc họp định kỳ với Team Leader để cập nhật tình hình và hỗ trợ kịp thời khi họ gặp khó khăn.
+	- Các bài test của dev:
+		- Kiểm thử chức năng (Functional Test): Đảm bảo các tính năng hoạt động theo yêu cầu.
+			- Ví dụ: Kiểm tra khả năng thay đổi mật khẩu Wi-Fi thông qua web, đảm bảo client thực hiện dễ dàng.
+		- Kiểm thử hệ thống (System Test): Đánh giá hoạt động của toàn bộ hệ thống trong môi trường thực tế.
+			- Ví dụ:nhiều thiết bị kết nối, khả năng ổn định
+		- Kiểm thử hiệu năng (Performance Test):Đánh giá hiệu suất của modem dưới các điều kiện tải khác nhau.
+			-  Ví dụ : Đo lường tốc độ truyền tải dữ liệu qua Wi-Fi ở các khoảng cách khác nhau,
+
 
 - Team DevOps:
 	- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
@@ -5267,104 +5291,99 @@ Phối hợp với team vận hành để giám sát hệ thống và triển kh
 **Quy trình phát triển modem có sự tham gia đầy đủ**
 - Team Dev, DevOps, Team Vận hành và Team Test/QA
 1. Lập kế hoạch (Planning Phase):
-Mục tiêu:
-- Xác định các tính năng của modem, yêu cầu kỹ thuật, và kế hoạch kiểm thử.
-- Thiết lập sự phối hợp giữa các team: Dev, QA/Test, DevOps, và Vận hành.
-Vai trò của các team:
+- Mục tiêu:
+	- Xác định các tính năng của modem, yêu cầu kỹ thuật, và kế hoạch kiểm thử.
+	- Thiết lập sự phối hợp giữa các team: Dev, QA/Test, DevOps, và Vận hành.
+- Vai trò của các team:
+	- Team Dev:
+		- Xác định yêu cầu phát triển và lên kế hoạch mã hóa các tính năng.
+		Team QA/Test:
+		- Xác định các kịch bản kiểm thử (test cases) cho từng tính năng.
+		- Phối hợp với Dev để đảm bảo các tính năng có thể kiểm thử dễ dàng.
 
-Team Dev:
-- Xác định yêu cầu phát triển và lên kế hoạch mã hóa các tính năng.
-Team QA/Test:
-- Xác định các kịch bản kiểm thử (test cases) cho từng tính năng.
-- Phối hợp với Dev để đảm bảo các tính năng có thể kiểm thử dễ dàng.
+	- Team DevOps:
+		- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
+		- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
 
-Team DevOps:
-- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
-- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
-
-Team Vận hành:
-- Đưa ra các yêu cầu từ thực tế, chẳng hạn như tính ổn định của firmware, khả năng OTA, và quản lý log.
-Kết quả:
-- Lộ trình phát triển.
-- Kế hoạch kiểm thử chi tiết từ QA/Test.
-- Danh sách công cụ cần thiết (CI/CD, monitoring).
+	- Team Vận hành:
+		- Đưa ra các yêu cầu từ thực tế, chẳng hạn như tính ổn định của firmware, khả năng OTA, và quản lý log.
+		Kết quả:
+		- Lộ trình phát triển.
+		- Kế hoạch kiểm thử chi tiết từ QA/Test.
+		- Danh sách công cụ cần thiết (CI/CD, monitoring).
 
 2. Phát triển (Development Phase)
-Mục tiêu:
-Phát triển mã nguồn (firmware) và chuẩn bị các tính năng cho kiểm thử.
-Vai trò của các team:
-
-Team Dev:
-- Phát triển mã nguồn firmware theo yêu cầu.
-- Kiểm tra sơ bộ (unit test) để phát hiện lỗi trước khi chuyển sang QA/Test.
-
-Team QA/Test:
-- Phối hợp với Dev để xây dựng các kịch bản kiểm thử tự động và thủ công.
-- Chuẩn bị bộ test cases cho các tính năng quan trọng.
-
-Team DevOps:
-- Tích hợp pipeline CI/CD để tự động hóa việc build firmware và chạy các bài kiểm thử cơ bản.
-- Cung cấp môi trường kiểm thử độc lập (Docker, Kubernetes, staging).
-
-Team Vận hành:
-- Theo dõi các yêu cầu vận hành có được tích hợp vào firmware hay không (quản lý log, khả năng reset từ xa).
+- Mục tiêu:
+	- Phát triển mã nguồn (firmware) và chuẩn bị các tính năng cho kiểm thử.
+- Vai trò của các team:
+	- Team Dev:
+		- Phát triển mã nguồn firmware theo yêu cầu.
+		- Kiểm tra sơ bộ (unit test) để phát hiện lỗi trước khi chuyển sang QA/Test.
+	- Team QA/Test:
+		- Phối hợp với Dev để xây dựng các kịch bản kiểm thử tự động và thủ công.
+		- Chuẩn bị bộ test cases cho các tính năng quan trọng.
+	- Team DevOps:
+		- Tích hợp pipeline CI/CD để tự động hóa việc build firmware và chạy các bài kiểm thử cơ bản.
+		- Cung cấp môi trường kiểm thử độc lập (Docker, Kubernetes, staging).
+	- Team Vận hành:
+		- Theo dõi các yêu cầu vận hành có được tích hợp vào firmware hay không (quản lý log, khả năng reset từ xa).
 Kết quả:
-- Phiên bản firmware đầu tiên (build) sẵn sàng để kiểm thử.
+	- Phiên bản firmware đầu tiên (build) sẵn sàng để kiểm thử.
+
 3. Kiểm thử (Testing Phase)
-Mục tiêu:
-Đảm bảo firmware hoạt động đúng và ổn định.
-Vai trò của các team:
-Team QA/Test:
-Chạy các bài kiểm thử thủ công và tự động trên firmware.
-Kiểm thử tính năng (functional test) và hiệu suất (performance test).
-Báo cáo lỗi và phối hợp với Dev để khắc phục.
-Team DevOps:
-Duy trì pipeline CI/CD:
-Tích hợp kiểm thử tự động (unit, integration, end-to-end).
-Theo dõi kết quả kiểm thử và tạo báo cáo tự động.
-Hỗ trợ QA/Test bằng cách cập nhật môi trường kiểm thử gần giống sản xuất.
-Team Dev:
-Sửa lỗi được báo cáo bởi QA/Test.
-Tinh chỉnh các tính năng dựa trên phản hồi từ kiểm thử.
-Team Vận hành:
-Thử nghiệm khả năng giám sát và các kịch bản sự cố (incident simulation).
-Kết quả:
-Firmware đã qua kiểm thử toàn diện, sẵn sàng cho triển khai.
+- Mục tiêu:
+	- Đảm bảo firmware hoạt động đúng và ổn định.
+- Vai trò của các team:
+	- Team QA/Test:
+		- Chạy các bài kiểm thử thủ công và tự động trên firmware.
+		- Kiểm thử tính năng (functional test) và hiệu suất (performance test).
+		- Báo cáo lỗi và phối hợp với Dev để khắc phục.
+	- Team DevOps:
+		- Duy trì pipeline CI/CD:
+		- Tích hợp kiểm thử tự động (unit, integration, end-to-end).
+		 Theo dõi kết quả kiểm thử và tạo báo cáo tự động.
+		- Hỗ trợ QA/Test bằng cách cập nhật môi trường kiểm thử gần giống sản xuất.
+	- Team Dev:
+		- Sửa lỗi được báo cáo bởi QA/Test.
+		- Tinh chỉnh các tính năng dựa trên phản hồi từ kiểm thử.
+	- Team Vận hành:
+		- Thử nghiệm khả năng giám sát và các kịch bản sự cố (incident simulation).
+- Kết quả:
+	- Firmware đã qua kiểm thử toàn diện, sẵn sàng cho triển khai.
+
 4. Triển khai (Deployment Phase)
-Mục tiêu:
-Đưa firmware lên thiết bị thực và triển khai trên diện rộng.
-Vai trò của các team:
-Team Dev:
-Sửa lỗi hoặc tinh chỉnh nếu phát sinh vấn đề trong giai đoạn triển khai.
-Team QA/Test:
-Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
-Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
-Team DevOps:
-Tự động hóa triển khai firmware qua pipeline CD.
-Triển khai bản cập nhật qua OTA (Over-The-Air).
-Team Vận hành:
-Theo dõi trạng thái thiết bị trong quá trình triển khai.
-Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
+- Mục tiêu:
+	- Đưa firmware lên thiết bị thực và triển khai trên diện rộng.
+- Vai trò của các team:
+	- Team Dev:
+		- Sửa lỗi hoặc tinh chỉnh nếu phát sinh vấn đề trong giai đoạn triển khai.
+	- Team QA/Test:
+		- Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
+		- Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
+	- Team DevOps:
+		- Tự động hóa triển khai firmware qua pipeline CD.
+		- Triển khai bản cập nhật qua OTA (Over-The-Air).
+	- Team Vận hành:
+		- Theo dõi trạng thái thiết bị trong quá trình triển khai.
+		- Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
 Kết quả:
-Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
+- Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
 5. Vận hành và Bảo trì (Operations and Maintenance Phase)
-Mục tiêu:
-
-Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
-Vai trò của các team:
-
-Team Dev:
-Phát hành các bản vá lỗi hoặc tính năng mới dựa trên phản hồi từ vận hành.
-Team QA/Test:
-Chạy lại các bài kiểm thử khi có bản cập nhật để đảm bảo tính tương thích.
-Team DevOps:
-Quản lý hạ tầng giám sát (monitoring) để phát hiện sớm các vấn đề.
-Triển khai nhanh các bản vá lỗi hoặc cải tiến qua pipeline CD.
-Team Vận hành:
-Giám sát hoạt động thực tế của thiết bị.
-Thu thập log và báo cáo các vấn đề thực tế để phản hồi cho Dev và QA.
-Kết quả:
-Modem hoạt động ổn định, các bản cập nhật được phát hành nhanh chóng.
+- Mục tiêu:
+	- Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
+- Vai trò của các team:
+	- Team Dev:
+		- Phát hành các bản vá lỗi hoặc tính năng mới dựa trên phản hồi từ vận hành.
+	- Team QA/Test:
+		- Chạy lại các bài kiểm thử khi có bản cập nhật để đảm bảo tính tương thích.
+	- Team DevOps:
+		- Quản lý hạ tầng giám sát (monitoring) để phát hiện sớm các vấn đề.
+		- Triển khai nhanh các bản vá lỗi hoặc cải tiến qua pipeline CD.
+	- Team Vận hành:
+		- Giám sát hoạt động thực tế của thiết bị.
+		- Thu thập log và báo cáo các vấn đề thực tế để phản hồi cho Dev và QA.
+- Kết quả:
+	- Modem hoạt động ổn định, các bản cập nhật được phát hành nhanh chóng.
 ![image](https://github.com/user-attachments/assets/6b75987b-f445-4bdd-925c-d93de7b52347)
 
 
