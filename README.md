@@ -6852,6 +6852,41 @@ return n;
 - Tốc độ truyền khoảng vài MHz hoặc vài chục MHz.
 - ![image](https://github.com/khokhanptv/ADVANCED-CC-ALGORITHM-T122023/assets/136571945/1287cafd-d263-4991-9fca-1d90ae15081e)
 
+
+- Các bước triển khai:
+	- Bước 1: Bật Clock cho SPI
+		- Bật clock cho SPI bằng cách cấu hình thanh ghi RCC.
+	- Bước 2: Cấu hình SPI
+		- Chọn chế độ Master/Slave.
+		- Thiết lập tốc độ truyền (Baud Rate) bằng Prescaler.	
+		- Cấu hình các thông số:
+			- Polarity (CPOL): Mức xung nhịp khi idle (Low/High).
+			- Phase (CPHA): Xung nhịp bắt đầu ở cạnh lên/xuống.
+			- Frame Size: 8-bit hoặc 16-bit.
+	- Bước 3: Cấu hình chân GPIO
+		- Thiết lập các chân liên quan:
+		- MOSI (Master Out Slave In): Gửi dữ liệu từ Master.
+		- MISO (Master In Slave Out): Nhận dữ liệu từ Slave.
+		- SCK (Clock): Đồng bộ hóa giữa Master và Slave.
+		- NSS (Slave Select): Chọn thiết bị Slave.
+	- Bước 4: Gửi và nhận dữ liệu
+		- Gửi dữ liệu qua thanh ghi DR (Data Register).
+		- Kiểm tra cờ TXE (Transmit Empty) và RXNE (Receive Not Empty) để đảm bảo dữ liệu đã được gửi hoặc nhận.
+	- Bước 5: Xử lý phản hồi
+		- Đọc dữ liệu từ DR để xử lý.
+
+
+
+
+
+
+
+
+
+
+
+
+
 Các bước truyền dữ liệu trong SPI
 Bước 1: Master kích hoạt Slave
 - Master sử dụng chân SS (Slave Select) để chọn Slave cụ thể:
@@ -6930,6 +6965,35 @@ Bước 5: Dừng giao tiếp
 - 7-bit hoặc 10-bit địa chỉ cho các thiết bị Slave.
 4. Acknowledge (ACK):
 - Kích hoạt hoặc vô hiệu hóa ACK để xác nhận khi dữ liệu được nhận thành công.
+
+
+Các bước triển khai:
+- Bước 1: Bật Clock cho I2C
+	- Bật clock cho I2C bằng cách cấu hình thanh ghi RCC.
+- Bước 2: Cấu hình tốc độ truyền (Clock Speed)
+	- Thiết lập tốc độ I2C (100 kHz hoặc 400 kHz) bằng cách cấu hình các thanh ghi:
+- Bước 3: Cấu hình chân GPIO
+- Bước 4: Bắt đầu giao tiếp
+	- Gửi tín hiệu START để bắt đầu giao tiếp.
+	- Gửi địa chỉ thiết bị Slave qua thanh ghi DR.
+- Bước 5: Gửi/nhận dữ liệu
+	- Gửi dữ liệu qua DR.
+	- Nhận dữ liệu phản hồi từ Slave qua DR.
+- Bước 6: Kết thúc giao tiếp
+	- Gửi tín hiệu STOP để kết thúc giao tiếp
+
+
+
+
+
+
+
+
+
+
+
+
+
 **Vấn đề về đồng bộ hóa trong I2C:**
 - Kiểm tra Master,Slayer tốc độ truyền có đồng bộ chưa
 - Khung truyền ,nhận có giống nhau chưa
@@ -7436,9 +7500,37 @@ int main(){
 </details>
 
 <details>
-  <summary><h3>Interrupt  </h3></summary>
+  <summary><h3>TIMER  </h3></summary>
 <details>
   <summary><h4>External interrupt </h4></summary>
+
+
+- Các bước triển khai:
+	- Bước 1: Bật Clock cho TIMER
+		- Bật clock cho TIMER bằng cách cấu hình thanh ghi RCC.
+ 
+	- Bước 2: Cấu hình Prescaler
+		- Prescaler chia tần số clock hệ thống xuống tần số thấp hơn phù hợp với TIMER.
+		- Ví dụ: Nếu SYSCLK = 84 MHz và cần tần số TIMER = 1 MHz, Prescaler = 84.
+	- Bước 3: Cấu hình chu kỳ Timer (ARR - Auto-Reload Register)
+		- Thiết lập giá trị chu kỳ (ARR) để TIMER đếm từ 0 đến ARR, sau đó lặp lại.
+		- Ví dụ: Với TIMER 1 MHz và ARR = 1000, tín hiệu đầu ra có tần số 1 kHz.
+	- Bước 4: Cấu hình chế độ hoạt động
+		- Chọn chế độ TIMER: đếm tăng, đếm giảm, hoặc đếm lặp lại.
+		- Ví dụ: Sử dụng chế độ PWM hoặc Capture Compare.
+	- Bước 5: Bật TIMER
+		- Kích hoạt TIMER bằng cách thiết lập bit CEN trong thanh ghi CR1.
+
+
+
+
+
+
+
+
+
+
+
 
 - External interrupt (EXTI) hay còn gọi là ngắt ngoài. Là 1 sự kiện ngắt xảy ra khi có tín hiệu can thiệp từ bên ngoài, từ phần cứng, người sử dụng hay ngoại vi,… 
 - Sơ đồ khối của các khối điều khiển ngắt ngoài:
@@ -7757,17 +7849,39 @@ int main(void)
 	- Tốc độ mà ADC có thể đọc tín hiệu analog (đơn vị: Samples per second).
 
 Quy trình lập trình ADC:
-1. Cấu hình xung nhịp cho ADC (Clock Configuration):
-- Cấp xung
-2. Cấu hình các chân GPIO làm ngõ vào Analog.
+- Bước 1: Cấu hình ADC
+	- Mục tiêu: Cấu hình các thông số của ADC phù hợp với yêu cầu của ứng dụng.
+	- Chi tiết:
+	- Chọn kênh ADC để đọc tín hiệu (ví dụ: kênh ADC1 trên STM32).
+	- Cấu hình độ phân giải ADC (8-bit, 10-bit, hoặc 12-bit) tùy thuộc vào độ chính xác yêu cầu.
+	- Thiết lập tần số lấy mẫu (sampling rate) để phù hợp với tín hiệu đầu vào.
+		- Sampling Rate (Tần số lấy mẫu) là số lần ADC chuyển đổi tín hiệu analog (liên tục),thành tín hiệu digital (rời rạc) trong một giây.
+		- Nếu Sampling Rate là 1 kHz, ADC sẽ đo giá trị tín hiệu 1000 lần mỗi giây.
+	- Cấu hình chế độ hoạt động:
+	- Single conversion mode: Chỉ chuyển đổi một lần khi được kích hoạt.
+	- Continuous mode: Tự động chuyển đổi liên tục.
+- Bước 2: Khởi động ADC
+	- Mục tiêu: Kích hoạt ADC để bắt đầu quá trình chuyển đổi.
+	- Chi tiết:
+	- Nếu sử dụng chế độ single conversion, cần kích hoạt ADC mỗi lần lấy mẫu.
+	- Trong chế độ DMA (Direct Memory Access), ADC tự động chuyển giá trị sang bộ nhớ.
 
-3. Cấu hình ADC:
+- Bước 3: Đọc giá trị ADC
+	- Mục tiêu: Lấy giá trị từ ADC và chuyển đổi sang giá trị thực tế.
+	- Chi tiết:
+	- Sử dụng hàm lấy giá trị ADC sau khi chuyển đổi hoàn tất.
+	- Chuyển đổi giá trị ADC thành đại lượng vật lý (ví dụ: điện áp, nhiệt độ).
 
-- Chọn độ phân giải ADC: Ví dụ: 8-bit, 10-bit, 12-bit.
-- Chọn kênh ADC: Xác định kênh nào sẽ được sử dụng (ADC1, ADC2,...).
-- Chọn chế độ quét: Single Conversion (chuyển đổi 1 lần) hoặc Continuous Conversion (chuyển đổi liên tục).
-- Chọn Nguồn tham chiếu 
 
+
+**tại sao cần chia tần số ?**
+- Nếu không chia tần số, CPU phải xử lý liên tục, làm giảm hiệu suất của các tác vụ khác trong hệ thống.
+- Tần số tối đa của các ngoại vi có giới hạn 
+	- ví dụ :ADC chỉ hỗ trợ tốc độ tối đa 36 MHz.
+	
+**Khi nào cần chú ý đến thanh ghi trong code ADC?**
+- Nếu bạn không sử dụng thư viện hỗ trợ (như HAL/LL của STM32 hoặc Arduino), cần trực tiếp thao tác với các thanh ghi điều khiển của ADC để cấu hình và vận hành.
+- Điều này đòi hỏi bạn phải hiểu chi tiết về cấu trúc thanh ghi từ datasheet của vi điều khiển.
 
 </details> 
 <details>
@@ -7775,19 +7889,38 @@ Quy trình lập trình ADC:
 
 - DMA cho phép các thiết bị ngoại vi như ADC, UART, hoặc SPI truy cập trực tiếp vào bộ nhớ mà không cần CPU can thiệp.
 - Điều này giúp Giảm tải cho CPU. tăng hiệu suất hệ thống.
+
 Quy trình lập trình DMA:
 
+1. Bật clock cho DMA
+- Bật clock DMA bằng cách cấu hình trong thanh ghi RCC.
+2. Cấu hình kênh DMA
+- Xác định nguồn dữ liệu (peripheral) và đích (bộ nhớ hoặc buffer).
+- Cấu hình số lượng dữ liệu cần truyền.
+- Chọn chế độ truyền:
+	- Normal Mode: Truyền một lần rồi dừng.
+	- Circular Mode: Liên tục truyền khi đạt số lượng dữ liệu đã cấu hình.
+3. Cấu hình chế độ hoạt động
+	- Tự động lặp lại quá trình truyền dữ liệu, đặc biệt hữu ích cho ADC liên tục.
+4. Kích hoạt DMA
+	- Kích hoạt DMA bằng cách thiết lập thanh ghi điều khiển tương ứng.
+5. Xử lý dữ liệu
+	- Xử lý dữ liệu trong bộ nhớ hoặc buffer sau khi DMA hoàn thành.
+	- Sử dụng ngắt DMA để thực hiện xử lý thời gian thực.
 
-1. Cấp xung
-2. Cấu hình nguồn dữ liệu và đích:
-- Nguồn dữ liệu (Source): Ví dụ, thanh ghi dữ liệu ADC.
-- Đích (Destination): Bộ nhớ RAM nơi lưu trữ dữ liệu.
-3. Cấu hình các chế độ DMA:
-- Mode: Normal (truyền một lần) hoặc Circular (truyền liên tục).
--  Data Size: Chọn kích thước dữ liệu (byte, half-word, word).
-Direction: Truyền dữ liệu từ peripheral (ngoại vi) đến memory (bộ nhớ) hoặc ngược lại.
-
-
+**QUY TRÌNH**
+1. DMA với ADC (Liên tục đọc dữ liệu)
+	- Quy trình:
+	- Cấu hình ADC ở chế độ Continuous.
+	- Cấu hình DMA để đọc giá trị ADC từ thanh ghi DR và lưu vào buffer.
+	- Kích hoạt ADC và DMA.
+	- Dữ liệu sẽ tự động được cập nhật trong buffer.
+2. DMA với SPI (Gửi/nhận dữ liệu nhanh)
+	- Quy trình:
+	- Cấu hình SPI ở chế độ Master.
+	- Cấu hình DMA để gửi và nhận dữ liệu qua SPI.
+	- Kích hoạt SPI và DMA.
+	- Dữ liệu tự động truyền qua SPI khi DMA chạy.
 
 
 </details>
