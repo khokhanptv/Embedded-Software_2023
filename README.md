@@ -4983,7 +4983,7 @@ int main(void){
 **Khó khăn khi lập trình C/C++ với vi điều khiển**
 1. Phải Hiểu về phần cứng , hiểu cách cấu hình thanh ghi ngoại vi
 	+ Ví dụ:Khi sử dụng ADC, bạn cần cấu hình đúng nguồn tham chiếu, độ phân giải, và các kênh phù hợp.
-2. Phải quản lý tốt bộ nhớ vì thiết bị thường có bộ nhớ hạn chế
+2. Phải quản lý tốt bộ nhớ vì thiết bị thường có bộ nhớ hạn chế(vài KB>MB)
 3. Tối ưu hóa hiệu suất:
 	+ Vi điều khiển thường có tốc độ xử lý thấp (ví dụ: từ vài MHz đến vài trăm MHz), 
 	+ nên chương trình cần được tối ưu hóa để chạy mượt.
@@ -5044,6 +5044,9 @@ Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể n
 
 **Lợi ích con trỏ**
 1. Truy cập và thao tác trực tiếp với bộ nhớ
+	+ truy cập địa chỉ thanh ghi, địa chỉ thanh ghi sẽ ánh xạ đến thanh ghi của VXL
+	+ Khi truy cập thanh ghi phần cứng trực tiếp (thông qua địa chỉ bộ nhớ), chương trình không cần qua các lớp trừu tượng hoặc thư viện trung gian.
+	+ Mọi thao tác như đọc/ghi giá trị sẽ diễn ra ngay lập tức trên phần cứng.
 2. Quản lý bộ nhớ động
 	- (malloc, calloc, realloc, free).
 	- cấp phát, quản lý, và giải phóng bộ nhớ một cách linh hoạt trong thời gian chạy.
@@ -5997,8 +6000,11 @@ int main() {
 - Memory leak(rò rỉ bộ nhớ) : Xảy ra khi bộ nhớ được cấp phát động bằng malloc() hoặc calloc() nhưng không được giải phóng bằng free(). Điều này dẫn đến việc bộ nhớ bị chiếm dụng không cần thiết, làm giảm hiệu suất và có thể làm chương trình gặp lỗi do thiếu bộ nhớ.
 
 **Phân biệt Program và Process,Thread:**
-1. Program: Nó là một thực thể thụ động (passive entity) và không có trạng thái thực thi. được lưu trữ trên một thiết bị lưu trữ (như ổ cứng) dưới dạng một tệp thực thi Ví dụ, tệp .exe hoặc .bin là các chương trình.Nó không hoạt động cho đến khi được thực thi.
-2. Process: Là một thực thể hoạt động (active entity) đại diện cho việc thực thi của một chương trình. Khi một chương trình(Program) được chạy, nó trở thành một process. Process bao gồm các tài nguyên như CPU thời gian, bộ nhớ, các tập tin đang mở,  
+1. Program: Nó là một thực thể thụ động (passive entity) và không có trạng thái thực thi. được lưu trữ trên một thiết bị lưu trữ (như ổ cứng) dưới dạng một tệp thực thi Ví dụ, tệp .exe hoặc .bin là các chương trình.Nó không hoạt động cho đến khi được thực thi
+2. Process: Là một thực thể hoạt động (active entity) đại diện cho việc thực thi của một chương trình. Khi một chương trình(Program) được chạy, nó trở thành một process. Process bao gồm các tài nguyên như CPU thời gian, bộ nhớ, các tập tin đang mở  
+	+  CPU (Bộ xử lý)  CPU thực hiện các lệnh trong chương trình của process.
+	+  Bộ nhớ Process cần không gian bộ nhớ để lưu
+
 3. Tóm lại, program là "kế hoạch" còn process là "thực thi kế hoạch đó". Khi bạn chạy một chương trình, nó sẽ trở thành một hoặc nhiều process trên hệ thống.
 4. Thread:Là đơn vị nhỏ hơn của một process, một luồng thực thi bên trong process. Một process có thể chứa nhiều thread.
 5.  Các thread trong cùng một process chia sẻ cùng không gian địa chỉ, có thể chia sẻ dữ liệu và tài nguyên với nhau nhưng vẫn có ngăn xếp và bộ đếm chương trình riêng.
