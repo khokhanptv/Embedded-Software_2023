@@ -5176,10 +5176,9 @@ Student s1, s2; // Không cần viết "struct" nữa
 
 **Project Manager (PM)**
 - Trong 7 năm tại FPT Telecom, tôi đã quản lý các dự án phát triển thiết bị của FPT
-- Theo dõi tiến độ phát triển của dự án, từ khi bắt đầu đến khi hoàn thành.
-- Phân công nhiệm vụ cho các thành viên trong team Dev, QA, và DevOps.
+- Đảm bảo tiến độ , chất lượng các dự án
+- Phân công nhiệm vụ cho các thành viên trong team Dev, test 
 - làm việc với nhà sản xuất để tích hợp các tính năng mới và tối ưu hóa hiệu suất thiết bị
-- Đảm bảo chất lượng và thời gian phát hành: Phê duyệt bản fw
 - Làm việc với các team khác để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
 - đồng thời xử lý các sự cố kỹ thuật sau khi triển khai. 
 
