@@ -5304,20 +5304,6 @@ Sau khi lỗi được xử lý, tôi báo cáo chi tiết cho các bên liên q
 Đồng thời, tổ chức buổi rút kinh nghiệm với đội nhóm để cải thiện quy trình phát triển và kiểm thử sản phẩm trong tương lai.”
 
 
-**thương lượng giá cả, thiết kế, và các tính năng với họ**
-1. Thu thập và phân tích yêu cầu từ FPT Telecom:
-Tôi phối hợp với các phòng ban liên quan (phòng kinh doanh, phòng kỹ thuật) để tổng hợp các yêu cầu về tính năng, chi phí, và thời gian triển khai.
-Điều này giúp tôi nắm rõ mức độ ưu tiên của từng yếu tố khi thương lượng.
-2. Chuẩn bị thông tin kỹ lưỡng trước khi đàm phán:
-Trước mỗi buổi làm việc, tôi nghiên cứu kỹ giá thị trường, khả năng sản xuất của nhà cung cấp, và các giải pháp thay thế.
- Điều này giúp tôi có cơ sở để thương lượng hiệu quả hơn.
-3. Thương lượng giá cả:
-Tôi tập trung vào việc cân bằng giữa chi phí và chất lượng. 
-Khi thương lượng, tôi thường đề cập đến các yếu tố như số lượng đặt hàng, chi phí vận chuyển, và thời gian giao hàng để thuyết phục nhà sản xuất đưa ra mức giá tốt nhất.
-4. Thảo luận về thiết kế và tính năng:
-Với thiết kế và tính năng, tôi đảm bảo rằng sản phẩm đáp ứng tiêu chuẩn kỹ thuật của FPT và phù hợp với nhu cầu thị trường Việt Nam. 
-Tôi sử dụng bản vẽ thiết kế hoặc tài liệu kỹ thuật chi tiết để giải thích rõ ràng yêu cầu của mình. 
-Đồng thời, tôi luôn lắng nghe ý kiến phản hồi từ nhà sản xuất để đưa ra giải pháp tối ưu.”
 
 **Khó khăn**
 - Một lần, tôi phải làm việc với nhà sản xuất để giải quyết vấn đề chậm tiến độ trong việc cập nhật firmware cho thiết bị WiFi. 
@@ -5546,10 +5532,12 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 
 **Makefile**
 1. Make file là một script bên trong có chứa các thông tin:
+- Nó chứa các quy tắc để tự động hóa quy trình build
 - Cấu trúc của một project(file, dependency).
 - Các command line dùng để tạo-hủy file.
-
-
+2. Chương trình make sẽ đọc nội dung trong Makefile và thực thi nó.
+3. Dependency (phụ thuộc) là mối quan hệ giữa các file trong dự án. Trong Makefile, dependency cho biết một tệp đầu ra cần dựa vào những tệp nào để được xây dựng.
+	- Một file thực thi (main) phụ thuộc vào file đối tượng (main.o).
 
 
 **Phân biệt Macro và Function trong C/C++**
@@ -6296,46 +6284,11 @@ int main() {
 - Thêm 1 byte check sum vào data
 - Thuật toán như CRC (Cyclic Redundancy Check) hoặc checksum đơn giản như tổng các byte.
 
-**Các hàm trong DIO VÀ SPI theo chuẩn AUTOSAR**
-1. DIO:
-	-Dio_ReadChannel: Đọc trạng thái của một kênh đầu vào cụ thể. Chanel được quy ước như sau chanel 1>16 thuộc GPIOA , 16>31 GPIOB .Có kiểu dữ liệu Dio_ChannelType
-	- Dio_WriteChannel: Ghi một giá trị vào một kênh đầu ra cụ thể. Dio_ChannelType
-	- Dio_ReadPort: Đọc trạng thái của một cổng đầu vào, có thể là một nhóm các kênh. Trả về giá trị của tất cả các kênh trong cổng đó.Dio_PortType
-	- Dio_WritePort: Ghi một giá trị vào một cổng đầu ra, có thể là một nhóm các kênh. Ghi giá trị vào tất cả các kênh trong cổng đó.Dio_PortType
-	- Dio_ReadChannelGroup: Đọc trạng thái của một nhóm các kênh đầu vào cụ thể. Đầu vào có thể bao gồm số tham chiếu đến nhóm kênh.Dio_ChannelGroupType
-	- Dio_WriteChannelGroup: Ghi một giá trị vào một nhóm các kênh đầu ra cụ thể. Đầu vào bao gồm số tham chiếu đến nhóm kênh và giá trị mà bạn muốn ghi vào đó.Dio_ChannelGroupType
-	- Dio_GetVersionInfo: Truy xuất thông tin phiên bản hoặc thông tin về thư viện Dio.
-	- Dio_FlipChannel: Đảo trạng thái của một kênh đầu ra cụ thể. Nếu kênh đó hiện đang ở trạng thái HIGH, thì hàm này sẽ chuyển nó thành LOW và ngược lại.
-	- Dio_MaskedWritePort: Ghi một giá trị vào một cổng đầu ra với một mặt nạ (mask). Chỉ các bit được đặt trong mặt nạ sẽ thay đổi giá trị của cổng đầu ra.
-		- Ví dụ nếu bạn có một cổng GPIO với 8 kênh đầu ra và bạn muốn chỉ bật LED ở kênh 0 và kênh 1, bạn có thể sử dụng Dio_MaskedWritePort với mặt nạ là 0x03 (0000  0011) để chỉ ảnh hưởng đến kênh 0 và kênh 1 trong khi giữ nguyên trạng thái của các kênh khác không bị thay đổi.
-	- Dio_LevelType Đây là một kiểu dữ liệu được sử dụng để đại diện cho trạng thái của một kênh đầu vào hoặc đầu ra, thường là hai giá trị "STD_LOW" và "STD_HIGH" 
-	- Dio_PortLevelType: Đây là một kiểu dữ liệu được sử dụng để đại diện cho trạng thái của một nhóm các kênh đầu vào hoặc đầu ra trên một cổng GPIO. Thường thì mỗi bit trong kiểu này tương ứng với trạng thái của một kênh trong nhóm.Ví dụ 1111 1111 1111 1111, 16 chanel ở mức 1
-	- Dio_ChannelType : Đây là một kiểu dữ liệu được sử dụng để đại diện cho một kênh đầu vào hoặc đầu ra trên một cổng GPIO cụ thể trên vi điều khiển
-	- Dio_PortType: Đây là một kiểu dữ liệu được sử dụng để đại diện cho một cổng GPIO trên vi điều khiển. 
-	- Dio_ChannelGroupType: Đây là một cấu trúc dữ liệu được sử dụng để đại diện cho một nhóm các kênh đầu vào hoặc đầu ra trên một cổng GPIO cụ thể trên vi điều khiển.
-
-2. SPI
-	- Spi_Init: Hàm này được sử dụng để khởi tạo giao diện SPI, cấu hình các cài đặt cần thiết như tốc độ truyền, chế độ truyền/nhận, bit dữ liệu và các cài đặt khác.
-	- Spi_DeInit: Hàm này được sử dụng để huỷ bỏ và dọn dẹp tất cả các tài nguyên và trạng thái của giao diện SPI sau khi sử dụng.
-	- Spi_WriteIB: Hàm này được sử dụng để gửi dữ liệu từ bộ đệm nội bộ đến thiết bị ngoại vi thông qua giao diện SPI.
-	- Spi_AsyncTransmit: Hàm này được sử dụng để bắt đầu một truyền dữ liệu bất đồng bộ thông qua giao diện SPI. Hàm này không chờ đợi việc truyền hoàn thành và cho phép tiếp tụcthực thi các tác vụ khác trong khi truyền dữ liệu.
-	- Spi_ReadIB: Hàm này được sử dụng để nhận dữ liệu từ thiết bị ngoại vi thông qua giao diện SPI và lưu trữ vào bộ đệm nội bộ.
-	- Spi_SetupEB: Hàm này được sử dụng để cấu hình và truyền dữ liệu theo phương thức gửi/nhận tuần tự thông qua giao diện SPI.
-	- Spi_GetStatus: Hàm này được sử dụng để lấy trạng thái hiện tại của giao diện SPI.
-	- Spi_GetJobResult: Hàm này được sử dụng để lấy kết quả của một công việc truyền dữ liệu đã hoàn thành qua giao diện SPI.
-	- Spi_GetSequenceResult: Hàm này được sử dụng để lấy kết quả của một chuỗi công việc đã hoàn thành qua giao diện SPI.
-	- Spi_GetVersionInfo: Hàm này được sử dụng để lấy thông tin phiên bản của module SPI.
-	- Spi_SyncTransmit: Hàm này được sử dụng để bắt đầu một truyền dữ liệu đồng bộ thông qua giao diện SPI. Hàm này chờ đợi cho đến khi truyền dữ liệu hoàn thành trước khi trả về.
-	- Spi_GetHWUnitStatus: Hàm này được sử dụng để lấy trạng thái hiện tại của một đơn vị phần cứng (HW unit) cụ thể của giao diện SPI.
-	- Spi_Cancel: Hàm này được sử dụng để hủy bỏ việc truyền dữ liệu đang diễn ra thông qua giao diện SPI.
-	- Spi_SetAsyncMode: Hàm này được sử dụng để cấu hình giao diện SPI vào chế độ bất đồng bộ hoặc đồng bộ.
-
 
 
 **LSB,MSB là gì**
-- NLeast significant bit LSB.  bit từ phải sang trái
+- Least significant bit LSB.  bit từ phải sang trái
 - Most Significant Bit MSB . bit từ trái sang phải
-**LSB,MSB là gì**
 
 
 
@@ -6386,11 +6339,6 @@ struct Person {
 **Giao thức truyền thông nối tiếp đồng bộ, bất đồng bộ**
 - Trong giao thức đồng bộ, dữ liệu được truyền đi và nhận với sự đồng bộ hoàn toàn với một tín hiệu clock chung. Cả bộ gửi và bộ nhận phải được đồng bộ hóa theo tín hiệu clock này.
 - Trong giao thức bất đồng bộ, không có tín hiệu clock chung để đồng bộ hóa dữ liệu
-
-**DMA khác gi với ngắt truyền thông**
-- Khi sử dụng DMA, dữ liệu được truyền đi hoặc nhận về mà không cần sự can thiệp của CPU. DMA sẽ thực hiện các hoạt động truyền dữ liệu song song với hoạt động của CPU.
-- Khi sử dụng ngắt truyền thông, vi điều khiển sẽ chờ cho đến khi có dữ liệu được truyền đến hoặc gửi đi, sau đó nó sẽ tự động thức dậy và thực hiện các xử lý phản ứng dựa trên sự kiện ngắt.
-- Tốc độ của DMA thường nhanh hơn so với ngắt truyền thông. Điều này là do DMA có khả năng thực hiện truyền dữ liệu mà không cần sự can thiệp của CPU, trong khi ngắt truyền thông đòi hỏi CPU phải xử lý dữ liệu mỗi khi có sự kiện ngắt xảy ra.
 
 **Kích thước Enum**
 - Bằng kích thước của int , kích thước int sẽ phụ thuộc vào kiến trúc hệ thống(32 bit -4 byte , 64 bit -8 byte)
