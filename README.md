@@ -5531,12 +5531,11 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 	
 
 **Makefile**
-1. Make file là một script bên trong có chứa các thông tin:
-- Nó chứa các quy tắc để tự động hóa quy trình build
-- Cấu trúc của một project(file, dependency).
+1. Make file là một script , Nó chứa các quy tắc để tự động hóa quy trình build chương trình
+- mối quan hệ giữa các file trong dự án
 - Các command line dùng để tạo-hủy file.
 2. Chương trình make sẽ đọc nội dung trong Makefile và thực thi nó.
-3. Dependency (phụ thuộc) là mối quan hệ giữa các file trong dự án. Trong Makefile, dependency cho biết một tệp đầu ra cần dựa vào những tệp nào để được xây dựng.
+3. Trong Makefile, dependency cho biết một tệp đầu ra cần dựa vào những tệp nào để được xây dựng.
 	- Một file thực thi (main) phụ thuộc vào file đối tượng (main.o).
 
 
