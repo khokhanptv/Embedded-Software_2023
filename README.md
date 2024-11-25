@@ -5175,47 +5175,22 @@ Student s1, s2; // Không cần viết "struct" nữa
 
 
 **Project Manager (PM)**
-- Trong 7 năm tại FPT Telecom, tôi đã quản lý các dự án phát triển modem/router và FPT Play Box.
-- phối hợp với nhiều team để đảm bảo tiến độ và chất lượng sản phẩm, 
-- làm việc với nhà sản xuất để tích hợp các tính năng mới và tối ưu hóa hiệu suất thiết bị
-- đồng thời xử lý các sự cố kỹ thuật sau khi triển khai. 
-
-Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
-1. Quản lý dự án:
+- Trong 7 năm tại FPT Telecom, tôi đã quản lý các dự án phát triển thiết bị của FPT
 - Theo dõi tiến độ phát triển của dự án, từ khi bắt đầu đến khi hoàn thành.
 - Phân công nhiệm vụ cho các thành viên trong team Dev, QA, và DevOps.
-2. Đảm bảo chất lượng và thời gian phát hành:
-- Đảm bảo sản phẩm được phát hành đúng lịch trình và đạt tiêu chuẩn chất lượng.
-- Phê duyệt phiên bản firmware trước khi phát hành chính thức.
-3. Giao tiếp với các bộ phận liên quan:
-- Làm việc với các team khác (Marketing, Sales, Hỗ trợ khách hàng) để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
-- Nếu là PM/Team Lead: Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
-4. Quản lý và phát triển sản phẩm:
-- Phối hợp với nhà sản xuất để kiểm tra mã nguồn, phát triển và tích hợp các tính năng phù hợp với nhu cầu của thị trường Việt Nam.
-- Quản lý các dự án firmware, từ giai đoạn lập kế hoạch đến triển khai và vận hành.
-5. . Kiểm thử và đảm bảo chất lượng:
-Làm việc với team QA/Test để xây dựng và thực hiện các kịch bản kiểm thử, đảm bảo sản phẩm đạt chất lượng trước khi ra mắt.
-Kết hợp với team DevOps triển khai hệ thống CI/CD, tự động hóa quá trình kiểm thử và phát hành firmware.
-3. Hỗ trợ kỹ thuật và vận hành:
-Hỗ trợ xử lý các vấn đề kỹ thuật từ phía khách hàng hoặc trong quá trình vận hành sản phẩm.
-Phối hợp với team vận hành để giám sát hệ thống và triển khai bản cập nhật qua OTA
-
-
-
-
-
+- làm việc với nhà sản xuất để tích hợp các tính năng mới và tối ưu hóa hiệu suất thiết bị
+- Đảm bảo chất lượng và thời gian phát hành: Phê duyệt bản fw
+- Làm việc với các team khác để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
+- đồng thời xử lý các sự cố kỹ thuật sau khi triển khai. 
 
 **Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
 - Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
 - Với đội dev:
 	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
 	- Vd:
-		+ Kiểm tra phát hiện và sửa lỗi( nếu có)trước khi tích hợp với hệ thống
 		+ Xác định các tính năng có đúng với yêu cầu của dự án hay không.
 		+ Đảm bảo không có lỗ hổng bảo mật tiềm ẩn 
 		+ Đảm bảo mã nguồn tương thích hệ thống hiện đang sử dụng.
-		+ 1 số chức năng chưa tối ưu,viết lại để tối ưu  hơn.
-		+ Kểm tra: Phân tích đoạn mã liên quan đến  WiFi
 		+ Đảm bảo các chức năng này hoạt động tốt với hạ tầng của FPT, 
 		+ đồng thời không có lỗi bảo mật trong phần NAT.
 	- Các bài test của dev:
@@ -5223,9 +5198,19 @@ Phối hợp với team vận hành để giám sát hệ thống và triển kh
 			+ Ví dụ: Kiểm tra hàm xử lý dữ liệu từ cổng WAN, đảm bảo dữ liệu được định dạng và truyền tải chính xác.
 		+  Kiểm thử tích hợp (Integration Test):M Đảm bảo các module hoạt động hài hòa khi kết hợp.
 			+ Ví dụ: Kiểm tra sự tương tác giữa module quản lý kết nối Wi-Fi và module cấp phát địa chỉ IP (DHCP), đảm bảo thiết bị kết nối nhận được IP hợp lệ.
-
+	- Tín năng nội bộ dev phát triển
+		+  Hệ thống thu thập và phân tích lỗi:
+			+  log kết nối, log bảo mật, lỗi hệ thống
+			+  Gửi log về server quản lý trung tâm để phân tích và xử lý sự cố từ xa.
+		+  Hệ thống điều khiển từ xa :
+			+  Cho phép quản lý modem từ xa qua giao diện web hoặc ứng dụng di động.
+		+  Giao diện người dùng tùy chỉnh
+			+  Tùy chỉnh giao diện quản lý modem trên web
+			+  Tích hợp thêm các tính năng như hiển thị trạng thái kết nối, số lượng thiết bị đang kết nối, tốc độ mạng thực tế.
+		+ Tích hợp với hệ thống của công ty , app, website
+		+ Chặn các trang web không phù hợp
 - Với đội test: 
-	- kiểm tra kỹ càng tính năng phần cứng từ đối tác Trung Quốc 
+	- kiểm tra ác phần cứng từ đối tác Trung Quốc 
 		- Mục tiêu: Đảm bảo phần cứng modem hoạt động đúng như thiết kế.
 		- Đánh giá độ ổn định khi modem hoạt động liên tục trong nhiều giờ hoặc nhiều ngày.
 		- Kiểm tra các cổng kết nối như Ethernet, USB, hoặc nguồn điện.
@@ -5239,43 +5224,36 @@ Phối hợp với team vận hành để giám sát hệ thống và triển kh
 			-  Ví dụ : Đo lường tốc độ truyền tải dữ liệu qua Wi-Fi ở các khoảng cách khác nhau,
 
 
-- Team DevOps:
-	- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
-	- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
-	- Jenkins để quản lý pipeline CI/CD.
-	- Docker để thiết lập môi trường kiểm thử đồng nhất.
-	- Tự động kiểm thử: Tích hợp unit test, integration test để kiểm tra mã nguồn của team Dev ngay khi có thay đổi.
-	- Tự động build: Build firmware mỗi khi mã nguồn được cập nhật.	
+**Quy trình phát triển modem có sự tham gia đầy đủ**
 
-
-
-
-
-
-
-
-
-
-**Tính năng team Dev Việt Nam phát triển:**
-1. Hệ thống thu thập và phân tích log:
-- log kết nối, log bảo mật, lỗi hệ thống
-- Gửi log về server quản lý trung tâm để phân tích và xử lý sự cố từ xa.
-- sử dụng syslog, dmesg để thu thập lỗi
-2. Hệ thống điều khiển từ xa :
-- Cho phép quản lý modem từ xa qua giao diện web hoặc ứng dụng di động.
-3. Giao diện người dùng tùy chỉnh
-- Tùy chỉnh giao diện quản lý modem trên web
-- Tích hợp thêm các tính năng như hiển thị trạng thái kết nối, số lượng thiết bị đang kết nối, tốc độ mạng thực tế.
-4. Hệ thống chẩn đoán tự động:
-- Modem có thể tự kiểm tra trạng thái hệ thống và báo cáo về người dùng
-- Tự động đề xuất gói cước phù hợp
-- Chặn các trang web không phù hợp
-- Phát triển giao diện quản lý đa ngôn ngữ để phục vụ nhiều đối tượng khách hàng.
-
-
-
-
-
+- tôi tham gia các buổi họp với ban giám đốc để thống nhất về kinh phí, thời gian, và các tính năng cần có.
+1. Triển khai (Deployment Phase)
+- Mục tiêu:
+	-  triển khai trên diện rộng.
+- Vai trò của các team:
+	- Team Dev:
+		- Sửa lỗi nếu phát sinh vấn đề trong giai đoạn triển khai.
+	- Team QA/Test:
+		- Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
+		- Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
+	- Team Vận hành:
+		- Theo dõi trạng thái thiết bị trong quá trình triển khai.
+		- Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
+Kết quả:
+- Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
+2. Vận hành và Bảo trì (Operations and Maintenance Phase)
+- Mục tiêu:
+	- Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
+- Vai trò của các team:
+	- Team Dev:
+		- Phát hành các bản vá lỗi hoặc tính năng mới dựa trên phản hồi từ vận hành.
+	- Team QA/Test:
+		- Chạy lại các bài kiểm thử khi có bản cập nhật để đảm bảo tính tương thích.
+	- Team Vận hành:
+		- Giám sát hoạt động thực tế của thiết bị.
+		- Thu thập log và báo cáo các vấn đề thực tế để phản hồi cho Dev và QA.
+- Kết quả:
+	- Modem hoạt động ổn định, các bản cập nhật được phát hành nhanh chóng.
 
 
 
@@ -5284,115 +5262,6 @@ Phối hợp với team vận hành để giám sát hệ thống và triển kh
 1. Phân công công việc rõ ràng: Xác định vai trò và trách nhiệm của từng thành viên trong nhóm để đảm bảo họ hiểu rõ công việc của mình.
 2. Hỗ trợ và phát triển: Tôi luôn sẵn sàng hỗ trợ khi nhóm gặp khó khăn và khuyến khích họ nâng cao kỹ năng cá nhân.
 3. Khuyến khích giao tiếp: Tôi tạo môi trường mở để các thành viên có thể chia sẻ ý kiến và đóng góp ý tưởng. Điều này giúp xây dựng sự gắn kết và sáng tạo trong nhóm."
-
-
-
-
-
-
-
-**Quy trình phát triển modem có sự tham gia đầy đủ**
-- Team Dev, DevOps, Team Vận hành và Team Test/QA
-1. Lập kế hoạch (Planning Phase):
-- Mục tiêu:
-	- Xác định các tính năng của modem, yêu cầu kỹ thuật, và kế hoạch kiểm thử.
-	- Thiết lập sự phối hợp giữa các team: Dev, QA/Test, DevOps, và Vận hành.
-- Vai trò của các team:
-	- Team Dev:
-		- Xác định yêu cầu phát triển và lên kế hoạch mã hóa các tính năng.
-		Team QA/Test:
-		- Xác định các kịch bản kiểm thử (test cases) cho từng tính năng.
-		- Phối hợp với Dev để đảm bảo các tính năng có thể kiểm thử dễ dàng.
-
-	- Team DevOps:
-		- Đề xuất công cụ CI/CD cho tự động hóa kiểm thử.
-		- Chuẩn bị môi trường kiểm thử (staging) để QA/Test sử dụng.
-
-	- Team Vận hành:
-		- Đưa ra các yêu cầu từ thực tế, chẳng hạn như tính ổn định của firmware, khả năng OTA, và quản lý log.
-		Kết quả:
-		- Lộ trình phát triển.
-		- Kế hoạch kiểm thử chi tiết từ QA/Test.
-		- Danh sách công cụ cần thiết (CI/CD, monitoring).
-
-2. Phát triển (Development Phase)
-- Mục tiêu:
-	- Phát triển mã nguồn (firmware) và chuẩn bị các tính năng cho kiểm thử.
-- Vai trò của các team:
-	- Team Dev:
-		- Phát triển mã nguồn firmware theo yêu cầu.
-		- Kiểm tra sơ bộ (unit test) để phát hiện lỗi trước khi chuyển sang QA/Test.
-	- Team QA/Test:
-		- Phối hợp với Dev để xây dựng các kịch bản kiểm thử tự động và thủ công.
-		- Chuẩn bị bộ test cases cho các tính năng quan trọng.
-	- Team DevOps:
-		- Tích hợp pipeline CI/CD để tự động hóa việc build firmware và chạy các bài kiểm thử cơ bản.
-		- Cung cấp môi trường kiểm thử độc lập (Docker, Kubernetes, staging).
-	- Team Vận hành:
-		- Theo dõi các yêu cầu vận hành có được tích hợp vào firmware hay không (quản lý log, khả năng reset từ xa).
-Kết quả:
-	- Phiên bản firmware đầu tiên (build) sẵn sàng để kiểm thử.
-
-3. Kiểm thử (Testing Phase)
-- Mục tiêu:
-	- Đảm bảo firmware hoạt động đúng và ổn định.
-- Vai trò của các team:
-	- Team QA/Test:
-		- Chạy các bài kiểm thử thủ công và tự động trên firmware.
-		- Kiểm thử tính năng (functional test) và hiệu suất (performance test).
-		- Báo cáo lỗi và phối hợp với Dev để khắc phục.
-	- Team DevOps:
-		- Duy trì pipeline CI/CD:
-		- Tích hợp kiểm thử tự động (unit, integration, end-to-end).
-		 Theo dõi kết quả kiểm thử và tạo báo cáo tự động.
-		- Hỗ trợ QA/Test bằng cách cập nhật môi trường kiểm thử gần giống sản xuất.
-	- Team Dev:
-		- Sửa lỗi được báo cáo bởi QA/Test.
-		- Tinh chỉnh các tính năng dựa trên phản hồi từ kiểm thử.
-	- Team Vận hành:
-		- Thử nghiệm khả năng giám sát và các kịch bản sự cố (incident simulation).
-- Kết quả:
-	- Firmware đã qua kiểm thử toàn diện, sẵn sàng cho triển khai.
-
-4. Triển khai (Deployment Phase)
-- Mục tiêu:
-	- Đưa firmware lên thiết bị thực và triển khai trên diện rộng.
-- Vai trò của các team:
-	- Team Dev:
-		- Sửa lỗi hoặc tinh chỉnh nếu phát sinh vấn đề trong giai đoạn triển khai.
-	- Team QA/Test:
-		- Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
-		- Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
-	- Team DevOps:
-		- Tự động hóa triển khai firmware qua pipeline CD.
-		- Triển khai bản cập nhật qua OTA (Over-The-Air).
-	- Team Vận hành:
-		- Theo dõi trạng thái thiết bị trong quá trình triển khai.
-		- Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
-Kết quả:
-- Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
-5. Vận hành và Bảo trì (Operations and Maintenance Phase)
-- Mục tiêu:
-	- Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
-- Vai trò của các team:
-	- Team Dev:
-		- Phát hành các bản vá lỗi hoặc tính năng mới dựa trên phản hồi từ vận hành.
-	- Team QA/Test:
-		- Chạy lại các bài kiểm thử khi có bản cập nhật để đảm bảo tính tương thích.
-	- Team DevOps:
-		- Quản lý hạ tầng giám sát (monitoring) để phát hiện sớm các vấn đề.
-		- Triển khai nhanh các bản vá lỗi hoặc cải tiến qua pipeline CD.
-	- Team Vận hành:
-		- Giám sát hoạt động thực tế của thiết bị.
-		- Thu thập log và báo cáo các vấn đề thực tế để phản hồi cho Dev và QA.
-- Kết quả:
-	- Modem hoạt động ổn định, các bản cập nhật được phát hành nhanh chóng.
-![image](https://github.com/user-attachments/assets/6b75987b-f445-4bdd-925c-d93de7b52347)
-
-
-
-
-
 
 
 
@@ -5409,16 +5278,8 @@ Kết quả:
 - Nếu xung đột liên quan đến công việc, tôi tổ chức cuộc họp nhóm để làm rõ vấn đề, xác định nguyên nhân và cùng nhau thảo luận giải pháp. 
 - Điều quan trọng là tôi luôn giữ không khí cuộc họp tích cực, tập trung vào giải quyết vấn đề thay vì đổ lỗi.”
 
-**Khi đảm nhận vai trò quản lý dự án, bạn thường lập kế hoạch công việc như thế nào?** 
-- Làm thế nào bạn phân bổ nguồn lực (nhân sự, thời gian) để đạt được các mục tiêu đề ra?
-- Quy trình lập kế hoạch tại FPT Telecom bắt đầu bằng việc thu thập thông tin từ các phòng ban về tính năng cần phát triển.
-- Sau đó, tôi tham gia các buổi họp với ban giám đốc để thống nhất về kinh phí, thời gian, và các tính năng cần có.
-- Dựa trên các yêu cầu đã được phê duyệt, tôi chia dự án thành các giai đoạn cụ thể:
-	- Giai đoạn kiểm tra mã nguồn từ nhà sản xuất.
-	- Giai đoạn phát triển tính năng mới.
-	- Giai đoạn kiểm thử toàn bộ hệ thống.
-- Tôi làm việc chặt chẽ với các Team Leader để phân bổ nguồn lực, đảm bảo rằng mỗi thành viên được giao đúng nhiệm vụ phù hợp với kỹ năng và kinh nghiệm của họ.
-- Ngoài ra, tôi luôn có một kế hoạch dự phòng để ứng phó với các tình huống bất ngờ.”
+
+
 
 
 **Cân bằng giữa các yêu cầu từ khách hàng và giới hạn về thời gian hoặc tài nguyên trong dự án** 
@@ -5426,20 +5287,6 @@ Kết quả:
 - ưu tiên phát triển những tính năng cần thiết nhất trước và lên kế hoạch bổ sung các tính năng ít quan trọng hơn trong các bản cập nhật sau
 - báo cáo với ban giám đốc về những giới hạn tài nguyên, từ đó đề xuất thêm nhân sự hoặc thời gian nếu cần thiết
 
-**biện pháp nào để đảm bảo sản phẩm WiFi/router và FPT Play Box đạt chất lượng cao trước khi ra mắt**
-1. Quy trình kiểm thử nghiêm ngặt:
-Phân công đội test thực hiện các kịch bản kiểm thử chi tiết, bao gồm:
-- Kiểm tra tính năng phần cứng từ nhà sản xuất.
-- Kiểm thử các tính năng mới được phát triển nội bộ, như giao tiếp mạng, hiệu suất băng thông, và khả năng tương thích với hệ sinh thái của FPT (như FPT Play Box).
-- Kiểm tra độ ổn định trong điều kiện sử dụng thực tế tại Việt Nam (nhiệt độ, độ ẩm, và môi trường mạng đa dạng).
-2. Công cụ và quy trình tự động hóa kiểm thử:
-Sử dụng công cụ tự động hóa kiểm thử (automation testing) để giảm thời gian và tăng độ chính xác, đặc biệt trong các bài test hiệu suất cao hoặc stress test.
-3. Kiểm tra mã nguồn:
-- Với đội dev, tôi yêu cầu kiểm tra mã nguồn từ nhà sản xuất để phát hiện và xử lý các vấn đề bảo mật hoặc hiệu suất trước khi tích hợp.
-4. Phối hợp chặt chẽ với nhà sản xuất:
-- Làm việc trực tiếp với đối tác Trung Quốc để sửa lỗi phần cứng hoặc firmware, đồng thời đảm bảo rằng họ cung cấp các bản cập nhật phù hợp với thị trường Việt Nam.
-5. Thử nghiệm người dùng cuối:
-- Tôi tổ chức các thử nghiệm beta (beta testing) với một nhóm khách hàng giới hạn để thu thập phản hồi thực tế trước khi ra mắt sản phẩm.”
 
 **Khi xảy ra lỗi, cách xử lý**
 1. Xác định và thu thập thông tin lỗi:
@@ -5482,15 +5329,6 @@ Thiết lập thời hạn cụ thể: Tôi thương lượng với nhà sản x
 Tăng cường liên lạc: Tôi duy trì liên lạc chặt chẽ qua email và họp trực tuyến hàng tuần để đảm bảo không có thông tin nào bị bỏ sót và các vấn đề phát sinh được giải quyết ngay lập tức.
 
 
-**Đào tạo**
-- Là Project Manager, nhiệm vụ đào tạo đội ngũ thường được giao cho các Team Leader, nhưng tôi luôn theo sát để đảm bảo quá trình đào tạo đáp ứng mục tiêu dự án.
-
-1. Phân công nhiệm vụ đào tạo:
-Tôi yêu cầu Team Leader tổ chức các buổi hướng dẫn và chia sẻ kiến thức về C/C++ cũng như các công nghệ nhúng mà dự án yêu cầu. Điều này bao gồm cả lý thuyết cơ bản và thực hành trên các tình huống thực tế trong dự án.
-2. Đảm bảo đội nhóm học tập qua dự án:
-Tôi giao nhiệm vụ phù hợp với năng lực của từng thành viên để họ vừa hoàn thành công việc, vừa học hỏi thêm kỹ năng. Đội Dev có thể học cách tối ưu mã nguồn, trong khi đội QA có thể cải thiện các kịch bản kiểm thử.
-3. Định hướng và đánh giá:
-Mặc dù không trực tiếp đào tạo, tôi thường xuyên tổ chức các buổi họp định kỳ với Team Leader để đánh giá hiệu quả đào tạo. Tôi cũng khuyến khích các Team Leader ghi nhận phản hồi từ đội nhóm để cải thiện nội dung đào tạo cho phù hợp.”
 
 **phương pháp nào để đánh giá hiệu suất**
 1. Đánh giá định lượng:
@@ -5521,113 +5359,7 @@ Cách tôi giải quyết:
 - Điều chỉnh kế hoạch: Tùy mức độ thay đổi, tôi có thể lùi thời hạn ra mắt hoặc đề xuất cắt giảm những tính năng không quan trọng để tập trung vào yêu cầu mới.
 - Thông báo và đồng thuận: Tôi luôn thông báo rõ ràng cho ban giám đốc và các phòng ban liên quan về thay đổi và lý do điều chỉnh. Đồng thời, cập nhật khách hàng để đảm bảo sự hài lòng của họ.”
 
-**Quy trình làm việc ở FPT**
-1. Thu thập yêu cầu và đánh giá sản phẩm từ đối tác:
-	+ Thu thập yêu cầu:
-		+ Yêu cầu từ bộ phận kỹ thuật và khách hàng về các tính năng cần thiết cho modem/router.
-		+ Họp BGD về chi phí,các kỹ thuật liên quan
-	+ Đánh giá sản phẩm từ đối tác:
-		+ Lựa chọn phần cứng (chipset, modem, router) và firmware phù hợp từ danh mục sản phẩm của đối tác.
-		+ Kiểm tra xem firmware có đáp ứng được các yêu cầu kỹ thuật
-			+ Hiệu năng Wi-Fi (MU-MIMO, Beamforming, Wi-Fi 6).
-2. Tùy chỉnh firmware theo yêu cầu nội bộ
-	+ Làm việc trực tiếp với đối tác để tùy chỉnh firmware theo các yêu cầu riêng:
-		+ Giao diện quản lý web hoặc ứng dụng phải mang thương hiệu FPT.
-		+ Thêm hoặc gỡ bỏ các tính năng không cần thiết.
-3. Release và triển khai sản phẩm
-	+  Release  là  phát hành sản phẩm đã hoàn thiện để sử dụng trong môi trường thực tế
-	+ Sau khi đối tác hoàn tất tùy chỉnh firmware, sản phẩm sẽ được kiểm thử lần cuối và triển khai qua:
-		+ OTA (Over-the-Air Update): Firmware tự động cập nhật từ xa cho các modem/router đang hoạt động.
-	+ Đưa sản phẩm ra thị trường
-		+ Triển khai sản phẩm đến khách hàng với phiên bản firmware đã tinh chỉnh phù hợp.
-		+ Release Code là  phát hành  firmware đã hoàn thiện để sử dụng trong môi trường thực tế, mục đích:
-		+ Cung cấp tính năng mới.
-		+ Sửa lỗi và vá bảo mật.
-		+ Đảm bảo hiệu suất và sự ổn định cho khách hàng.
-		+ Trước khi release bản chính thức, firmware sẽ được thử nghiệm trên môi trường staging (giả lập gần giống môi trường thực tế).
-		+ Release firmware trực tiếp đến modem/router của khách hàng thông qua cập nhật từ xa.
-	+ Ai chịu trách nhiệm trong Release Code?
-		+ Team Dev: Phát triển tính năng và sửa lỗi.
-		+ Team QA: Kiểm tra chất lượng trước khi release.
 
-4. Trách nhiệm của Team bạn (Development Team)
-	+ Phát triển tính năng nội bộ ( sẽ thêm sau)
-	+ thực hiện kiểm thử ở cấp độ cơ bản để đảm bảo rằng phần code mới hoạt động đúng
-	+ Unit Testing (Kiểm thử đơn vị):
-		+ Team bạn sẽ kiểm tra các module hoặc chức năng riêng lẻ mà bạn phát triển.
-		+ Ví dụ: Gửi lệnh bật/tắt Wi-Fi, thay đổi mật khẩu qua API điều khiển từ xa.
-		+ công cụ Google Test 
-	+ Integration Testing (Kiểm thử tích hợp):
-        + Đảm bảo rằng code tính năng nội bộ hoạt động đúng khi tương tác với firmware của modem do phía Trung Quốc cung cấp.
-		+  công cụ Google Test 
-	+ Developer khác hoặc Team Lead sẽ kiểm tra mã nguồn (code review) để đảm bảo:( tý hỏi CI/CD)
-		+ Code tuân thủ coding standard.
-		+ Logic và hiệu năng của code đúng yêu cầu.
-	+ QC/QA kiểm thử sản phẩm (Testing)
-		+ QC/QA không trực tiếp đọc mã nguồn, nhưng họ sẽ kiểm thử phần mềm dựa trên các kịch bản sử dụng thực tế để phát hiện lỗi.
-	+ Mục tiêu của QC/QA:
-		+ Đảm bảo rằng sản phẩm cuối cùng đáp ứng đúng yêu cầu chức năng.
-		+ Tìm ra các lỗi logic, giao diện, hoặc hiệu năng mà không cần phải đọc mã nguồn.
-	+ Chip của FPT là ZTE và media tek
-	+ Modem FPT dùng hệ điều hành Linux nhúng không phải RT OS hỗ trợ   đa nhiệm
-		+ OpenWRT: Một hệ điều hành Linux mã nguồn mở cho router.
-	+ Các modem/router có nhiều tính năng phức tạp (ví dụ: quản lý nhiều kết nối, QoS, VPN, Mesh Networking) 
-
-
-5. Nếu bạn là Developer (Lập trình viên)
-+ Nhiệm vụ chính:
-	+ Phát triển tính năng mới:
-		+ Viết mã nguồn (C/C++) cho các tính năng mới trên modem/router, 
-		+ ví dụ như lấy log lỗi, quản lý từ xa, tối ưu hiệu năng Wi-Fi.
-	+ Viết test code:
-		+ Tự viết Unit Test và Integration Test để đảm bảo các module hoạt động đúng.
-		+ Sửa lỗi (Bug Fixing):
-		+ Phân tích và sửa các lỗi phát hiện trong quá trình kiểm thử hoặc từ feedback của khách hàng.
-	+ Tích hợp mã nguồn:
-		+  Đẩy mã nguồn lên hệ thống Git (GitHub/GitLab).
-		+ Làm việc chặt chẽ với CI/CD để đảm bảo mã nguồn được kiểm thử tự động sau mỗi lần commit.
-	+ Công việc cụ thể trong quy trình:
-		+ Viết mã để tích hợp các tính năng mới trên firmware.
-		+ Thực hiện các bài test cơ bản để đảm bảo mã hoạt động đúng.
-		+ Chạy các bài kiểm thử tự động qua CI/CD và xử lý lỗi phát hiện trong quá trình kiểm thử.
-
-6. Nếu bạn là QA/QC 
-	+ Kiểm tra toàn bộ hệ thống sau khi Dev tích hợp mã.
-	+ Viết báo cáo kiểm thử chi tiết, bao gồm trạng thái của từng Test Case.
-	+ Phê duyệt hoặc yêu cầu chỉnh sửa trước khi sản phẩm được release.
-	+ Đảm bảo rằng tất cả các tính năng hoạt động ổn định trước khi phát hành firmware.
-7. Project Manager (PM)
-	+ Quản lý dự án:
-		+ Theo dõi tiến độ phát triển của dự án, từ khi bắt đầu đến khi hoàn thành.
-		+ Phân công nhiệm vụ cho các thành viên trong team Dev, QA, và DevOps.
-	+ Đảm bảo chất lượng và thời gian phát hành:
-		+ Đảm bảo sản phẩm được phát hành đúng lịch trình và đạt tiêu chuẩn chất lượng.
-		+ Phê duyệt phiên bản firmware trước khi phát hành chính thức.
-	+ Giao tiếp với các bộ phận liên quan:
-		+ Làm việc với các team khác (Marketing, Sales, Hỗ trợ khách hàng) để đảm bảo sản phẩm đáp ứng đúng nhu cầu của khách hàng.
-8. Dựa vào kinh nghiệm và kỹ năng của bạn, bạn có thể:
-	+ Nếu là Dev: Phát triển tính năng, viết test, tích hợp mã nguồn.
-	+ Nếu là QA: Thiết kế và thực hiện kiểm thử để đảm bảo chất lượng.
-	+ Nếu là PM/Team Lead: Quản lý dự án, điều phối các nhóm và đảm bảo tiến độ.
-9. Dùng gì để debug modem
-	+ UART
-	+ PUTTY
-	+ SDK nha sản xuất cung cấp
-10. Tính năng team Dev Việt Nam  phát triển :
-	+ Hệ thống thu thập và phân tích log:
-		+ log kết nối, log bảo mật, lỗi hệ thống
-		+ Gửi log về server quản lý trung tâm để phân tích và xử lý sự cố từ xa.
-		+ sử dụng syslog, dmesg để thu thập lỗi
-	+ Hệ thống điều khiển từ xa :
-		+ Cho phép quản lý modem từ xa qua giao diện web hoặc ứng dụng di động.
-	+ Giao diện người dùng tùy chỉnh 
-		+ Tùy chỉnh giao diện quản lý modem trên web  
-        + Tích hợp thêm các tính năng như hiển thị trạng thái kết nối, số lượng thiết bị đang kết nối, tốc độ mạng thực tế.
-	+ Hệ thống chẩn đoán tự động:
-		+ Modem có thể tự kiểm tra trạng thái hệ thống và báo cáo về người dùng
-		+ Tự động đề xuất gói cước phù hợp
-	+ Chặn các trang web không phù hợp
-	+ Phát triển giao diện quản lý đa ngôn ngữ để phục vụ nhiều đối tượng khách hàng.
 
 **tùy chỉnh kernel Linux**
 - Có, tôi đã từng cấu hình và tùy chỉnh kernel Linux trong modem/router 
