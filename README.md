@@ -5538,6 +5538,41 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 3. Trong Makefile, dependency cho biết một tệp đầu ra cần dựa vào những tệp nào để được xây dựng.
 	- Một file thực thi (main) phụ thuộc vào file đối tượng (main.o).
 
+**IPC - Interprocess Communication**
+- IPC (Interprocess Communication) là cơ chế cho phép các process trao đổi thông tin và chia sẽ dữ liệu 
+- Các phương thức IPC phổ biến
+	- Pipe:Giao tiếp một chiều, chỉ trong tiến trình cha-con.
+	- FIFO:Giao tiếp hai chiều. phù hợp cho các tiến trình không liên quan trực tiếp.
+	- Socket: Giao tiếp giữa các tiến trình qua mạng hoặc cùng một máy.
+	- Message Queue:Gửi và nhận thông điệp giữa các tiến trình thông qua hàng đợi (queue).
+	- Shared Memory: các tiến trình cùng truy cập một vùng bộ nhớ chung.
+	- Semaphore:
+		- Dùng để giới hạn số lượng tiến trình truy cập tài nguyên chung.
+	- Mutex (Mutual Exclusion):
+		- Cơ chế khóa tài nguyên để chỉ một tiến trình được phép truy cập tại một thời điểm.
+- RCU (Read-Copy-Update) một cơ chế đồng bộ cho phép các tiến trình đọc dữ liệu mà không bị cản trở bởi các tiến trình ghi dữ Liệu
+	-  đồng thời đảm bảo tính nhất quán của dữ liệu được truy cập.
+
+**Physical Memory,Virtual Memory**
+- Physical Memory:Là RAM thực tế trên phần cứng.
+- Virtual Memory:Là không gian bộ nhớ   do hệ điều hành tạo ra.
+-  Lý do cơ chế Virtual Memory ra đời
+	+  cho phép nhiều chương trình sử dụng bộ nhớ đồng thời bằng cách:
+		+ Chỉ tải các phần cần thiết của chương trình vào RAM.
+		+ Lưu phần còn lại trên ổ cứng (swap space).
+	+ Tạo không gian bộ nhớ lớn hơn RAM:
+		+ cho phép chương trình yêu cầu bộ nhớ vượt quá dung lượng RAM thực tế.
+
+**Kernel Panic là gì?**
+- Kernel Panic là một trạng thái lỗi nghiêm trọng của hệ điều hành, xảy ra khi kernel gặp một lỗi không thể phục hồi hoặc xử lý được
++ Lỗi phần cứng:
+	+ RAM bị lỗi hoặc không tương thích.
+	+ CPU quá nhiệt hoặc gặp vấn đề.
+ 
+
+
+
+
 
 **Phân biệt Macro và Function trong C/C++**
  
@@ -5610,6 +5645,10 @@ uint x = 10;  // x là một unsigned int
 	- 0: Trả về trong tiến trình con.
 	- Dương số (> 0): Trả về PID (Process ID) của tiến trình con trong tiến trình cha.
 	- Âm số (< 0): Trả về nếu có lỗi, không thể tạo tiến trình con.
+- Khi tiến trình con kết thúc nhưng tiến trình cha chưa gọi wait(), tiến trình con trở thành "zombie".
+	- Lãng phí tài nguyên trong Process Table.(hết pid)
+- Orphan Process:
+- Nếu tiến trình cha kết thúc trước khi tiến trình con kết thúc, tiến trình con trở thành "orphan" và được init process nhận quản lý.
 	
 **cross compiler**
 - Cross Compiler là trình biên dịch có khả năng tạo ra mã nhị phân có thể chạy trên một nền tảng khác với nền tảng nơi trình biên dịch đang hoạt động.
@@ -5626,10 +5665,57 @@ uint x = 10;  // x là một unsigned int
 - Hệ nhị phân (firmware) này sau đó được nạp vào vi điều khiển thông qua giao tiếp như SWD, JTAG, hoặc UART.
 
 
+**Phân tích issue**
+- Xác định rõ vấn đề, thu thập dữ liệu, tái hiện lỗi, phân tích log, và xác định nguyên nhân gốc rễ.
+- Log cần thiết:
+	- Log hệ thống, log ứng dụng, log mạng, log debugger, core dump, và log cấu hình.
+- Bước 1: Xác định rõ issue
+	- Sau một bản cập nhật, khi tải cao, hoặc trên môi trường cụ thể.
+- Bước 2: Thu thập dữ liệu liên quan
+	- Log file: Ghi lại các sự kiện trước và trong khi lỗi xảy ra.
+- Bước 3: Tái hiện lỗi
+	- Tái hiện theo kịch bản người dùng đã gặp lỗi.
+- Bước 4: Phân tích log và triệu chứng
+	- Phân tích các log thu thập được:
+	- Kiểm tra trạng thái hệ thống:
+	- CPU, bộ nhớ, I/O, hoặc kết nối mạng có bị quá tải không?
+- Bước 5: Xác định nguyên nhân gốc rễ
+	- Xác định vấn đề thuộc về:
+	- Lỗi phần mềm: Bug trong logic hoặc code.
+	- Lỗi cấu hình: Cài đặt sai cấu hình phần mềm hoặc môi trường.
+	- Lỗi môi trường: Phần cứng, mạng, hoặc tài nguyên không đủ.
+- Bước 6: Đề xuất và thực hiện giải pháp
+	- Sau khi xác định nguyên nhân:
+	- Cung cấp bản vá hoặc sửa lỗi.
+	- Điều chỉnh cấu hình hệ thống.
+	- Nâng cấp tài nguyên phần cứng (nếu cần).
+	- Thử nghiệm và xác minh lại để đảm bảo vấn đề được giải quyết.
+
+
+**Linux có mấy loại context?**
+- context là môi trường có  đó một tiến trình hoặc tác vụ  đang chạy
+1. User Context các chương trình thông thường như trình duyệt, biên dịch, ứng dụng.
+2. Kernel Context (Ngữ cảnh nhân)
+	- Đây là ngữ cảnh trong đó mã của kernel (nhân Linux) chạy. Kernel có toàn quyền kiểm soát hệ thống và phần cứng,
+3. Interrupt Context :Ngữ cảnh này xuất hiện khi hệ thống xử lý một ngắt 
+
+
+
 
 **Tính chất của ngôn ngữ C:**
 - Ngôn ngữ lập trình bậc thấp (Low-level language): C gần với ngôn ngữ máy hơn các ngôn ngữ lập trình bậc cao khác, điều này giúp nó có khả năng điều khiển phần cứng mạnh mẽ và tối ưu hóa hiệu suất.
 - Ngôn ngữ thủ tục (Procedural Language): C chủ yếu dựa trên cách lập trình thủ tục, tức là chương trình được cấu trúc thành các hàm 
+- cho phép truy cập trực tiếp vào phần cứng và quản lý tài nguyên hệ thống hiệu quả.
+	+  lập trình viên có thể trực tiếp thao tác với thanh ghi, không cần phụ thuộc vào lớp trung gian, giảm độ trễ và tăng hiệu quả.
+- Nó tạo ra mã máy gọn nhẹ, phù hợp với các hệ thống nhúng có tài nguyên hạn chế (bộ nhớ, CPU).
+- Chương trình viết bằng C thường chiếm ít dung lượng hơn so với các ngôn ngữ khác, 
+- Quản lý bộ nhớ: C cho phép lập trình viên cấp phất và giải phóng bộ nhớ  thông qua các con trỏ. 
+- Điều này giúp tối ưu hóa bộ nhớ hạn chế trong hệ thống nhúng, 
+- vì lập trình viên có thể chỉ cấp phát đúng lượng bộ nhớ cần thiết và giải phóng nó khi không còn dùng.
+- tự động quản lý bộ nhớ (garbage collection) Điều này tiện lợi, nhưng gây ra chi phí tài nguyên không cần thiết,
+
+
+
 
 **Tính chất của ngôn ngữ C++:**
 - C++ là một ngôn ngữ bậc trung:C++ cung cấp cả tính năng gần gũi với phần cứng như C (ví dụ như quản lý bộ nhớ thủ công, truy cập địa chỉ bộ nhớ trực tiếp,...) và các tính năng bậc cao như lập trình hướng đối tượng, xử lý ngoại lệ (exception handling), và thư viện chuẩn phong phú (STL).
