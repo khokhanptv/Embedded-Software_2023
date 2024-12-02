@@ -7853,37 +7853,74 @@ int main(void)
   <summary><h3>ADC</h3></summary>
 
 2. Bạn hiểu thế nào về độ phân giải của ADC?
-Độ phân giải của ADC xác định số mức điện áp mà ADC có thể phân biệt, được biểu diễn bằng số bit.
+- Độ phân giải của ADC xác định số mức điện áp mà ADC có thể phân biệt, được biểu diễn bằng số bit.
 3. Tần số lấy mẫu (Sampling Rate) là gì và tại sao nó quan trọng?
-Tần số lấy mẫu là số lần ADC lấy mẫu tín hiệu analog trong một giây.
+- Tần số lấy mẫu là số lần ADC lấy mẫu tín hiệu analog trong một giây.
 Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tần số cao nhất của tín hiệu để tránh hiện tượng aliasing.
 4. Sự khác biệt giữa độ chính xác và độ phân giải của ADC là gì?
-Độ phân giải: Liên quan đến số bit của ADC, xác định mức điện áp nhỏ nhất mà ADC có thể phân biệt.
-Độ chính xác: Liên quan đến mức độ gần gũi giữa giá trị chuyển đổi và giá trị thực của tín hiệu đầu vào, phụ thuộc vào nhiễu, lỗi tham chiếu, và chất lượng thiết kế.
+- Độ phân giải: Liên quan đến số bit của ADC, xác định mức điện áp nhỏ nhất mà ADC có thể phân biệt.
+- Độ chính xác: Liên quan đến mức độ gần gũi giữa giá trị chuyển đổi và giá trị thực của tín hiệu đầu vào, phụ thuộc vào nhiễu, lỗi tham chiếu, và chất lượng thiết kế.
 5. Các phương pháp chuyển đổi ADC phổ biến là gì?
-Successive Approximation Register (SAR): Phương pháp phổ biến nhất, cân bằng giữa tốc độ và độ chính xác.
-Sigma-Delta: Độ chính xác cao, tốc độ thấp, thường dùng trong âm thanh.
-Flash ADC: Nhanh nhất, nhưng tốn tài nguyên và đắt đỏ.
-Dual-Slope: Độ chính xác cao, thường dùng trong đo đạc.
-1. Trong một dự án cụ thể, bạn đã sử dụng ADC như thế nào để đọc tín hiệu?
- 
+- Successive Approximation Register (SAR): Phương pháp phổ biến nhất, cân bằng giữa tốc độ và độ chính xác.
+- Sigma-Delta: Độ chính xác cao, tốc độ thấp, thường dùng trong âm thanh.
+- Flash ADC: Nhanh nhất, nhưng tốn tài nguyên và đắt đỏ.
+- Dual-Slope: Độ chính xác cao, thường dùng trong đo đạc.
+6. Trong một dự án cụ thể, bạn đã sử dụng ADC như thế nào để đọc tín hiệu?
+- Cảm biến LM35 xuất tín hiệu analog tuyến tính theo nhiệt độ.
+- ADC trên vi điều khiển (STM32) chuyển đổi tín hiệu analog từ cảm biến sang số.
+7. Bạn đã từng sử dụng DMA (Direct Memory Access) với ADC chưa? Nếu có, hãy mô tả cách thực hiện.
+- Cấu hình ADC để chạy ở chế độ liên tục (continuous mode).
+- Cấu hình DMA để đọc giá trị ADC và lưu vào buffer.
+- DMA tự động chuyển dữ liệu mà không cần CPU can thiệp, giúp giảm tải CPU.
+8. Bạn đã từng xử lý nhiễu tín hiệu ADC chưa? Nếu có, bạn làm như thế nào?
+- Tăng độ chính xác: Thêm tụ lọc (capacitor) ở chân analog để giảm nhiễu.
+- Lọc trung bình (Averaging): Lấy trung bình nhiều giá trị ADC để làm mượt dữ liệu.
+- Sử dụng nguồn tham chiếu ổn định (Vref): Đảm bảo Vref không bị dao động.
+9. Làm thế nào để đo điện áp âm với ADC?
+- Chuyển đổi tín hiệu âm: Thêm một điện áp offset (DC bias) vào tín hiệu để chuyển nó sang dải điện áp dương.
+- Sử dụng Op-Amp: Khuếch đại và chỉnh sửa tín hiệu trước khi đưa vào ADC.
+10. Bạn sẽ làm gì nếu ADC đọc giá trị không chính xác?
+- Nguồn tham chiếu (Vref) ổn định.
+- Tín hiệu đầu vào trong dải điện áp của ADC.
+- Tín hiệu không bị nhiễu hoặc méo.
+- Thêm kỹ thuật lọc tín hiệu hoặc hiệu chỉnh ADC.
+11. Làm thế nào để tối ưu hiệu suất ADC khi cần tốc độ cao?
+- Tăng tần số clock ADC nhưng vẫn trong dải hỗ trợ.
+- Sử dụng DMA để giảm tải CPU.
+- Giảm số lượng kênh chuyển đổi hoặc độ phân giải nếu cần thiết.
+12. Bạn đã từng sử dụng ADC để đo tín hiệu tốc độ cao (như âm thanh) chưa? 
+- Sử dụng ADC với độ phân giải cao (16-bit hoặc 24-bit).
+- Tăng tần số lấy mẫu (theo nguyên tắc Nyquist).
+- Dùng bộ lọc thấp (Low-Pass Filter) để loại bỏ nhiễu tần số cao.
+13. Bạn đã từng sử dụng ADC trong điều khiển động cơ hoặc cảm biến chưa
+- ADC đọc tín hiệu từ cảm biến dòng để giám sát dòng điện của động cơ.
+- Vi điều khiển điều chỉnh tín hiệu PWM để giảm dòng điện khi vượt ngưỡng.
+14. Khi cấu hình ADC trên STM32, bạn thường sử dụng thư viện HAL hay viết mã thủ công? Tại sao?
+- Sử dụng HAL để tiết kiệm thời gian và giảm lỗi.
+- Viết mã thủ công khi cần tối ưu hóa hiệu suất hoặc cấu hình phức tạp.
+15. Bạn sẽ debug như thế nào nếu ADC không hoạt động hoặc đọc giá trị sai?
+- Kiểm tra cấu hình clock và nguồn tham chiếu.
+- Đảm bảo tín hiệu đầu vào trong dải điện áp hợp lệ.
+- Sử dụng oscilloscope để kiểm tra tín hiệu analog.
+16. Làm thế nào để đảm bảo ADC hoạt động chính xác trong môi trường nhiễu?
+- Dùng tụ lọc ở đầu vào tín hiệu.
+- Tăng thời gian lấy mẫu.
+- Dùng vỏ bọc kim loại (shielding) để giảm nhiễu.
+17. Khi nào bạn chọn ADC 10-bit thay vì 12-bit hoặc 16-bit?
+- Chọn ADC 10-bit khi:
+- Yêu cầu tốc độ cao.
+- Độ phân giải cao không cần thiết.
+- Hệ thống có tài nguyên hạn chế.
+18. Làm thế nào để đo tín hiệu AC với ADC?
+- Sử dụng mạch chỉnh lưu hoặc thêm điện áp offset để chuyển tín hiệu AC sang dải điện áp dương.
+- Sử dụng bộ lọc thấp để giảm nhiễu.
+19. Làm thế nào để tối ưu hóa hiệu suất ADC trong hệ thống đa kênh?
+- Sử dụng chế độ scan mode để chuyển đổi tuần tự.
+- Sử dụng DMA để tự động lưu dữ liệu.
+- Tối ưu tần số clock để tăng tốc độ mà không giảm chất lượng.
 
-Cảm biến LM35 xuất tín hiệu analog tuyến tính theo nhiệt độ.
-ADC trên vi điều khiển (STM32) chuyển đổi tín hiệu analog từ cảm biến sang số.
-2. Bạn đã từng sử dụng DMA (Direct Memory Access) với ADC chưa? Nếu có, hãy mô tả cách thực hiện.
- 
 
-Cấu hình ADC để chạy ở chế độ liên tục (continuous mode).
-Cấu hình DMA để đọc giá trị ADC và lưu vào buffer.
-DMA tự động chuyển dữ liệu mà không cần CPU can thiệp, giúp giảm tải CPU.
- Bạn đã từng xử lý nhiễu tín hiệu ADC chưa? Nếu có, bạn làm như thế nào?
-Có. Tôi sử dụng các kỹ thuật sau:
-
-Tăng độ chính xác: Thêm tụ lọc (capacitor) ở chân analog để giảm nhiễu.
-Lọc trung bình (Averaging): Lấy trung bình nhiều giá trị ADC để làm mượt dữ liệu.
-Sử dụng nguồn tham chiếu ổn định (Vref): Đảm bảo Vref không bị dao động.
-
-
+**Lý thuyết ADC**
 
 
 
@@ -7936,8 +7973,88 @@ Quy trình lập trình ADC:
 <details>
   <summary><h3>DMA</h3></summary>
 
-- DMA cho phép các thiết bị ngoại vi như ADC, UART, hoặc SPI truy cập trực tiếp vào bộ nhớ mà không cần CPU can thiệp.
+- DMA  là một module phần cứng cho phép các thiết bị ngoại vi giao tiếp trực tiếp với bộ nhớ mà không cần sự can thiệp của CPU..
 - Điều này giúp Giảm tải cho CPU. tăng hiệu suất hệ thống.
+
+1. Cách hoạt động:
+- CPU cấu hình DMA với thông tin: nguồn, đích, kích thước dữ liệu.
+- DMA tự động chuyển dữ liệu giữa các thiết bị mà không làm gián đoạn CPU.
+- Sau khi hoàn tất, DMA phát tín hiệu (interrupt) để báo CPU.
+2. Ưu điểm của việc sử dụng DMA là gì?
+- Giảm tải CPU: CPU có thể xử lý các tác vụ khác trong khi DMA thực hiện việc truyền dữ liệu.
+- Tăng tốc độ: DMA hoạt động nhanh hơn so với việc chuyển dữ liệu bằng phần mềm.
+- Tiết kiệm năng lượng: Giảm chu kỳ xử lý của CPU.
+3. DMA được sử dụng trong những trường hợp nào?
+- Giao tiếp dữ liệu tốc độ cao giữa ngoại vi và bộ nhớ (UART, SPI, I2C, ADC, DAC).
+- Các hệ thống thời gian thực yêu cầu hiệu suất cao.
+4. DMA hoạt động đồng bộ và bất đồng bộ như thế nào?
+- Đồng bộ: DMA hoạt động dưới sự kiểm soát của một tín hiệu hoặc sự kiện (trigger).
+- Bất đồng bộ: DMA tự động chuyển dữ liệu theo cấu hình mà không cần tín hiệu trigger.
+5. Trong một dự án cụ thể, bạn đã sử dụng DMA để truyền dữ liệu như thế nào?
+- UART:
+	- DMA được cấu hình để tự động truyền dữ liệu từ bộ nhớ đến UART TX.
+	- Khi bộ đệm truyền đầy, DMA gửi tín hiệu interrupt để xử lý dữ liệu tiếp theo.
+- SPI:
+	- Cấu hình DMA để truyền dữ liệu từ bộ nhớ đến SPI TX.
+	- SPI RX sử dụng DMA để nhận dữ liệu vào bộ nhớ.
+- I2C:
+	- DMA truyền dữ liệu từ bộ nhớ đến I2C để giao tiếp với slave.
+	- DMA tự động xử lý mà không cần CPU can thiệp.
+- ADC:
+	- Cấu hình ADC để hoạt động ở chế độ Scan Mode.
+	- Kích hoạt DMA để tự động lưu dữ liệu ADC vào buffer.
+	- Sử dụng Circular Mode để liên tục đọc dữ liệu từ các kênh ADC.
+	- Ưu điểm: CPU không cần xử lý từng mẫu dữ liệu ADC, giúp giảm tải đáng kể.
+6. Khi làm việc với DMA, bạn đã xử lý lỗi như thế nào?
+- Dữ liệu không đầy đủ: Kiểm tra kích thước buffer và nguồn/đích cấu hình đúng hay chưa.
+- DMA không khởi động: Đảm bảo DMA đã được bật và có trigger từ ngoại vi.
+- Giao tiếp ngắt quãng: Sử dụng chế độ Circular hoặc tăng kích thước buffer.
+7. Bạn đã từng tối ưu hóa DMA cho ứng dụng tốc độ cao chưa?
+- Double Buffer Mode: Truyền dữ liệu liên tục mà không chờ đợi.
+- Ưu tiên DMA: Đặt mức ưu tiên cao hơn cho các kênh DMA quan trọng
+8. Làm thế nào để cấu hình DMA để truyền dữ liệu giữa hai bộ nhớ (Memory-to-Memory)?
+- Cấu hình DMA với:
+	- Nguồn (Source): Địa chỉ vùng bộ nhớ đầu vào.
+	- Đích (Destination): Địa chỉ vùng bộ nhớ đầu ra.
+	- Kích thước (Data Size): Số byte cần truyền.
+	- Kích hoạt DMA và chờ tín hiệu hoàn thành (interrupt hoặc polling).
+9. Bạn sẽ xử lý như thế nào nếu DMA không kích hoạt hoặc không truyền dữ liệu?
+- Kiểm tra cấu hình:
+	- Kênh DMA có được bật không?
+	- Địa chỉ nguồn và đích có hợp lệ không?
+	- Trigger từ ngoại vi đã được kích hoạt chưa?
+	- Đảm bảo clock của DMA đã được bật trong cấu hình RCC.
+10. Làm thế nào để ngăn chặn xung đột dữ liệu khi sử dụng DMA và CPU cùng truy cập vào một buffer?
+- Double Buffer Mode: Dùng hai buffer để luân phiên truyền và xử lý dữ liệu.
+- Mutex hoặc Flag: Đồng bộ giữa DMA và CPU để đảm bảo không truy cập đồng thời.
+11. DMA có thể hoạt động song song với CPU như thế nào?
+- DMA truyền dữ liệu độc lập với CPU, trong khi CPU thực hiện các tác vụ khác.
+- Khi DMA hoàn tất, nó gửi một tín hiệu interrupt để thông báo cho CPU.
+12. Làm thế nào để đo hiệu suất của DMA?
+- So sánh thời gian truyền dữ liệu giữa việc sử dụng DMA và CPU.
+- Sử dụng công cụ debug (logic analyzer, oscilloscope) để đo thời gian truyền thực tế.
+13. Bạn đã từng sử dụng DMA trong ứng dụng âm thanh hoặc video chưa? Nếu có, hãy mô tả
+- DMA được sử dụng để liên tục truyền dữ liệu từ buffer đến DAC để phát âm thanh.
+- Sử dụng Circular Mode để đảm bảo luồng dữ liệu không bị gián đoạn.
+14. Làm thế nào để kết hợp DMA và Timer để xử lý tín hiệu liên tục?
+- Cấu hình Timer để tạo tín hiệu trigger cho DMA.
+- DMA đọc dữ liệu từ ADC (hoặc bộ nhớ) và lưu vào buffer theo chu kỳ định sẵn.
+15. Bạn sẽ debug như thế nào nếu DMA không hoạt động như mong đợi?
+- Kiểm tra cấu hình nguồn, đích, và kích thước dữ liệu.
+- Đảm bảo ngoại vi kích hoạt DMA (trigger) hoạt động đúng.
+- Sử dụng công cụ debug để kiểm tra trạng thái DMA (flag hoặc interrupt).
+16. Làm thế nào để sử dụng DMA cho hệ thống đa kênh (multi-channel)?
+- Cấu hình từng kênh DMA với ưu tiên khác nhau.
+- Sử dụng chế độ Circular Mode cho kênh liên tục.
+- Kích hoạt interrupt để xử lý khi mỗi kênh hoàn thành.
+17. Khi nào bạn chọn DMA thay vì sử dụng interrupt hoặc polling?
+- Chọn DMA: Khi cần truyền dữ liệu lớn hoặc tốc độ cao, giảm tải CPU.
+- Chọn interrupt: Khi dữ liệu nhỏ hoặc yêu cầu thời gian thực cao.
+- Chọn polling: Khi hệ thống đơn giản và không yêu cầu hiệu suất cao.
+18. Làm thế nào để tối ưu hóa việc sử dụng DMA trong hệ thống có tài nguyên hạn chế?
+- Sử dụng DMA cho các tác vụ ưu tiên cao.
+- Giảm kích thước buffer để tiết kiệm bộ nhớ.
+- Tận dụng DMA đa kênh để quản lý
 
 Quy trình lập trình DMA:
 
