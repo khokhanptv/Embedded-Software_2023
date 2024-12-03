@@ -4980,6 +4980,32 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+**scanf**
+- Hàm scanf yêu cầu một địa chỉ của biến để lưu giá trị mà người dùng nhập vào.
+- Không cung cấp địa chỉ (mà chỉ cung cấp giá trị), scanf không biết vị trí trong bộ nhớ để lưu giá trị, dẫn đến lỗi.
+- Trường hợp ngoại lệ (không cần &)
+1. Mảng char :(không cần &) mảng kiểu khác vẫn dùng `&`
+	- tên mảng đã đại diện cho địa chỉ của phần tử đầu tiên:
+		`char str[100];`
+		`scanf("%s", str); // Không cần & vì tên mảng là địa chỉ`
+2. Con trỏ: một con trỏ trỏ đến vùng nhớ hợp lệ,  không cần & vì con trỏ đã chứa địa chỉ:
+
+```C
+
+int x;
+int *ptr = &x;
+scanf("%d", ptr); // Không cần & vì ptr đã là địa chỉ
+
+
+```
+
+**while và do-while**
+- while kiểm tra điều kiện trước và có khả năng vòng lặp không chạy lần nào.
+- do-while nếu bạn cần đảm bảo rằng khối lệnh chạy ít nhất một lần, bất kể điều kiện ban đầu.
+
+
+
+
 **Khó khăn khi lập trình C/C++ với vi điều khiển**
 1. Phải Hiểu về phần cứng , hiểu cách cấu hình thanh ghi ngoại vi
 	+ Ví dụ:Khi sử dụng ADC, bạn cần cấu hình đúng nguồn tham chiếu, độ phân giải, và các kênh phù hợp.
