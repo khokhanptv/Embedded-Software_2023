@@ -1788,8 +1788,8 @@ int main() {
 
 **Con trỏ hằng- Pointer to Constant**
 - không thể thay đổi giá trị tại biến mà nó đang trỏ đến.
-- Ngăn chặn thay đổi dữ liệu mà con trỏ trỏ tới.
-- Thường dùng khi truyền tham số cho hàm.
+- Thường  dùng khi làm việc với các vùng nhớ không được phép thay đổi
+- Dùng để truyền tham số vào hàm mà không muốn hàm đó thay đổi giá trị  tham số.
 <details>
 <summary>Ví dụ:</summary>
 
@@ -1838,7 +1838,7 @@ int main() {
 **Hằng con trỏ- Constant Pointer**
 - Khai báo:`int *const const_ptr = &value;`
 - Đặc điểm:
-	- Chắc chắn rằng con trỏ luôn trỏ tới một vùng nhớ cụ thể.
+	- muốn con trỏ luôn trỏ đến một đối tượng cụ thể trong suốt vòng đời của nó.
 	- Khi hằng con trỏ đã trỏ đến 1 địa chỉ nào rồi,nó không thể trỏ tới bất kỳ 1 địa chỉ nào khác.
 	- Có thể thay đổi được giá trị tại địa chỉ đã khởi gán ban đầu.
 
