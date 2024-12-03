@@ -5209,19 +5209,22 @@ Student s1, s2; // Không cần viết "struct" nữa
 - đồng thời xử lý các sự cố kỹ thuật sau khi triển khai. 
 
 **Trong vai trò Project Manager tại FPT Telecom, bạn đã làm thế nào để quản lý đội nhóm hiệu quả**
+1. Lập kế hoạch
+- tôi tham gia các buổi họp với ban giám đốc, các phòng ban liên quan để thống nhất về mục tiêu sản phẩm, timeline,yêu cầu kỹ thuật và tính khả thi.
+- làm việc với nhà cung cấp Trung Quốc để nhập modem test và nhận tài liệu kỹ thuật.
+
+2. Kiểm thử
 - Tôi phân công công việc thông qua các Team Leader để đảm bảo hiệu quả quản lý.
 - Với đội dev:
 	- Tập trung kiểm tra mã nguồn từ nhà sản xuất và phát triển thêm các tính năng mới theo yêu cầu
 	- Vd:
 		+ Xác định các tính năng có đúng với yêu cầu của dự án hay không.
 		+ Đảm bảo không có lỗ hổng bảo mật tiềm ẩn 
-		+ Đảm bảo mã nguồn tương thích hệ thống hiện đang sử dụng.
-		+ Đảm bảo các chức năng này hoạt động tốt với hạ tầng của FPT, 
-		+ đồng thời không có lỗi bảo mật trong phần NAT.
+		+ Đảm bảo tích hợp với hệ thống nội bộ (như app quản lý của FPT).
 	- Các bài test của dev:
 		+ Kiểm thử đơn vị (Unit Test):Đảm bảo  module hoạt động đúng như mong đợi.
 			+ Ví dụ: Kiểm tra hàm xử lý dữ liệu từ cổng WAN, đảm bảo dữ liệu được định dạng và truyền tải chính xác.
-		+  Kiểm thử tích hợp (Integration Test):M Đảm bảo các module hoạt động hài hòa khi kết hợp.
+		+  Kiểm thử tích hợp (Integration Test):Đảm bảo các module hoạt động hài hòa khi kết hợp.
 			+ Ví dụ: Kiểm tra sự tương tác giữa module quản lý kết nối Wi-Fi và module cấp phát địa chỉ IP (DHCP), đảm bảo thiết bị kết nối nhận được IP hợp lệ.
 	- Tín năng nội bộ dev phát triển
 		+  Hệ thống thu thập và phân tích lỗi:
@@ -5235,7 +5238,7 @@ Student s1, s2; // Không cần viết "struct" nữa
 		+ Tích hợp với hệ thống của công ty , app, website
 		+ Chặn các trang web không phù hợp
 - Với đội test: 
-	- kiểm tra ác phần cứng từ đối tác Trung Quốc 
+	- kiểm tra các phần cứng từ đối tác Trung Quốc 
 		- Mục tiêu: Đảm bảo phần cứng modem hoạt động đúng như thiết kế.
 		- Đánh giá độ ổn định khi modem hoạt động liên tục trong nhiều giờ hoặc nhiều ngày.
 		- Kiểm tra các cổng kết nối như Ethernet, USB, hoặc nguồn điện.
@@ -5248,25 +5251,26 @@ Student s1, s2; // Không cần viết "struct" nữa
 		- Kiểm thử hiệu năng (Performance Test):Đánh giá hiệu suất của modem dưới các điều kiện tải khác nhau.
 			-  Ví dụ : Đo lường tốc độ truyền tải dữ liệu qua Wi-Fi ở các khoảng cách khác nhau,
 
-
-**Quy trình phát triển modem có sự tham gia đầy đủ**
-
-- tôi tham gia các buổi họp với ban giám đốc để thống nhất về kinh phí, thời gian, và các tính năng cần có.
-1. Triển khai (Deployment Phase)
+3. thiết bị thử nghiệm 
+	- Sau khi đảm bảo phần cứng , phần mềm ok thì TK 1 số chi nhánh
+	- Thu thập log lỗi và phản hồi từ khách hàng.
+	- Đội Dev/QA/Test tinh chỉnh sản phẩm dựa trên kết quả thử nghiệm	
+4. Triển khai (Deployment Phase)
 - Mục tiêu:
 	-  triển khai trên diện rộng.
 - Vai trò của các team:
+	- Phối hợp với phòng kinh doanh và các đại lý (nếu có) để đưa sản phẩm ra thị trường.
+	- Hướng dẫn khách hàng sử dụng thông qua tài liệu, video, hoặc bộ phận chăm sóc khách hàng.
 	- Team Dev:
 		- Sửa lỗi nếu phát sinh vấn đề trong giai đoạn triển khai.
 	- Team QA/Test:
-		- Kiểm thử trên một nhóm thiết bị thử nghiệm (pilot test) trước khi triển khai diện rộng.
 		- Xác nhận rằng firmware đạt chất lượng ở môi trường thực tế.
 	- Team Vận hành:
 		- Theo dõi trạng thái thiết bị trong quá trình triển khai.
 		- Xử lý các vấn đề phát sinh (downtime, lỗi kết nối).
 Kết quả:
 - Firmware được triển khai thành công, hoạt động ổn định trên thiết bị thực.
-2. Vận hành và Bảo trì (Operations and Maintenance Phase)
+5. Vận hành và Bảo trì (Operations and Maintenance Phase)
 - Mục tiêu:
 	- Đảm bảo hệ thống modem hoạt động ổn định và được cập nhật định kỳ.
 - Vai trò của các team:
@@ -5282,7 +5286,11 @@ Kết quả:
 
 
 
-**Phong cách quản lý của tôi tập trung vào sự phối hợp và trao quyền. Tôi ưu tiên việc:**
+
+
+
+
+**Phong cách quản lý của tôi tập trung vào sự phối hợp và trao quyền**
 
 1. Phân công công việc rõ ràng: Xác định vai trò và trách nhiệm của từng thành viên trong nhóm để đảm bảo họ hiểu rõ công việc của mình.
 2. Hỗ trợ và phát triển: Tôi luôn sẵn sàng hỗ trợ khi nhóm gặp khó khăn và khuyến khích họ nâng cao kỹ năng cá nhân.
