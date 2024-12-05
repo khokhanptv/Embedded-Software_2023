@@ -4980,6 +4980,34 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+**Linux Embedded là gì?**
+
+- Linux Embedded là hệ điều hành được tối ưu hóa để chạy trên các thiết bị nhúng (embedded devices).
+- Thường có tài nguyên hạn chế (RAM, CPU, bộ nhớ) có thể được sử dụng cho các ứng dụng phức tạp như router, modem, hoặc IoT.
+- Không phải RTOS vì:
+	- Linux không đảm bảo thời gian thực (real-time deadlines).
+	- Hệ thống lập lịch của Linux được tối ưu hóa cho đa nhiệm và công bằng hơn là độ trễ thấp.
+-  RTOS (Real-Time Operating System) là một hệ điều hành được thiết kế để Đảm bảo thời gian thựcs, 
+phù hợp với các ứng dụng yêu cầu độ trễ thấp và tính chính xác cao.
+
+
+**TCP/IP,UDP**
+- TCP /UDP là giao thứ để truyền, nhận dữ liệu giữa các thiết bị thông qua mạng máy tính.mạng nội bộ.
+- TCP giao thức  truyền nhận đảm bảo dữ liệu được truyền đầy đủ và theo thứ tự.(Web , Email , hoặc truyền file (FTP).)
+- IP là giao thức lớp thấp hơn, chịu trách nhiệm định tuyến và chuyển tiếp dữ liệu qua các mạng.
+- UDP không đảm bảo dữ liệu đến đầy đủ hoặc theo thứ tự.Gửi dữ liệu nhanh chóng(Streaming , chơi game online.)
+
+- Router FPT:
+	- Sử dụng giao thức TCP/IP   kết nối giữa client và server.
+	- UDP dùng trong các ứng dụng cần tốc độ cao như truyền video qua Wi-Fi.game online.
+- Tạo socket:
+	- Lập trình mạng thường sử dụng sockets – giao diện để giao tiếp qua mạng.
+	- Trong TCP, socket sẽ thiết lập kết nối giữa client và server.
+	- Trong UDP, socket gửi dữ liệu ngay lập tức mà không cần thiết lập kết nối.
+
+**ESP32**
+- Dự án thử nghiệm khả năng đọc dữ liệu cảm biến, điều khiển thiết bị qua Wi-Fi.
+
 **scanf**
 - Hàm scanf yêu cầu một địa chỉ của biến để lưu giá trị mà người dùng nhập vào.
 - Không cung cấp địa chỉ (mà chỉ cung cấp giá trị), scanf không biết vị trí trong bộ nhớ để lưu giá trị, dẫn đến lỗi.
@@ -5139,6 +5167,31 @@ Student s1, s2; // Không cần viết "struct" nữa
 2. tăng Hiệu suất 
 	+ Khi truyền tham chiếu, hàm thao tác trực tiếp trên biến gốc , thay vì làm việc trên một bản sao của dữ liệu.
 	+ Điều này giúp tránh chi phí xử lý dư thừa>> tăng hiệu suất
+
+
+
+
+
+
+
+
+
+**Ngay cả khi nhà sản xuất Trung Quốc cung cấp một hệ điều hành Linux sẵn, FPT có thể cần:**
+
++ Tùy chỉnh Firmware:
+	+ Thêm các tính năng riêng của FPT (ví dụ: giao diện người dùng, chức năng quản lý khách hàng).
+	+ Đảm bảo hệ điều hành tuân thủ các yêu cầu bảo mật hoặc luật pháp tại Việt Nam.
++ Kiểm tra bảo mật:
+	+ Đảm bảo hệ điều hành Linux từ nhà sản xuất không chứa mã độc g.
+	+ Loại bỏ các thành phần không cần thiết hoặc thay thế bằng các phần mềm mã nguồn mở được kiểm chứng.
++ Cập nhật hoặc sửa lỗi:
+	+ Cần có đội ngũ kỹ thuật để bảo trì hệ điều hành Linux, cập nhật kernel, hoặc vá các lỗ hổng bảo mật trong firmware.
+
+
+
+
+
+
 
 **typedef và #define**
 
