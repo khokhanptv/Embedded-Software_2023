@@ -4980,6 +4980,101 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+**Variadic Functions, Assert là gì**
+- Variadic Functions hàm có thể nhận số lượng tham số đầu vào không xác định( dùng thư viện <stdarg.h>)
+- Hạn chế vì cần phải biết rõ kiểu dữ liệu truyền vào, vì va_list không lưu các kiểu dữ liệu của tham số 
+- Xác định các tham số tại thời điểm chạy
+- Trong C++,  dùng template để tránh rủi ro này.
+- Assert là một câu lệnh dùng để debug , nếu điều kiện là sai sẽ dừng chương trình
+
+
+
+
+
+**ARM Cortex**
+- ARM Cortex là một kiến trúc vi xử lý được thiết kế bởi arm
+- ARM Cortex được xây dựng trên kiến trúc RISC 
+	- kiến trúc RISC tập trung vào:
+		- Tập lệnh đơn giản  
+		- Tiêu thụ năng lượng thấp.
+- Các công ty như STM, NXP, Qualcomm.. mua bản quyền thiết kế để phát triển vi xử lý cụ thể  của họ
+- ARM Cortex được chia thành ba nhóm chính;
+	- Cortex-M:
+		- Dành cho thiết bị nhúng, IoT yêu cầu tiết kiệm năng lượng, chi phí thấp.
+		- Như thiết bị thông minh.
+	- Cortex-A:
+		- Dành cho thiết bị yêu cầu hiệu năng cao
+		- Thường dùng trong điện thoại thông minh
+	- Cortex-R:
+		- Dành cho hệ thống thời gian thực , đòi hỏi độ tin cậy như phanh ABS,thiết bị y tế
+- So sánh ARM Cortex-M0, M3, M4, và M7:
+	- Cortex-M0/M0+:  tiết kiệm năng lượng, hiệu suất thấp,rẻ
+	- Cortex-M3: Hiệu năng trung bình, ứng dụng nhúng phổ biến.
+	- Cortex-M4: hỗ trợ xử lý tín hiệu số và dấu phẩy động.(FPU )
+		- dấu phẩy động :Biểu diễn số rất lớn hoặc rất nhỏ dấu phẩy động
+	- Cortex-M7: Mạnh nhất, phù hợp các hệ thống yêu cầu hiệu năng cao, tốn năng lượng , giá thành cao
+
+- NVIC 
+	- Bảng ưu tiên ngắt (Interrupt Priority Table):
+
+		- Lưu trữ mức ưu tiên  .
+		- Ngắt có ưu tiên cao hơn sẽ được xử lý trước.
+  	-  Bảng địa chỉ vector ngắt:
+		-  Mỗi ngắt ứng với 1 địa chỉ 
+		-  Đảm bảo CPU nhảy tới đúng hàm xử lý khi ngắt xảy ra.
+- bảng điều chỉnh ưu tiên (Priority Grouping):
+	- Chia thành (group priority) và  (sub-priority), để linh hoạt hơn trong xử lý ngắt.
+	- Group  xác định ngắt nào được xử lý trước.
+	- Sub :Chỉ được xét khi các ngắt có cùng Group Priority.
+
+
+- là bộ điều khiển ngắt cho phép nhiều nguồn ngắt được xử lý dựa trên mức ưu tiên
+- đảm bảo các ngắt quan trọng được thực thi trước
+
+
+- Cách cấu hình ngắt ngoại vi trên ARM Cortex-M4 (đơn giản):
+	- Bật clock cho ngoại vi và GPIO
+	- Cấu hình chân GPIO:
+		- SET GPIO làm input và  interrupt
+	-  Cấu hình EXTI (External Interrupt)(ngắt ngoài):
+		- Liên kết chân GPIO với EXTI Line tương ứng.
+		- Chọn chế độ kích hoạt ngắt: Rising edge, Falling edge, hoặc Both edges.
+	- Thiết lập NVIC:
+		-  Đặt mức ưu tiên và bật ngắt trong NVIC.
+    - Viết ISR (Interrupt Service Routine):
+		- Viết hàm xử lý ngắt để thực hiện hành động khi ngắt xảy ra.
+- Cách cấu hình clock system trên ARM Cortex-M4
+	-  Chọn HSE/hsi làm nguồn clock (ví dụ: thạch anh 8 MHz).
+	- Sử dụng PLL để nhân tần số lên 168 MHz.
+	- Đặt PLL làm clock chính (System Clock).
+    - Chia tần số cho các bus và ngoại vi (ví dụ: AHB, APB1, APB2).
+- Làm thế nào để giảm mức tiêu thụ năng lượng của hệ thống?
+	- Sử dụng chế độ Sleep hoặc Stop 
+	- Tắt các ngoại vi không sử dụng.
+
+
+
+
+**C/C++/MISRA C**
+- Thường dùng C11,C++11, MISRA 12 
+- MISRA  là 1 tiểu chuẩn để phát triển mã nguồn
+	- Giảm thiểu lỗi và tăng tính ổn định 
+	- Tăng khả năng tái sử dụng của mã nguồn
+
+**khó khăn khi làm việc nhóm**
+- Khi tôi mới vào công ty, tôi gặp không ít khó khăn khi làm việc nhóm, từ việc chưa quen với quy trình cho đến thiếu kinh nghiệm. 
+- Tuy nhiên, nhờ sự lắng nghe,chủ động học hỏi từ những người đi trước và không ngại hỏi khi có điều chưa rõ. 
+- Qua thời gian, tôi không chỉ cải thiện kỹ năng làm việc nhóm mà còn đóng góp hiệu quả hơn vào các dự án chung
+
+**OT**
+- Với 1 sự trách nhiệm , tôi luôn sẵn sàng OT để hoàn thành nhiệm vụ.
+
+**Khi leader giao task,cần**
+- tôi lắng nghe kỹ để hiểu rõ yêu cầu
+- Hỏi điều thắc mắc để tránh sai só
+-  lập kế hoạch chi tiết để đảm bảo hoàn thành
+- Cập nhật tiến độ với leader , để đảm bảo đúng Hướng
+
 **Linux Embedded là gì?**
 
 - Linux Embedded là hệ điều hành được tối ưu hóa để chạy trên các thiết bị nhúng (embedded devices).
@@ -4987,8 +5082,9 @@ int main(void){
 - Không phải RTOS vì:
 	- Linux không đảm bảo thời gian thực (real-time deadlines).
 	- Hệ thống lập lịch của Linux được tối ưu hóa cho đa nhiệm và công bằng hơn là độ trễ thấp.
--  RTOS (Real-Time Operating System) là một hệ điều hành được thiết kế để Đảm bảo thời gian thựcs, 
+-  RTOS (Real-Time Operating System) là một hệ điều hành được thiết kế để Đảm bảo thời gian thực, 
 phù hợp với các ứng dụng yêu cầu độ trễ thấp và tính chính xác cao.
+- Bao gồm nhiều hệ điều hành thời gian thực khác nhau như VxWorks, QNX, RTEMS, uC/OS, và FreeRTOS.
 
 
 **TCP/IP,UDP**
@@ -5072,6 +5168,16 @@ Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể n
 **kinh nghiệm làm việc của mình với các hệ điều hành nhúng không**
 - FreeRTOS: Sử dụng trong các dự án yêu cầu đa nhiệm, như quản lý nhiều giao thức truyền thông đồng thời (SPI, UART) hoặc điều khiển thời gian thực. 
 - Tôi đã sử dụng FreeRTOS để quản lý luồng dữ liệu cảm biến và giao tiếp mạng trong một thiết bị IoT.
+	- Hỗ trợ đa nhiệm
+	- Yêu cầu bộ nhớ rất nhỏ, phù hợp cho các hệ thống nhúng
+	- Trong dự án của bạn, hệ thống cần đồng thời:
+		- Đọc dữ liệu từ cảm biến RFID.
+		- Kiểm tra dữ liệu trên SDCARD.
+		- Điều khiển servo motor.
+		- Gửi thông báo tới ứng dụng IoT.
+	- Chia các chức năng thành nhiều task độc lập, giúp hệ thống hoạt động rõ ràng .
+	- Đảm bảo các tác vụ quan trọng được thực thi đúng thời gian.
+	- Với các công cụ như semaphore, mutex đảm bảo rằng tài nguyên dùng chung được quản lý tốt mà không gây xung đột
 - Linux nhúng (Embedded Linux): Tôi đã sử dụng Embedded Linux trong các dự án phát triển firmware cho router/modem.
 
 **làm thế nào bạn đảm bảo hệ thống không bị treo hoặc mất dữ liệu khi xử lý nhiều ngắt cùng lúc?**
@@ -5098,7 +5204,7 @@ Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể n
 
 **Lợi ích con trỏ**
 1. Truy cập và thao tác trực tiếp với bộ nhớ
-	+ truy cập địa chỉ thanh ghi, địa chỉ thanh ghi sẽ ánh xạ đến thanh ghi của VXL
+	+ Con trỏ trong C cho phép truy cập trực tiếp vào địa chỉ ánh xạ của thanh ghi phần cứng thông qua cơ chế Memory-Mapped I/O, giúp thao tác với thanh ghi nhanh chóng, hiệu quả mà không cần thông qua các thư viện hoặc lớp trừu tượng trung gian
 	+ Khi truy cập thanh ghi phần cứng trực tiếp (thông qua địa chỉ bộ nhớ), chương trình không cần qua các lớp trừu tượng hoặc thư viện trung gian.
 	+ Mọi thao tác như đọc/ghi giá trị sẽ diễn ra ngay lập tức trên phần cứng.
 2. Quản lý bộ nhớ động
@@ -7474,8 +7580,12 @@ int main(){
 <details>
   <summary><h3>TIMER  </h3></summary>
 
+**Timer là gì**
+-  là một phần cứng trong vi điều khiển 
 
-1. chức năng và ứng dụng của Timer g?
+
+
+1. chức năng và ứng dụng của Timer ?
 - Đếm thời gian (tạo độ trễ, đo thời gian sự kiện).
 - Phát tín hiệu định kỳ (ngắt Timer).
 - Tạo tín hiệu PWM (điều khiển động cơ, độ sáng LED).
