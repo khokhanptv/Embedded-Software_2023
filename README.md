@@ -7606,11 +7606,6 @@ int main(){
 5. Timer có thể được sử dụng để tạo độ trễ như thế nào?
 - Cấu hình Timer với tốc độ đếm cụ thể.
 - Đợi đến khi Timer đạt giá trị mong muốn hoặc sử dụng ngắt Timer để báo hiệu hết thời gian.
-6. Trong một dự án cụ thể, bạn đã sử dụng Timer như thế nào để điều khiển hoặc đồng bộ hóa các tác vụ?
-   - Trong một dự án điều khiển động cơ, tôi sử dụng Timer để:
-     - Tạo tín hiệu PWM điều chỉnh tốc độ động cơ.
-     - Gửi tín hiệu định kỳ đến cảm biến để đọc dữ liệu.
-
 7. Bạn đã từng cấu hình Timer để tạo tín hiệu PWM chưa? Nếu có, hãy mô tả cách bạn thực hiện.
 	1. Cấp xung clock cho Timer .
 	2. Tính Prescaler và Period( ví dụ tính cho động có 50hz)
