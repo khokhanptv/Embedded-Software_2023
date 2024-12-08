@@ -5204,8 +5204,9 @@ Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể n
 
 **Lợi ích con trỏ**
 1. Truy cập và thao tác trực tiếp với bộ nhớ
-	+ Con trỏ trong C cho phép truy cập trực tiếp vào địa chỉ ánh xạ của thanh ghi phần cứng thông qua cơ chế Memory-Mapped I/O, giúp thao tác với thanh ghi nhanh chóng, hiệu quả mà không cần thông qua các thư viện hoặc lớp trừu tượng trung gian
-	+ Khi truy cập thanh ghi phần cứng trực tiếp (thông qua địa chỉ bộ nhớ), chương trình không cần qua các lớp trừu tượng hoặc thư viện trung gian.
+	+ Con trỏ trong C cho phép truy cập trực tiếp vào địa chỉ ánh xạ của thanh ghi phần cứng thông qua cơ chế Memory-Mapped I/O,
+	giúp thao tác với thanh ghi nhanh chóng,
+	  không cần thông qua các thư viện hoặc lớp trừu tượng trung gian
 	+ Mọi thao tác như đọc/ghi giá trị sẽ diễn ra ngay lập tức trên phần cứng.
 2. Quản lý bộ nhớ động
 	- (malloc, calloc, realloc, free).
@@ -7611,44 +7612,63 @@ int main(){
      - Gửi tín hiệu định kỳ đến cảm biến để đọc dữ liệu.
 
 7. Bạn đã từng cấu hình Timer để tạo tín hiệu PWM chưa? Nếu có, hãy mô tả cách bạn thực hiện.
-   - Chọn chế độ PWM cho Timer.
-   - Cấu hình chu kỳ tín hiệu (period) và độ rộng xung (duty cycle) dựa trên giá trị cần thiết.
-   - Kết nối chân Timer với chân PWM của vi điều khiển.
+	1. Cấp xung clock cho Timer .
+	2. Tính Prescaler và Period( ví dụ tính cho động có 50hz)
+		- Bộ chia tần số:Prescaler giảm tần số clock gốc (84 MHz xuống 1 MHz).= f clock -1;
+		- Chu kỳ Timer:Period = ftimer/fpwm=1 triệu/50 -1=20.000-1
+	3. Cấu hình Timer ở chế độ PWM.
+	4. Cấu hình GPIO (AF)
+	5. Bắt đầu Timer ở chế độ PWM.
+		- Sử dụng Compare Register để điều chỉnh Duty Cycle 
+		- 1 ms (5% Duty Cycle): Góc quay nhỏ nhất (thường là 0°).
+		- 1 ms là thời gian ở mức cao trong 20ms
+		- 5 % là Duty Cycle , nghĩa là 1 ms tương ứng 5 % 
 
-8. Bạn đã sử dụng Timer để đo độ dài xung tín hiệu (Input Capture) hoặc đếm số xung chưa? Hãy mô tả cách bạn thực hiện.
-   - Cấu hình chân Timer để nhận tín hiệu đầu vào.
-   - Khi tín hiệu thay đổi cạnh (rising/falling edge), Timer ghi giá trị hiện tại.
-   - Tính toán độ dài xung dựa trên sự khác biệt giữa các giá trị Timer.
+
+8. Bạn đã sử dụng Timer để đếm số xung chưa?
+    1. Cấp xung clock cho Timer .
+	2. cấu hình  Prescaler và Period phù hợp
+		- Prescaler: Cấu hình để điều chỉnh tần số đếm phù hợp thường là 1Mhz
+		- Period  Thiết lập giá trị tối đa để Timer tự động quay lại 0 , thường là 1ms
+	3. Cấu hình Timer ở chế độ Counter.
+		- Đếm lên (UP) hoặc đếm xuống (DOWN).
+	4. Cấu hình nguồn xung Clock
+		- Internal Clock: Dùng clock nội bộ.
+		- External Clock: Sử dụng tín hiệu từ chân GPIO (cấu hình Timer ở chế độ External Clock hoặc Encoder).
+	5. Bắt đầu Timer ở chế độ đếm .
+		- Khởi động Timer để bắt đầu đếm số xung
+	6.  Đọc giá trị Counter
 
 9. Khi làm việc với hệ thống nhúng có nhiều Timer, bạn đã tối ưu hóa cách sử dụng chúng như thế nào?
-   - Sử dụng Timer với tần số phù hợp nhất cho nhiệm vụ.
-   - Kết hợp nhiều tác vụ trên một Timer (ví dụ: sử dụng Timer định kỳ để kích hoạt nhiều tác vụ nhỏ qua phần mềm).
+   - Phân chia nhiệm vụ phù hợp cho từng Timer
+   - Tính toàn Prescaler và Period hợp ly
+   - Kết hợp DMA với Timer
 
+   
 10. Làm thế nào để cấu hình Timer để phát ra ngắt định kỳ? Bạn đã từng xử lý ngắt từ Timer chưa?
-    - Cấu hình Timer ở chế độ Periodic.
-    - Đặt giá trị đếm và kích hoạt ngắt Timer.
-    - Trong ISR (Interrupt Service Routine), thực hiện tác vụ định kỳ, như cập nhật giá trị hoặc đọc cảm biến.
+    1. Cấp xung clock cho Timer .
+	2. cấu hình  Prescaler và Period phù hợp
+		- Cấu hình Prescaler và Period để thiết lập chu kỳ ngắs
+	3. Bật ngắt Timer và Kích hoạt ngắt trong NVIC
+	4. Viết hàm xử lý ngắt (Callback).
+ 
 
 11. Bạn sẽ làm gì nếu Timer không chính xác (ví dụ: sai tần số hoặc độ trễ)?
     - Kiểm tra xung clock đầu vào (prescaler, nguồn clock).
-    - Hiệu chỉnh (calibrate) Timer nếu cần độ chính xác cao.
-    - Đảm bảo giá trị đếm và tốc độ clock được tính toán chính xác.
+    - Đảm bảo giá trị Prescaler và Period tính toán chính xác
 
 12. Nếu Timer hết hạn trước khi tác vụ hiện tại hoàn thành, bạn sẽ xử lý tình huống này như thế nào?
-    - Tăng thời gian của Timer (nếu có thể).
-    - Chuyển một phần tác vụ sang các Timer khác hoặc xử lý song song bằng DMA.
+    - Tăng Period
+    - Kết hợp DMA với Timer
 
 13. Làm thế nào để xử lý lỗi tràn số của Timer (Timer Overflow)?
     - Kích hoạt ngắt Timer để phát hiện overflow.
-    - Sử dụng thêm biến đếm (overflow counter) để ghi lại số lần tràn.
+ 
 
-14. Bạn đã từng sử dụng Timer để điều khiển động cơ hoặc LED chưa? Nếu có, hãy mô tả cách thực hiện.
-    - Điều chỉnh duty cycle để thay đổi độ sáng LED.
-    - Sử dụng PWM để điều chỉnh tốc độ động cơ.
+15. Trong một hệ thống đa nhiệm, Timer được sử dụng như thế nào ?
+    - Timer được cấu hình để phát ra ngắt ở các khoảng thời gian cố định.
+    - Timer Điều khiển thời gian thực hiện các tác vụ.
 
-15. Trong một hệ thống đa nhiệm, Timer được sử dụng như thế nào để thực hiện các tác vụ định kỳ?
-    - Timer phát ngắt định kỳ.
-    - Trong ISR, sử dụng cơ chế flag hoặc queue để kích hoạt các tác vụ định kỳ.
 
 16. Khi cấu hình Timer trên STM32 hoặc ESP32, bạn thường sử dụng thư viện chuẩn (HAL/LL) hay viết mã thủ công? Tại sao?
     - Sử dụng HAL/LL để tiết kiệm thời gian và giảm lỗi.
@@ -7664,27 +7684,21 @@ int main(){
     - Chờ Timer đạt giá trị mong muốn trước khi tiếp tục.
 
 19. Làm thế nào để đo thời gian chính xác đến micro giây hoặc mili giây bằng Timer?
-    - Cấu hình Timer với xung clock cao (ví dụ: 1 MHz cho độ chính xác 1 µs).
-    - Đọc giá trị Timer hoặc sử dụng ngắt để ghi nhận thời gian.
+	- Prescaler thấp (1 MHz): Timer đếm với độ chính xác 1 µs 
+    - Prescaler cao (1 kHz): Timer đếm với độ chính xác 1 ms 
 
 20. Khi nào bạn chọn sử dụng Timer phần cứng thay vì giải pháp phần mềm để quản lý thời gian?
-    - Dùng Timer phần cứng khi yêu cầu độ chính xác cao hoặc tải CPU thấp.
-    - Dùng giải pháp phần mềm khi độ chính xác không phải ưu tiên và tài nguyên phần cứng hạn chế.
+    - Dùng Timer phần cứng khi yêu cầu độ chính xác cao 
+    - Dùng giải pháp phần mềm tài nguyên phần cứng hạn chế.
 
-21. Bạn sẽ làm gì nếu có nhiều tác vụ cần Timer, nhưng vi điều khiển chỉ có một số lượng Timer giới hạn?
-    - Kết hợp nhiều tác vụ trên một Timer thông qua phần mềm quản lý thời gian.
-    - Sử dụng thư viện hoặc hệ điều hành thời gian thực (RTOS).
 
 22. Bạn đã từng sử dụng Watchdog Timer chưa? Hãy mô tả cách nó hoạt động và khi nào cần sử dụng.
-    - Reset hệ thống nếu không được làm mới (refresh) trong khoảng thời gian nhất định.
+	- Mục đích: Đảm bảo hệ thống không bị treo hoặc dừng hoạt động.
+    - WDT bắt đầu đếm từ 0 đến giá trị giới hạn (timeout).
+	- Hệ thống phải "làm mới" (reset WDT) trước khi WDT đạt timeout.
+	- Nếu không làm mới kịp:
+		-  WDT sẽ reset hệ thống.
     - Đảm bảo hệ thống phục hồi từ lỗi như treo (hang) hoặc deadlock.
-
-23. Làm thế nào để tối ưu hóa sử dụng Timer trong hệ thống có tài nguyên hạn chế?
-    - Sử dụng Timer với chế độ chia sẻ nhiệm vụ.
-    - Tận dụng các Timer đa năng (General-Purpose Timer) để phục vụ nhiều chức năng như đo xung, tạo PWM.
-
-
-
 
 
 
@@ -8049,11 +8063,12 @@ int main(void)
 <details>
   <summary><h3>ADC</h3></summary>
 
+
+1. ADC là bộ chuyển đổi tín hiệu analog (tín hiệu tương tự) thành tín hiệu số (digital).
 2. Bạn hiểu thế nào về độ phân giải của ADC?
-- Độ phân giải của ADC xác định số mức điện áp mà ADC có thể phân biệt, được biểu diễn bằng số bit.
+- Độ phân giải xác định số lượng  tín hiệu số mà ADC có thể tạo ra từ tín hiệu analog.
 3. Tần số lấy mẫu (Sampling Rate) là gì và tại sao nó quan trọng?
-- Tần số lấy mẫu là số lần ADC lấy mẫu tín hiệu analog trong một giây.
-Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tần số cao nhất của tín hiệu để tránh hiện tượng aliasing.
+- Tần số lấy mẫu là  tốc độ mà ADC lấy mẫu tín hiệu analog  trong 1 s
 4. Sự khác biệt giữa độ chính xác và độ phân giải của ADC là gì?
 - Độ phân giải: Liên quan đến số bit của ADC, xác định mức điện áp nhỏ nhất mà ADC có thể phân biệt.
 - Độ chính xác: Liên quan đến mức độ gần gũi giữa giá trị chuyển đổi và giá trị thực của tín hiệu đầu vào, phụ thuộc vào nhiễu, lỗi tham chiếu, và chất lượng thiết kế.
@@ -8066,9 +8081,12 @@ Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tầ
 - Cảm biến LM35 xuất tín hiệu analog tuyến tính theo nhiệt độ.
 - ADC trên vi điều khiển (STM32) chuyển đổi tín hiệu analog từ cảm biến sang số.
 7. Bạn đã từng sử dụng DMA (Direct Memory Access) với ADC chưa? Nếu có, hãy mô tả cách thực hiện.
-- Cấu hình ADC để chạy ở chế độ liên tục (continuous mode).
-- Cấu hình DMA để đọc giá trị ADC và lưu vào buffer.
-- DMA tự động chuyển dữ liệu mà không cần CPU can thiệp, giúp giảm tải CPU.
+	1. Cấp xung cho ADC, DMA, và GPIO
+	2. Đặt chân GPIO ở chế độ Analog để kết nối tín hiệu ADC
+	3. Cấu hình DMA:DMA tự động truyền dữ liệu từ ADC vào bộ nhớ đệm 
+	4. Cấu hình ADC với chế độ DMA
+	5. Xử lý giá trị ADC để chuyển thành điện áp hoặc thông số vật lý.
+	6. Dùng Điện áp tham chiếu để chuyển đổi số ADC
 8. Bạn đã từng xử lý nhiễu tín hiệu ADC chưa? Nếu có, bạn làm như thế nào?
 - Tăng độ chính xác: Thêm tụ lọc (capacitor) ở chân analog để giảm nhiễu.
 - Lọc trung bình (Averaging): Lấy trung bình nhiều giá trị ADC để làm mượt dữ liệu.
@@ -8079,7 +8097,6 @@ Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tầ
 10. Bạn sẽ làm gì nếu ADC đọc giá trị không chính xác?
 - Nguồn tham chiếu (Vref) ổn định.
 - Tín hiệu đầu vào trong dải điện áp của ADC.
-- Tín hiệu không bị nhiễu hoặc méo.
 - Thêm kỹ thuật lọc tín hiệu hoặc hiệu chỉnh ADC.
 11. Làm thế nào để tối ưu hiệu suất ADC khi cần tốc độ cao?
 - Tăng tần số clock ADC nhưng vẫn trong dải hỗ trợ.
@@ -8089,9 +8106,6 @@ Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tầ
 - Sử dụng ADC với độ phân giải cao (16-bit hoặc 24-bit).
 - Tăng tần số lấy mẫu (theo nguyên tắc Nyquist).
 - Dùng bộ lọc thấp (Low-Pass Filter) để loại bỏ nhiễu tần số cao.
-13. Bạn đã từng sử dụng ADC trong điều khiển động cơ hoặc cảm biến chưa
-- ADC đọc tín hiệu từ cảm biến dòng để giám sát dòng điện của động cơ.
-- Vi điều khiển điều chỉnh tín hiệu PWM để giảm dòng điện khi vượt ngưỡng.
 14. Khi cấu hình ADC trên STM32, bạn thường sử dụng thư viện HAL hay viết mã thủ công? Tại sao?
 - Sử dụng HAL để tiết kiệm thời gian và giảm lỗi.
 - Viết mã thủ công khi cần tối ưu hóa hiệu suất hoặc cấu hình phức tạp.
@@ -8109,10 +8123,9 @@ Nguyên tắc Nyquist: Tần số lấy mẫu phải ít nhất gấp đôi tầ
 - Độ phân giải cao không cần thiết.
 - Hệ thống có tài nguyên hạn chế.
 18. Làm thế nào để đo tín hiệu AC với ADC?
-- Sử dụng mạch chỉnh lưu hoặc thêm điện áp offset để chuyển tín hiệu AC sang dải điện áp dương.
+- Sử dụng mạch chỉnh lưu
 - Sử dụng bộ lọc thấp để giảm nhiễu.
 19. Làm thế nào để tối ưu hóa hiệu suất ADC trong hệ thống đa kênh?
-- Sử dụng chế độ scan mode để chuyển đổi tuần tự.
 - Sử dụng DMA để tự động lưu dữ liệu.
 - Tối ưu tần số clock để tăng tốc độ mà không giảm chất lượng.
 
@@ -8255,22 +8268,22 @@ Quy trình lập trình ADC:
 
 Quy trình lập trình DMA:
 
-1. Bật clock cho DMA
+1. Cấp xung cho DMA và ngoại vi
 - Bật clock DMA bằng cách cấu hình trong thanh ghi RCC.
-2. Cấu hình kênh DMA
+2. Thiết lập DMA để truyền dữ liệu giữa ngoại vi và bộ nhớ
 - Xác định nguồn dữ liệu (peripheral) và đích (bộ nhớ hoặc buffer).
-- Cấu hình số lượng dữ liệu cần truyền.
+- Cấu hình số lượng mẫu dữ liệu cần truyền.( ví dụ 100 mẫu , mỗi mẫu 16 bit)
 - Chọn chế độ truyền:
 	- Normal Mode: Truyền một lần rồi dừng.
 	- Circular Mode: Liên tục truyền khi đạt số lượng dữ liệu đã cấu hình.
-3. Cấu hình chế độ hoạt động
-	- Tự động lặp lại quá trình truyền dữ liệu, đặc biệt hữu ích cho ADC liên tục.
+3.  Cấu hình ngoại vi (ví dụ: ADC) 
+	- Cấu hình như bình thường , thêm Kích hoạt DMA trong ngoại vi
 4. Kích hoạt DMA
 	- Kích hoạt DMA bằng cách thiết lập thanh ghi điều khiển tương ứng.
 5. Xử lý dữ liệu
-	- Xử lý dữ liệu trong bộ nhớ hoặc buffer sau khi DMA hoàn thành.
-	- Sử dụng ngắt DMA để thực hiện xử lý thời gian thực.
-
+	- Xử lý dữ liệu trong bộ nhớ sau khi DMA hoàn thành.
+	- Dùng ngắt DMA nếu cần để tối ưu xử lý.
+		- ví dụ Xử lý dữ liệu ADC
 **QUY TRÌNH**
 1. DMA với ADC (Liên tục đọc dữ liệu)
 	- Quy trình:
