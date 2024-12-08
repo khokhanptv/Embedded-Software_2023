@@ -4980,6 +4980,24 @@ int main(void){
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
 
 
+
+
+**Vrình tự hoạt động của ngắt**
+- Peripheral: Gửi tín hiệu ngắt (ví dụ: Timer, UART, GPIO).
+- NVIC: bộ điều khiển ngắt
+	- Kích hoạt hoặc vô hiệu hóa ngắt.
+	- Quyết định mức độ ưu tiên (priority) của các ngắt.
+- Kiểm tra trạng thái ngắt (đã kích hoạt hay chưa).
+- Kiểm tra mức độ ưu tiên.
+- Vector Ngắt: NVIC tra bảng Vector Ngắt để lấy địa chỉ ISR tương ứng.
+- ISR: CPU chuyển quyền điều khiển tới ISR để xử lý ngắt.
+- Trở về: Sau khi ISR hoàn thành, CPU quay lại thực hiện tác vụ trước đó
+
+
+
+
+
+
 **Variadic Functions, Assert là gì**
 - Variadic Functions hàm có thể nhận số lượng tham số đầu vào không xác định( dùng thư viện <stdarg.h>)
 - Hạn chế vì cần phải biết rõ kiểu dữ liệu truyền vào, vì va_list không lưu các kiểu dữ liệu của tham số 
