@@ -7641,11 +7641,10 @@ int main(){
 
    
 10. Làm thế nào để cấu hình Timer để phát ra ngắt định kỳ? Bạn đã từng xử lý ngắt từ Timer chưa?
-    1. Cấp xung clock cho Timer .
-	2. cấu hình  Prescaler và Period phù hợp
-		- Cấu hình Prescaler và Period để thiết lập chu kỳ ngắs
-	3. Bật ngắt Timer và Kích hoạt ngắt trong NVIC
-	4. Viết hàm xử lý ngắt (Callback).
+    - Cấp xung clock cho Timer .
+	- cấu hình  Prescaler và Period để thiết lập chu kỳ ngắt.
+	- Kích hoạt tính năng ngắt Timer và đăng ký ngắt với NVIC
+	- Viết hàm xử lý ngắt Thực hiện các tác vụ khi ngắt xảy ra.
  
 
 11. Bạn sẽ làm gì nếu Timer không chính xác (ví dụ: sai tần số hoặc độ trễ)?
@@ -7657,8 +7656,10 @@ int main(){
     - Kết hợp DMA với Timer
 
 13. Làm thế nào để xử lý lỗi tràn số của Timer (Timer Overflow)?
-    - Kích hoạt ngắt Timer để phát hiện overflow.
- 
+    - tính toán để Period và ARR phù hợp không vượt quá độ phân giải timer(8 bit,16 bit)có thể ARR sẽ quay về 0 trước Period 
+	- ARR: Là mốc lớn nhất mà Timer được cài đặt để đếm đến trước khi quay lại 0.
+	- Period Là khoảng thời gian thực để Timer đếm từ 0 đến ARR và quay về 0
+	- Khi Timer đạt ARR, nó sẽ quay về 0 
 
 15. Trong một hệ thống đa nhiệm, Timer được sử dụng như thế nào ?
     - Timer được cấu hình để phát ra ngắt ở các khoảng thời gian cố định.
@@ -7670,10 +7671,15 @@ int main(){
     - Viết mã thủ công khi cần tối ưu hóa hiệu suất hoặc cấu hình phức tạp.
 
 17. Bạn sẽ debug như thế nào nếu Timer không hoạt động hoặc không tạo ra ngắt?
-    - Kiểm tra cấu hình clock đầu vào (prescaler, nguồn clock).
-    - Đảm bảo Timer được kích hoạt và ngắt được bật.
-    - Sử dụng oscilloscope hoặc logic analyzer để kiểm tra tín hiệu Timer.
-
+    - Timer không chạy:
+		- Đảm bảo Timer đã được cấp xung clock từ RCC (Reset and Clock Control).
+		- Kiểm tra giá trị Prescaler và Period xem thử tính toán chính xác chưa
+		- Đảm bảo Timer được đặt ở chế độ đúng
+	-  Kiểm tra ngắt (Interrupt)
+		- đảm bảo chế độ ngắt được khởi động
+		- đảm bảo đã bật ngắt trong NVIC.
+		- Đảm bảo hàm ISR được khai báo chính xác trong file startup hoặc vector ngắt.
+	- Phân tích lỗi với công cụ debug
 18. Bạn đã sử dụng Timer để tạo độ trễ chính xác chưa? Làm thế nào để thực hiện điều này?
     - Cấu hình Timer với tốc độ đếm phù hợp.
     - Chờ Timer đạt giá trị mong muốn trước khi tiếp tục.
