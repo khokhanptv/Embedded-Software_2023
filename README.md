@@ -5184,19 +5184,55 @@ Tuy nhiên, tôi tin rằng với kinh nghiệm trước đây, tôi có thể n
 
 
 **kinh nghiệm làm việc của mình với các hệ điều hành nhúng không**
-- FreeRTOS: Sử dụng trong các dự án yêu cầu đa nhiệm, như quản lý nhiều giao thức truyền thông đồng thời (SPI, UART) hoặc điều khiển thời gian thực. 
-- Tôi đã sử dụng FreeRTOS để quản lý luồng dữ liệu cảm biến và giao tiếp mạng trong một thiết bị IoT.
-	- Hỗ trợ đa nhiệm
-	- Yêu cầu bộ nhớ rất nhỏ, phù hợp cho các hệ thống nhúng
-	- Trong dự án của bạn, hệ thống cần đồng thời:
-		- Đọc dữ liệu từ cảm biến RFID.
-		- Kiểm tra dữ liệu trên SDCARD.
-		- Điều khiển servo motor.
-		- Gửi thông báo tới ứng dụng IoT.
-	- Chia các chức năng thành nhiều task độc lập, giúp hệ thống hoạt động rõ ràng .
-	- Đảm bảo các tác vụ quan trọng được thực thi đúng thời gian.
+- FreeRTOS: là hệ điều hành đảm bảo các tác vụ diễn ra đúng lúc, không bị trễ.
+	-  Kích thước nhỏ (vài KB đến vài chục KB) (FreeRTOS Kernel)
+	-  FreeRTOS phù hợp cho các hệ thống nhúng nhỏ
+	- FreeRTOS được thiết kế để chạy trên các thiết bị có tài nguyên rất nhỏ:  điều khiển, đo sk
+		- CPU:vài mhz> chục MHZ
+		- Vài KB - vài chục KB
+- linux là hệ điều hành nhng hướng tới thiết bị phức tạp , có tài nguyên lớn, hỗ trợ đa nhiệm tốt hơn
+	- Thiết bị công nghiệp, router, camera IP, Smart TV, các hệ thống phức tạp.
+	- Kernel lớn
+- FreeRTOS trong dự án
+	- Quản lý đa nhiệm (Multitasking):
+		- FreeRTOS sử dụng cơ chế lập lịch để chuyển đổi nhanh chóng giữa các tác vụ 
+		- CPU chuyển đổi nhanh giữa các tác vụ, tạo cảm giác như tất cả chúng đang chạy đồng thời.
+		- FreeRTOS cho phép chạy nhiều tác vụ đồng thời, ví dụ:
+			- Tác vụ đọc dữ liệu từ RFID.
+			- Tác vụ kiểm tra dữ liệu trên SDCARD.
+			- Tác vụ điều khiển servo motor.
+			- Tác vụ gửi thông báo qua Blynk IoT.
+	- FreeRTOS đảm bảo tác vụ quan trọng được ưu tiên, và không tác vụ nào làm "treo" toàn bộ hệ thống.
+	- Đảm bảo các tác vụ quan trọng (như kiểm tra RFID và điều khiển servo) được thực thi đúng thời điểm.	
 	- Với các công cụ như semaphore, mutex đảm bảo rằng tài nguyên dùng chung được quản lý tốt mà không gây xung đột
-- Linux nhúng (Embedded Linux): Tôi đã sử dụng Embedded Linux trong các dự án phát triển firmware cho router/modem.
+
+- Nếu không dùng Free RTOS thì sao
+	- các tác vụ sẽ thực hiện tuần tự
+	- Nếu 1 tác vụ chậm sẽ làm chậm cả hệ thống
+		- check card 500ms , cả hệ thống sẽ chờ 
+	- Ngắt không phải lúc nào cũng hiệu quả
+		- Ngắt quá nhiều sẽ làm hệ thống bị treo
+	- Không có cách nào để đảm bảo tác vụ quan trọng (như điều khiển servo) được thực thi đúng lúc khi cần.
+		- Nếu RFID đọc dữ liệu đúng lúc cần mở khóa cửa, nhưng hệ thống đang bận gửi thông báo qua Blynk, tác vụ quan trọng sẽ bị trễ.
+	- Nếu dùng Free RTOS thì sẽ gán ưu tiên cho từng tác vụ
+		- tác vụ mở cửa là ưu tiên cao nhất
+		- tác vụ gửi thông báo qua blink ít hơn
+		- thì ServoTask  được thực thì ngay ,FreeRTOS tạm dừng blink task , sẽ tiếp tục khi ServoTask hoàn thành
+- Dữ liệu lưu trong file CSV	
+
+
+
+
+
+
+
+- Cách tích hợp FreeRTOS vào ESP32
+	- ESP32 tích hợp sẵn FreeRTOS trong ESP IDF
+- STM32 không tích hợp FreeRTOS 
+	- Dùng STM32cubeMX thêm FreeRTOS vào dự án
+
+
+- 
 
 **làm thế nào bạn đảm bảo hệ thống không bị treo hoặc mất dữ liệu khi xử lý nhiều ngắt cùng lúc?**
 1. Ưu tiên ngắt (Interrupt Priority): Tôi cấu hình mức ưu tiên (priority) cho các ngắt, đảm bảo rằng các ngắt quan trọng nhất (ví dụ: Timer hoặc UART) được xử lý trước.
@@ -5678,10 +5714,7 @@ Nhẹ và tối ưu hóa:FreeRTOS có kích thước nhỏ, phù hợp cho các 
 	+ Xây dựng root filesystem: Tạo hệ điều hành Linux đầy đủ (gồm kernel, file system, driver, các ứng dụng).
 	+ Tích hợp các layer: Dễ dàng thêm hoặc bớt các tính năng, driver, hoặc ứng dụng thông qua các layer cấu hình.
 
-**OpenWrt là gì?**
-- OpenWrt là một hệ điều hành nhúng dựa trên Linux, được thiết kế để thay thế firmware gốc trên các thiết bị mạng như router
--  SDK là bộ công cụ phát triển cung cấp API, thư viện, và công cụ để lập trình viên phát triển phần mềm.
-- Bên china cấp SDK , kết hợp với VS code
+
 
 **JTAG/SWD là gì?**
 - Khi nào sử dụng JTAG hoặc SWD Debugger?
