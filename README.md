@@ -4982,7 +4982,13 @@ int main(void){
 
 
 
-**Vrình tự hoạt động của ngắt**
+
+ 
+
+
+
+
+**Trình tự hoạt động của ngắt**
 - Peripheral: Gửi tín hiệu ngắt (ví dụ: Timer, UART, GPIO).
 - NVIC: bộ điều khiển ngắt
 	- Kích hoạt hoặc vô hiệu hóa ngắt.
@@ -9214,108 +9220,186 @@ int main (void)
 
 </details>
 <details>
-  <summary><h1>▶ ⭐V-Model </h1></summary>
+  <summary><h1>▶ ⭐OpenWrt</h1></summary>
 
-![image](https://github.com/khokhanptv/Embedded-Software_2023/assets/136571945/b3cf7f9f-ae02-413d-8af6-b001ad8b4516)
+# 🚀 Giới thiệu về OpenWrt và Hướng dẫn phát triển ứng dụng Web trên Router TP-Link
 
-- Mô hình mô tả vòng đời phát triển 1 chương trình .( 9 bước)
-1. Requirements Gathering (Thu thập yêu cầu)
-- Bắt đầu với việc thu thập yêu cầu từ khách hàng hoặc các bên liên quan
-- Xác định, xác minh các yêu cầu về chức năng, hiệu suất và các yêu cầu khác của sản phẩm
-2. Requirements Analysis (Phân tích yêu cầu)
-- Phân tích yêu cầu để hiểu rõ những gì cần phải được phát triển và cách thức thực hiện
-- Xác định các rủi ro và yêu cầu bổ sung nếu cần
-3. Design (Thiết kê)
-- Phát triển các thiết kế chỉ tiết cá phần của hệ thóng hoặc sản phẩm.
-- Bao gồm thiết kế cơ điện tử, cơ khí , phần mềm (viết code )
-4. Test Planning (Lập kế hoạch kiểm thử)
-- Bắt đầu việc thực hiện thiết kế xây dựng sản phẩm thực tế dựa trên các yêu cầu thiết kế đã được
-phê duyệt.
-5. Development (Phát triển)
-- Bắt đầu việc thực hiện thiết kế và xây dụng sản phẩm thực tế dựa trên các yêu cầu và thiết kế đã
-được phê duyệt
-6. Unit Testing
-- Kiểm tra từng phần nhỏ của sản phẩm để bảo đảm tính đúng đắn và hoặt động đúng cách.
-7. Integration Testing
-- Kiểm tra tính tương tác và tính hoạt động của các thành phần khi được kết hợp lại với nhau
-8. System Testing
-- Kiểm tra hệ thống hoàn chính để đảm bảo rằng nó đáp ứng các yêu cầu chức năng và phi chức
-năng
-9. Acceptance Testing
-- Thực hiện các bài kiểm tra cuối cùng bởi người dùng hoặc khách hàng đề xác nhận sản phẩm
-đáp ứng các yêu cầu đạt được.
+**OpenWrt** là một hệ điều hành được thiết kế chủ yếu cho các router (bộ định tuyến mạng) và thiết bị nhúng. Nó thay thế firmware mặc định của thiết bị như TP-Link, Tenda, Linksys... nhằm tăng tính **linh hoạt**, **hiệu suất** và **khả năng tùy chỉnh**.
 
-**Unit test là gì?**
-- là một loại kiểm thử phần mềm để kiểm tra tính chính xác của từng "đơn vị" của mã nguồn phần mềm: fution , class ,method
-- lưu ý khi làm việc với unit test:
-1. Chuẩn bị tốt:
-	+ Đảm bảo rằng bạn đã cài đặt và cấu hình môi trường phát triển phù hợp để chạy unittest.
-	+ Xác định và cài đặt các framework hoặc thư viện unittest phù hợp với ngôn ngữ lập trình của bạn (ví dụ: unittest, JUnit, Pytest).
-2.	Thiết lập độc lập:
-	+ Đảm bảo rằng các unittest của bạn hoàn toàn độc lập và không phụ thuộc vào các thành phần bên ngoài như cơ sở dữ liệu, mạng hoặc các tài nguyên bên ngoài khác.
-	+ Sử dụng mocking hoặc stubbing để giả lập các thành phần phụ thuộc và tạo môi trường kiểm thử độc lập.
-3.	Tách biệt các trường hợp kiểm thử:
-	+ Chia nhỏ các testcase thành các trường hợp kiểm thử riêng biệt và đảm bảo mỗi testcase kiểm tra một tính năng cụ thể.
-	+ Cung cấp các dữ liệu kiểm thử đại diện cho tất cả các trường hợp biên, bình thường và ngoại lệ.
-4.	Đảm bảo tính phủ (Code Coverage):
-	+ Kiểm tra tính phủ mã nguồn để đảm bảo rằng tất cả các đoạn mã được kiểm thử.
-	+ Đảm bảo kiểm tra các điều kiện biên, đường dẫn thực thi khác nhau và các trường hợp ngoại lệ.
-5.	Xử lý và báo cáo lỗi:
-	+ Xác định và kiểm tra các trường hợp lỗi, xử lý ngoại lệ và các tình huống không mong muốn.
-	+ Đảm bảo rằng bạn kiểm tra và báo cáo lỗi một cách chính xác và chi tiết để dễ dàng xác định và sửa chúng.
-6.	Đồng nhất và duy trì:
-	+ Sử dụng quy ước đặt tên và cấu trúc đồng nhất cho các testcase để dễ đọc và hiểu.
-	+ Duy trì và cập nhật các unittest khi có sự thay đổi trong mã nguồn để đảm bảo tính nhất quán và độ tin cậy của chúng.
-7.	Tích hợp liên tục:
-	+ Tự động hóa việc chạy unittest trong quy trình tích hợp liên tục để đảm bảo rằng các testcase được chạy tự động và thường xuyên.
-	+ Sử dụng công cụ tích hợp liên tục như Jenkins, Travis CI, hoặc GitLab CI để chạy và theo dõi các unittest.
-8.	Quản lý dữ liệu kiểm thử:
-	+ Quản lý dữ liệu kiểm thử một cách cẩn thận để đảm bảo tính nhất quán và dễ dàng tái sử dụng.
-	+ Sử dụng tập dữ liệu kiểm thử đại diện cho các trường hợp biên, bình thường và ngoại lệ, và lưu trữ chúng một cách có tổ chức.
-9.	Kiểm tra hiệu suất (Performance Testing):
-	+ Trong một số trường hợp, cần kiểm tra hiệu suất của mã nguồn.
-	+ Sử dụng công cụ phân tích hiệu suất để đo và đánh giá hiệu suất của mã nguồn trong các điều kiện tải khác nhau.
-10.	Sử dụng các nguyên tắc lập trình tốt:
-	+ Áp dụng các nguyên tắc lập trình tốt như nguyên tắc SOLID, kiểm tra đơn vị và thiết kế phần mềm để viết các unittest dễ đọc, dễ bảo trì và linh hoạt.
-11.	Kiểm tra tích hợp:
-	+ Đối với các ứng dụng lớn hoặc có nhiều phần tương tác với nhau, cần kiểm tra tích hợp giữa các thành phần để đảm bảo sự tương tác đúng đắn và chính xác.
-12.	Kiểm tra biên:
-	+ Đảm bảo kiểm tra các trường hợp biên để đảm bảo tính ổn định và đáng tin cậy của ứng dụng trong các điều kiện đặc biệt và giá trị đầu vào biên.
+---
 
-•	EXPECT_EQ: giá trị kỳ vọng bằng giá trị thực tế thì pass
-•	EXPECT_TRUE: ĐK đúng thì pass
-•	EXPECT_FALSE: ĐK sai thì pass
+## 1. 🌟 Đặc điểm nổi bật của OpenWrt
+
+- Dựa trên Linux, nhẹ và tối ưu cho phần cứng hạn chế.
+- Hỗ trợ cài thêm gói phần mềm (giống `apt` trên Ubuntu, dùng `opkg`).
+- Cấu hình mạnh qua dòng lệnh (SSH) và có giao diện web thân thiện (**LuCI**).
+
+---
+
+## 2. 🧠 Sử dụng C++ trong OpenWrt
+
+- OpenWrt hỗ trợ chạy chương trình viết bằng **C hoặc C++**.
+- Các ứng dụng/tiện ích mạng có thể viết bằng C++, sau đó **cross-compile** để chạy trên router.
+
+---
+
+## 3. 🌐 Giao diện quản lý web (LuCI)
+
+- **LuCI** là giao diện web mặc định.
+- Truy cập tại địa chỉ: `http://192.168.1.1` (hoặc địa chỉ IP khác nếu đã đổi).
+
+---
+
+## 🛠️ BƯỚC 1: Chuẩn bị thiết bị và môi trường
+
+### A. Kiểm tra router có hỗ trợ OpenWrt:
+- Truy cập: [https://openwrt.org/toh/start](https://openwrt.org/toh/start)
+- Tìm model (VD: TL-WR841N, Archer C7…)
+- Kiểm tra phiên bản phần cứng (Hardware Version)
+
+### B. Tải firmware tương thích:
+- Tải đúng bản `.bin` cho model và version của bạn.
+
+---
+
+## ⚡ BƯỚC 2: Cài OpenWrt lên router TP-Link
+
+- Truy cập: `http://192.168.0.1` (giao diện gốc của TP-Link)
+- Chọn mục **Firmware Upgrade**
+- Tải lên file `.bin` → Flash → Đợi hoàn tất
+
+> ⚠️ **Cảnh báo:** Flash sai firmware có thể làm hỏng thiết bị. Kiểm tra kỹ và **backup** trước.
+
+---
+
+## 🧑‍💻 BƯỚC 3: Truy cập OpenWrt
+
+- Sau khi flash thành công → Truy cập: `http://192.168.1.1`
+- Giao diện **LuCI** sẽ xuất hiện
+- Thiết lập mật khẩu và cấu hình WiFi nếu cần
+
+---
+
+## 💻 BƯỚC 4: SSH vào router
+
+```bash
+ssh root@192.168.1.1
+
+Dùng Truy cập hệ điều hành bên trong router
+
+🔹 Gõ http://192.168.1.1 trong trình duyệt:
+Truy cập vào giao diện quản lý web (LuCI của OpenWrt)
 
 
-**MCDC là gì?**
-- MCDC (Modified Condition/Decision Coverage) là một kỹ thuật kiểm thử phần mềm được sử dụng để đảm bảo mức độ phủ mã nguồn cao
-- độ bao phủ MCDC là tỷ lệ  điều kiện và quyết định trong mã đã được kiểm tra so với tổng số lượng điều kiện và quyết định có trong mã
-MCDC yêu cầu các bài kiểm tra phải thỏa mãn các tiêu chí sau:
-1.	Mỗi điều kiện trong mã nguồn phải được kiểm tra ít nhất một lần và cả trong trạng thái đúng và trạng thái sai.
-2.	Các phần tử quyết định phải được kiểm tra ít nhất một lần và cả trong trạng thái đúng và trạng thái sai.
-3.	Mọi khả năng kết hợp của các điều kiện phải được kiểm tra, bao gồm cả các kết hợp tình huống đặc biệt và biên.
-ví dụ:
-
-```c
-bool IsPositiveEven(int n) {
-    if (n > 0 && n % 2 == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-\*
-Decision  1: (n > 0 && n % 2 == 0).
-Conditions:
-Condition 1: n > 0.
-Condition 2: n % 2 == 0.
-Test case 1: n = 2 (Positive even number).
-Test case 2: n = 1 (Not a positive even number).
-Test case 3: n = 0 (Not a positive even number).
-Test case 4: n = -2 (Not a positive number).
-Test case 5: n = -1 (Not a positive number).
-*/
 ```
+
+🧩 BƯỚC 5: Viết chương trình backend (C/C++ hoặc shell)
+Bạn có thể viết các file .sh, .c, .cpp để xử lý logic (bật/tắt thiết bị, thu thập dữ liệu...).
+
+Ví dụ C++ đơn giản:
+```c++
+#include <iostream>
+int main() {
+    std::cout << "Router Control Interface Started!" << std::endl;
+    return 0;
+}
+```
+- Cross-compile bằng toolchain cho MIPS/ARM → Copy sang router để chạy.
+
+🌐 BƯỚC 6: Tạo giao diện web (HTML + JS + CGI/Shell)
+A. Tạo thư mục giao diện:
+bash
+Sao chép
+Chỉnh sửa
+cd /www
+vi index.html
+B. Nội dung index.html ví dụ:
+html
+<!DOCTYPE html>
+<html>
+<head><title>Control Panel</title></head>
+<body>
+  <h1>Chào mừng đến router!</h1>
+  <form action="/cgi-bin/toggle_led.sh" method="POST">
+    <input type="submit" value="Bật/Tắt đèn">
+  </form>
+</body>
+</html>
+C. Tạo script CGI:
+
+```bash
+
+mkdir -p /www/cgi-bin
+vi /www/cgi-bin/toggle_led.sh
+chmod +x /www/cgi-bin/toggle_led.sh
+```
+
+Nội dung toggle_led.sh:
+
+sh
+ 
+#!/bin/sh
+echo "Content-type: text/html"
+echo ""
+echo "<html><body><h2>LED toggled!</h2></body></html>"
+# Ở đây bạn có thể điều khiển GPIO nếu muốn
+
+🧪 BƯỚC 7: Truy cập và kiểm thử
+Mở trình duyệt → vào http://192.168.1.1
+
+Click nút "Bật/Tắt đèn" → script backend xử lý
+
+📁 Tại sao cần 2 file riêng biệt?
+✅ 1. File HTML – Giao diện (frontend)
+Vai trò: Hiển thị form đăng nhập cho người dùng nhập Username và Password
+
+Không xử lý dữ liệu, chỉ dùng để gửi thông tin lên server
+
+📍 Giống như: một biểu mẫu giấy bạn điền tên, gửi lên quầy tiếp nhận
+
+✅ 2. File CGI script (Shell) – Xử lý (backend)
+Vai trò: Nhận dữ liệu từ form HTML → kiểm tra hợp lệ → trả về kết quả
+
+Có thể xử lý nâng cao như:
+
+Kiểm tra mật khẩu
+
+Điều khiển đèn, motor, thiết bị
+
+Ghi log, chuyển hướng trang
+
+📍 Giống như: nhân viên quầy tiếp nhận, kiểm tra thông tin bạn gửi lên
+
+
+
+## ✅ TỔNG QUAN CÁC BƯỚC PHÁT TRIỂN ỨNG DỤNG HẸN GIỜ TẮT WIFI TRÊN TP-LINK (OPENWRT)
+
+| Bước | Mục tiêu                           | Việc cần làm cụ thể |
+|------|------------------------------------|----------------------|
+| 1    | Cài OpenWrt cho TP-Link           | - Tải firmware đúng cho **TP-Link TL-WR841N v13**  <br> - Truy cập `192.168.0.1` (firmware gốc TP-Link) <br> - Nâng cấp bằng file `.bin` <br> - Sau khi flash thành công, truy cập `192.168.1.1` |
+| 2    | Tạo giao diện HTML                 | - SSH vào router: `ssh root@192.168.1.1` <br> - Tạo file `/www/mytime.html` <br> - Viết mã HTML gồm form nhập số giây và nút gửi |
+| 3    | Viết script xử lý backend         | - Tạo thư mục `/www/cgi-bin` nếu chưa có <br> - Tạo file `/www/cgi-bin/set_timer.sh` <br> - Viết shell script nhận giá trị POST và hẹn giờ tắt WiFi |
+| 4    | Liên kết HTML với script backend  | - Trong form HTML, đặt `action="/cgi-bin/set_timer.sh"` <br> - Đảm bảo script có quyền thực thi: `chmod +x set_timer.sh` |
+| 5    | Kiểm tra hoạt động trên trình duyệt | - Mở trình duyệt: `http://192.168.1.1/mytime.html` <br> - Nhập thời gian (giây) → bấm nút <br> - Quan sát router tắt WiFi sau thời gian đã đặt |
+
+
+
+ 
+## 🔧 Những tính năng bạn có thể phát triển trên router chạy OpenWrt
+
+| #   | Nhóm tính năng                        | Mô tả chi tiết |
+|-----|----------------------------------------|----------------|
+| 📡 1 | **Quản lý WiFi nâng cao**              | - Tắt/bật WiFi theo giờ <br> - Thay đổi SSID, mật khẩu <br> - Chặn người dùng lạ |
+| 🌐 2 | **Thiết lập Web Server**               | - Giao diện điều khiển tùy chỉnh (HTML + JS + CGI) <br> - Trang điều khiển LED, relay, cảm biến |
+| 🛡️ 3 | **Firewall / Port Forwarding tự động**| - Script bật NAT, forward port cho camera/game <br> - Cấu hình `iptables` động |
+| 🔁 4 | **Tạo API điều khiển từ xa**           | - Viết REST API với CGI/Lua: `GET /status`, `POST /wifi` <br> - Tích hợp với app điện thoại |
+| 🔌 5 | **Điều khiển thiết bị vật lý**         | - Điều khiển GPIO: bật/tắt LED, role, quạt, còi <br> - Đọc cảm biến qua UART, SPI, I2C |
+| 🧠 6 | **Hệ thống hẹn giờ / tự động hóa**     | - Hẹn giờ tắt WiFi <br> - Tự động reboot, gửi email khi mất mạng |
+| 📥 7 | **Tự cập nhật firmware (OTA)**         | - Viết module kiểm tra & tải firmware mới tự động |
+| 📊 8 | **Theo dõi hệ thống (Monitoring)**     | - Ghi log truy cập <br> - Theo dõi tốc độ mạng, nhiệt độ, RAM, CPU |
+| 🧰 9 | **Gắn thiết bị ngoài (USB, SSD)**      | - Lưu log, cấu hình, chạy web server mở rộng <br> - Ghi dữ liệu cảm biến vào USB |
+| 🌍 10 | **Dịch vụ mạng mở rộng**              | - Thiết lập VPN Server (OpenVPN, WireGuard) <br> - Làm Proxy, DNS, DHCP Server mở rộng |
+
 
 
 
