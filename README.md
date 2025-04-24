@@ -4974,7 +4974,7 @@ int main(void){
   <summary><h1>▶ ⭐Embedded</h1></summary>
 
 <details>
-  <summary><h2>1 Số câu hỏi</h2></summary
+  <summary><h2>1 Số câu hỏi 2025</h2></summary
 
  
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
