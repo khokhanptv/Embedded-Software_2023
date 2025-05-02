@@ -3604,196 +3604,163 @@ public:
 };
 
 ```
-**Constructor**
--  Constructor là một phương thức trong lớp (class) dùng để khởi tạo đối tượng.. 
--  Constructor được gọi tự động khi một đối tượng của lớp được tạo.
-- Đặc điểm của Constructor:
-	- Nếu không định nghĩa Constructor, trình biên dịch sẽ tự động tạo ra một Constructor mặc định.
-	- Tên trùng với tên lớ
-	- Không có kiểu trả về
-	- Tự động gọi khi khởi tạo đối tượng.
-	- Có thể có tham số:
+ # 🚀 Constructor, Destructor, Copy Constructor trong C++
 
--  Có hai loại chính:
-	+ Constructor mặc định: Hệ thống sẽ tự động tạo
-	+ Constructor với tham số :Cho phép truyền giá trị khi khởi tạo đối tượng.
-	+ Constructor sao chép :Được sử dụng để khởi tạo một đối tượng mới từ một đối tượng hiện có.
+## 🔧 Constructor
+- Constructor là một phương thức đặc biệt trong class, dùng để khởi tạo đối tượng.
+- Tên giống với tên class, **không có kiểu trả về**.
+- Được gọi tự động khi đối tượng được tạo ra.
+
+### 🔸 Đặc điểm:
+- Nếu không khai báo, trình biên dịch sẽ tạo **constructor mặc định**.
+- Có thể **overload** để tạo nhiều constructor.
+- Có thể có **tham số** để truyền dữ liệu lúc khởi tạo.
+
+### 🔸 Các loại constructor:
+| Loại                  | Mô tả                                                        |
+|-----------------------|---------------------------------------------------------------|
+| Mặc định              | Không tham số, hệ thống tự tạo nếu không khai báo            |
+| Có tham số            | Truyền giá trị vào lúc khởi tạo đối tượng                    |
+| Constructor sao chép | Tạo đối tượng mới từ một đối tượng có sẵn                    |
 
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ Constructor có tham số:</summary>
 
-```C++
+```cpp
 #include <iostream>
-
 class HinhChuNhat {
 public:
     double chieuDai;
     double chieuRong;
 
-    // Parameterized Constructor
+    // Constructor có tham số và mặc định giá trị
     HinhChuNhat(int dai = 5, int rong = 3) {
         chieuDai = dai;
         chieuRong = rong;
     }
 
-    // Hàm tính diện tích
     double tinhDienTich() {
         return chieuDai * chieuRong;
     }
 };
 
 int main() {
-    // Tạo đối tượng HinhChuNhat và sử dụng constructor với giá trị mặc định
-    HinhChuNhat hinhCN1;
-
-    // Tạo đối tượng HinhChuNhat và truyền giá trị khác cho constructor
-    HinhChuNhat hinhCN2(7, 4);
-
-    // Hiển thị diện tích của hình chữ nhật 1 và 2
-    std::cout << "Dien tich hinh chieuDai1: " << hinhCN1.tinhDienTich() << std::endl;
-    std::cout << "Dien tich hinh chieuDai2: " << hinhCN2.tinhDienTich() << std::endl;
-
+    HinhChuNhat hinh1;           // Dùng giá trị mặc định
+    HinhChuNhat hinh2(7, 4);     // Truyền tham số
+    std::cout << hinh1.tinhDienTich() << std::endl;
+    std::cout << hinh2.tinhDienTich() << std::endl;
     return 0;
 }
-
-
 ```
 </details>
 
-**copy Constructor**
-- Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
-	+ Shallow copy
-		+ Chỉ sao chép địa chỉ bên trong , không sao chép dữ liệu 
-		+ Khi một đối tượng bị hủy, dữ liệu chung sẽ bị giải phóng, làm cho đối tượng còn lại trỏ tới vùng nhớ không hợp lệ
+---
 
-	+ Deep copp
-		+ Tạo một bản sao độc lập của tất cả dữ liệu ,có vùng nhớ riêng
-	
+## 🧹 Destructor
+- Destructor là phương thức đặc biệt **được gọi khi đối tượng bị hủy**.
+- Có cùng tên với class, nhưng có thêm `~` ở đầu.
+- Không có tham số, không overload được.
+
+### 🔸 Đặc điểm:
+- Dùng để **giải phóng bộ nhớ/tài nguyên**.
+- Gọi tự động khi:
+  - Kết thúc hàm
+  - `delete` đối tượng
+  - Kết thúc chương trình
 
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ Destructor:</summary>
 
-```c++
+```cpp
+#include <iostream>  
+using namespace std;  
+class NhanVien  {  
+public:  
+    NhanVien() {
+        cout << "Ham xay dung duoc goi" << endl;    
+    }
+    ~NhanVien() {
+        cout << "Ham huy duoc goi" << endl;    
+    }  
+};
+
+int main() {
+    NhanVien* n0 = new NhanVien();
+    delete n0;              // Gọi destructor thủ công
+    NhanVien n1;            // Gọi destructor khi kết thúc hàm
+    NhanVien n2;
+    return 0;
+}
+```
+</details>
+
+---
+
+## 📋 Copy Constructor (Shallow vs Deep Copy)
+- Dùng để **tạo bản sao của một đối tượng có sẵn**.
+- Có 2 loại:
+
+| Loại         | Mô tả                                                                 |
+|--------------|------------------------------------------------------------------------|
+| Shallow copy | Sao chép địa chỉ con trỏ → dễ gây lỗi giải phóng bộ nhớ trùng        |
+| Deep copy    | Cấp phát vùng nhớ mới và sao chép dữ liệu → an toàn hơn              |
+
+<details>
+<summary>🔍 Ví dụ Deep Copy:</summary>
+
+```cpp
 #include <iostream>
-
 using namespace std;
 
-class TestShallowCopy {
-    int a;
-    int b;
+class Test {
+    int a, b;
     int *p;
-
 public:
-    TestShallowCopy() {
+    Test() {
         p = new int;
     }
-
-    TestShallowCopy(const TestShallowCopy &t) {
+    Test(const Test &t) {
         a = t.a;
         b = t.b;
-        p = new int; // Cấp phát vùng nhớ mới
-        *p = *(t.p); // Sao chép giá trị của *p từ đối tượng gốc sang đối tượng mới
+        p = new int;
+        *p = *(t.p);
     }
-
-    ~TestShallowCopy() {
-        delete p; // Giải phóng bộ nhớ khi đối tượng bị hủy
+    ~Test() {
+        delete p;
     }
-
     void TaoDuLieu(int x, int y, int z) {
-        a = x;
-        b = y;
-        *p = z;
+        a = x; b = y; *p = z;
     }
-
     void HienThi() {
-        cout << "   Gia tri cua a la: " << a << endl;
-        cout << "   Gia tri cua b la: " << b << endl;
-        cout << "   Gia tri cua *p la: " << *p << endl;
+        cout << a << ", " << b << ", *p = " << *p << endl;
     }
 };
 
 int main() {
-    TestShallowCopy t1;
+    Test t1;
     t1.TaoDuLieu(2, 6, 8);
-    TestShallowCopy t2 = t1;
-    cout << "Du lieu cua doi tuong t1: " << endl;
+    Test t2 = t1;
     t1.HienThi();
-    cout << "Du lieu cua doi tuong t2: " << endl;
     t2.HienThi();
     return 0;
 }
-
-
-
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-</details>
-
-
-
-
-
-**Destructor**
-- là một phương thức trong lớp (class) được sử dụng để giải phóng tài nguyên
-- Destructor sẽ có tên trùng với tên của class và thêm ký tự ~ ở phía trước tên.
-- Không có tham số
-- Chỉ có duy nhất một hàm hủy trong một lớp. Hàm hủy tự động được gọi. Nếu như chúng ta không định nghĩa hàm hủy thì mặc định trình biên dịch sẽ tự tạo ra một hàm hủy mặc nhiên
-- Hàm hủy (Destructor) trong C++ được gọi tự động khi:
-	+ Kết thúc hàm
-	+ Kết thúc chương trình
-	+ Toán tử delete được gọi
-- 1 chương trình có nhiều  Constructor nhưng chỉ có 1 Destructor
-
-<details>
-<summary>Ví dụ:</summary>
-
-```C++
-#include <iostream>  
-using namespace std;  
-class NhanVien  {  
-   public:  
-        NhanVien() {    
-            cout << "Ham xay dung duoc goi" << endl;    
-        }    
-        ~NhanVien() {    
-            cout << "Ham huy duoc goi" << endl;    
-        }  
-};  
-int main(void) {  
-	NhanVien* n0 = new NhanVien();
-	delete n0;
-    NhanVien n1;   
-    NhanVien n2; 
-    return 0;  
-}
-
 ```
 </details>
 
-**Vitual Destructor**
+---
 
-- virtual destructor nằm ở lớp cha( lớp cơ sở ), khi ta có 1 đối tượng của lớp con được tạo ra và xóa từ con trỏ của lớp cha.Destructor của cả lớp con  và lớp cha đều được gọi, đảm bảo rằng tất cả các tài nguyên được giải phóng đúng đắn.
-- Khi nào cần sử dụng Virtual Destructor?
-	- Khi bạn làm việc với đa hình (polymorphism).
+## 🧬 Virtual Destructor
+- Dùng khi **xóa đối tượng thông qua con trỏ của lớp cha**.
+- Đảm bảo destructor của **lớp con và lớp cha đều được gọi** đúng thứ tự.
+
+### 📌 Khi nào dùng?
+- Khi sử dụng **đa hình (polymorphism)** trong lập trình hướng đối tượng.
+
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ Virtual Destructor:</summary>
 
-```C++
+```cpp
 #include <iostream>
-
 class Base {
 public:
     virtual ~Base() {
@@ -3809,15 +3776,14 @@ public:
 };
 
 int main() {
-    Base* ptr = new Derived(); // Tạo một đối tượng Derived và gán con trỏ của lớp cơ sở
-    delete ptr; // Xóa đối tượng thông qua con trỏ của lớp cơ sở
-
+    Base* ptr = new Derived();
+    delete ptr;  // Gọi cả destructor của Derived và Base
     return 0;
 }
-
-
 ```
 </details>
+
+
 
 **Static keyword:property**
 - Static data member là một biến thành viên của lớp, nhưng không thuộc về bất kỳ đối tượng cụ thể nào.
