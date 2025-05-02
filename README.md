@@ -4788,6 +4788,8 @@ int main(void){
 - Được sử dụng để tạo hàm ảo. Hàm ảo cho phép lớp con ghi đè hàm của lớp cha  .
 
 
+
+</details>
 </details>
 <details>
   <summary><h2>Standard template library </h2></summary>
