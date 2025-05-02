@@ -4804,7 +4804,7 @@ STL là thư viện mạnh mẽ trong C++ giúp xử lý dữ liệu hiệu qu�
 | `vector`              | Mảng động, truy cập ngẫu nhiên, thêm/xóa cuối hiệu quả                       | Danh sách điểm, mảng kết quả, tập hợp dữ liệu biến đổi   |
 | `list`                | Danh sách liên kết đôi, chèn/xóa ở bất kỳ đâu, không truy cập ngẫu nhiên     | Hàng đợi xử lý công việc cần xóa/chèn linh hoạt          |
 | `deque`               | Hàng đôi, thêm/xóa ở đầu/cuối, truy cập nhanh                                 | Trình duyệt lịch sử, undo/redo                          |
-| `set`                 | Tập hợp không trùng, tự sắp xếp                                               | Lọc trùng, lưu danh sách ID duy nhất                     |
+| `set`                 | Tập hợp phần tử không trùng, tự sắp xếp                                               | Lọc trùng, lưu danh sách ID duy nhất                     |
 | `multiset`            | Cho phép phần tử trùng, vẫn sắp xếp                                           | Thống kê dữ liệu, đa số phiếu                           |
 | `unordered_set`       | Không trùng, không sắp xếp                                                     | Kiểm tra tồn tại nhanh (lookup)                         |
 | `unordered_multiset`  | Trùng lặp, không sắp xếp                                                      | Lưu trữ dữ liệu phân bố không quan trọng thứ tự         |
