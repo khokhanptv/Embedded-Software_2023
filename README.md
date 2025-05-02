@@ -251,7 +251,7 @@ int main(void){
 </details>
 </details>
 <details>
-<summary><h1>▶ ⭐GIT</h1></summary>
+<summary><h1>▶ ⭐C_BASIC</h1></summary>
 
 <details>
   <summary><h3>Lệnh điều kiện trong C</h3></summary>
@@ -4894,56 +4894,115 @@ int main(void){
 <details>
   <summary><h2>Multithreading</h2></summary>
 
-**Lập trình đa luồng (Multithreading):**
-- Tiến trình (process) trong lập trình là một chương trình đang được thực thi
-- một đơn vị thực thi độc lập trong một chương trình
-- Là việc sử dụng nhiều luồng đồng thời trong một chương trình để tăng hiệu suất và sử dụng tốt các tài nguyên hệ thống.Muốn sử dụng thì `#include <thread>`
 
-- Các vấn đề thường gặp trong đa luồng:
--	Data race: Nhiều luồng truy cập và ghi dữ liệu cùng lúc mà không có đồng bộ.
-	+ Dùng mutex, lock_guard, atomic operations để tránh
--	Deadlock: Các luồng chờ nhau giải phóng tài nguyên, dẫn đến tình trạng chờ vĩnh viễn.
-	+ Dùng lock 
-	+ Sử dụng Timeout:Thiết lập thời gian chờ khi yêu cầu tài nguyên. 
-	+ Sử dụng Hierarchical Locking (Khóa theo cấp bậc): 
-		+ Đảm bảo rằng các luồng đều tuân thủ thứ tự khóa giống nhau (khóa dữ liệu 1 trước, sau đó khóa dữ liệu 2 sau).
-		+ Thread A cố gắng khóa khóa dữ liệu 1. Nếu  dữ liệu 1 đang trống, nó sẽ khóa thành công và tiếp tục.
-		+ Thread A sau đó cố gắng khóa dữ liệu 2. Nếu  dữ liệu 2 đang trống, nó sẽ khóa thành công. Nếu không, nó sẽ chờ cho đến khi  dữ liệu 2 được mở khóa.
+# 🧵 Lập trình đa luồng (Multithreading) trong C++
 
--   Race condition: Xảy ra khi các luồng không có thứ tự logic khi tranh chấp tài nguyên
-	+ Sử dụng cờ đồng bộ hoặc điều kiện chờ như std::condition_variable
+## 📌 Khái niệm cơ bản
 
+- **Process (Tiến trình)**: Là một chương trình đang được thực thi.
+- **Thread (Luồng)**: Là một đơn vị thực thi độc lập trong một process.
+- **Multithreading**: Là kỹ thuật sử dụng nhiều luồng đồng thời để tăng hiệu suất và tận dụng tài nguyên hệ thống.
+- Để sử dụng multithreading:
+  ```cpp
+  #include <thread>
+  ```
 
-**Synchronization Mechanisms (Cơ chế đồng bộ hóa):**
-- Đồng bộ hóa: Là quá trình đảm bảo rằng các luồng hoạt động đồng bộ khi truy cập và thay đổi dữ liệu chia sẻ. 
-- Cơ chế đồng bộ hóa: Là phương pháp được sử dụng để đạt được đồng bộ  giữa các luồng, bao gồm cơ chế locks,unlock,mutex.Muốn sử dụng cơ chế này thì `#include <mutex>`
-- Mutex (Mutual Exclusion): được sử dụng để đồng bộ hóa truy cập vào các tài nguyên được chia sẻ giữa các luồng
-- Để khóa một mutex, bạn cần sử dụng phương thức lock() của đối tượng mutex, và để mở khóa mutex, bạn sử dụng phương thức unlock(). 
-- Cơ chế lock(),unlock() được sử dụng để khóa mutex.Việc khóa mutex trước và mở khóa mutex sau đảm bảo rằng chỉ có một luồng có thể truy cập vào dữ liệu chia sẽ giữa 2 luồng
-- std::unique_lock: Cơ bản có tính năng giống lock(),unlock(). nghĩa là 1 thời điểm chỉ cho 1 luồng truy cập dữ liệu , nhưng việc unlock là tự động
-- std::shared_lock:cho phép nhiều luồng đọc cùng một lúc.
+---
 
+## ❗️Các vấn đề thường gặp trong đa luồng
 
+### 1. Data Race (Tranh chấp dữ liệu)
 
+- Xảy ra khi nhiều luồng cùng lúc truy cập và thay đổi một biến dùng chung mà không có đồng bộ.
+- **Cách khắc phục**:
+  - Dùng `std::mutex`, `std::lock_guard`, `std::atomic`.
 
-**Concurrent Data Structures (Cấu trúc dữ liệu đồng thời)**
-- Cấu trúc dữ liệu đồng thời: Là  cấu trúc hỗ trợ truy cập  dữ liệu từ nhiều luồng mà không cần sử dụng locks hoặc mutexes.
-- condition_variable là  một cơ chế trong C++11 được sử dụng để đồng bộ hóa các luồng thông qua việc chờ đợi và thông báo về sự kiện xảy ra
-- condition_variable cho phép một hoặc nhiều luồng chờ đợi cho một điều kiện nhất định trở thành đúng trước khi tiếp tục thực hiện công việc của mình.
-- condition_variable có các hàm :notify_one(),notify_all(),wait().Chúng sẽ tự động mở khóa mutexz
+---
 
+### 2. Deadlock (Chết cứng)
 
-**Bất đồng bộ (Asynchronous):**
-- Trong lập trình, bất đồng bộ thường ám chỉ việc thực hiện một tác vụ mà không cần chờ đợi kết quả của tác vụ trước đó hoàn thành.
-- notify_one() nằm trong thread1 ,wait() nằm trong thread2.Điều này đảm bảo rằng khi điều kiện được thỏa mãn trong thread1, thread2 sẽ được thông báo và tỉnh dậy để tiếp tục thực thi.
-- Khi điều kiện thread 1 thõa mãn , thì wait() sẽ tự unlock tài nguyên , để các luồng khác có thể tiếp tục thực thi
+- Khi các luồng chờ nhau giải phóng tài nguyên, dẫn đến vòng lặp chờ vô hạn.
+- **Cách phòng tránh**:
+  - Khóa theo cùng thứ tự (Hierarchical Locking).
+  - Dùng `try_lock` hoặc `std::unique_lock` với timeout.
+  - Hạn chế giữ nhiều mutex cùng lúc nếu không cần thiết.
 
+---
 
+### 3. Race Condition (Điều kiện tranh chấp)
 
-- Starvation (Thiếu tài nguyên):   
-	+ xảy ra khi một hoặc nhiều luồng không thể truy cập tài nguyên cần thiết để tiếp tục thực thi, vì các luồng khác liên tục chiếm dụng tài nguyên đó.
-	+ Condition Variables để điều khiển thứ tự thực thi của các luồng và đảm bảo rằng tất cả các luồng đều có cơ hội thực thi.
-	+ thiết lập giới hạn thời gian chờ cho các tài nguyên để đảm bảo rằng không có luồng nào bị chặn quá lâu.
+- Khi kết quả phụ thuộc vào thứ tự thực hiện của các luồng.
+- **Cách xử lý**:
+  - Sử dụng biến cờ đồng bộ hoặc `std::condition_variable`.
+
+---
+
+### 4. Starvation (Đói tài nguyên)
+
+- Một số luồng không thể truy cập tài nguyên vì bị các luồng khác liên tục chiếm dụng.
+- **Cách giảm thiểu**:
+  - Dùng `condition_variable` để điều phối.
+  - Đặt timeout cho việc truy cập tài nguyên.
+
+---
+
+## 🔒 Cơ chế đồng bộ hóa (Synchronization Mechanisms)
+
+### 📘 Khái niệm
+
+- **Đồng bộ hóa**: Giúp các luồng phối hợp an toàn khi truy cập dữ liệu dùng chung.
+- Thư viện cần dùng:
+  ```cpp
+  #include <mutex>
+  #include <shared_mutex> // (C++17 trở lên)
+  ```
+
+### 🔧 Các cơ chế
+
+| Cơ chế               | Mô tả |
+|----------------------|-------|
+| `std::mutex`         | Khóa tài nguyên, chỉ một luồng được phép truy cập |
+| `lock()` / `unlock()`| Khóa và mở khóa mutex thủ công |
+| `std::lock_guard`    | Tự động lock và unlock khi ra khỏi scope |
+| `std::unique_lock`   | Linh hoạt hơn, hỗ trợ unlock tạm thời |
+| `std::shared_lock`   | Cho phép nhiều luồng đọc đồng thời (C++17) |
+
+---
+
+## 🧱 Cấu trúc dữ liệu đồng thời (Concurrent Data Structures)
+
+### 📌 `std::condition_variable`
+
+- Dùng để **chờ đợi và thông báo** giữa các luồng.
+- Hữu ích khi một luồng cần đợi điều kiện từ luồng khác.
+
+### Các hàm chính:
+
+- `wait()`: Chờ đến khi điều kiện đúng.
+- `notify_one()`: Đánh thức một luồng đang chờ.
+- `notify_all()`: Đánh thức tất cả các luồng đang chờ.
+
+> `wait()` sẽ **tự unlock mutex** khi chờ và **lock lại** khi tiếp tục.
+
+---
+
+## ⚡ Bất đồng bộ (Asynchronous)
+
+### 📘 Khái niệm
+
+- Thực hiện tác vụ mà **không cần chờ kết quả ngay**.
+- Ví dụ:
+  - Thread 1 thực hiện công việc xong và gọi `notify_one()`.
+  - Thread 2 đang `wait()` sẽ được đánh thức để tiếp tục chạy.
+
+> Cơ chế bất đồng bộ giúp tiết kiệm thời gian và tăng hiệu suất chương trình.
+
+---
+
+## ✅ Tổng kết
+
+Multithreading giúp cải thiện hiệu năng chương trình, nhưng cũng đi kèm nhiều thách thức như race condition, deadlock, starvation. Việc sử dụng đúng các cơ chế đồng bộ hóa như mutex, condition_variable và các kỹ thuật thiết kế giúp đảm bảo chương trình chạy an toàn và hiệu quả.
+
 
 
 
