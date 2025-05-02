@@ -4974,7 +4974,7 @@ int main(void){
   <summary><h1>▶ ⭐Embedded</h1></summary>
 
 <details>
-  <summary><h2>1 Số câu hỏi</h2></summary
+  <summary><h2>1 Số câu hỏi 2025</h2></summary
 
  
 ![image](https://github.com/user-attachments/assets/3a28a482-0162-432c-8e95-92e0fc8d669d)
@@ -4982,7 +4982,13 @@ int main(void){
 
 
 
-**Vrình tự hoạt động của ngắt**
+
+ 
+
+
+
+
+**Trình tự hoạt động của ngắt**
 - Peripheral: Gửi tín hiệu ngắt (ví dụ: Timer, UART, GPIO).
 - NVIC: bộ điều khiển ngắt
 	- Kích hoạt hoặc vô hiệu hóa ngắt.
@@ -9213,3 +9219,192 @@ int main (void)
 </details>
 
 </details>
+<<<<<<< HEAD
+=======
+<details>
+  <summary><h1>▶ ⭐OpenWrt</h1></summary>
+
+# 🚀 Giới thiệu về OpenWrt và Hướng dẫn phát triển ứng dụng Web trên Router TP-Link
+
+**OpenWrt** là một hệ điều hành được thiết kế chủ yếu cho các router (bộ định tuyến mạng) và thiết bị nhúng. Nó thay thế firmware mặc định của thiết bị như TP-Link, Tenda, Linksys... nhằm tăng tính **linh hoạt**, **hiệu suất** và **khả năng tùy chỉnh**.
+
+---
+
+## 1. 🌟 Đặc điểm nổi bật của OpenWrt
+
+- Dựa trên Linux, nhẹ và tối ưu cho phần cứng hạn chế.
+- Hỗ trợ cài thêm gói phần mềm (giống `apt` trên Ubuntu, dùng `opkg`).
+- Cấu hình mạnh qua dòng lệnh (SSH) và có giao diện web thân thiện (**LuCI**).
+
+---
+
+## 2. 🧠 Sử dụng C++ trong OpenWrt
+
+- OpenWrt hỗ trợ chạy chương trình viết bằng **C hoặc C++**.
+- Các ứng dụng/tiện ích mạng có thể viết bằng C++, sau đó **cross-compile** để chạy trên router.
+
+---
+
+## 3. 🌐 Giao diện quản lý web (LuCI)
+
+- **LuCI** là giao diện web mặc định.
+- Truy cập tại địa chỉ: `http://192.168.1.1` (hoặc địa chỉ IP khác nếu đã đổi).
+
+---
+
+## 🛠️ BƯỚC 1: Chuẩn bị thiết bị và môi trường
+
+### A. Kiểm tra router có hỗ trợ OpenWrt:
+- Truy cập: [https://openwrt.org/toh/start](https://openwrt.org/toh/start)
+- Tìm model (VD: TL-WR841N, Archer C7…)
+- Kiểm tra phiên bản phần cứng (Hardware Version)
+
+### B. Tải firmware tương thích:
+- Tải đúng bản `.bin` cho model và version của bạn.
+
+---
+
+## ⚡ BƯỚC 2: Cài OpenWrt lên router TP-Link
+
+- Truy cập: `http://192.168.0.1` (giao diện gốc của TP-Link)
+- Chọn mục **Firmware Upgrade**
+- Tải lên file `.bin` → Flash → Đợi hoàn tất
+
+> ⚠️ **Cảnh báo:** Flash sai firmware có thể làm hỏng thiết bị. Kiểm tra kỹ và **backup** trước.
+
+---
+
+## 🧑‍💻 BƯỚC 3: Truy cập OpenWrt
+
+- Sau khi flash thành công → Truy cập: `http://192.168.1.1`
+- Giao diện **LuCI** sẽ xuất hiện
+- Thiết lập mật khẩu và cấu hình WiFi nếu cần
+
+---
+
+## 💻 BƯỚC 4: SSH vào router
+
+```bash
+ssh root@192.168.1.1
+
+Dùng Truy cập hệ điều hành bên trong router
+
+🔹 Gõ http://192.168.1.1 trong trình duyệt:
+Truy cập vào giao diện quản lý web (LuCI của OpenWrt)
+
+
+```
+
+🧩 BƯỚC 5: Viết chương trình backend (C/C++ hoặc shell)
+Bạn có thể viết các file .sh, .c, .cpp để xử lý logic (bật/tắt thiết bị, thu thập dữ liệu...).
+
+Ví dụ C++ đơn giản:
+```c++
+#include <iostream>
+int main() {
+    std::cout << "Router Control Interface Started!" << std::endl;
+    return 0;
+}
+```
+- Cross-compile bằng toolchain cho MIPS/ARM → Copy sang router để chạy.
+
+🌐 BƯỚC 6: Tạo giao diện web (HTML + JS + CGI/Shell)
+A. Tạo thư mục giao diện:
+bash
+Sao chép
+Chỉnh sửa
+cd /www
+vi index.html
+B. Nội dung index.html ví dụ:
+html
+<!DOCTYPE html>
+<html>
+<head><title>Control Panel</title></head>
+<body>
+  <h1>Chào mừng đến router!</h1>
+  <form action="/cgi-bin/toggle_led.sh" method="POST">
+    <input type="submit" value="Bật/Tắt đèn">
+  </form>
+</body>
+</html>
+C. Tạo script CGI:
+
+```bash
+
+mkdir -p /www/cgi-bin
+vi /www/cgi-bin/toggle_led.sh
+chmod +x /www/cgi-bin/toggle_led.sh
+```
+
+Nội dung toggle_led.sh:
+
+sh
+ 
+#!/bin/sh
+echo "Content-type: text/html"
+echo ""
+echo "<html><body><h2>LED toggled!</h2></body></html>"
+# Ở đây bạn có thể điều khiển GPIO nếu muốn
+
+🧪 BƯỚC 7: Truy cập và kiểm thử
+Mở trình duyệt → vào http://192.168.1.1
+
+Click nút "Bật/Tắt đèn" → script backend xử lý
+
+📁 Tại sao cần 2 file riêng biệt?
+✅ 1. File HTML – Giao diện (frontend)
+Vai trò: Hiển thị form đăng nhập cho người dùng nhập Username và Password
+
+Không xử lý dữ liệu, chỉ dùng để gửi thông tin lên server
+
+📍 Giống như: một biểu mẫu giấy bạn điền tên, gửi lên quầy tiếp nhận
+
+✅ 2. File CGI script (Shell) – Xử lý (backend)
+Vai trò: Nhận dữ liệu từ form HTML → kiểm tra hợp lệ → trả về kết quả
+
+Có thể xử lý nâng cao như:
+
+Kiểm tra mật khẩu
+
+Điều khiển đèn, motor, thiết bị
+
+Ghi log, chuyển hướng trang
+
+📍 Giống như: nhân viên quầy tiếp nhận, kiểm tra thông tin bạn gửi lên
+
+
+
+## ✅ TỔNG QUAN CÁC BƯỚC PHÁT TRIỂN ỨNG DỤNG HẸN GIỜ TẮT WIFI TRÊN TP-LINK (OPENWRT)
+
+| Bước | Mục tiêu                           | Việc cần làm cụ thể |
+|------|------------------------------------|----------------------|
+| 1    | Cài OpenWrt cho TP-Link           | - Tải firmware đúng cho **TP-Link TL-WR841N v13**  <br> - Truy cập `192.168.0.1` (firmware gốc TP-Link) <br> - Nâng cấp bằng file `.bin` <br> - Sau khi flash thành công, truy cập `192.168.1.1` |
+| 2    | Tạo giao diện HTML                 | - SSH vào router: `ssh root@192.168.1.1` <br> - Tạo file `/www/mytime.html` <br> - Viết mã HTML gồm form nhập số giây và nút gửi |
+| 3    | Viết script xử lý backend         | - Tạo thư mục `/www/cgi-bin` nếu chưa có <br> - Tạo file `/www/cgi-bin/set_timer.sh` <br> - Viết shell script nhận giá trị POST và hẹn giờ tắt WiFi |
+| 4    | Liên kết HTML với script backend  | - Trong form HTML, đặt `action="/cgi-bin/set_timer.sh"` <br> - Đảm bảo script có quyền thực thi: `chmod +x set_timer.sh` |
+| 5    | Kiểm tra hoạt động trên trình duyệt | - Mở trình duyệt: `http://192.168.1.1/mytime.html` <br> - Nhập thời gian (giây) → bấm nút <br> - Quan sát router tắt WiFi sau thời gian đã đặt |
+
+
+
+ 
+## 🔧 Những tính năng bạn có thể phát triển trên router chạy OpenWrt
+
+| #   | Nhóm tính năng                        | Mô tả chi tiết |
+|-----|----------------------------------------|----------------|
+| 📡 1 | **Quản lý WiFi nâng cao**              | - Tắt/bật WiFi theo giờ <br> - Thay đổi SSID, mật khẩu <br> - Chặn người dùng lạ |
+| 🌐 2 | **Thiết lập Web Server**               | - Giao diện điều khiển tùy chỉnh (HTML + JS + CGI) <br> - Trang điều khiển LED, relay, cảm biến |
+| 🛡️ 3 | **Firewall / Port Forwarding tự động**| - Script bật NAT, forward port cho camera/game <br> - Cấu hình `iptables` động |
+| 🔁 4 | **Tạo API điều khiển từ xa**           | - Viết REST API với CGI/Lua: `GET /status`, `POST /wifi` <br> - Tích hợp với app điện thoại |
+| 🔌 5 | **Điều khiển thiết bị vật lý**         | - Điều khiển GPIO: bật/tắt LED, role, quạt, còi <br> - Đọc cảm biến qua UART, SPI, I2C |
+| 🧠 6 | **Hệ thống hẹn giờ / tự động hóa**     | - Hẹn giờ tắt WiFi <br> - Tự động reboot, gửi email khi mất mạng |
+| 📥 7 | **Tự cập nhật firmware (OTA)**         | - Viết module kiểm tra & tải firmware mới tự động |
+| 📊 8 | **Theo dõi hệ thống (Monitoring)**     | - Ghi log truy cập <br> - Theo dõi tốc độ mạng, nhiệt độ, RAM, CPU |
+| 🧰 9 | **Gắn thiết bị ngoài (USB, SSD)**      | - Lưu log, cấu hình, chạy web server mở rộng <br> - Ghi dữ liệu cảm biến vào USB |
+| 🌍 10 | **Dịch vụ mạng mở rộng**              | - Thiết lập VPN Server (OpenVPN, WireGuard) <br> - Làm Proxy, DNS, DHCP Server mở rộng |
+
+
+
+
+
+</details>
+>>>>>>> 925cd5078fca11c050819c36c83dd1885a9af4a5
