@@ -4127,6 +4127,8 @@ int main() {
 - Muốn sd weak_ptr phải chuyển weak_ptr thành shared_ptr bằng lock, bạm thời tăng ref count của đối tượng.
 - lock() sẽ trả về nullptr.Nếu đối tượng bị hủy
 - Trước khi sử dụng tài nguyên, cần chuyển weak_ptr thành shared_ptr bằng lock().
+- Tránh vòng tham chiếu (`circular reference`).- 
+
 **Lặp tham chiếu**
 - xảy ra khi hai hoặc nhiều đối tượng trỏ qua lại lẫn nhau bằng shared_ptr
 - bộ đếm tham chiếu của chúng sẽ luôn lớn hơn 0 .Do đó, tài nguyên sẽ không bao giờ được giải phóng.
@@ -4270,25 +4272,62 @@ int main() {
 <details>
   <summary><h2>Lambda,templates</h2></summary>
 
-**Lambda**
-- Lambda là một cú pháp trong ngôn ngữ lập trình C++ cho phép tạo ra các hàm vô danh (anonymous functions) ngắn gọn và linh hoạt ngay tại chỗ mà không cần phải đặt tên  cho chúng,Cú pháp của lambda rất linh hoạt và có thể được sử dụng để viết mã ngắn gọn và dễ đọc.
-- Cú pháp :
-` [capture clause] (parameter list) -> return type { body }`
-- Capture clause: Là cách bạn chọn để capture các biến từ phạm vi bên ngoài vào bên trong lambda. Có thể capture bằng reference (&), capture bằng giá trị (=), hoặc không capture ([]).
-- parameter list: Là danh sách các tham số của hàm lambda, tương tự như danh sách tham số của một hàm thông thường.
-- return type: Là kiểu dữ liệu của giá trị trả về của hàm lambda. Trong một số trường hợp, trình biên dịch có thể tự suy luận kiểu dữ liệu này.
-- body: Là phần thân của hàm lambda, nơi  viết mã lệnh thực thi các công việc của hàm.
-- Trong C++, có ba cách chính để capture các biến từ phạm vi bên ngoài vào trong một lambda function:
-	+	Capture bằng Giá Trị (=):
-		+ Capture tất cả các biến được sử dụng trong lambda theo cách sao chép giá trị của chúng.
-		Các biến được capture bằng giá trị sẽ không thay đổi giá trị của chúng ngoài lambda khi chúng được thay đổi trong lambda.
-	+	Capture bằng Reference (&):
-		+ Capture tất cả các biến được sử dụng trong lambda theo cách tham chiếu đến chúng.
-		+ Các biến được capture bằng reference cho phép thay đổi giá trị của chúng ngoài lambda khi chúng được thay đổi trong lambda.
-	+ Capture Tự Do (không sử dụng capture clause):
-		+ Không capture bất kỳ biến nào từ phạm vi bên ngoài vào trong lambda.
-		+ Lambda chỉ có thể truy cập các biến được định nghĩa trong lambda hoặc các biến toàn cục.
-**Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
+ 
+## ⚡ Lambda Expression trong C++
+
+### 🔸 Lambda là gì?
+- Lambda là hàm **vô danh** (không tên), khai báo ngay tại chỗ, giúp viết code **ngắn gọn và linh hoạt**.
+- Dạng tổng quát:
+
+```cpp
+[capture clause] (parameter list) -> return type { body }
+```
+
+### 🔸 Thành phần:
+| Thành phần        | Mô tả                                                                 |
+|-------------------|----------------------------------------------------------------------|
+| `capture clause`  | Cách truy cập biến bên ngoài: `[]`, `[=]`, `[&]`                      |
+| `parameter list`  | Danh sách tham số (giống hàm thông thường)                           |
+| `return type`     | (Tùy chọn) Kiểu trả về. Có thể bỏ qua nếu trình biên dịch tự suy luận |
+| `body`            | Phần thân của hàm                                                    |
+
+### 🔸 Capture kiểu:
+| Cách capture     | Ý nghĩa                                                                 |
+|------------------|-------------------------------------------------------------------------|
+| `[]`             | Không capture biến nào                                                 |
+| `[=]`            | Capture tất cả biến xung quanh **bằng giá trị**                       |
+| `[&]`            | Capture tất cả biến xung quanh **bằng tham chiếu**                    |
+| `[a, &b]`        | Capture cụ thể biến `a` bằng giá trị, `b` bằng tham chiếu              |
+
+### 🔸 Ví dụ minh họa:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int main() {
+    int x = 10, y = 20;
+
+    auto add = [=]() { return x + y; };     // capture by value
+    auto modify = [&]() { x += 5; };        // capture by reference
+
+    std::cout << "Add: " << add() << std::endl; // 30
+    modify();
+    std::cout << "x after modify: " << x << std::endl; // 15
+
+    std::vector<int> nums = {1, 2, 3};
+    std::for_each(nums.begin(), nums.end(), [](int n) {
+        std::cout << n * n << " ";
+    }); // In ra bình phương
+    return 0;
+}
+```
+
+### ✅ Lợi ích
+- Giúp **tránh tạo hàm rườm rà**.
+- Dễ truyền làm đối số cho hàm (`std::sort`, `std::for_each`...)
+- Thường dùng trong các thư viện STL và lập trình hàm.
 
  📦 Templates trong C++
 
