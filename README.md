@@ -3576,6 +3576,8 @@ int main() {
 </details>
 
 </details>
+
+
 <details>
   <summary><h1>▶ ⭐C++ programming language</h1></summary>
 
@@ -4789,236 +4791,67 @@ int main(void){
 </details>
 <details>
   <summary><h2>Standard template library </h2></summary>
+STL là thư viện mạnh mẽ trong C++ giúp xử lý dữ liệu hiệu quả với ba thành phần chính:
 
-## STL là một thư viện trong ngôn ngữ lập trình C++ cung cấp một tập hợp các  hàm mẫu và thuật toán để lưu trữ và thao tác dữ liệu.
+### 🔹 1. Containers (Bộ chứa)
+- Dùng để lưu trữ dữ liệu.
+- Các loại phổ biến:
 
-**Một số thành phần chính của STL:**
-- Container(Bộ chứa) :là các cấu trúc dữ liệu được sử dụng để lưu trữ các phần tử.
-- Iterator: Cung cấp 1 cách chung để duyệt các phần tử trong Container mà không cần quan tâm tới container đó là gi.
-- Kết hợp với các thuật toán STL (std::sort, std::find, std::for_each) để thực hiện các thao tác như sắp xếp, tìm kiếm, và lọc dữ liệu.
- - Trong STL, có nhiều loại iterators:
-	+ Input Iterators: Cho phép duyệt qua các phần tử của một container từ đầu đến cuối, nhưng không thể thay đổi giá trị của các phần tử.
-	+ Output Iterators: Cho phép ghi dữ liệu vào một container từ đầu đến cuối.
-- Algorithms: STL cung cấp một loạt các thuật toán tiêu chuẩn như sort, find, binary_search, etc. Những thuật toán này có thể được áp dụng trên các containers.
-
-**Vector trong C++ là gì?**
-
-- vector là một container cung cấp một mảng động ,có thể thay đổi kích thước 
-- có thể chèn và xóa phần tử ở cuối mảng một cách hiệu quả. 
-- Không chèn xóa ở đầu , vì phải di chuyển các phần tử còn lại về phía trước > tốn time so với các loại khác
-- Nó khác mảng động ở chỗ là quản lý bộ nhớ tự động 
-- Sử dụng Vector: 
-	+ Thêm hoặc xóa phần tử ở cuối danh sách
-	+ Cần truy cập ngẫu nhiên  thông qua chỉ số.
-![image](https://github.com/user-attachments/assets/fb20cb53-317f-4f83-a4db-e971372f2c6a)
-
-
-**List là gì**
-- List là một danh sách liên kết hai chiều.
-- trong đó mỗi phần tử là một nút chứa:
-	+ Giá trị dữ liệu.
-	+ Con trỏ trỏ tới phần tử trước và sau nó.
-- Không hỗ trợ truy cập ngẫu nhiên	
-- Sử dụng list khi:
-	+ Thực hiện nhiều thao tác chèn/xóa ở bất kỳ vị trí nào trong danh sách.
-	+ Cần thực hiện nhiều thao tác chèn/xóa mà không làm ảnh hưởng đến các iterators hiện có.
-**Deque là gì**
-- là một container cho phép thêm/xóa ở cả hai đầu và truy cập ngẫu nhiên.(như Vector)
-**Map trong C++ là gì?**
-- dùng để lưu trữ các cặp khóa-giá trị (key-value pairs).
-- Mỗi khóa là duy nhất và được sử dụng để truy cập giá trị tương ứng. 
-- Các phần tử được sắp xếp theo khóa, không cần thao tác sắp xếp thủ công.
-- truy cập dữ liệu thông qua khóa, giúp tổ chức và quản lý dữ liệu dễ dàng hơn.
-- Ví dụ:Lưu trữ thông tin cá nhân theo ID.
-**Multimap  trong C++ là gì?**
-1. Khóa trùng lặp: nhiều giá trị cho cùng khóa 
-2. Sắp xếp: Các phần tử được sắp xếp tự động theo thứ tự của khóa.
-**Unordered_map  trong C++ là gì?**
-1. Không cho phép khóa trùng lặp; mỗi khóa phải duy nhất.
-2. Sắp xếp: Không có thứ tự sắp xếp giữa các phần tử.
-**unordered_multimap  trong C++ là gì?**
-1. Khóa trùng lặp: nhiều giá trị cho cùng khóa 
-2.  Không có thứ tự sắp xếp giữa các phần tử.
-
- 
-
-**set**
-- Set: Là một container không cho phép phần tử trùng lặp và sắp xếp tự động các phần tử theo thứ tự tăng dần
-- Khi cần sắp xếp tự động các phần tử theo thứ tự tăng dần hoặc giảm dần.
-- Khi cần lưu trữ một tập hợp các phần tử duy nhất.
-- Hiệu suất:Tìm kiếm, chèn, xóa
-**Multiset set:**
-1. Cho phép phần tử trùng lặp.
-2. Các phần tử trong multiset có thứ tự mặc định theo thứ tự tăng dần
- 
-**Unordered_set:**
-1. Không cho phép phần tử trùng lặp.
-2. Sắp xếp: Không duy trì thứ tự sắp xếp.
-
-**unordered_multiset**
-1. Cho phép phần tử trùng lặp.
-2. Không duy trì thứ tự sắp xếp.
-**stack**
-1. Nguyên tắc hoạt động LIFO  (Last In, First Out).
-2. Thêm/xóa  tại đỉnh ngăn xếp.
-**queue**
-1. Nguyên tắc hoạt động FIFO (First In, First Out).
-2. Thêm ở cuối hàng đợi, xóa ở đầu hàng đợi.
-# Iterator
-
-# 🔁 Iterator trong C++
-
-## ✅ 1. Khái niệm
-
-- **Iterator** là một đối tượng cung cấp cách **duyệt tuần tự các phần tử** trong container (như vector, list, map...) mà không cần biết chi tiết nội bộ của container đó.
-- Iterator hoạt động giống như **con trỏ**:
-  - `*it` để truy cập phần tử hiện tại
-  - `++it` để di chuyển đến phần tử kế tiếp
+| Container             | Đặc điểm chính                                                                 | Ứng dụng tiêu biểu                                       |
+|-----------------------|--------------------------------------------------------------------------------|----------------------------------------------------------|
+| `vector`              | Mảng động, truy cập ngẫu nhiên, thêm/xóa cuối hiệu quả                       | Danh sách điểm, mảng kết quả, tập hợp dữ liệu biến đổi   |
+| `list`                | Danh sách liên kết đôi, chèn/xóa ở bất kỳ đâu, không truy cập ngẫu nhiên     | Hàng đợi xử lý công việc cần xóa/chèn linh hoạt          |
+| `deque`               | Hàng đôi, thêm/xóa ở đầu/cuối, truy cập nhanh                                 | Trình duyệt lịch sử, undo/redo                          |
+| `set`                 | Tập hợp không trùng, tự sắp xếp                                               | Lọc trùng, lưu danh sách ID duy nhất                     |
+| `multiset`            | Cho phép phần tử trùng, vẫn sắp xếp                                           | Thống kê dữ liệu, đa số phiếu                           |
+| `unordered_set`       | Không trùng, không sắp xếp                                                     | Kiểm tra tồn tại nhanh (lookup)                         |
+| `unordered_multiset`  | Trùng lặp, không sắp xếp                                                      | Lưu trữ dữ liệu phân bố không quan trọng thứ tự         |
+| `map`                 | Cặp key-value, key duy nhất, tự sắp xếp                                       | Từ điển, bảng cấu hình theo ID                          |
+| `multimap`            | Cho phép nhiều value cho cùng 1 key                                           | Lưu danh sách học sinh theo lớp, từ đa nghĩa            |
+| `unordered_map`       | Key duy nhất, không sắp xếp                                                    | Hash table, cache                                       |
+| `unordered_multimap`  | Key trùng, không sắp xếp                                                      | Lưu log theo ID, group data nhanh                       |
+| `stack`               | Cấu trúc LIFO, thêm/xóa trên đỉnh                                             | Gọi hàm, undo hành động                                |
+| `queue`               | Cấu trúc FIFO, thêm cuối - xóa đầu                                            | Hệ thống hàng đợi, xử lý yêu cầu tuần tự                |
 
 ---
 
-## 📘 2. Cách sử dụng cơ bản
+### 🔹 2. Iterators
+- Cho phép duyệt phần tử trong container một cách tổng quát.
+- Kết hợp với `algorithm` để duyệt, sắp xếp, lọc...
 
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> v = {1, 2, 3, 4, 5};
-    vector<int>::iterator it;
-
-    for (it = v.begin(); it != v.end(); ++it) {
-        cout << *it << " ";
-    }
-}
-```
-
-> Kết quả: `1 2 3 4 5`
+| Loại Iterator     | Mô tả                                                   |
+|-------------------|----------------------------------------------------------|
+| `Input Iterator`  | Đọc dữ liệu, không thay đổi                             |
+| `Output Iterator` | Ghi dữ liệu                                              |
+| `Forward Iterator`| Duyệt tiến, đọc và ghi                                   |
+| `Bidirectional`   | Duyệt tiến/lùi                                           |
+| `Random Access`   | Duyệt mọi vị trí như con trỏ                             |
 
 ---
 
-## 🧠 3. Tính chất của Iterator
+### 🔹 3. Algorithms
+STL cung cấp nhiều thuật toán dùng chung cho mọi container:
 
-| Tính năng                  | Mô tả |
-|---------------------------|-------|
-| Giống con trỏ             | Trỏ đến và thao tác phần tử trong container |
-| Tách biệt dữ liệu và thao tác | Dễ dàng thay đổi container mà không đổi cách duyệt |
-| Hỗ trợ trong vòng lặp      | Dùng được với `for`, `while`, hoặc `auto` |
-
----
-
-## 🔧 4. Các loại Iterator
-
-| Loại Iterator            | Mô tả |
-|--------------------------|-------|
-| Input Iterator           | Chỉ đọc, di chuyển một chiều |
-| Output Iterator          | Chỉ ghi, di chuyển một chiều |
-| Forward Iterator         | Đọc/ghi, di chuyển một chiều |
-| Bidirectional Iterator   | Đọc/ghi, di chuyển hai chiều |
-| Random Access Iterator   | Đọc/ghi, truy cập ngẫu nhiên (như vector, array) |
+| Thuật toán         | Mô tả                                     |
+|--------------------|--------------------------------------------|
+| `std::sort`        | Sắp xếp                                   |
+| `std::find`        | Tìm phần tử                               |
+| `std::for_each`    | Áp dụng hàm lên mỗi phần tử               |
+| `std::count`       | Đếm số lần xuất hiện                      |
+| `std::binary_search` | Tìm kiếm nhị phân (dãy đã sắp xếp)     |
 
 ---
 
-## 🚀 5. Ví dụ dùng `auto`
-
-```cpp
-#include <vector>
-#include <iostream>
-using namespace std;
-
-int main() {
-    vector<int> nums = {10, 20, 30};
-    for (auto it = nums.begin(); it != nums.end(); ++it) {
-        cout << *it << " ";
-    }
-}
-```
+### ✅ Khi nào dùng gì?
+- `vector`: Truy cập nhanh, thêm cuối danh sách.
+- `list`: Chèn/xóa giữa danh sách thường xuyên.
+- `deque`: Chèn/xóa hai đầu hiệu quả.
+- `map`: Tra cứu theo key, cần sắp xếp.
+- `unordered_map`: Tra cứu nhanh, không cần sắp xếp.
+- `set`: Dữ liệu duy nhất, tự sắp xếp.
+- `stack/queue`: Cần cấu trúc dữ liệu chuẩn LIFO/FIFO.
 
 ---
-
-## ✅ 6. Tổng kết
-
-- Iterator là công cụ quan trọng để thao tác container trong C++.
-- Giúp duyệt các phần tử **một cách độc lập với cấu trúc container**.
-- Kết hợp tốt với STL và các thuật toán chuẩn (`std::find`, `std::sort`, v.v.).
-được triển khai.
-- Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
-- Iterator thường được sử dụng bằng cách sử dụng toán tử * để truy cập giá trị của iterator hiện tại và toán tử ++ để di chuyển đến phần tử tiếp theo trong cấu trúc dữ liệu
-- - Iterator giống như **con trỏ**, có thể:
-  - Trỏ đến phần tử hiện tại: `*it`
-  - Di chuyển sang phần tử tiếp theo: `++it
-
-# Algorithm
-# ⚙️ Thuật toán (`<algorithm>`) trong C++ STL
-
-## 📌 Khái niệm
-- STL (`Standard Template Library`) cung cấp thư viện `<algorithm>` chứa hàng trăm thuật toán sẵn có.
-- Các thuật toán này **không phụ thuộc vào loại container**, mà chỉ yêu cầu hỗ trợ `iterator`.
-- Giúp thực hiện các thao tác như **sắp xếp**, **tìm kiếm**, **chuyển đổi dữ liệu**, **duyệt**, **biến đổi**, và nhiều hơn nữa.
-
----
-
-## 🔹 Một số thuật toán tiêu biểu
-
-### 1. 📊 Thuật toán sắp xếp
-
-| Tên hàm             | Mô tả                                   |
-|----------------------|--------------------------------------------|
-| `std::sort()`        | Sắp xếp dãy theo thứ tự tăng dần          |
-| `std::stable_sort()` | Giữ nguyên thứ tự phần tử bằng nhau       |
-| `std::reverse()`     | Đảo ngược thứ tự các phần tử              |
-
----
-
-### 2. 🔎 Thuật toán tìm kiếm
-
-| Tên hàm                | Mô tả                                             |
-|-------------------------|----------------------------------------------------|
-| `std::find()`           | Tìm phần tử đầu tiên bằng giá trị                  |
-| `std::binary_search()`  | Kiểm tra phần tử có tồn tại (dãy đã được sắp xếp) |
-| `std::count()`          | Đếm số lượng phần tử bằng giá trị cho trước       |
-
----
-
-### 3. 🧮 Thuật toán thống kê
-
-| Tên hàm               | Mô tả                                               |
-|------------------------|------------------------------------------------------|
-| `std::count()`        | Đếm số lượng phần tử bằng X                         |
-| `std::accumulate()`   | Tính tổng các phần tử (cần `#include <numeric>`)    |
-| `std::min_element()`  | Tìm phần tử nhỏ nhất                                |
-| `std::max_element()`  | Tìm phần tử lớn nhất                                |
-
----
-
-### 4. 🧩 Thuật toán biến đổi
-
-| Tên hàm              | Mô tả                                                                 |
-|-----------------------|------------------------------------------------------------------------|
-| `std::transform()`   | Biến đổi từng phần tử (vd: nhân đôi, chuyển chữ thường, v.v.)          |
-| `std::replace()`     | Thay thế giá trị                                                       |
-| `std::fill()`        | Gán toàn bộ phần tử thành một giá trị                                  |
-
----
-
-### ✨ Một số thuật toán khác
-
-| Tên hàm                  | Mô tả                                         |
-|---------------------------|------------------------------------------------|
-| `std::unique()`          | Loại bỏ phần tử trùng lặp liên tiếp           |
-| `std::next_permutation()`| Sinh hoán vị tiếp theo                        |
-| `std::partition()`       | Phân chia dãy theo điều kiện                  |
-
----
-
-## ✅ Kết luận
-
-Thư viện `<algorithm>` là một phần không thể thiếu trong lập trình C++ hiện đại, giúp:
-
-- ✅ Giảm thời gian viết code lặp lại  
-- ✅ Tăng khả năng tái sử dụng  
-- ✅ Viết code gọn, đúng chuẩn, dễ bảo trì  
 
 
 
@@ -5143,29 +4976,12 @@ Thư viện `<algorithm>` là một phần không thể thiếu trong lập trì
 
 Multithreading giúp cải thiện hiệu năng chương trình, nhưng cũng đi kèm nhiều thách thức như race condition, deadlock, starvation. Việc sử dụng đúng các cơ chế đồng bộ hóa như mutex, condition_variable và các kỹ thuật thiết kế giúp đảm bảo chương trình chạy an toàn và hiệu quả.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</details>
 
 </details>
+
 </details>
+
 </details>
 
 </details>
