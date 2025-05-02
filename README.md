@@ -3783,24 +3783,18 @@ int main() {
 ```
 </details>
 
-
-
-**Static keyword:property**
-- Static data member là một biến thành viên của lớp, nhưng không thuộc về bất kỳ đối tượng cụ thể nào.
-- Thay vào đó, static property được chia sẻ giữa tất cả các đối tượng của lớp.
-- Chỉ tồn tại một bản sao duy nhất của static property trong bộ nhớ
-- Static property được khởi tạo ngoài lớp 
-- Có thể được truy cập thông qua tên lớp hoặc đối tượng.
+## 📌 Static Keyword: Property
+- `static` data member là một biến thành viên được chia sẻ giữa **tất cả các đối tượng** của lớp.
+- Chỉ có **một bản sao duy nhất** trong bộ nhớ.
+- Được khai báo trong lớp, nhưng **khởi tạo ngoài lớp**.
+- Truy cập thông qua tên lớp hoặc đối tượng.
 -  Ví dụ Đếm số lượng đối tượng được tạo từ một lớp
- 
-
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ: Static Property dùng chung:</summary>
 
-```C++
-#include <iostream>  
+```cpp
+#include <iostream>
 class HinhChuNhat {
-
 public:
     double chieuDai;
     double chieuRong;
@@ -3809,72 +3803,49 @@ public:
 
 int HinhChuNhat::var;
 
-int main()
-{
-    HinhChuNhat hinh1;
-    HinhChuNhat hinh2;
-    HinhChuNhat hinh3;
-
-	hinh1.var =10;
-	// thì hinh2.var cũng bằng 10;
-  
-
-    
-
-
+int main() {
+    HinhChuNhat hinh1, hinh2;
+    hinh1.var = 10;
+    std::cout << hinh2.var << std::endl; // cũng in ra 10
     return 0;
 }
-
-
 ```
 </details>
 
-
-- Biến đếm chung, đếm object
-
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ: Static Property đếm đối tượng:</summary>
 
-```C++
+```cpp
 #include <iostream>
-
 class ObjectCounter {
 public:
-    static int count;  // Biến tĩnh để đếm số đối tượng
-
+    static int count;
     ObjectCounter() {
-        count++;  // Tăng biến đếm khi tạo một đối tượng mới
+        count++;
     }
 };
 
-int ObjectCounter::count = 0;  // Khởi tạo biến tĩnh
+int ObjectCounter::count = 0;
 
 int main() {
-    ObjectCounter obj1;  // Tạo đối tượng thứ nhất, count = 1
-    ObjectCounter obj2;  // Tạo đối tượng thứ hai, count = 2
-
-    std::cout << "Number of objects: " << ObjectCounter::count << std::endl;  // In ra số lượng đối tượng: 2
+    ObjectCounter obj1, obj2;
+    std::cout << "Number of objects: " << ObjectCounter::count << std::endl;
     return 0;
 }
-
-// nếu không dùng từ khóa static thì obj1 và obj2 có biến count riêng  không ảnh hưởng đến nhau.
-
 ```
 </details>
 
+---
 
-
-**Static keyword:method**
-- Static method trong C++ là một method khai báo với từ khóa static
-- Không cần tạo đối tượng để gọi static method, có thể gọi thông qua tên lớp
-- Static method chỉ có thể truy cập static property hoặc static method khác.
+## 📌 Static Keyword: Method
+- `static` method có thể gọi **mà không cần tạo đối tượng**.
+- Chỉ có thể truy cập các thành phần `static` khác trong class.
 
 <details>
-<summary>Ví dụ:</summary>
+<summary>🔍 Ví dụ: Static Method:</summary>
 
-```C++
+```cpp
 #include <iostream>
-
 class MathUtils {
 public:
     static int square(int x) {
@@ -3883,14 +3854,14 @@ public:
 };
 
 int main() {
-    int result = MathUtils::square(5);  // Gọi phương thức tĩnh mà không cần đối tượng
-    std::cout << "Square of 5: " << result << std::endl;  // Output: Square of 5: 25
+    int result = MathUtils::square(5);
+    std::cout << "Square of 5: " << result << std::endl;
     return 0;
 }
-
 ```
-
 </details>
+
+
 
 
 **Con trỏ this trong C++**
@@ -4210,14 +4181,29 @@ if (a_shared) {
 }
 
 ```
+ 
 
 -  lock() trên một std::weak_ptr, nếu đối tượng mà weak_ptr đang theo dõi vẫn tồn tại , lock() sẽ trả về một std::shared_ptr hợp lệ trỏ đến đối tượng đó. Điều này có nghĩa là bạn có thể sử dụng shared_ptr này để truy cập và thao tác với đối tượng an toàn.
 - Nếu A vẫn tồn tại, ptrA.lock() sẽ trả về một shared_ptr<A> hợp lệ (a_shared), và bạn có thể sử dụng a_shared để thực hiện các thao tác như thông báo "Process A successful!". Ngược lại, nếu A đã bị hủy, ptrA.lock() sẽ trả về một shared_ptr<A> rỗng, và bạn sẽ nhận được thông báo "A is no longer available."
 - lock():Giúp đảm bảo rằng bạn chỉ truy cập vào đối tượng khi nó vẫn còn tồn tại, tránh gây ra lỗi truy cập vào bộ nhớ đã giải phóng.
 
-
-
+ 
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </details>
 <details>
   <summary><h2>namespace</h2></summary>
