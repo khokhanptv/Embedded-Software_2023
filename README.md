@@ -4338,66 +4338,91 @@ int main() {
 		+ Lambda chỉ có thể truy cập các biến được định nghĩa trong lambda hoặc các biến toàn cục.
 **Lambda function mang lại tính ngắn gọn và linh hoạt trong việc viết code, giúp tăng cường độ dễ đọc và dễ bảo trì của chương trình**
 
-**Template**
-- Là một kiểu dữ liệu trừu tượng tổng quát hóa cho các kiểu dữ liệu int, float, double, bool...cho phép  viết mã một cách tổng quát cho nhiều loại dữ liệu khác nhau mà không cần phải viết lại mã nhiều lần
-- Có 2 loại  Templates:
-	+ Class Templates: 
-		+ Cho phép tạo một lớp chung để làm việc với nhiều loại dữ liệu khác nhau mà không cần viết lại mã lập trình cho mỗi loại dữ liệu đó. 
-		+ Khi sử dụng một template class, bạn cần cung cấp các loại dữ liệu cụ thể cho các tham số khi khai báo đối tượng từ template
-	+ Function templates:Function templates cho phép bạn tạo ra các hàm mà có thể làm việc với nhiều kiểu dữ liệu khác nhau. chỉ cần viết một hàm mẫu (template) và sau đó sử dụng nó để tạo ra các phiên bản cụ thể cho mỗi kiểu dữ liệu mà bạn muốn sử dụng.
-	+ Variadic Templates là một tính năng trong C++ ,Tạo một hàm với số lượng tham số đầu vào không xác định.
-	
-```C++
-	// Khai báo một class template cho một cặp giá trị
-#include <iostream>
+ 📦 Templates trong C++
 
-// Định nghĩa một class template
-template <typename T>
+## ✅ 1. Khái niệm
+
+Template là một **kỹ thuật tổng quát hóa** trong C++, cho phép viết mã có thể áp dụng cho nhiều kiểu dữ liệu khác nhau (int, float, string, v.v.) mà **không cần viết lại logic**.
+
+> Templates giúp viết mã ngắn gọn, tái sử dụng và giảm lỗi.
+
+---
+
+## 🧱 2. Các loại Template
+
+### 🔹 2.1 Function Template
+
+Cho phép định nghĩa các hàm làm việc với nhiều kiểu dữ liệu.
+
+```cpp
+template<typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    cout << add(3, 4);       // int
+    cout << add(3.5, 2.1);   // double
+}
+```
+
+---
+
+### 🔹 2.2 Class Template
+
+Dùng để tạo các lớp tổng quát hóa, áp dụng cho nhiều kiểu dữ liệu.
+
+```cpp
+template<typename T>
 class Box {
+    T value;
 public:
-    T value; // Thành viên dữ liệu kiểu T
-
-    // Constructor để khởi tạo giá trị
-    Box(T v) : value(v) {}
+    Box(T val) : value(val) {}
+    void show() { cout << value; }
 };
 
 int main() {
-    // Tạo các đối tượng của Box với các kiểu dữ liệu khác nhau
-    Box<int> intBox(123); // Đối tượng Box với kiểu int
-    Box<double> doubleBox(45.67); // Đối tượng Box với kiểu double
-    Box<std::string> stringBox("Hello, World!"); // Đối tượng Box với kiểu std::string
-
-    // In ra giá trị của các đối tượng Box
-    std::cout << "Giá trị của intBox: " << intBox.value << std::endl; // 123
-    std::cout << "Giá trị của doubleBox: " << doubleBox.value << std::endl; // 45.67
-    std::cout << "Giá trị của stringBox: " << stringBox.value << std::endl; // Hello, World!
-
-    return 0;
+    Box<int> b1(100);
+    Box<string> b2("hello");
 }
-
-
-
-
-
-
-
-
-
-
-	// Hàm template tính tổng của hai giá trị
-	template <class T>
-	T sum(T a, T b) {
-		return a + b;
-	}
-	int main() {
-    std::cout << "Sum of integers: " << sum(5, 10) << std::endl; // T được suy luận là int
-    std::cout << "Sum of doubles: " << sum(3.14, 2.5) << std::endl; // T được suy luận là double
-    
-
-    return 0;
-}
-
 ```
+
+---
+
+### 🔹 2.3 Variadic Template (C++11 trở lên)
+
+Cho phép định nghĩa hàm hoặc lớp với **số lượng tham số không xác định**.
+
+```cpp
+template<typename T>
+void print(T t) {
+    cout << t << endl;
+}
+
+template<typename T, typename... Args>
+void print(T t, Args... args) {
+    cout << t << ", ";
+    print(args...);  // Đệ quy
+}
+
+int main() {
+    print(1, 2.5, "abc", true);
+}
+```
+
+---
+
+## 📌 3. Lưu ý
+
+- Có thể dùng `template<typename T>` hoặc `template<class T>` — cả hai đều hợp lệ.
+- Khi biên dịch, compiler sẽ **tự tạo ra các phiên bản** tương ứng với từng kiểu dữ liệu được dùng.
+- Templates có thể kết hợp với các tính năng khác như `constexpr`, `auto`, `concepts` (C++20).
+
+---
+
+## ✅ 4. Tổng kết
+
+Templates là một công cụ mạnh mẽ trong C++ để viết **mã tổng quát**, **giảm trùng lặp**, và **cải thiện khả năng bảo trì**. Cần hiểu rõ cách hoạt động và khi nào nên áp dụng để tránh lỗi phức tạp khi biên dịch.
 	
 
 **Virtual Function**
@@ -4665,89 +4690,68 @@ int main() {
 - Chỉ cung cấp giao diện, ẩn đi chi tiết triển khai.
 - Ví dụ tính phương trình bậc 2 , để tính nghiệm x1,x2 thì ta có hàm tính detal = b * b - 4 * a * c .delta là 1 trong những thành phần tạo ra kết quả.Vậy thì hàm tính delta này phải được ẩn đi bằng cách để nó vào phạm vi private
 
-<details>
-<summary>Ví dụ:</summary>
 
-```C++
-#include <iostream>
-#include <string>
-#include <cmath>
+# 🔒 Abstraction (Tính trừu tượng) trong C++
 
-using namespace std;
+## ✅ 1. Khái niệm
 
-class GiaiPhuongTrinh
-{
-private:
-    double a;
-    double b;
-    double c;
-    double x1;
-    double x2;
-    double delta;
+- **Abstraction** là quá trình **ẩn đi chi tiết hiện thực** và chỉ **hiển thị những gì cần thiết** với người dùng.
+- Giúp giảm sự phức tạp và tăng tính bảo trì trong chương trình.
+- Trong C++, abstraction được thực hiện thông qua:
+  - **Lớp trừu tượng (abstract class)**
+  - **Hàm ảo thuần túy (pure virtual function)**
 
-    void tinhNghiem()
-    {
-        delta = b * b - 4 * a * c;
-        if (delta < 0)
-        {
-            delta = -1;
-        }
-        else if (delta == 0)
-        {
-            x1 = x2 = -b / (2 * a);
-        }
-        else if (delta > 0)
-        {
-            x1 = (-b + sqrt(delta)) / (2 * a);
-            x2 = (-b - sqrt(delta)) / (2 * a);
-        }
-    }
+---
 
+## 🧱 2. Lớp trừu tượng (Abstract Class)
+
+- Là lớp có ít nhất **một hàm ảo thuần túy** (`= 0`).
+- Không thể tạo đối tượng trực tiếp từ lớp trừu tượng.
+- Chỉ dùng để **kế thừa và triển khai các hành vi cụ thể** ở lớp con.
+
+```cpp
+class Animal {
 public:
-    void enterNumber(double num_a, double num_b, double num_c);
-    void printResult();
+    virtual void speak() = 0;  // Hàm thuần ảo
 };
 
-void GiaiPhuongTrinh::enterNumber(double num_a, double num_b, double num_c)
-{
-    a = num_a;
-    b = num_b;
-    c = num_c;
-}
-
-void GiaiPhuongTrinh::printResult()
-{
-    tinhNghiem();
-    if (delta == -1)
-    {
-        cout << "PT vo nghiem" << endl;
+class Dog : public Animal {
+public:
+    void speak() override {
+        cout << "Woof!
+";
     }
-    else if (delta == 0)
-    {
-        cout << "PT co nghiem chung: " << x1 << endl;
-    }
-    else if (delta > 0)
-    {
-        cout << "PT co 2 nghiem: \n";
-        cout << "x1: " << x1 << endl;
-        cout << "x2: " << x2 << endl;
-    }
-}
-
-int main()
-{
-    GiaiPhuongTrinh phuongtrinh1;
-    phuongtrinh1.enterNumber(1, 5, 4);
-    phuongtrinh1.printResult();
-
-    return 0;
-}
-
-
-
-
-
+};
 ```
+
+---
+
+## 🧠 3. Mục tiêu của abstraction
+
+| Mục tiêu                 | Ý nghĩa |
+|--------------------------|--------|
+| Ẩn chi tiết triển khai   | Người dùng không cần biết cách lớp hoạt động nội bộ |
+| Tăng tính mô-đun         | Tách giao diện và thực thi giúp dễ bảo trì, nâng cấp |
+| Hỗ trợ thiết kế hướng đối tượng | Là một trong bốn trụ cột OOP: Encapsulation, Inheritance, Polymorphism, Abstraction |
+
+---
+
+## 📌 4. Sự khác biệt giữa Abstraction và Encapsulation
+
+| Đặc điểm        | Abstraction                       | Encapsulation                  |
+|-----------------|------------------------------------|--------------------------------|
+| Mục tiêu chính  | Ẩn chi tiết logic không cần thiết | Giấu dữ liệu để bảo vệ thông tin |
+| Triển khai      | Lớp trừu tượng, hàm ảo thuần túy   | Access modifiers (private, protected) |
+| Người dùng thấy | Giao diện hoặc hành vi cần thiết  | Không thấy dữ liệu nội bộ     |
+
+---
+
+## ✅ 5. Tổng kết
+
+- Abstraction giúp **tập trung vào cái "gì" hệ thống làm**, thay vì "làm như thế nào".
+- Là công cụ mạnh để thiết kế hệ thống linh hoạt, có thể mở rộng.
+- Sử dụng qua abstract class là cách phổ biến trong C++ để đạt tính trừu tượng.
+
 
 
 </details>
@@ -4870,15 +4874,160 @@ int main(void){
 1. Nguyên tắc hoạt động FIFO (First In, First Out).
 2. Thêm ở cuối hàng đợi, xóa ở đầu hàng đợi.
 # Iterator
-- Iterator cung cấp một cách chung để duyệt qua các phần tử của một container mà không cần biết chi tiết về cách container được triển khai.
+
+# 🔁 Iterator trong C++
+
+## ✅ 1. Khái niệm
+
+- **Iterator** là một đối tượng cung cấp cách **duyệt tuần tự các phần tử** trong container (như vector, list, map...) mà không cần biết chi tiết nội bộ của container đó.
+- Iterator hoạt động giống như **con trỏ**:
+  - `*it` để truy cập phần tử hiện tại
+  - `++it` để di chuyển đến phần tử kế tiếp
+
+---
+
+## 📘 2. Cách sử dụng cơ bản
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5};
+    vector<int>::iterator it;
+
+    for (it = v.begin(); it != v.end(); ++it) {
+        cout << *it << " ";
+    }
+}
+```
+
+> Kết quả: `1 2 3 4 5`
+
+---
+
+## 🧠 3. Tính chất của Iterator
+
+| Tính năng                  | Mô tả |
+|---------------------------|-------|
+| Giống con trỏ             | Trỏ đến và thao tác phần tử trong container |
+| Tách biệt dữ liệu và thao tác | Dễ dàng thay đổi container mà không đổi cách duyệt |
+| Hỗ trợ trong vòng lặp      | Dùng được với `for`, `while`, hoặc `auto` |
+
+---
+
+## 🔧 4. Các loại Iterator
+
+| Loại Iterator            | Mô tả |
+|--------------------------|-------|
+| Input Iterator           | Chỉ đọc, di chuyển một chiều |
+| Output Iterator          | Chỉ ghi, di chuyển một chiều |
+| Forward Iterator         | Đọc/ghi, di chuyển một chiều |
+| Bidirectional Iterator   | Đọc/ghi, di chuyển hai chiều |
+| Random Access Iterator   | Đọc/ghi, truy cập ngẫu nhiên (như vector, array) |
+
+---
+
+## 🚀 5. Ví dụ dùng `auto`
+
+```cpp
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int main() {
+    vector<int> nums = {10, 20, 30};
+    for (auto it = nums.begin(); it != nums.end(); ++it) {
+        cout << *it << " ";
+    }
+}
+```
+
+---
+
+## ✅ 6. Tổng kết
+
+- Iterator là công cụ quan trọng để thao tác container trong C++.
+- Giúp duyệt các phần tử **một cách độc lập với cấu trúc container**.
+- Kết hợp tốt với STL và các thuật toán chuẩn (`std::find`, `std::sort`, v.v.).
+được triển khai.
 - Iterator là một đối tượng cho phép truy cập tuần tự qua các phần tử của một container.
 - Iterator thường được sử dụng bằng cách sử dụng toán tử * để truy cập giá trị của iterator hiện tại và toán tử ++ để di chuyển đến phần tử tiếp theo trong cấu trúc dữ liệu
-- Nó giống như con trỏ, cho phép di chuyển qua các phần tử trong container.
+- - Iterator giống như **con trỏ**, có thể:
+  - Trỏ đến phần tử hiện tại: `*it`
+  - Di chuyển sang phần tử tiếp theo: `++it
 
 # Algorithm
-- Thư viện STL (Standard Template Library) cung cấp một số thuật toán tiêu biểu thông qua algorithm. 
-- Các thuật toán này hoạt động trên các phạm vi hoặc các loại dữ liệu khác nhau, giúp thực hiện các nhiệm vụ như sắp xếp, tìm kiếm, chuyển đổi dữ liệu, và nhiều thao tác khác. 
+# ⚙️ Thuật toán (`<algorithm>`) trong C++ STL
 
+## 📌 Khái niệm
+- STL (`Standard Template Library`) cung cấp thư viện `<algorithm>` chứa hàng trăm thuật toán sẵn có.
+- Các thuật toán này **không phụ thuộc vào loại container**, mà chỉ yêu cầu hỗ trợ `iterator`.
+- Giúp thực hiện các thao tác như **sắp xếp**, **tìm kiếm**, **chuyển đổi dữ liệu**, **duyệt**, **biến đổi**, và nhiều hơn nữa.
+
+---
+
+## 🔹 Một số thuật toán tiêu biểu
+
+### 1. 📊 Thuật toán sắp xếp
+
+| Tên hàm             | Mô tả                                   |
+|----------------------|--------------------------------------------|
+| `std::sort()`        | Sắp xếp dãy theo thứ tự tăng dần          |
+| `std::stable_sort()` | Giữ nguyên thứ tự phần tử bằng nhau       |
+| `std::reverse()`     | Đảo ngược thứ tự các phần tử              |
+
+---
+
+### 2. 🔎 Thuật toán tìm kiếm
+
+| Tên hàm                | Mô tả                                             |
+|-------------------------|----------------------------------------------------|
+| `std::find()`           | Tìm phần tử đầu tiên bằng giá trị                  |
+| `std::binary_search()`  | Kiểm tra phần tử có tồn tại (dãy đã được sắp xếp) |
+| `std::count()`          | Đếm số lượng phần tử bằng giá trị cho trước       |
+
+---
+
+### 3. 🧮 Thuật toán thống kê
+
+| Tên hàm               | Mô tả                                               |
+|------------------------|------------------------------------------------------|
+| `std::count()`        | Đếm số lượng phần tử bằng X                         |
+| `std::accumulate()`   | Tính tổng các phần tử (cần `#include <numeric>`)    |
+| `std::min_element()`  | Tìm phần tử nhỏ nhất                                |
+| `std::max_element()`  | Tìm phần tử lớn nhất                                |
+
+---
+
+### 4. 🧩 Thuật toán biến đổi
+
+| Tên hàm              | Mô tả                                                                 |
+|-----------------------|------------------------------------------------------------------------|
+| `std::transform()`   | Biến đổi từng phần tử (vd: nhân đôi, chuyển chữ thường, v.v.)          |
+| `std::replace()`     | Thay thế giá trị                                                       |
+| `std::fill()`        | Gán toàn bộ phần tử thành một giá trị                                  |
+
+---
+
+### ✨ Một số thuật toán khác
+
+| Tên hàm                  | Mô tả                                         |
+|---------------------------|------------------------------------------------|
+| `std::unique()`          | Loại bỏ phần tử trùng lặp liên tiếp           |
+| `std::next_permutation()`| Sinh hoán vị tiếp theo                        |
+| `std::partition()`       | Phân chia dãy theo điều kiện                  |
+
+---
+
+## ✅ Kết luận
+
+Thư viện `<algorithm>` là một phần không thể thiếu trong lập trình C++ hiện đại, giúp:
+
+- ✅ Giảm thời gian viết code lặp lại  
+- ✅ Tăng khả năng tái sử dụng  
+- ✅ Viết code gọn, đúng chuẩn, dễ bảo trì  
 
 
 
