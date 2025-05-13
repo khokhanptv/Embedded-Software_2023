@@ -4,17 +4,19 @@
 
 # So sánh: Multi-Process vs Multi-Thread
 
-| Tiêu chí        | Multi-Process                                                                 | Multi-Thread                                                               |
-|-----------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| **Khái niệm**   | Tạo ra nhiều tiến trình (process) độc lập                                     | Tạo nhiều luồng (thread) trong cùng một tiến trình                         |
-| **Bộ nhớ**      | Mỗi process có bộ nhớ riêng biệt                                               | Các thread chia sẻ bộ nhớ chung                                            |
-| **Tốc độ giao tiếp** | Chậm hơn vì phải dùng IPC                                                      | Nhanh vì dùng chung bộ nhớ                                                 |
-| **Tính ổn định**| An toàn hơn: crash 1 process không làm hỏng process khác                      | Nếu 1 thread lỗi, có thể làm treo toàn bộ process                          |
-| **Tốn tài nguyên**| Tốn bộ nhớ hơn do không gian riêng                                             | Tốn ít tài nguyên hơn                                                      |
-| **Tạo & huỷ**   | Chi phí cao hơn (fork, CreateProcess)                                         | Tạo huỷ nhanh hơn (std::thread)                                            |
-| **Use case**    | Browser tab, server worker, sandbox                                           | Xử lý song song nhẹ: tải file, UI, xử lý song song                         |
-| **Giao tiếp (IPC)**| Cần dùng Pipe, Socket, Shared Memory                                         | Không cần IPC, vì dùng chung biến                                          |
-| **Ví dụ API**   | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
+| Tiêu chí             | Multi-Process                                                                 | Multi-Thread                                                               |
+|----------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **Là gì?**            | Là một **chương trình độc lập** đang chạy (có vùng nhớ và tài nguyên riêng biệt). | Là **đơn vị nhỏ hơn của process**, chạy song song bên trong process.         |
+| **Khái niệm**         | Tạo ra nhiều tiến trình (process) độc lập                                     | Tạo nhiều luồng (thread) trong cùng một tiến trình                         |
+| **Bộ nhớ**            | Mỗi process có bộ nhớ riêng biệt                                               | Các thread chia sẻ bộ nhớ chung                                            |
+| **Tốc độ giao tiếp**  | Chậm hơn vì phải dùng IPC                                                     | Nhanh vì dùng chung bộ nhớ                                                 |
+| **Tính ổn định**      | An toàn hơn: crash 1 process không làm hỏng process khác                      | Nếu 1 thread lỗi, có thể làm treo toàn bộ process                          |
+| **Tốn tài nguyên**    | Tốn bộ nhớ hơn do không gian riêng                                             | Tốn ít tài nguyên hơn                                                      |
+| **Tạo & huỷ**         | Chi phí cao hơn (fork, CreateProcess)                                         | Tạo huỷ nhanh hơn (std::thread)                                            |
+| **Use case**          | Browser tab, server worker, sandbox                                           | Xử lý song song nhẹ: tải file, UI, xử lý song song                         |
+| **Giao tiếp (IPC)**   | Cần dùng Pipe, Socket, Shared Memory                                          | Không cần IPC, vì dùng chung biến                                          |
+| **Ví dụ API**         | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
+| **✅ Mục đích tổng quát** | Cần cách ly bộ nhớ, tăng độ an toàn & ổn định khi crash                      | Cần tốc độ xử lý song song, chia sẻ dữ liệu nhanh giữa các task nhỏ         |
 
 
 # Inter-Process Communication (IPC)
