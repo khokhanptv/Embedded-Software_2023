@@ -1,6 +1,151 @@
 <details>
 <summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
 
+
+# So sánh: Multi-Process vs Multi-Thread
+
+| Tiêu chí        | Multi-Process                                                                 | Multi-Thread                                                               |
+|-----------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **Khái niệm**   | Tạo ra nhiều tiến trình (process) độc lập                                     | Tạo nhiều luồng (thread) trong cùng một tiến trình                         |
+| **Bộ nhớ**      | Mỗi process có bộ nhớ riêng biệt                                               | Các thread chia sẻ bộ nhớ chung                                            |
+| **Tốc độ giao tiếp** | Chậm hơn vì phải dùng IPC                                                      | Nhanh vì dùng chung bộ nhớ                                                 |
+| **Tính ổn định**| An toàn hơn: crash 1 process không làm hỏng process khác                      | Nếu 1 thread lỗi, có thể làm treo toàn bộ process                          |
+| **Tốn tài nguyên**| Tốn bộ nhớ hơn do không gian riêng                                             | Tốn ít tài nguyên hơn                                                      |
+| **Tạo & huỷ**   | Chi phí cao hơn (fork, CreateProcess)                                         | Tạo huỷ nhanh hơn (std::thread)                                            |
+| **Use case**    | Browser tab, server worker, sandbox                                           | Xử lý song song nhẹ: tải file, UI, xử lý song song                         |
+| **Giao tiếp (IPC)**| Cần dùng Pipe, Socket, Shared Memory                                         | Không cần IPC, vì dùng chung biến                                          |
+| **Ví dụ API**   | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
+
+
+# Inter-Process Communication (IPC)
+
+## IPC là gì?
+- IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **không chia sẻ bộ nhớ**.
+- Dùng cho **Multi-Process** (không cần thiết với Multi-Thread).
+
+## Các loại IPC phổ biến:
+
+| IPC Loại          | Giải thích                                                     | Đặc điểm                                              |
+|-------------------|---------------------------------------------------------------|------------------------------------------------------|
+| **Pipe**          | 1 chiều: truyền dữ liệu từ process cha -> con hoặc ngược lại    | Đơn giản, giống ống dẫn                              |
+| **Named Pipe (FIFO)** | Giống pipe nhưng có tên, nhiều process truy cập được            | Giao tiếp giữa 2 process không cùng cha-con          |
+| **Shared Memory** | Nhiều process truy cập vùng nhớ chung                          | Rất nhanh, nhưng cần cơ chế đồng bộ (semaphore)       |
+| **Message Queue** | Hàng đợi lưu thông điệp giữa process                           | Có thứ tự, quản lý message tốt                       |
+| **Socket**        | Giao tiếp qua TCP/UDP, kể cả qua mạng                          | Mạnh mẽ, dùng cho client-server                     |
+| **Semaphore**     | Cơ chế đồng bộ để quản lý tài nguyên dùng chung                | Hay dùng với Shared Memory                           |
+| **Signals**       | Gửi tín hiệu tới process khác (kill, stop, user-defined signals)| Đơn giản, không truyền dữ liệu                      |
+
+# So sánh: Semaphore vs Mutex
+
+| Tiêu chí            | Semaphore                                                         | Mutex                                                          |
+|---------------------|--------------------------------------------------------------------|----------------------------------------------------------------|
+| **Khái niệm**        | Biến đếm, quản lý số lượng truy cập vào tài nguyên dùng chung      | Khóa nhị phân, chỉ cho phép 1 thread truy cập tại 1 thời điểm   |
+| **Giá trị**          | Có thể >1 (Counting Semaphore) hoặc 0/1 (Binary Semaphore)          | Chỉ có 2 trạng thái: Locked (1) hoặc Unlocked (0)              |
+| **Use case**         | Quản lý nhiều tài nguyên cùng loại (pool connection, buffer slot)  | Đảm bảo chỉ 1 thread vào vùng critical section                  |
+| **Sở hữu (Ownership)**| Không có khái niệm sở hữu, ai cũng có thể Signal (V)                | Chỉ thread lock mới có thể unlock (đảm bảo tính sở hữu)         |
+| **Tốc độ**           | Thường chậm hơn mutex do hay dùng cho nhiều resource               | Nhanh hơn khi chỉ cần bảo vệ độc quyền                          |
+| **Khả năng đồng bộ**  | Đồng bộ nhiều thread/process truy cập đồng thời (nhiều resource)   | Đồng bộ truy cập độc quyền (1 resource duy nhất)                |
+| **Ứng dụng phổ biến** | Shared Memory, giới hạn resource pool                             | Bảo vệ vùng critical section, bảo vệ dữ liệu đơn lẻ              |
+
+## Tóm tắt:
+- **Mutex** = Bảo vệ độc quyền (1 thread tại 1 thời điểm).
+- **Semaphore** = Quản lý nhiều tài nguyên hoặc kiểm soát luồng truy cập đồng thời.
+
+# Tóm tắt: Khi nào dùng loại IPC nào?
+
+| Nhu cầu                                          | Nên dùng                                   |
+|--------------------------------------------------|--------------------------------------------|
+| **Truyền dữ liệu đơn giản cha <-> con**          | Pipe                                       |
+| **Giao tiếp giữa process khác cha mẹ**           | Named Pipe, Socket                         |
+| **Cần hiệu suất cao (shared data)**              | Shared Memory + Semaphore                  |
+| **Truyền thông điệp dạng hàng đợi**              | Message Queue                              |
+| **Dịch vụ Client-Server**                        | Socket                                     |
+| **Báo hiệu trạng thái (simple signal)**          | Signals              
+
+# Cha (Parent Process) và Con (Child Process)
+
+| Parent Process (Tiến trình Cha)                           | Child Process (Tiến trình Con)                                      |
+|-----------------------------------------------------------|---------------------------------------------------------------------|
+| Là tiến trình gốc, đang chạy trước                        | Là tiến trình được tạo ra bởi tiến trình cha                        |
+| Dùng `fork()` (Linux) hoặc `CreateProcess()` (Windows) để tạo con | Con là bản sao hoặc chương trình mới sinh ra từ cha                  |
+| Có thể tạo nhiều tiến trình con                           | Mỗi con có thể tiếp tục tạo ra các tiến trình con khác               |
+| Có thể giao tiếp với con qua Pipe, Shared Memory, Signal, Socket | Con có thể trả kết quả về cho cha qua các phương pháp IPC            |
+                      |
+# Windows Message là gì?
+
+**Windows Message** là cơ chế giao tiếp giữa hệ điều hành Windows và ứng dụng (hoặc giữa các cửa sổ).
+
+## Chức năng:
+- Cho phép **Hệ điều hành gửi thông điệp** tới ứng dụng khi có sự kiện xảy ra.
+- Các **cửa sổ trong ứng dụng** cũng có thể gửi message cho nhau.
+- Là nền tảng của **Windows GUI Programming**.
+
+## Ví dụ về các loại message:
+| Hành động               | Message tương ứng                     |
+|-------------------------|---------------------------------------|
+| Click chuột              | `WM_LBUTTONDOWN`, `WM_LBUTTONUP`      |
+| Nhấn phím                | `WM_KEYDOWN`, `WM_KEYUP`              |
+| Di chuyển/Resize cửa sổ  | `WM_MOVE`, `WM_SIZE`                  |
+| Timer                   | `WM_TIMER`                            |
+| Đóng cửa sổ              | `WM_CLOSE`, `WM_DESTROY`              |
+
+## Cơ chế xử lý:
+- Mỗi cửa sổ có một **message queue**.
+- Khi có sự kiện, message sẽ được **gửi vào queue**.
+- Hàm **`GetMessage()` / `PeekMessage()`** lấy message ra xử lý.
+- Hàm **`DispatchMessage()`** sẽ chuyển message tới hàm **WindowProc()** để xử lý thực tế.
+
+## Code minh hoạ:
+```cpp
+MSG msg;
+while (GetMessage(&msg, NULL, 0, 0)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+}
+```
+Tóm tắt:
+Windows Message = Thông điệp sự kiện.
+
+Làm cầu nối giữa Hệ điều hành ↔ Ứng dụng.
+
+Ứng dụng phải có vòng lặp xử lý message để tương tác với người dùng.
+
+
+# Phát hiện Memory Leak khi dùng Smart Pointer (shared_ptr, unique_ptr)
+
+| Công cụ                            | Môi trường        | Dùng để                                      | Ưu điểm                                      |
+|------------------------------------|------------------|----------------------------------------------|---------------------------------------------|
+| **Valgrind (memcheck)**            | Linux            | Phát hiện leak vùng heap                     | Chuẩn, mạnh mẽ                              |
+| **AddressSanitizer (ASAN)**        | Linux & Windows  | Runtime detect leak & Undefined Behavior     | Nhanh, dễ dùng                              |
+| **Visual Studio Diagnostic Tools** | Windows (VS IDE) | Xem live memory usage, detect leaks          | Tích hợp dễ dùng                            |
+| **leak sanitizer (-fsanitize=leak)**| Linux            | Phát hiện leak khi build                     | Cực nhanh, nhẹ                              |
+| **Clang Static Analyzer**          | Linux, macOS     | Phân tích code tĩnh, tìm lỗi leak             | Không cần chạy app                          |
+| **Instruments (Leaks tool)**       | macOS            | GUI kiểm tra leak trên app                   | Đẹp, dễ nhìn                                |
+| **shared_ptr::use_count()**        | Tất cả           | Kiểm tra tham chiếu thủ công                 | Dùng cho vòng tham chiếu debug              |
+
+## Ghi chú:
+- Với **shared_ptr**, memory leak thường do **vòng tham chiếu (circular reference)** → cần dùng **weak_ptr**.
+- **unique_ptr** sẽ tự huỷ khi ra khỏi scope, leak chủ yếu do misuse (gián tiếp).
+
+shared_ptr::use_count() là một phương thức thành viên của smart pointer std::shared_ptr 
+✅ Ý nghĩa:
+use_count() giúp kiểm tra có bao nhiêu shared_ptr đang cùng giữ quyền sở hữu đối tượng.
+
+Dùng để debug vòng tham chiếu (circular reference) hoặc kiểm tra số lượng tham chiếu còn lại.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 1 số BT liên quan con trỏ
 <details>
 <summary>Pointer</summary>
