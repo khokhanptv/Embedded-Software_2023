@@ -2,7 +2,13 @@
 <summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
 
 
-# Multi-Process / Multi-Thread
+
+# Tổng hợp Kiến Thức
+
+<details>
+<summary><strong>Multi-Process / Multi-Thread</strong></summary>
+
+Multi-Process / Multi-Thread
 
 <details>
 <summary><strong>Bảng So sánh Multi-Process vs Multi-Thread</strong></summary>
@@ -166,6 +172,11 @@ IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **kh
 
 </details>
 
+</details>
+
+<details>
+<summary><strong>OOP - Tổng quan & Chi tiết</strong></summary>
+
 # OOP - Tổng quan & Chi tiết
 
 <details>
@@ -325,7 +336,10 @@ Hàm không thuộc class nhưng được phép truy cập private/protected.
 </details>
 
 
+</details>
 
+<details>
+<summary><strong>C++ STL Containers Interview QA</strong></summary>
 # C++ STL Containers Interview QA
 
 <details>
@@ -485,9 +499,12 @@ Deque (double-ended queue): Mảng động có thể chèn/xóa ở cả 2 đầ
 
 </details>
 
+</details>
 
+<details>
+<summary><strong>Keil, IAR, STM32CubeIDE Interview QA</strong></summary>
 
-
+(
 # Keil, IAR, STM32CubeIDE Interview QA
 
 <details>
@@ -608,9 +625,7 @@ Thường dùng CubeMX để sinh code, sau đó mở bằng CubeIDE để lập
 
 
 
-
-
-
+</details>
 
 
 
