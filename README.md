@@ -2,21 +2,17 @@
 <summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
 
 
-# So sánh: Multi-Process vs Multi-Thread
-
-| Tiêu chí             | Multi-Process                                                                 | Multi-Thread                                                               |
-|----------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| **Là gì?**            | Là một **chương trình độc lập** đang chạy (có vùng nhớ và tài nguyên riêng biệt). | Là **đơn vị nhỏ hơn của process**, chạy song song bên trong process.         |
-| **Khái niệm**         | Tạo ra nhiều tiến trình (process) độc lập                                     | Tạo nhiều luồng (thread) trong cùng một tiến trình                         |
-| **Bộ nhớ**            | Mỗi process có bộ nhớ riêng biệt                                               | Các thread chia sẻ bộ nhớ chung                                            |
-| **Tốc độ giao tiếp**  | Chậm hơn vì phải dùng IPC                                                     | Nhanh vì dùng chung bộ nhớ                                                 |
-| **Tính ổn định**      | An toàn hơn: crash 1 process không làm hỏng process khác                      | Nếu 1 thread lỗi, có thể làm treo toàn bộ process                          |
-| **Tốn tài nguyên**    | Tốn bộ nhớ hơn do không gian riêng                                             | Tốn ít tài nguyên hơn                                                      |
-| **Tạo & huỷ**         | Chi phí cao hơn (fork, CreateProcess)                                         | Tạo huỷ nhanh hơn (std::thread)                                            |
-| **Use case**          | Browser tab, server worker, sandbox                                           | Xử lý song song nhẹ: tải file, UI, xử lý song song                         |
-| **Giao tiếp (IPC)**   | Cần dùng Pipe, Socket, Shared Memory                                          | Không cần IPC, vì dùng chung biến                                          |
-| **Ví dụ API**         | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
+| **Tiêu chí**           | **Multi-Process**                                                             | **Multi-Thread**                                                           |
+|------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **Là gì?**              | Là một **chương trình độc lập** đang chạy (có vùng nhớ và tài nguyên riêng biệt). | Là **đơn vị nhỏ hơn của process**, chạy song song bên trong process.         |
+| **Khái niệm**           | Tạo ra nhiều tiến trình (process) độc lập                                     | Tạo nhiều luồng (thread) trong cùng một tiến trình                         |
 | **✅ Mục đích tổng quát** | Cần cách ly bộ nhớ, tăng độ an toàn & ổn định khi crash                      | Cần tốc độ xử lý song song, chia sẻ dữ liệu nhanh giữa các task nhỏ         |
+| **Bộ nhớ**              | Mỗi process có bộ nhớ riêng biệt                                               | Các thread chia sẻ bộ nhớ chung                                            |
+| **Tốc độ giao tiếp**    | Chậm hơn vì phải dùng IPC                                                     | Nhanh vì dùng chung bộ nhớ                                                 |
+| **Tính ổn định**        | An toàn hơn: crash 1 process không làm hỏng process khác                      | Nếu 1 thread lỗi, có thể làm treo toàn bộ process                          |
+| **Tốn tài nguyên**      | Tốn bộ nhớ hơn do không gian riêng                                             | Tốn ít tài nguyên hơn                                                      |
+| **Giao tiếp (IPC)**     | Cần dùng Pipe, Socket, Shared Memory                                          | Không cần IPC, vì dùng chung biến                                          |
+| **Ví dụ API**           | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
 
 
 # Inter-Process Communication (IPC)
@@ -41,7 +37,7 @@
 
 | Tiêu chí            | Semaphore                                                         | Mutex                                                          |
 |---------------------|--------------------------------------------------------------------|----------------------------------------------------------------|
-| **Khái niệm**        | Biến đếm, quản lý số lượng truy cập vào tài nguyên dùng chung      | Khóa nhị phân, chỉ cho phép 1 thread truy cập tại 1 thời điểm   |
+| **Khái niệm**        | Biến đếm, quản lý số lượng truy cập vào tài nguyên dùng chung , ví dụ:n=0 >> 1 process truy cập ,1 >>1 truy cập     | Khóa nhị phân, chỉ cho phép 1 thread truy cập tại 1 thời điểm   |
 | **Giá trị**          | Có thể >1 (Counting Semaphore) hoặc 0/1 (Binary Semaphore)          | Chỉ có 2 trạng thái: Locked (1) hoặc Unlocked (0)              |
 | **Use case**         | Quản lý nhiều tài nguyên cùng loại (pool connection, buffer slot)  | Đảm bảo chỉ 1 thread vào vùng critical section                  |
 | **Sở hữu (Ownership)**| Không có khái niệm sở hữu, ai cũng có thể Signal (V)                | Chỉ thread lock mới có thể unlock (đảm bảo tính sở hữu)         |
@@ -135,6 +131,90 @@ use_count() giúp kiểm tra có bao nhiêu shared_ptr đang cùng giữ quyền
 
 Dùng để debug vòng tham chiếu (circular reference) hoặc kiểm tra số lượng tham chiếu còn lại.
 
+
+# 📦 So sánh Process vs Thread & Câu hỏi Phỏng vấn
+
+## 🔹 1. Sự khác biệt giữa Process và Thread
+- **Process**: Chương trình đang chạy, vùng nhớ & tài nguyên riêng biệt.
+- **Thread**: Luồng nhỏ hơn, chung vùng nhớ trong cùng 1 process.
+
+## 🔹 2. Ưu nhược điểm của Multi-Process và Multi-Thread
+
+| **Multi-Process**                        | **Multi-Thread**                              |
+|------------------------------------------|-----------------------------------------------|
+| An toàn, cách ly vùng nhớ                | Tốn ít tài nguyên, giao tiếp dễ dàng          |
+| Khó chia sẻ dữ liệu, tốn nhiều tài nguyên | Dễ bị race condition, deadlock               |
+
+## 🔹 3. Khi nào dùng Multi-Process, khi nào dùng Multi-Thread?
+- **Process**: Cần cách ly, an toàn (ex: browser tab).
+- **Thread**: Cần tốc độ, chia sẻ dữ liệu nhanh (ex: web server).
+
+## 🔹 4. Vì sao Multi-Thread dễ bị race condition hơn Process?
+- Thread dùng chung vùng nhớ → dễ xung đột dữ liệu.
+- Process tách biệt vùng nhớ → không bị tranh chấp.
+
+## 🔹 5. Context Switch Process vs Thread?
+- **Process switch**: Tốn nhiều tài nguyên hơn (vì đổi vùng nhớ).
+- **Thread switch**: Nhanh hơn (vì cùng vùng nhớ).
+
+## 🔹 6. Giao tiếp giữa Process và Thread khác nhau thế nào?
+- **Process**: IPC (socket, pipe, shared memory...).
+- **Thread**: Giao tiếp dễ qua biến chung, chỉ cần đồng bộ hóa.
+
+## 🔹 7. Deadlock là gì? Cách phòng tránh?
+- **Deadlock**: 2 hoặc nhiều thread/process cùng chờ tài nguyên → kẹt.
+- **Phòng tránh**: Cố định thứ tự lock, dùng timeout, lock-free structures.
+
+## 🔹 8. Vì sao browser dùng Multi-Process cho mỗi tab?
+- Cách ly lỗi: Tab crash không ảnh hưởng tab khác.
+- Bảo mật: Cô lập sandbox từng tab.
+- Tối ưu đa nhân CPU.
+
+## 🔹 9. Vì sao Multi-Thread dễ lỗi segmentation fault hơn Process?
+- Thread: Cùng vùng nhớ, dễ ghi sai địa chỉ, thiếu đồng bộ → lỗi.
+- Process: Vùng nhớ riêng → lỗi không lan sang process khác.
+
+## 🔹 10. Ưu nhược điểm của Shared Memory trong Multi-Thread?
+- **Ưu điểm**: Truyền dữ liệu nhanh, dùng chung biến.
+- **Nhược điểm**: Dễ race condition, deadlock → cần đồng bộ tốt.
+
+## 🔹 11. Fork() & exec() là gì?
+- `fork()`: Tạo process con (copy từ cha).
+- `exec()`: Nạp code chương trình mới vào process hiện tại.
+
+## 🔹 12. Mô hình Master-Worker?
+- **Master**: Quản lý, chia task.
+- **Worker**: Thread/Process xử lý task song song.
+
+## 🔹 13. Debug race condition, deadlock thực tế?
+- Dùng log, tool (Valgrind, ThreadSanitizer).
+- Kiểm tra thứ tự lock, đồng bộ hóa lại.
+
+## 🔹 14. Multi-core CPU: Multi-Thread vs Multi-Process?
+- **Multi-Thread**: Tận dụng đa nhân tốt, nhẹ hơn.
+- **Multi-Process**: Cách ly an toàn hơn nhưng nặng hơn.
+
+## 🔹 15. GIL trong Python là gì?
+- Global Interpreter Lock: Chỉ 1 thread Python chạy tại 1 thời điểm → hạn chế CPU-bound multi-thread.
+- Dùng Multi-Process để tận dụng đa nhân.
+
+## 🔹 16. Xử lý ảnh hàng loạt: Process hay Thread?
+- Ảnh lớn, nặng: Dùng Multi-Process.
+- Ảnh nhỏ, nhẹ, cần tốc độ: Dùng Multi-Thread.
+
+## 🔹 17. Debug khi ứng dụng bị crash do multi-thread?
+- Xem log, core dump, dùng AddressSanitizer.
+- Kiểm tra race condition, vùng nhớ sai.
+- Đồng bộ hóa lại.
+
+## 🔹 18. Server 10,000 request/s: Process hay Thread?
+- **Thread**: Xử lý nhanh, nhẹ, số lượng lớn request.
+- **Process**: Dùng khi cần cách ly an toàn.
+- Thực tế: Hybrid (Process + Thread pool).
+
+## 🔹 19. Công cụ debug lỗi đồng bộ (race condition, deadlock)?
+- **GDB + rr**: Debug "time-travel", cực hay với lỗi khó tái hiện.
+- **Visual Studio**: Dành cho Windows dev.
 
 
 
