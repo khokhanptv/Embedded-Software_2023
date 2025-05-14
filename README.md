@@ -6,9 +6,7 @@
 # Tổng hợp Kiến Thức
 
 <details>
-<summary><strong>Multi-Process / Multi-Thread</strong></summary>
-
-Multi-Process / Multi-Thread
+<summary><strong><h2>Multi-Process / Multi-Thread<h2></strong></summary>
 
 <details>
 <summary><strong>Bảng So sánh Multi-Process vs Multi-Thread</strong></summary>
@@ -175,9 +173,8 @@ IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **kh
 </details>
 
 <details>
-<summary><strong>OOP - Tổng quan & Chi tiết</strong></summary>
+<summary><strong><h2>OOP - Tổng quan & Chi tiết<h2></strong></summary>
 
-# OOP - Tổng quan & Chi tiết
 
 <details>
 <summary><strong>🔹 1. OOP là gì? Các đặc điểm chính?</strong></summary>
@@ -339,7 +336,7 @@ Hàm không thuộc class nhưng được phép truy cập private/protected.
 </details>
 
 <details>
-<summary><strong>C++ STL Containers Interview QA</strong></summary>
+<summary><strong><h2>C++ STL Containers Interview QA<h2></strong></summary>
 # C++ STL Containers Interview QA
 
 <details>
@@ -502,7 +499,7 @@ Deque (double-ended queue): Mảng động có thể chèn/xóa ở cả 2 đầ
 </details>
 
 <details>
-<summary><strong>Keil, IAR, STM32CubeIDE Interview QA</strong></summary>
+<summary><strong><h2>Keil, IAR, STM32CubeIDE Interview QA<h2></strong></summary>
 
 (
 # Keil, IAR, STM32CubeIDE Interview QA
