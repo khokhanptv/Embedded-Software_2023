@@ -2,6 +2,11 @@
 <summary><h1><img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474015QSt/anh-gai-xinh-1.jpg" width="90px"  >   Kiến thức tổng hơp </h1></summary>
 
 
+# Multi-Process / Multi-Thread
+
+<details>
+<summary><strong>Bảng So sánh Multi-Process vs Multi-Thread</strong></summary>
+
 | **Tiêu chí**           | **Multi-Process**                                                             | **Multi-Thread**                                                           |
 |------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | **Là gì?**              | Là một **chương trình độc lập** đang chạy (có vùng nhớ và tài nguyên riêng biệt). | Là **đơn vị nhỏ hơn của process**, chạy song song bên trong process.         |
@@ -14,12 +19,12 @@
 | **Giao tiếp (IPC)**     | Cần dùng Pipe, Socket, Shared Memory                                          | Không cần IPC, vì dùng chung biến                                          |
 | **Ví dụ API**           | fork(), CreateProcess(), Boost.Process                                        | std::thread, pthread (POSIX), std::async                                   |
 
+</details>
 
-# Inter-Process Communication (IPC)
+<details>
+<summary><strong>Inter-Process Communication (IPC)</strong></summary>
 
-## IPC là gì?
-- IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **không chia sẻ bộ nhớ**.
-- Dùng cho **Multi-Process** (không cần thiết với Multi-Thread).
+IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **không chia sẻ bộ nhớ**.
 
 ## Các loại IPC phổ biến:
 
@@ -33,11 +38,14 @@
 | **Semaphore**     | Cơ chế đồng bộ để quản lý tài nguyên dùng chung                | Hay dùng với Shared Memory                           |
 | **Signals**       | Gửi tín hiệu tới process khác (kill, stop, user-defined signals)| Đơn giản, không truyền dữ liệu                      |
 
-# So sánh: Semaphore vs Mutex
+</details>
+
+<details>
+<summary><strong>So sánh Semaphore vs Mutex</strong></summary>
 
 | Tiêu chí            | Semaphore                                                         | Mutex                                                          |
 |---------------------|--------------------------------------------------------------------|----------------------------------------------------------------|
-| **Khái niệm**        | Biến đếm, quản lý số lượng truy cập vào tài nguyên dùng chung , ví dụ:n=0 >> 1 process truy cập ,1 >>1 truy cập     | Khóa nhị phân, chỉ cho phép 1 thread truy cập tại 1 thời điểm   |
+| **Khái niệm**        | Biến đếm, quản lý số lượng truy cập vào tài nguyên dùng chung     | Khóa nhị phân, chỉ cho phép 1 thread truy cập tại 1 thời điểm   |
 | **Giá trị**          | Có thể >1 (Counting Semaphore) hoặc 0/1 (Binary Semaphore)          | Chỉ có 2 trạng thái: Locked (1) hoặc Unlocked (0)              |
 | **Use case**         | Quản lý nhiều tài nguyên cùng loại (pool connection, buffer slot)  | Đảm bảo chỉ 1 thread vào vùng critical section                  |
 | **Sở hữu (Ownership)**| Không có khái niệm sở hữu, ai cũng có thể Signal (V)                | Chỉ thread lock mới có thể unlock (đảm bảo tính sở hữu)         |
@@ -49,67 +57,10 @@
 - **Mutex** = Bảo vệ độc quyền (1 thread tại 1 thời điểm).
 - **Semaphore** = Quản lý nhiều tài nguyên hoặc kiểm soát luồng truy cập đồng thời.
 
-# Tóm tắt: Khi nào dùng loại IPC nào?
+</details>
 
-| Nhu cầu                                          | Nên dùng                                   |
-|--------------------------------------------------|--------------------------------------------|
-| **Truyền dữ liệu đơn giản cha <-> con**          | Pipe                                       |
-| **Giao tiếp giữa process khác cha mẹ**           | Named Pipe, Socket                         |
-| **Cần hiệu suất cao (shared data)**              | Shared Memory + Semaphore                  |
-| **Truyền thông điệp dạng hàng đợi**              | Message Queue                              |
-| **Dịch vụ Client-Server**                        | Socket                                     |
-| **Báo hiệu trạng thái (simple signal)**          | Signals              
-
-# Cha (Parent Process) và Con (Child Process)
-
-| Parent Process (Tiến trình Cha)                           | Child Process (Tiến trình Con)                                      |
-|-----------------------------------------------------------|---------------------------------------------------------------------|
-| Là tiến trình gốc, đang chạy trước                        | Là tiến trình được tạo ra bởi tiến trình cha                        |
-| Dùng `fork()` (Linux) hoặc `CreateProcess()` (Windows) để tạo con | Con là bản sao hoặc chương trình mới sinh ra từ cha                  |
-| Có thể tạo nhiều tiến trình con                           | Mỗi con có thể tiếp tục tạo ra các tiến trình con khác               |
-| Có thể giao tiếp với con qua Pipe, Shared Memory, Signal, Socket | Con có thể trả kết quả về cho cha qua các phương pháp IPC            |
-                      |
-# Windows Message là gì?
-
-**Windows Message** là cơ chế giao tiếp giữa hệ điều hành Windows và ứng dụng (hoặc giữa các cửa sổ).
-
-## Chức năng:
-- Cho phép **Hệ điều hành gửi thông điệp** tới ứng dụng khi có sự kiện xảy ra.
-- Các **cửa sổ trong ứng dụng** cũng có thể gửi message cho nhau.
-- Là nền tảng của **Windows GUI Programming**.
-
-## Ví dụ về các loại message:
-| Hành động               | Message tương ứng                     |
-|-------------------------|---------------------------------------|
-| Click chuột              | `WM_LBUTTONDOWN`, `WM_LBUTTONUP`      |
-| Nhấn phím                | `WM_KEYDOWN`, `WM_KEYUP`              |
-| Di chuyển/Resize cửa sổ  | `WM_MOVE`, `WM_SIZE`                  |
-| Timer                   | `WM_TIMER`                            |
-| Đóng cửa sổ              | `WM_CLOSE`, `WM_DESTROY`              |
-
-## Cơ chế xử lý:
-- Mỗi cửa sổ có một **message queue**.
-- Khi có sự kiện, message sẽ được **gửi vào queue**.
-- Hàm **`GetMessage()` / `PeekMessage()`** lấy message ra xử lý.
-- Hàm **`DispatchMessage()`** sẽ chuyển message tới hàm **WindowProc()** để xử lý thực tế.
-
-## Code minh hoạ:
-```cpp
-MSG msg;
-while (GetMessage(&msg, NULL, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-}
-```
-Tóm tắt:
-Windows Message = Thông điệp sự kiện.
-
-Làm cầu nối giữa Hệ điều hành ↔ Ứng dụng.
-
-Ứng dụng phải có vòng lặp xử lý message để tương tác với người dùng.
-
-
-# Phát hiện Memory Leak khi dùng Smart Pointer (shared_ptr, unique_ptr)
+<details>
+<summary><strong>Phát hiện Memory Leak với Smart Pointer</strong></summary>
 
 | Công cụ                            | Môi trường        | Dùng để                                      | Ưu điểm                                      |
 |------------------------------------|------------------|----------------------------------------------|---------------------------------------------|
@@ -125,14 +76,11 @@ Làm cầu nối giữa Hệ điều hành ↔ Ứng dụng.
 - Với **shared_ptr**, memory leak thường do **vòng tham chiếu (circular reference)** → cần dùng **weak_ptr**.
 - **unique_ptr** sẽ tự huỷ khi ra khỏi scope, leak chủ yếu do misuse (gián tiếp).
 
-shared_ptr::use_count() là một phương thức thành viên của smart pointer std::shared_ptr 
-✅ Ý nghĩa:
-use_count() giúp kiểm tra có bao nhiêu shared_ptr đang cùng giữ quyền sở hữu đối tượng.
+</details>
 
-Dùng để debug vòng tham chiếu (circular reference) hoặc kiểm tra số lượng tham chiếu còn lại.
+<details>
+<summary><strong>Câu hỏi Phỏng vấn Process/Thread</strong></summary>
 
-
-# 📦 So sánh Process vs Thread & Câu hỏi Phỏng vấn
 
 ## 🔹 1. Sự khác biệt giữa Process và Thread
 - **Process**: Chương trình đang chạy, vùng nhớ & tài nguyên riêng biệt.
@@ -217,261 +165,7 @@ Dùng để debug vòng tham chiếu (circular reference) hoặc kiểm tra số
 - **Visual Studio**: Dành cho Windows dev.
 
 
-
-
-
-
-
-
-
-
-
-
-
-## 1 số BT liên quan con trỏ
-<details>
-<summary>Pointer</summary>
-
-**Tính độ dài mảng tĩnh**
-<details>
-<summary>CODE:</summary>
-
-```C
-#include <stdio.h>
-int main() {
-    int arr[4] = {1, 2, 3, 4};
-    int *ptr = arr;
-    int length = 0;
-
-    while (*ptr != '\0') {
-        ptr++;
-        length++;
-    }
-    printf("Do dai mang arr la: %d\n", length);
-
-    return 0;
-}
-1111
-```
 </details>
-
-**Tính độ dài mảng động**
-<details>
-<summary>CODE:</summary>
-
-```C
- #include "stdio.h"
- #include"stdlib.h"
- 
- int main(){
-    int n=0;
-    int length=0;
-    printf("nhap n\n");
-    scanf("%d",&n);
-    int *arr= (int*)malloc(n*sizeof(int));//cấp phát động cho mảng
-    if(arr==NULL){
-        printf("loi \n");
-        return 1;
-    }
-    int *ptr =arr;
-    printf("nhap cac phan tu\n");
-    for(int i =0;i<n;i++){
-        scanf("%d",ptr+i);
-    }
-    printf("cac phan tu da nhap la\n");
-    for(int i =0;i<n;i++){
-        printf("%d ",*(ptr+i));
-    }
-	free(arr);
-	return 0;
- }
-```  
-</details>
-
-**Sắp xếp(thuật toán bubble sort) và tìm kiếm**
-<details>
-<summary>CODE:</summary>
-
-```C
-#include<stdio.h>
-#include<stdlib.h>
-
-int main(){
-    int n=0;
-    int temp;
-    int a;
-    int found =0;
-    printf("nhap n\n");
-    scanf("%d",&n);
-
-    int *arr=(int*)malloc(n*sizeof(int));
-    int *ptr  =arr;
-    printf("nhap cac phan tu\n");
-    for(int i =0;i<n;i++){
-    scanf("%d",(ptr+i));
-    }  
-    printf("cac phan tu da nhap la n\n"); 
-    for(int i =0;i<n;i++){
-        printf("%d \n",*(ptr+i));
-    }
-    printf("sap xep cac phan tu tu be toi lon\n");
-    for(int i =0;i<n;i++){
-        for(int j=i+1; j<n;j++){
-            if (*(ptr+i)>*(ptr+j)){
-            temp =*(ptr+i);
-            *(ptr+i)  =*(ptr+j);
-            *(ptr+j) =temp;
-         }
-        }
-    }
-    printf("cac phan tu da sap xep n\n"); 
-        for(int i =0;i<n;i++){
-        printf("%d \n",*(ptr+i));
-    }
-    printf("nhap so can tim\n"); 
-    scanf("%d",&a);
-    for(int i =0;i<n;i++){
-        if(a == *(ptr+i)){
-            printf("da tim thay %d o vi tri %d \n ",*(ptr+i),i);
-            found=1;
-            break;
-        }
-    }
-    if(found==0){
-        printf("khong tim thay\n");
-        }
-    
-
-
-    free(arr);
-    return 0;
-}
-```
-
-</details>
-
-**Sắp xếp mảng**
-<details>
-<summary>CODE:</summary>
-
-```C
-#include <stdio.h>
-
-int main(void) {
-    char arr1[] = "dbca 1d13";
-    char *ptr1;
-    ptr1 = arr1;
- printf("Chuoi s: %s \n", ptr1);
-    // Sắp xếp chuỗi arr1 theo yêu cầu
-    for (int i = 0; i < 9; i++) {
-        for (int j = i + 1; j < 9; j++) {
-            if (ptr1[i] > ptr1[j]) {
-                char temp = ptr1[i];
-                ptr1[i] = ptr1[j];
-                ptr1[j] = temp;
-            }
-        }
-    }
-
-    printf("Chuoi sau khi sap xep: %s \n", ptr1);
-
-    return 0;
-}
-```
-</details>
-
-**So sánh 2 mảng bất kỳ( 1 chiều , 2 chiều)**
-<details>
-<summary>CODE:</summary>
-
-```c
- #include <stdio.h>
-
-int compareArrays(const char *arr1, const char *arr2, int size) ;
-   
-
-int main()
-{
-    char str[5] = {1, 2, 3, 0, 5};
-    char serNum[2][5] = {{1, 2, 3, 4, 5}, {1, 2, 3, 0, 5}};
-     
-    
-    // Lưu kết quả của hàm compareArrays
-    int s1 = compareArrays(str, serNum[0], 5); // So sánh với hàng đầu tiên của serNum
-    printf("s1 bang %d \n", s1);
-    
-    int s2 = compareArrays(str, serNum[1], 5); // So sánh với hàng thứ hai của serNum
-    printf("s2 bang %d \n", s2);
-    
-    //1 cach tong hop hon, dung vòng for
-    for (int j = 0; j < 5; ++j) {
-                if (compareArrays(str, serNum[j], 5)) {
-                 
-                    printf("ID the khop tai vi tri %d\n", j);
-                    break; 
-                }
-            }
-
-
-    return 0;
-}
-
-
-int compareArrays(const char *arr1, const char *arr2, int size) {
-    for (int i = 0; i < size; ++i) {
-        if (arr1[i] != arr2[i]) {
-            return 0; 
-        }
-    }
-    return 1; 
-}
-
-```
-
-</details>
-
-</details>
-
-## Struct_union
-
-<details>
-<summary>CODE:</summary>
-
-```C
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdint.h>
-
-int main(void){
-    struct ex{
-       
-        uint8_t  arr1[5]   ;
-        uint16_t  arr2[4]   ;
-        uint32_t  arr3[2]   ;
-    };
-    union ex1{
-       
-        uint8_t  arr1[5]   ;
-        uint16_t  arr2[4]   ;
-        uint32_t  arr3[2]   ;
-    };
-    printf("%zu",sizeof(struct ex));
-    printf("%zu",sizeof(union ex1));
-    return 0;
-}
-
-
-```
-
-</details>
-
-
-
-
-
-
-
-
 
 
 
