@@ -164,8 +164,198 @@ IPC là các cơ chế giúp các process giao tiếp với nhau vì chúng **kh
 - **GDB + rr**: Debug "time-travel", cực hay với lỗi khó tái hiện.
 - **Visual Studio**: Dành cho Windows dev.
 
+</details>
+
+# OOP - Tổng quan & Chi tiết
+
+<details>
+<summary><strong>🔹 1. OOP là gì? Các đặc điểm chính?</strong></summary>
+
+OOP (Object-Oriented Programming) là lập trình hướng đối tượng, tập trung vào đối tượng và tương tác giữa chúng.
+
+**4 đặc điểm chính:**
+- Encapsulation (Đóng gói)
+- Inheritance (Kế thừa)
+- Polymorphism (Đa hình)
+- Abstraction (Trừu tượng)
 
 </details>
+
+<details>
+<summary><strong>🔹 2. Encapsulation là gì?</strong></summary>
+
+Đóng gói dữ liệu & hàm xử lý vào cùng một đối tượng (class). Dữ liệu private, chỉ truy cập qua public method → giúp giấu thông tin & bảo vệ dữ liệu.
+
+</details>
+
+<details>
+<summary><strong>🔹 3. Inheritance là gì?</strong></summary>
+
+Kế thừa cho phép tạo class con từ class cha. Class con kế thừa thuộc tính & phương thức, có thể mở rộng hoặc override.
+
+</details>
+
+<details>
+<summary><strong>🔹 4. Polymorphism là gì?</strong></summary>
+
+Polymorphism (đa hình): 1 đối tượng có nhiều hình thái.
+- Compile-time: Function/Operator overloading.
+- Run-time: Virtual function, override.
+
+</details>
+
+<details>
+<summary><strong>🔹 5. Abstraction là gì?</strong></summary>
+
+Ẩn chi tiết cài đặt, chỉ cung cấp giao diện.
+- Dùng abstract class & pure virtual function.
+
+</details>
+
+<details>
+<summary><strong>🔹 6. Virtual Function & Virtual Destructor</strong></summary>
+
+- Virtual function: Hỗ trợ override để đa hình runtime.
+- Virtual destructor: Đảm bảo hủy đúng thứ tự base → derived.
+
+</details>
+
+<details>
+<summary><strong>🔹 7. Constructor & Destructor</strong></summary>
+
+- Constructor: Hàm khởi tạo object.
+- Destructor: Hàm hủy, giải phóng tài nguyên.
+
+</details>
+
+<details>
+<summary><strong>🔹 8. Overloading vs Overriding</strong></summary>
+
+| Overloading | Overriding |
+|-------------|------------|
+| Cùng tên, khác tham số | Override từ base class |
+| Compile-time | Run-time |
+
+</details>
+
+<details>
+<summary><strong>🔹 9. Abstract Class vs Interface (C++)</strong></summary>
+
+- Abstract Class: Có thể chứa hàm thuần ảo và hàm thường.
+- Interface: Pure abstract class (chỉ thuần ảo).
+
+</details>
+
+<details>
+<summary><strong>🔹 10. Multiple Inheritance & Diamond Problem</strong></summary>
+
+- Multiple Inheritance: Kế thừa nhiều class cha.
+- Diamond Problem: Trùng thành viên → giải quyết bằng virtual inheritance.
+
+</details>
+
+<details>
+<summary><strong>🔹 11. Friend Function</strong></summary>
+
+Hàm không thuộc class nhưng được phép truy cập private/protected.
+
+</details>
+
+<details>
+<summary><strong>🔹 12. This Pointer</strong></summary>
+
+- Trỏ tới chính object hiện tại.
+- Dùng để phân biệt biến thành viên với tham số trùng tên.
+
+</details>
+
+<details>
+<summary><strong>🔹 13. Static Member</strong></summary>
+
+- Static variable: Dùng chung cho mọi object.
+- Static function: Gọi không cần object.
+
+</details>
+
+<details>
+<summary><strong>🔹 14. Smart Pointer (unique_ptr, shared_ptr, weak_ptr)</strong></summary>
+
+- unique_ptr: Quản lý duy nhất.
+- shared_ptr: Quản lý tham chiếu chung.
+- weak_ptr: Giảm vòng tham chiếu.
+
+</details>
+
+<details>
+<summary><strong>🔹 15. Copy Constructor & Move Constructor</strong></summary>
+
+- Copy Constructor: Tạo bản sao.
+- Move Constructor: Di chuyển tài nguyên tạm thời.
+
+</details>
+
+<details>
+<summary><strong>🔹 16. Vtable & Vptr</strong></summary>
+
+- Vtable: Bảng ánh xạ virtual function.
+- Vptr: Con trỏ tới Vtable của object.
+
+</details>
+
+<details>
+<summary><strong>🔹 17. SOLID Principles</strong></summary>
+
+5 nguyên lý giúp code dễ bảo trì, mở rộng:
+- Single Responsibility
+- Open/Closed
+- Liskov Substitution
+- Interface Segregation
+- Dependency Inversion
+
+</details>
+
+<details>
+<summary><strong>🔹 18. Công cụ phát hiện lỗi Smart Pointer</strong></summary>
+
+| Công cụ | Mục đích |
+|---------|---------|
+| Cppcheck | Static Analysis, kiểm tra smart pointer misuse |
+| Visual Studio Static Analysis | Phát hiện memory leak & misuse smart pointer |
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
