@@ -326,6 +326,285 @@ Hàm không thuộc class nhưng được phép truy cập private/protected.
 
 
 
+# C++ STL Containers Interview QA
+
+<details>
+<summary><strong>🔹 1. STL là gì? Tại sao cần dùng?</strong></summary>
+
+STL (Standard Template Library) là thư viện chuẩn của C++ cung cấp các cấu trúc dữ liệu (containers), giải thuật (algorithms), và iterator sẵn có.
+
+Lý do sử dụng:
+- Tiết kiệm thời gian, không phải tự viết lại container, sort, search...
+- Hiệu suất cao, tối ưu hóa tốt.
+- Tính tổng quát (template), tái sử dụng dễ dàng.
+
+</details>
+
+<details>
+<summary><strong>🔹 2. Các nhóm Container chính trong STL?</strong></summary>
+
+STL Container chia 3 nhóm chính:
+- Sequence Containers: vector, list, deque, array, forward_list.
+- Associative Containers: set, map, multiset, multimap.
+- Unordered Containers: unordered_set, unordered_map, unordered_multiset, unordered_multimap.
+
+</details>
+
+<details>
+<summary><strong>🔹 3. Vector là gì? Ưu nhược điểm?</strong></summary>
+
+Vector: Mảng động có thể thay đổi kích thước.
+
+Ưu điểm:
+- Truy cập phần tử O(1).
+- Dễ sử dụng, tự động mở rộng.
+
+Nhược điểm:
+- Chèn/xóa ở giữa hoặc đầu chậm O(n).
+- Tăng kích thước sẽ tốn công copy.
+
+</details>
+
+<details>
+<summary><strong>🔹 4. List (doubly linked list) là gì? Khác Vector thế nào?</strong></summary>
+
+List: Danh sách liên kết đôi (doubly linked list).
+
+Ưu điểm:
+- Chèn/xóa ở đầu/cuối/giữa O(1) nếu có iterator.
+
+Nhược điểm:
+- Truy cập ngẫu nhiên O(n).
+- Tốn bộ nhớ hơn do lưu pointer.
+
+Khác Vector:
+- Vector: Truy cập nhanh, chèn xóa chậm.
+- List: Chèn xóa nhanh, truy cập chậm.
+
+</details>
+
+<details>
+<summary><strong>🔹 5. Deque là gì?</strong></summary>
+
+Deque (double-ended queue): Mảng động có thể chèn/xóa ở cả 2 đầu hiệu quả.
+
+- Truy cập phần tử O(1).
+- Chèn/xóa ở đầu/cuối đều O(1).
+- Thích hợp khi cần queue 2 đầu nhưng vẫn muốn random access.
+
+</details>
+
+<details>
+<summary><strong>🔹 6. Set & Multiset là gì?</strong></summary>
+
+- Set: Tập hợp phần tử unique, tự động sắp xếp (Red-Black Tree).
+- Multiset: Cho phép trùng lặp giá trị.
+- Tìm kiếm, chèn, xóa: O(log n).
+
+</details>
+
+<details>
+<summary><strong>🔹 7. Map & Multimap là gì?</strong></summary>
+
+- Map: Lưu trữ cặp key-value, key là unique, tự động sắp xếp.
+- Multimap: Cho phép trùng key.
+- Tìm kiếm, chèn, xóa: O(log n).
+
+</details>
+
+<details>
+<summary><strong>🔹 8. Unordered_set & Unordered_map là gì?</strong></summary>
+
+- Unordered_set: Tập hợp phần tử unique, dùng hash table.Không sắp xếp 
+- Unordered_map: Key-value, dùng hash table.Không sắp xếp 
+- Tìm kiếm trung bình O(1), worst-case O(n) nếu hash không tốt.
+
+</details>
+
+<details>
+<summary><strong>🔹 9. Difference giữa map & unordered_map?</strong></summary>
+
+| map | unordered_map |
+|-----|---------------|
+| Red-Black Tree | Hash Table |
+| Tìm kiếm O(log n) | Tìm kiếm trung bình O(1) |
+| Dữ liệu sắp xếp theo key | Không sắp xếp |
+| Worst-case vẫn O(log n) | Worst-case O(n) |
+
+</details>
+
+<details>
+<summary><strong>🔹 10. Khi nào chọn vector, list, deque?</strong></summary>
+
+- Vector: Truy cập nhanh, thay đổi kích thước ít.
+- List: Cần chèn/xóa liên tục giữa danh sách.
+- Deque: Cần chèn/xóa 2 đầu nhưng vẫn muốn random access.
+
+</details>
+
+<details>
+<summary><strong>🔹 11. Khi nào dùng set vs unordered_set?</strong></summary>
+
+- Set: Khi cần dữ liệu sắp xếp, hoặc bài toán yêu cầu tìm kiếm theo thứ tự.
+- Unordered_set: Khi chỉ cần kiểm tra tồn tại, tốc độ O(1) là ưu tiên.
+
+</details>
+
+<details>
+<summary><strong>🔹 12. Emplace vs Insert khác nhau thế nào?</strong></summary>
+
+- insert(): Tạo bản sao object rồi chèn.
+- emplace(): Tạo object trực tiếp tại vị trí chèn (không copy).
+- Emplace nhanh hơn insert khi chèn object phức tạp.
+
+</details>
+
+<details>
+<summary><strong>🔹 13. Iterator là gì? Vì sao iterator quan trọng trong STL?</strong></summary>
+
+- Iterator: Con trỏ thông minh giúp duyệt qua các container.
+- Cho phép truy xuất, thay đổi dữ liệu container mà không cần biết cấu trúc nội bộ.
+- Giúp container dùng chung cho algorithm (sort, find, etc).
+
+</details>
+
+<details>
+<summary><strong>🔹 14. C++20: unordered_map có thể dùng hash tùy chỉnh không?</strong></summary>
+
+- Có, hoàn toàn tùy chỉnh hash function bằng cách viết struct std::hash<CustomType>.
+- Dùng để hash struct, class tự định nghĩa.
+
+</details>
+
+<details>
+<summary><strong>🔹 15. STL container nào thread-safe?</strong></summary>
+
+- Tất cả STL containers không thread-safe cho write (chèn/xóa).
+- Đọc (read-only) thì an toàn nếu không có write song song.
+- Muốn thread-safe cần bảo vệ ngoài (mutex, concurrent containers từ thư viện ngoài như TBB, Folly).
+
+</details>
+
+
+
+
+# Keil, IAR, STM32CubeIDE Interview QA
+
+<details>
+<summary><strong>🔹 1. Keil, IAR, STM32CubeIDE khác nhau như thế nào?</strong></summary>
+
+| Keil | IAR | STM32CubeIDE |
+|------|-----|--------------|
+| Thường dùng cho ARM Cortex-M, dễ tích hợp | Tối ưu code size tốt, mạnh cho sản phẩm thương mại | Miễn phí, chính thức từ ST, tích hợp CubeMX |
+| Dễ dùng, phổ biến cho STM32 nhỏ | Tối ưu performance, hỗ trợ nhiều vi điều khiển | IDE tích hợp Eclipse, hỗ trợ debug mạnh |
+| Có license hạn chế | Cần license thương mại | Miễn phí hoàn toàn |
+
+Tóm gọn:
+- Keil: Thông dụng, dễ dùng.
+- IAR: Tối ưu code size tốt.
+- CubeIDE: Chính chủ STM, dễ kết hợp CubeMX.
+
+</details>
+
+<details>
+<summary><strong>🔹 2. Bạn đã từng debug firmware với Keil/IAR/STM32CubeIDE như thế nào?</strong></summary>
+
+- Keil: Dùng simulator, debug qua JTAG/SWD, sử dụng Watch window, Memory viewer, Logic Analyzer.
+- IAR: Sử dụng C-SPY Debugger, thiết lập breakpoints, xem register trực tiếp.
+- STM32CubeIDE: Kết hợp debug với ST-LINK, dùng Live Expressions, peripheral registers viewer, FreeRTOS aware debugging.
+
+</details>
+
+<details>
+<summary><strong>🔹 3. Lỗi thường gặp khi build firmware trên Keil/IAR là gì?</strong></summary>
+
+Keil:
+- “Cannot load flash programming algorithm.”
+- “Undefined Symbol” do thiếu file startup hoặc linker config sai.
+
+IAR:
+- “Fatal Error: Failed to initialize device.”
+- Lỗi liên quan đến ICF (IAR Configuration File) sai lệch.
+
+Cách khắc phục:
+- Kiểm tra target device.
+- Kiểm tra file linker, startup file.
+- Kiểm tra cấu hình debug interface (JTAG/SWD).
+
+</details>
+
+<details>
+<summary><strong>🔹 4. Bạn có hiểu về Linker Script (Scatter file, ICF, .ld) không?</strong></summary>
+
+- Keil: Dùng Scatter file (.sct) để định nghĩa layout bộ nhớ (FLASH, RAM).
+- IAR: Dùng ICF file để cấu hình mapping bộ nhớ.
+- STM32CubeIDE: Dùng file linker script .ld (GNU LD).
+
+Vai trò:
+- Xác định code segment (text, data, bss).
+- Mapping đúng địa chỉ vùng Flash, RAM.
+- Cấu hình stack, heap size.
+
+</details>
+
+<details>
+<summary><strong>🔹 5. STM32CubeMX và CubeIDE liên quan gì nhau?</strong></summary>
+
+- STM32CubeMX: Tool cấu hình GPIO, Clock, Peripheral, sinh code khung tự động.
+- STM32CubeIDE: IDE tích hợp để build, debug firmware (dùng CubeMX làm front-end cấu hình).
+
+Thường dùng CubeMX để sinh code, sau đó mở bằng CubeIDE để lập trình & debug.
+
+</details>
+
+<details>
+<summary><strong>🔹 6. Khi debug firmware, làm sao để kiểm tra stack overflow?</strong></summary>
+
+- Dùng RTOS-aware Debugging trong CubeIDE.
+- Xem giá trị register MSP/PSP (Main Stack Pointer / Process Stack Pointer).
+- Cấu hình stack watermarking (điền 0xAA, kiểm tra còn bao nhiêu byte stack chưa bị ghi đè).
+- Theo dõi lỗi HardFault Handler, kiểm tra LR, SP tại thời điểm lỗi.
+
+</details>
+
+<details>
+<summary><strong>🔹 7. Bạn xử lý lỗi "HardFault_Handler" thế nào khi debug?</strong></summary>
+
+- Xem stack frame tại thời điểm lỗi (R0-R3, LR, PC, PSR).
+- Kiểm tra địa chỉ lệnh (PC) gây lỗi.
+- Xác định nguyên nhân: dereference NULL pointer, stack overflow, invalid memory access.
+- Dùng CubeIDE/Keil xem Memory viewer, các vùng RAM/FLASH.
+
+</details>
+
+<details>
+<summary><strong>🔹 8. Tại sao IAR/Keil hay tối ưu code size tốt hơn GCC (CubeIDE)?</strong></summary>
+
+- Keil & IAR có compiler tối ưu chuyên sâu cho embedded, đặc biệt là ARM Cortex-M.
+- Tối ưu lệnh ASM, inline functions, remove unused code tốt hơn GCC mặc định.
+- GCC (CubeIDE) cần chỉnh flags như -Os, -flto để tối ưu ngang bằng.
+
+</details>
+
+<details>
+<summary><strong>🔹 9. Khi nào chọn Keil/IAR/CubeIDE cho project thực tế?</strong></summary>
+
+- Keil: Project nhỏ/mid size, phát triển nhanh, phổ biến cho STM32F0/F1/F4.
+- IAR: Project thương mại, cần tối ưu size cho production.
+- CubeIDE: Project open source, startup project, dùng tool STM chính chủ, tích hợp FreeRTOS dễ dàng.
+
+</details>
+
+<details>
+<summary><strong>🔹 10. Cách kiểm tra xem code đã nạp đúng vào Flash vi điều khiển?</strong></summary>
+
+- Kiểm tra bằng debug interface (ST-LINK/JTAG):
+  - Xem memory flash address (0x08000000) trong debugger.
+  - Dùng checksum, verify operation.
+  - Có thể đọc flash qua command-line tool (ex: ST-LINK utility).
+
+</details>
+
 
 
 
